@@ -1,0 +1,2916 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ফুলবাড়ীয়া কলেজ | Fulbariya College</title>
+<meta name="description" content="ফুলবাড়ীয়া কলেজ - মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --white: #ffffff;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --border: rgba(0,0,0,0.08);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 2px 10px rgba(10,22,85,0.06);
+    --shadow-md: 0 8px 30px rgba(10,22,85,0.10);
+    --shadow-lg: 0 20px 60px rgba(10,22,85,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--white);
+    color: var(--dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+    position: relative;
+}
+h1, h2, h3, h4, h5, h6 { font-weight: 700; line-height: 1.3; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.reveal.reveal-left { transform: translateX(-80px); }
+.reveal.reveal-right { transform: translateX(80px); }
+.reveal.reveal-scale { transform: scale(0.9) translateY(30px); }
+.reveal.in-view { opacity: 1; transform: translateX(0) translateY(0) scale(1); }
+
+.reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+.reveal-stagger.in-view > * { opacity: 1; transform: translateY(0); }
+.reveal-stagger.in-view > *:nth-child(1) { transition-delay: 0s; }
+.reveal-stagger.in-view > *:nth-child(2) { transition-delay: 0.15s; }
+.reveal-stagger.in-view > *:nth-child(3) { transition-delay: 0.30s; }
+.reveal-stagger.in-view > *:nth-child(4) { transition-delay: 0.45s; }
+.reveal-stagger.in-view > *:nth-child(5) { transition-delay: 0.60s; }
+.reveal-stagger.in-view > *:nth-child(6) { transition-delay: 0.75s; }
+
+.container-custom {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.section-title {
+    font-size: 32px;
+    color: var(--navy);
+    text-align: center;
+    margin-bottom: 8px;
+    position: relative;
+}
+.section-title::after {
+    content: '';
+    display: block;
+    width: 70px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--navy), var(--gold));
+    margin: 14px auto 0;
+    border-radius: 4px;
+}
+.section-subtitle {
+    text-align: center;
+    color: var(--grey);
+    font-size: 15px;
+    margin-bottom: 40px;
+}
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+.top-bar {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    font-size: 13px;
+    padding: 8px 0;
+}
+.top-bar .container-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.top-bar-left { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.top-bar-left span { display: inline-flex; align-items: center; gap: 7px; opacity: 0.92; }
+.top-bar-left i { color: var(--gold); }
+.top-bar-social { display: flex; gap: 8px; align-items: center; }
+.top-bar-social a {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: 0.25s;
+    color: #fff;
+}
+.top-bar-social a:hover {
+    background: var(--gold);
+    color: var(--navy);
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+.main-header {
+    background: #fff;
+    padding: 10px 0;
+    box-shadow: 0 2px 15px rgba(10,22,85,0.08);
+    position: sticky;
+    top: 0;
+    z-index: 900;
+}
+.main-header .container-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+}
+.logo-box { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.logo-box img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: var(--off-white);
+    padding: 3px;
+    flex-shrink: 0;
+}
+.logo-box .logo-text h1 {
+    font-size: 17px;
+    color: var(--navy);
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    white-space: nowrap;
+    line-height: 1.1;
+}
+.logo-box .logo-text p {
+    font-size: 10px;
+    color: var(--grey);
+    margin: 2px 0 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.main-nav { display: flex; align-items: center; gap: 2px; flex-wrap: wrap; }
+.main-nav a {
+    padding: 7px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+    border-radius: 8px;
+    transition: 0.25s;
+    white-space: nowrap;
+}
+.main-nav a:hover { color: var(--navy); background: var(--off-white); }
+.main-nav a.active {
+    color: var(--navy);
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(242,210,123,0.15));
+}
+.main-nav a.nav-login {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 700;
+    font-size: 11.5px;
+    color: #fff !important;
+    padding: 7px 12px;
+    border-radius: 50px;
+    transition: 0.3s;
+    margin-left: 3px;
+}
+.main-nav a.nav-login i { font-size: 11px; }
+.main-nav a.nav-student {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    box-shadow: 0 4px 14px rgba(10,22,85,0.25);
+}
+.main-nav a.nav-student:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(10,22,85,0.4);
+    color: #fff !important;
+}
+.main-nav a.nav-admin {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy) !important;
+    box-shadow: 0 4px 14px rgba(212,175,55,0.35);
+}
+.main-nav a.nav-admin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(212,175,55,0.5);
+    color: var(--navy) !important;
+}
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--navy);
+    cursor: pointer;
+    padding: 8px;
+    flex-shrink: 0;
+}
+
+/* =========================================================
+   HERO SLIDER
+========================================================= */
+.hero-slider {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 520px;
+    max-height: 720px;
+    overflow: hidden;
+    background: var(--navy);
+}
+.hero-slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 0 60px;
+    overflow: hidden;
+}
+.hero-slide.active { opacity: 1; }
+.hero-slide img {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scale(1);
+    transition: transform 6s ease-out;
+}
+.hero-slide.active img { transform: scale(1.12); }
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    max-width: 900px;
+    padding: 0 20px;
+    text-shadow: 0 3px 15px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.9);
+    animation: heroFadeUp 1s ease;
+}
+@keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.hero-content h2 {
+    font-size: clamp(24px, 5vw, 48px);
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.25;
+}
+.hero-content p {
+    font-size: clamp(14px, 2vw, 18px);
+    margin-bottom: 24px;
+    opacity: 0.95;
+    font-weight: 400;
+}
+.hero-content .hero-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 32px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 30px rgba(242,210,123,0.4);
+    text-decoration: none;
+}
+.hero-content .hero-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(242,210,123,0.6);
+    color: var(--navy);
+}
+.hero-dots {
+    position: absolute;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 3;
+}
+.hero-dots .dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.5);
+    cursor: pointer;
+    transition: 0.3s;
+    border: 2px solid transparent;
+}
+.hero-dots .dot.active {
+    background: var(--gold);
+    transform: scale(1.2);
+    border-color: #fff;
+}
+
+/* =========================================================
+   NOTICE TICKER
+========================================================= */
+.notice-ticker {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 14px 0;
+    overflow: hidden;
+    position: relative;
+}
+.notice-ticker .container-custom {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+.ticker-label {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    padding: 6px 18px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+.ticker-label i { animation: pulse 1.5s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+.ticker-wrap { flex: 1; overflow: hidden; position: relative; height: 26px; }
+.ticker-track {
+    display: flex;
+    gap: 50px;
+    animation: tickerScroll 6s linear infinite;
+    white-space: nowrap;
+    align-items: center;
+    height: 100%;
+    will-change: transform;
+}
+.ticker-track:hover { animation-play-state: paused; }
+@keyframes tickerScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+.ticker-item {
+    color: #fff;
+    font-size: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.25s;
+}
+.ticker-item:hover { color: var(--gold); }
+.ticker-item i { color: var(--gold); font-size: 11px; }
+.ticker-controls { display: flex; gap: 6px; flex-shrink: 0; }
+.ticker-controls button {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+}
+.ticker-controls button:hover {
+    background: var(--gold);
+    color: var(--navy);
+    border-color: var(--gold);
+}
+
+/* =========================================================
+   QUICK CARDS
+========================================================= */
+.quick-cards-section { padding: 70px 0; background: #fff; }
+.quick-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 22px;
+}
+.quick-card {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 20px;
+    padding: 30px 26px;
+    transition: 0.4s;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: block;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+.quick-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(242,210,123,0.15) 0%, transparent 60%);
+    opacity: 0;
+    transition: 0.5s;
+}
+.quick-card:hover::before { opacity: 1; }
+.quick-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(10,22,85,0.3);
+    color: #fff;
+}
+.quick-card-icon {
+    width: 60px; height: 60px;
+    border-radius: 16px;
+    background: rgba(242,210,123,0.15);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: var(--gold);
+    margin-bottom: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+    transition: 0.4s;
+}
+.quick-card:hover .quick-card-icon {
+    background: var(--gold);
+    color: var(--navy);
+    transform: rotate(-8deg) scale(1.08);
+}
+.quick-card h3 {
+    font-size: 19px;
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+.quick-card p {
+    font-size: 13.5px;
+    opacity: 0.85;
+    margin-bottom: 16px;
+    line-height: 1.6;
+}
+.quick-card .card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold);
+    font-weight: 600;
+    font-size: 13.5px;
+    transition: 0.25s;
+}
+.quick-card:hover .card-link { gap: 14px; }
+
+/* =========================================================
+   PRINCIPAL
+========================================================= */
+.principal-section {
+    padding: 80px 0;
+    background: var(--off-white);
+    overflow-x: hidden;
+}
+.principal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 50px;
+    align-items: center;
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+.principal-image-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
+}
+.principal-image-wrap img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    display: block;
+}
+.principal-image-wrap::after {
+    content: '';
+    position: absolute;
+    inset: -15px -15px 15px 15px;
+    border: 3px solid var(--gold);
+    border-radius: 24px;
+    z-index: -1;
+    pointer-events: none;
+}
+.principal-content {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+}
+.principal-content h2 {
+    font-size: 32px;
+    color: var(--navy);
+    margin-bottom: 8px;
+    line-height: 1.3;
+    overflow-wrap: break-word;
+}
+.principal-content .designation {
+    color: var(--gold-2);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+}
+.principal-content .quote {
+    font-size: 15px;
+    line-height: 1.9;
+    color: #4b5563;
+    font-style: italic;
+    padding: 20px 0 20px 24px;
+    border-left: 4px solid var(--gold);
+    margin-bottom: 24px;
+    background: rgba(242,210,123,0.05);
+    border-radius: 0 12px 12px 0;
+}
+.principal-content .principal-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.btn-navy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 24px rgba(10,22,85,0.2);
+}
+.btn-navy:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(10,22,85,0.3);
+    color: #fff;
+}
+.btn-outline-navy {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 28px;
+    background: transparent;
+    color: var(--navy);
+    border: 2px solid var(--navy);
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-outline-navy:hover {
+    background: var(--navy);
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+/* =========================================================
+   DEPARTMENT HEADS
+========================================================= */
+.dept-heads-section {
+    padding: 80px 0;
+    background: #fff;
+    overflow: hidden;
+    position: relative;
+}
+.dept-slider-viewport {
+    overflow: hidden;
+    position: relative;
+    padding: 30px 0 40px;
+    width: 100%;
+    max-width: 100%;
+    mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+}
+.dept-slider {
+    display: flex;
+    gap: 24px;
+    animation: deptAutoScroll 45s linear infinite;
+    will-change: transform;
+    width: max-content;
+}
+.dept-slider:hover { animation-play-state: paused; }
+@keyframes deptAutoScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+.dept-card {
+    flex: 0 0 260px;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.4s;
+    border: 1px solid var(--border);
+    text-align: center;
+    position: relative;
+}
+.dept-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--navy), var(--gold));
+    opacity: 0;
+    transition: 0.3s;
+    z-index: 2;
+}
+.dept-card:hover::before { opacity: 1; }
+.dept-card:hover {
+    transform: translateY(-12px) scale(1.04);
+    box-shadow: var(--shadow-lg);
+}
+.dept-card .dept-img {
+    width: 100%; height: 280px;
+    object-fit: cover;
+    background: var(--off-white);
+    transition: transform 0.6s;
+}
+.dept-card:hover .dept-img { transform: scale(1.06); }
+.dept-card .dept-info { padding: 18px 16px 22px; }
+.dept-card .dept-info h4 {
+    font-size: 17px;
+    color: var(--navy);
+    margin-bottom: 4px;
+}
+.dept-card .dept-info .dept-designation {
+    font-size: 12px;
+    color: var(--gold-2);
+    font-weight: 600;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.dept-card .dept-info .dept-department {
+    font-size: 13px;
+    color: var(--grey);
+}
+
+/* =========================================================
+   WELCOME
+========================================================= */
+.welcome-section {
+    padding: 80px 0;
+    background: linear-gradient(135deg, #f8f9fc, #eef1f8);
+    overflow-x: hidden;
+}
+.welcome-wrap {
+    max-width: 900px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    background: #fff;
+    padding: 50px 40px;
+    border-radius: 24px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+.welcome-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+.welcome-wrap h2 {
+    font-size: 30px;
+    color: var(--navy);
+    margin-bottom: 20px;
+    word-wrap: break-word;
+}
+.welcome-wrap p {
+    font-size: 15px;
+    color: #4b5563;
+    line-height: 1.9;
+    margin-bottom: 24px;
+    word-wrap: break-word;
+}
+
+/* =========================================================
+   COUNTER
+========================================================= */
+.counter-section {
+    position: relative;
+    padding: 100px 0;
+    min-height: 520px;
+    overflow: hidden;
+    color: #fff;
+    background: var(--navy);
+}
+.counter-section::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: var(--counter-bg, url('assets/images/building2.png'));
+    background-size: cover;
+    background-position: center;
+    animation: counterBgZoom 20s ease-in-out infinite alternate;
+}
+@keyframes counterBgZoom {
+    from { transform: scale(1); }
+    to { transform: scale(1.08); }
+}
+.counter-section .container-custom {
+    position: relative;
+    z-index: 2;
+}
+.counter-slider-wrap {
+    position: relative;
+    max-width: 780px;
+    margin: 0 auto;
+    min-height: 220px;
+    overflow: hidden;
+}
+.counter-slide {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    opacity: 0;
+    transform: translateX(100px) scale(0.94);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+.counter-slide.active {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    pointer-events: auto;
+}
+.counter-slide.exit-left {
+    opacity: 0;
+    transform: translateX(-100px) scale(0.94);
+}
+.counter-glass {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 30px;
+    padding: 40px 50px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid rgba(242, 210, 123, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    min-height: 200px;
+}
+.counter-glass::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 5px;
+    background: var(--gold);
+    border-radius: 20px 0 0 20px;
+}
+.counter-fm-icon {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+    font-size: 78px;
+    line-height: 1;
+    filter: drop-shadow(0 6px 20px rgba(242,210,123,0.5));
+    animation: iconPulse 2.5s ease-in-out infinite;
+}
+@keyframes iconPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+}
+.counter-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+    width: 100%;
+}
+.counter-info .counter-label {
+    font-size: 15px;
+    color: #fff;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-shadow: 0 2px 10px rgba(0,0,0,0.6);
+}
+.counter-info .counter-value {
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 1px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+.counter-dots { display: none; }
+
+/* =========================================================
+   NOTICE BOARD
+========================================================= */
+.notice-board-section { padding: 80px 0; background: #fff; }
+.notice-board-box {
+    max-width: 850px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+.notice-board-head {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 20px 26px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.notice-board-head h3 {
+    margin: 0;
+    font-size: 19px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.notice-board-head h3 i { color: var(--gold); }
+.notice-board-head .view-all {
+    color: var(--gold);
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: 0.25s;
+}
+.notice-board-head .view-all:hover { gap: 12px; }
+.notice-list {
+    padding: 0;
+    max-height: 420px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    cursor: grab;
+    -webkit-overflow-scrolling: touch;
+}
+.notice-list:active { cursor: grabbing; }
+.notice-list::-webkit-scrollbar { width: 6px; }
+.notice-list::-webkit-scrollbar-track { background: #f1f3f6; }
+.notice-list::-webkit-scrollbar-thumb {
+    background: rgba(10,22,85,0.25);
+    border-radius: 3px;
+}
+.notice-item {
+    padding: 18px 26px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: 0.25s;
+    text-decoration: none;
+    color: inherit;
+}
+.notice-item:last-child { border-bottom: none; }
+.notice-item:hover {
+    background: var(--off-white);
+    padding-left: 32px;
+}
+.notice-item .notice-date {
+    flex-shrink: 0;
+    width: 60px;
+    text-align: center;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 10px;
+    padding: 8px 4px;
+}
+.notice-item .notice-date .day {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.notice-item .notice-date .month {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+    color: var(--gold);
+}
+.notice-item .notice-body { flex: 1; min-width: 0; }
+.notice-item .notice-body h4 {
+    font-size: 15px;
+    color: var(--navy);
+    margin-bottom: 4px;
+    line-height: 1.4;
+}
+.notice-item .notice-body p {
+    font-size: 12.5px;
+    color: var(--grey);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.notice-item .featured-star {
+    color: var(--gold-2);
+    font-size: 12px;
+    margin-left: 6px;
+}
+
+/* =========================================================
+   NEWS
+========================================================= */
+.news-section { padding: 80px 0; background: var(--off-white); }
+.news-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 26px;
+}
+.news-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: 0.4s;
+    border: 1px solid var(--border);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+}
+.news-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+    color: inherit;
+}
+.news-card .news-img-wrap {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    background: var(--off-white);
+}
+.news-card .news-img-wrap img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+.news-card:hover .news-img-wrap img { transform: scale(1.06); }
+.news-card .news-body {
+    padding: 20px 22px 24px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+.news-card .news-body .news-cat {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(242,210,123,0.2), rgba(212,175,55,0.15));
+    color: var(--gold-dark);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    width: fit-content;
+}
+.news-card .news-body h4 {
+    font-size: 17px;
+    color: var(--navy);
+    margin-bottom: 8px;
+    line-height: 1.4;
+    font-weight: 700;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.news-card .news-body p {
+    font-size: 13px;
+    color: var(--grey);
+    margin-bottom: 14px;
+    line-height: 1.65;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+.news-card .news-body .news-date {
+    font-size: 12px;
+    color: var(--grey);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+    margin-top: auto;
+}
+.news-card .news-body .news-date i { color: var(--gold-dark); }
+
+/* =========================================================
+   GALLERY
+========================================================= */
+.gallery-section { padding: 80px 0; background: #fff; }
+.gallery-grid-home {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 20px;
+}
+.gallery-card {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    box-shadow: var(--shadow-sm);
+    transition: 0.4s cubic-bezier(0.34, 1.4, 0.64, 1);
+    background: var(--off-white);
+}
+.gallery-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+}
+.gallery-card img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.34, 1.4, 0.64, 1);
+    display: block;
+}
+.gallery-card:hover img { transform: scale(1.08); }
+.gallery-card .featured-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 50px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    z-index: 3;
+}
+.gallery-card .gallery-text-overlay {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    padding: 40px 16px 14px;
+    background: linear-gradient(to top,
+        rgba(6, 10, 40, 0.92) 0%,
+        rgba(6, 10, 40, 0.75) 35%,
+        rgba(6, 10, 40, 0.35) 65%,
+        transparent 100%);
+    color: #fff;
+    z-index: 2;
+}
+.gallery-card .gallery-text-overlay h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 4px;
+    line-height: 1.35;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.gallery-card .gallery-text-overlay p {
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    margin: 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+.main-footer {
+    background: linear-gradient(135deg, #061040, var(--navy));
+    color: rgba(255,255,255,0.85);
+    padding: 60px 0 0;
+}
+.footer-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    gap: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    align-items: start;
+}
+.footer-col h4 {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 10px;
+}
+.footer-col h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 40px; height: 3px;
+    background: var(--gold);
+    border-radius: 3px;
+}
+.footer-col p {
+    font-size: 13.5px;
+    line-height: 1.8;
+    margin-bottom: 16px;
+}
+.footer-col ul { list-style: none; padding: 0; margin: 0; }
+.footer-col ul li { margin-bottom: 12px; }
+.footer-col ul li a {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.75);
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.footer-col ul li a:hover { color: var(--gold); padding-left: 6px; }
+.footer-col ul li a i { font-size: 10px; color: var(--gold); }
+
+.footer-social { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+.footer-social a {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.footer-social a:hover {
+    background: var(--gold);
+    color: var(--navy);
+    transform: translateY(-3px);
+}
+.footer-contact-item {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 13.5px;
+    align-items: flex-start;
+}
+.footer-contact-item i {
+    color: var(--gold);
+    font-size: 14px;
+    margin-top: 4px;
+    flex-shrink: 0;
+    width: 18px;
+    text-align: center;
+}
+.footer-map-box {
+    width: 100%;
+    max-width: 220px;
+    aspect-ratio: 1 / 1;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.15);
+    background: rgba(255,255,255,0.04);
+    margin-bottom: 12px;
+    transition: 0.3s;
+}
+.footer-map-box:hover {
+    border-color: var(--gold);
+    box-shadow: 0 8px 24px rgba(242,210,123,0.25);
+}
+.footer-map-box iframe {
+    width: 100%; height: 100%;
+    border: 0;
+    filter: grayscale(0.2) contrast(0.95);
+    transition: filter 0.3s;
+}
+.footer-map-box:hover iframe { filter: grayscale(0) contrast(1); }
+.footer-map-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--gold);
+    font-weight: 600;
+    margin-bottom: 8px;
+    transition: 0.25s;
+}
+.footer-map-link:hover { gap: 10px; }
+
+/* =========================================================
+   IMPORTANT LINKS — Simple list style (like other colleges)
+========================================================= */
+.important-links-section {
+    padding: 40px 0 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.important-links-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+    color: #fff;
+}
+.important-links-header i {
+    color: var(--gold);
+    font-size: 18px;
+}
+.important-links-header h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.3px;
+    position: relative;
+    padding-bottom: 10px;
+}
+.important-links-header h4::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 40px; height: 3px;
+    background: var(--gold);
+    border-radius: 3px;
+}
+
+.important-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px 30px;
+}
+.important-links-list li {
+    margin: 0;
+    padding: 0;
+}
+.important-links-list li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.75);
+    transition: 0.25s;
+    border-bottom: 1px dashed rgba(255,255,255,0.06);
+    position: relative;
+}
+.important-links-list li a::before {
+    content: '\f105';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: var(--gold);
+    font-size: 12px;
+    transition: 0.25s;
+    flex-shrink: 0;
+}
+.important-links-list li a:hover {
+    color: var(--gold);
+    padding-left: 6px;
+}
+.important-links-list li a:hover::before {
+    transform: translateX(3px);
+}
+.important-links-list li a .ext-icon {
+    margin-left: auto;
+    color: rgba(242,210,123,0.5);
+    font-size: 10px;
+    transition: 0.25s;
+}
+.important-links-list li a:hover .ext-icon {
+    color: var(--gold);
+}
+
+/* =========================================================
+   FOOTER BOTTOM — Smart Visitor Counter
+========================================================= */
+.footer-bottom {
+    padding: 26px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.6);
+}
+.footer-bottom strong { color: var(--gold); }
+
+.footer-visitors {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, rgba(242, 210, 123, 0.08), rgba(242, 210, 123, 0.15));
+    border: 1px solid rgba(242, 210, 123, 0.3);
+    border-radius: 50px;
+    font-size: 12.5px;
+    color: var(--gold);
+    font-weight: 600;
+    transition: 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+.footer-visitors::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(242,210,123,0.15), transparent);
+    transform: translateX(-100%);
+    animation: shineEffect 3s ease-in-out infinite;
+}
+@keyframes shineEffect {
+    0% { transform: translateX(-100%); }
+    50% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+.footer-visitors:hover {
+    background: linear-gradient(135deg, rgba(242, 210, 123, 0.18), rgba(242, 210, 123, 0.25));
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(242,210,123,0.25);
+    border-color: var(--gold);
+}
+.footer-visitors i {
+    color: var(--gold);
+    font-size: 15px;
+    animation: eyeBlink 3s ease-in-out infinite;
+    position: relative;
+    z-index: 1;
+}
+@keyframes eyeBlink {
+    0%, 45%, 55%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(0.3); }
+}
+.footer-visitors .visitor-label {
+    letter-spacing: 0.5px;
+    position: relative;
+    z-index: 1;
+}
+.footer-visitors .visitor-count {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.5px;
+    padding: 3px 12px;
+    background: rgba(10, 22, 85, 0.4);
+    border-radius: 20px;
+    position: relative;
+    z-index: 1;
+    min-width: 50px;
+    text-align: center;
+}
+
+.footer-credit {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    color: rgba(255,255,255,0.65);
+    transition: 0.25s;
+}
+.footer-credit:hover { color: var(--gold); }
+.footer-credit .fm-icon {
+    color: var(--gold);
+    font-size: 13px;
+    animation: heartBeat 2s ease-in-out infinite;
+}
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+}
+
+/* SMART MODAL */
+.smart-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 10, 40, 0.65);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.25s ease;
+}
+.smart-modal-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.smart-modal {
+    background: #fff;
+    border-radius: 24px;
+    max-width: 750px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+.smart-modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+@keyframes modalPop {
+    from { opacity: 0; transform: scale(0.9) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.smart-modal-head {
+    padding: 26px 30px 18px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+}
+.smart-modal-head h3 {
+    font-size: 22px;
+    color: var(--navy);
+    margin: 0;
+}
+.smart-modal-close {
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    border: none;
+    background: var(--off-white);
+    color: var(--navy);
+    cursor: pointer;
+    transition: 0.25s;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.smart-modal-close:hover {
+    background: var(--navy);
+    color: #fff;
+    transform: rotate(90deg);
+}
+.smart-modal-body {
+    padding: 24px 30px 30px;
+    font-size: 15px;
+    color: #4b5563;
+    line-height: 1.9;
+}
+
+/* SCROLL TOP */
+.scroll-top {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 8px 24px rgba(10,22,85,0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    z-index: 900;
+}
+.scroll-top.show { opacity: 1; visibility: visible; }
+.scroll-top:hover {
+    background: var(--gold);
+    color: var(--navy);
+    transform: translateY(-4px);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 1100px) {
+    .main-nav a { padding: 6px 8px; font-size: 12px; }
+    .main-nav a.nav-login { padding: 6px 10px; font-size: 11px; }
+}
+@media (max-width: 992px) {
+    .principal-grid {
+        grid-template-columns: 1fr;
+        gap: 30px;
+        width: 100%;
+        max-width: 100%;
+    }
+    .principal-image-wrap {
+        max-width: 320px;
+        width: 100%;
+        margin: 0 auto;
+    }
+    .principal-content {
+        padding: 0 4px;
+        text-align: center;
+    }
+    .principal-content h2 {
+        font-size: 24px;
+        text-align: center;
+    }
+    .principal-content .designation {
+        text-align: center;
+    }
+    .principal-content .quote {
+        text-align: left;
+    }
+    .principal-content .principal-actions {
+        justify-content: center;
+    }
+    .welcome-wrap { max-width: 100%; }
+    .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+    .main-nav a { padding: 6px 7px; font-size: 11.5px; }
+    .main-nav a.nav-login { padding: 5px 9px; font-size: 10.5px; }
+    .counter-glass { padding: 32px 30px; gap: 22px; }
+    .counter-fm-icon { font-size: 60px; }
+    .counter-info .counter-value { font-size: 44px; }
+    .counter-info .counter-label { font-size: 13px; letter-spacing: 3px; }
+}
+
+@media (max-width: 768px) {
+    .main-nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: #fff;
+        flex-direction: column;
+        padding: 14px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        border-top: 1px solid var(--border);
+        max-height: 80vh;
+        overflow-y: auto;
+        gap: 2px;
+    }
+    .main-nav.show { display: flex; }
+    .main-nav a {
+        width: 100%;
+        padding: 11px 14px;
+        font-size: 14px;
+    }
+    .main-nav a.nav-login {
+        justify-content: center;
+        margin-left: 0;
+        margin-top: 4px;
+        padding: 11px 14px;
+        font-size: 13px;
+    }
+    .nav-toggle { display: block; }
+    .main-header .container-custom { position: relative; }
+
+    .top-bar-left { font-size: 11px; gap: 12px; }
+    .top-bar-left span:nth-child(3) { display: none; }
+
+    .section-title { font-size: 24px; }
+
+    .quick-cards-section,
+    .principal-section,
+    .dept-heads-section,
+    .welcome-section,
+    .counter-section,
+    .notice-board-section,
+    .news-section,
+    .gallery-section {
+        padding: 50px 0;
+    }
+    .counter-section { padding: 60px 0; min-height: 400px; }
+    .counter-slider-wrap { min-height: 190px; }
+    .counter-glass {
+        padding: 26px 24px;
+        gap: 18px;
+        min-height: 180px;
+    }
+    .counter-fm-icon { font-size: 48px; }
+    .counter-info .counter-value { font-size: 34px; }
+    .counter-info .counter-label { font-size: 11px; letter-spacing: 2.5px; }
+
+    .welcome-wrap { padding: 30px 20px; border-radius: 18px; }
+    .welcome-wrap h2 { font-size: 22px; }
+
+    .notice-item { padding: 14px 18px; gap: 12px; }
+    .notice-item .notice-date { width: 50px; padding: 6px 4px; }
+    .notice-item .notice-date .day { font-size: 18px; }
+
+    .footer-grid { grid-template-columns: 1fr; gap: 30px; }
+    .footer-map-box { max-width: 100%; aspect-ratio: 16/9; }
+
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 14px;
+    }
+
+    .scroll-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
+
+    .smart-modal-head { padding: 20px 22px 14px; }
+    .smart-modal-head h3 { font-size: 18px; }
+    .smart-modal-body { padding: 20px 22px 24px; font-size: 14px; }
+
+    .ticker-label { font-size: 11px; padding: 5px 12px; }
+    .ticker-controls button { width: 28px; height: 28px; font-size: 10px; }
+    .ticker-track { animation-duration: 4s !important; }
+
+    .dept-slider { animation-duration: 30s; }
+    .news-card .news-img-wrap { height: 180px; }
+
+    .important-links-section { padding: 30px 0 25px; }
+    .important-links-list {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    .important-links-header h4 { font-size: 15px; }
+
+    .reveal.reveal-left { transform: translateX(-50px); }
+    .reveal.reveal-right { transform: translateX(50px); }
+}
+
+@media (max-width: 480px) {
+    .logo-box img { width: 44px; height: 44px; }
+    .logo-box .logo-text h1 { font-size: 16px; }
+    .logo-box .logo-text p { font-size: 9px; }
+    .hero-content h2 { font-size: 22px; }
+    .hero-content p { font-size: 13px; }
+    .hero-content .hero-btn { padding: 10px 24px; font-size: 13px; }
+    .dept-card { flex: 0 0 220px; }
+    .dept-card .dept-img { height: 240px; }
+    .gallery-grid-home { grid-template-columns: 1fr; }
+    .counter-glass { padding: 22px 18px; gap: 14px; }
+    .counter-fm-icon { font-size: 40px; }
+    .counter-info .counter-value { font-size: 28px; }
+    .counter-info .counter-label { font-size: 10px; letter-spacing: 1.5px; }
+    .quick-cards-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="container-custom">
+        <div class="top-bar-left">
+            <span><i class="fas fa-envelope"></i> <span data-college-email>info@fulbariyacollege.edu.bd</span></span>
+            <span><i class="fas fa-phone"></i> <span data-college-phone>+880 1XXX-XXXXXX</span></span>
+            <span><i class="fas fa-map-marker-alt"></i> <span data-college-address>ফুলবাড়ীয়া, ময়মনসিংহ</span></span>
+        </div>
+        <div class="top-bar-social">
+            <a href="#" id="socialFacebook" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+            <a href="#" id="socialYoutube" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+            <a href="#" id="socialWebsite" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+            <a href="#" id="socialMap" target="_blank" title="Map"><i class="fas fa-map"></i></a>
+        </div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="main-header">
+    <div class="container-custom">
+        <a href="index.html" class="logo-box">
+            <img src="assets/images/logo1.png" alt="Fulbariya College" onerror="this.style.display='none'">
+            <div class="logo-text">
+                <h1 data-college-name>ফুলবাড়ীয়া কলেজ</h1>
+                <p>Fulbariya College</p>
+            </div>
+        </a>
+
+        <nav class="main-nav" id="mainNav">
+            <a href="index.html" class="active">হোম</a>
+            <a href="public-pages/about.html">আমাদের সম্পর্কে</a>
+            <a href="public-pages/admission.html">ভর্তি তথ্য</a>
+            <a href="public-pages/notices.html">নোটিশ</a>
+            <a href="public-pages/results.html">রেজাল্ট</a>
+            <a href="public-pages/academic-hub.html">একাডেমিক হাব</a>
+            <a href="public-pages/gallery.html">গ্যালারি</a>
+            <a href="public-pages/bncc.html">BNCC</a>
+            <a href="public-pages/scouts.html">Scouts</a>
+            <a href="public-pages/contact.html">যোগাযোগ</a>
+            <a href="admin-pages/admin-login.html" class="nav-login nav-admin">
+                <i class="fas fa-user-shield"></i> Admin
+            </a>
+        </nav>
+
+        <button class="nav-toggle" id="navToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</header>
+
+<!-- HERO SLIDER -->
+<section class="hero-slider" id="heroSlider"></section>
+
+<!-- NOTICE TICKER -->
+<section class="notice-ticker" id="noticeTicker" style="display:none;">
+    <div class="container-custom">
+        <div class="ticker-label">
+            <i class="fas fa-bullhorn"></i> <span id="tickerLabel">জরুরি</span>
+        </div>
+        <div class="ticker-wrap">
+            <div class="ticker-track" id="tickerTrack"></div>
+        </div>
+        <div class="ticker-controls">
+            <button id="tickerPrev" title="Previous"><i class="fas fa-chevron-left"></i></button>
+            <button id="tickerNext" title="Next"><i class="fas fa-chevron-right"></i></button>
+        </div>
+    </div>
+</section>
+
+<!-- QUICK CARDS -->
+<section class="quick-cards-section">
+    <div class="container-custom">
+        <h2 class="section-title reveal reveal-scale">আমাদের সেবাসমূহ</h2>
+        <p class="section-subtitle reveal reveal-scale">শিক্ষা, তথ্য ও সুবিধার এক ঠিকানা</p>
+        <div class="quick-cards-grid reveal-stagger" id="quickCardsGrid"></div>
+    </div>
+</section>
+
+<!-- PRINCIPAL -->
+<section class="principal-section">
+    <div class="container-custom">
+        <div class="principal-grid">
+            <div class="principal-image-wrap reveal reveal-left">
+                <img src="assets/images/principal.jpg" alt="Principal" id="principalImage" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22500%22%3E%3Crect fill=%22%230a1655%22 width=%22400%22 height=%22500%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23f2d27b%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E👤%3C/text%3E%3C/svg%3E'">
+            </div>
+            <div class="principal-content">
+                <h2 id="principalName">অধ্যক্ষের নাম</h2>
+                <p class="designation" id="principalDesignation">অধ্যক্ষ</p>
+                <div class="quote" id="principalShortMessage">"শিক্ষাই জাতির মেরুদণ্ড — আমরা প্রতিটি শিক্ষার্থীকে আধুনিক ও নৈতিক শিক্ষায় গড়ে তুলতে প্রতিশ্রুতিবদ্ধ।"</div>
+                <div class="principal-actions">
+                    <button class="btn-navy" onclick="openPrincipalModal()">
+                        <i class="fas fa-book-open"></i> সম্পূর্ণ বাণী পড়ুন
+                    </button>
+                    <a href="public-pages/about.html" class="btn-outline-navy">
+                        <i class="fas fa-info-circle"></i> বিস্তারিত
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- DEPARTMENT HEADS -->
+<section class="dept-heads-section">
+    <div class="container-custom">
+        <h2 class="section-title reveal reveal-scale">বিভাগীয় প্রধানগণ</h2>
+        <p class="section-subtitle reveal reveal-scale">আমাদের অভিজ্ঞ শিক্ষকমণ্ডলী</p>
+    </div>
+    <div class="dept-slider-viewport">
+        <div class="dept-slider" id="deptSlider"></div>
+    </div>
+</section>
+
+<!-- WELCOME -->
+<section class="welcome-section">
+    <div class="container-custom">
+        <div class="welcome-wrap reveal reveal-left">
+            <h2 id="welcomeTitle">স্বাগতম</h2>
+            <p id="welcomeShortText">
+                ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম। আমরা মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়ে শিক্ষার্থীদের ভবিষ্যৎ গড়ে তুলছি।
+            </p>
+            <button class="btn-navy" onclick="openWelcomeModal()">
+                <i class="fas fa-arrow-right"></i> আরও পড়ুন
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- COUNTER -->
+<section class="counter-section" id="counterSection">
+    <div class="container-custom">
+        <div class="counter-slider-wrap" id="counterSliderWrap"></div>
+        <div class="counter-dots" id="counterDots"></div>
+    </div>
+</section>
+
+<!-- NOTICE BOARD -->
+<section class="notice-board-section">
+    <div class="container-custom">
+        <div class="notice-board-box reveal reveal-scale">
+            <div class="notice-board-head">
+                <h3><i class="fas fa-clipboard-list"></i> <span id="noticeBoardTitle">নোটিশ বোর্ড</span></h3>
+                <a href="public-pages/notices.html" class="view-all" id="noticeBoardViewAll">
+                    সব দেখুন <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="notice-list" id="noticeBoardList">
+                <div style="padding:30px;text-align:center;color:var(--grey);">
+                    <i class="fas fa-spinner fa-spin me-2"></i> লোড হচ্ছে...
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LATEST NEWS -->
+<section class="news-section">
+    <div class="container-custom">
+        <h2 class="section-title reveal reveal-scale" id="newsSectionTitle">সর্বশেষ সংবাদ</h2>
+        <p class="section-subtitle reveal reveal-scale">কলেজের সাম্প্রতিক খবর ও ইভেন্ট</p>
+        <div class="news-grid reveal-stagger" id="newsGrid"></div>
+        <div style="text-align:center;margin-top:40px;">
+            <a href="public-pages/news.html" class="btn-navy">
+                <i class="fas fa-newspaper"></i> <span id="newsViewAllText">সব সংবাদ দেখুন</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+    <div class="container-custom">
+        <h2 class="section-title reveal reveal-scale">আমাদের গ্যালারি</h2>
+        <p class="section-subtitle reveal reveal-scale">কলেজের স্মরণীয় মুহূর্তের ছবি</p>
+        <div class="gallery-grid-home reveal-stagger" id="galleryGridHome"></div>
+        <div style="text-align:center;margin-top:40px;">
+            <a href="public-pages/gallery.html" class="btn-navy">
+                <i class="fas fa-images"></i> সব ছবি দেখুন
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+    <div class="container-custom">
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4 data-college-name>ফুলবাড়ীয়া কলেজ</h4>
+                <p>শিক্ষা, নৈতিকতা ও আধুনিকতার সমন্বয়ে একটি আদর্শ শিক্ষা প্রতিষ্ঠান। ১৯৭২ সাল থেকে মানসম্মত শিক্ষা প্রদান করে আসছে।</p>
+                <div class="footer-social">
+                    <a href="#" id="footerFacebook" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" id="footerYoutube" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                    <a href="#" id="footerWebsite" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+                    <a href="#" id="footerMap" target="_blank" title="Map"><i class="fas fa-map"></i></a>
+                </div>
+                <div class="footer-map-box">
+                    <iframe
+                        src="https://www.google.com/maps?q=24.637326,90.272935&hl=bn&z=16&output=embed"
+                        allowfullscreen=""
+                        loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+                <a href="https://www.google.com/maps/search/?api=1&query=24.637326,90.272935"
+                   class="footer-map-link"
+                   target="_blank">
+                    <i class="fas fa-map-marker-alt"></i> Google Maps-এ দেখুন
+                    <i class="fas fa-arrow-right" style="font-size:9px;"></i>
+                </a>
+            </div>
+
+            <div class="footer-col">
+                <h4>দ্রুত লিংক</h4>
+                <ul>
+                    <li><a href="public-pages/about.html"><i class="fas fa-chevron-right"></i> আমাদের সম্পর্কে</a></li>
+                    <li><a href="public-pages/academics.html"><i class="fas fa-chevron-right"></i> একাডেমিক</a></li>
+                    <li><a href="public-pages/admission.html"><i class="fas fa-chevron-right"></i> ভর্তি তথ্য</a></li>
+                    <li><a href="public-pages/notices.html"><i class="fas fa-chevron-right"></i> নোটিশ</a></li>
+                    <li><a href="public-pages/results.html"><i class="fas fa-chevron-right"></i> রেজাল্ট</a></li>
+                    <li><a href="public-pages/gallery.html"><i class="fas fa-chevron-right"></i> গ্যালারি</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>শিক্ষার্থী সেবা</h4>
+                <ul>
+                    <li><a href="public-pages/academic-hub.html"><i class="fas fa-chevron-right"></i> একাডেমিক হাব</a></li>
+                    <li><a href="public-pages/bncc.html"><i class="fas fa-chevron-right"></i> BNCC</a></li>
+                    <li><a href="public-pages/scouts.html"><i class="fas fa-chevron-right"></i> Scouts</a></li>
+                    <li><a href="public-pages/contact.html"><i class="fas fa-chevron-right"></i> যোগাযোগ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>যোগাযোগ</h4>
+                <div class="footer-contact-item">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <span data-college-address>ফুলবাড়ীয়া, ময়মনসিংহ, বাংলাদেশ</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span data-college-phone>+880 1XXX-XXXXXX</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span data-college-email>info@fulbariyacollege.edu.bd</span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-id-card"></i>
+                    <span>EIIN: <span data-college-eiin>XXXXXX</span></span>
+                </div>
+                <div class="footer-contact-item">
+                    <i class="fas fa-clock"></i>
+                    <span>রবি - বৃহস্পতি: ৯টা - ৪টা</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- IMPORTANT LINKS — Simple list style -->
+        <div class="important-links-section">
+            <div class="important-links-header">
+                <i class="fas fa-link"></i>
+                <h4>প্রয়োজনীয় লিংকসমূহ</h4>
+            </div>
+            <ul class="important-links-list">
+                <li>
+                    <a href="https://teachers.gov.bd" target="_blank" rel="noopener">
+                        শিক্ষক বাতায়ন
+                        <i class="fas fa-external-link-alt ext-icon"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://pmo.gov.bd" target="_blank" rel="noopener">
+                        প্রধানমন্ত্রীর কার্যালয় (PMO)
+                        <i class="fas fa-external-link-alt ext-icon"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://moedu.gov.bd" target="_blank" rel="noopener">
+                        শিক্ষা মন্ত্রণালয়
+                        <i class="fas fa-external-link-alt ext-icon"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://dshe.gov.bd" target="_blank" rel="noopener">
+                        মাধ্যমিক ও উচ্চশিক্ষা অধিদপ্তর
+                        <i class="fas fa-external-link-alt ext-icon"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://xiclassadmission.gov.bd" target="_blank" rel="noopener">
+                        একাদশ-দ্বাদশ শ্রেণিতে ভর্তি আবেদন
+                        <i class="fas fa-external-link-alt ext-icon"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://honorsadmission.gov.bd" target="_blank" rel="noopener">
+                        অনার্স-ডিগ্রি শ্রেণিতে ভর্তি আবেদন
+                        <i class="fas fa-external-link-alt ext-icon"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="footer-bottom">
+            <span>© <span id="year"></span> <strong data-college-name>ফুলবাড়ীয়া কলেজ</strong>। সর্বস্বত্ব সংরক্ষিত।</span>
+
+            <div class="footer-visitors" title="Total Visitors">
+                <i class="fas fa-eye"></i>
+                <span class="visitor-label">Total Visitors</span>
+                <span class="visitor-count" id="totalVisitors">...</span>
+            </div>
+
+            <span class="footer-credit">
+                <i class="fas fa-graduation-cap fm-icon"></i>
+                Created by <strong style="color: var(--gold); font-weight: 700;">Sabbir Hosan Nirob</strong>
+            </span>
+        </div>
+    </div>
+</footer>
+
+<button class="scroll-top" id="scrollTop">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<div class="smart-modal-overlay" id="smartModal">
+    <div class="smart-modal">
+        <div class="smart-modal-head">
+            <h3 id="smartModalTitle">শিরোনাম</h3>
+            <button class="smart-modal-close" onclick="closeSmartModal()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="smart-modal-body" id="smartModalBody"></div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/supabase.js"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    let SITE_SETTINGS = {};
+    let HERO_SLIDES = [];
+    let HERO_INDEX = 0;
+    let HERO_TIMER = null;
+    let COUNTER_INDEX = 0;
+    let COUNTER_TIMER = null;
+    let COUNTER_TOTAL = 0;
+    let INIT_DONE = false;
+    let REVEAL_OBSERVER = null;
+    let NOTICE_AUTOSCROLL_TIMER = null;
+    let NOTICE_IS_HOVERED = false;
+    let NOTICE_IS_DRAGGING = false;
+
+    function getSetting(key, fallback) {
+        if (fallback === undefined) fallback = '';
+        return SITE_SETTINGS[key] !== undefined && SITE_SETTINGS[key] !== null && SITE_SETTINGS[key] !== ''
+            ? SITE_SETTINGS[key]
+            : fallback;
+    }
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // =========================================================
+    // SCROLL REVEAL
+    // =========================================================
+    function setupScrollReveal() {
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) {
+                el.classList.add('in-view');
+            });
+            return null;
+        }
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal:not(.in-view), .reveal-stagger:not(.in-view)').forEach(function (el) {
+            observer.observe(el);
+        });
+        return observer;
+    }
+
+    function observeNewReveals(container) {
+        if (!REVEAL_OBSERVER) return;
+        container.querySelectorAll('.reveal:not(.in-view), .reveal-stagger:not(.in-view)').forEach(function (el) {
+            REVEAL_OBSERVER.observe(el);
+        });
+    }
+
+    function forceCheckVisible() {
+        document.querySelectorAll('.reveal:not(.in-view), .reveal-stagger:not(.in-view)').forEach(function (el) {
+            const rect = el.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight - 80 && rect.bottom > 0;
+            if (isVisible) el.classList.add('in-view');
+        });
+    }
+
+    // =========================================================
+    // LOAD SETTINGS
+    // =========================================================
+    async function loadSiteSettings() {
+        try {
+            const supabase = window.FDC_SUPABASE;
+            if (!supabase) throw new Error('Supabase not initialized');
+            const { data, error } = await supabase.from('site_settings').select('key, value');
+            if (error) throw error;
+            SITE_SETTINGS = {};
+            (data || []).forEach(function (item) { SITE_SETTINGS[item.key] = item.value; });
+            console.log('✅ Settings loaded:', Object.keys(SITE_SETTINGS).length);
+            return true;
+        } catch (err) {
+            console.error('❌ Settings error:', err);
+            return false;
+        }
+    }
+
+    function applyCollegeInfo() {
+        const name = getSetting('college_name', 'ফুলবাড়ীয়া কলেজ');
+        const email = getSetting('college_email', 'info@fulbariyacollege.edu.bd');
+        const phone = getSetting('college_phone', '+880 1XXX-XXXXXX');
+        const address = getSetting('college_address', 'ফুলবাড়ীয়া, ময়মনসিংহ');
+        const eiin = getSetting('college_eiin', 'XXXXXX');
+
+        document.querySelectorAll('[data-college-name]').forEach(function (el) { el.textContent = name; });
+        document.querySelectorAll('[data-college-email]').forEach(function (el) { el.textContent = email; });
+        document.querySelectorAll('[data-college-phone]').forEach(function (el) { el.textContent = phone; });
+        document.querySelectorAll('[data-college-address]').forEach(function (el) { el.textContent = address; });
+        document.querySelectorAll('[data-college-eiin]').forEach(function (el) { el.textContent = eiin; });
+        document.title = name + ' | Fulbariya College';
+    }
+
+    function applySocialLinks() {
+        function setLink(id, url) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            if (url) { el.href = url; el.style.display = ''; }
+            else { el.style.display = 'none'; }
+        }
+        const fb = getSetting('social_facebook');
+        const yt = getSetting('social_youtube');
+        const wb = getSetting('social_website');
+        const mp = getSetting('social_map');
+
+        setLink('socialFacebook', fb);
+        setLink('socialYoutube', yt);
+        setLink('socialWebsite', wb);
+        setLink('socialMap', mp);
+        setLink('footerFacebook', fb);
+        setLink('footerYoutube', yt);
+        setLink('footerWebsite', wb);
+        setLink('footerMap', mp);
+    }
+
+    // =========================================================
+    // HERO SLIDER
+    // =========================================================
+    function buildHeroSlider() {
+        const slider = document.getElementById('heroSlider');
+        const count = parseInt(getSetting('hero_slide_count', '1')) || 1;
+
+        HERO_SLIDES = [];
+        for (let i = 1; i <= count; i++) {
+            const img = getSetting('hero_slide_' + i + '_image');
+            const title = getSetting('hero_slide_' + i + '_title');
+            const subtitle = getSetting('hero_slide_' + i + '_subtitle');
+            const btnText = getSetting('hero_slide_' + i + '_btn_text');
+            const btnLink = getSetting('hero_slide_' + i + '_btn_link');
+            if (img || title) {
+                HERO_SLIDES.push({ img: img, title: title, subtitle: subtitle, btnText: btnText, btnLink: btnLink });
+            }
+        }
+
+        if (HERO_SLIDES.length === 0) {
+            slider.innerHTML = '<div class="hero-slide active" style="position:relative;min-height:520px;background:linear-gradient(135deg,#0a1655,#1a237e);"><div class="hero-content" style="position:relative;padding:80px 20px;"><h2>ফুলবাড়ীয়া কলেজে স্বাগতম</h2><p>মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়</p></div></div>';
+            return;
+        }
+
+        slider.style.position = 'relative';
+        slider.style.minHeight = '520px';
+
+        let html = '';
+        HERO_SLIDES.forEach(function (slide, idx) {
+            const isActive = idx === 0 ? 'active' : '';
+            html += '<div class="hero-slide ' + isActive + '">' +
+                (slide.img ? '<img src="' + slide.img + '" alt="' + (slide.title || 'Slide') + '" onerror="this.style.display=\'none\'">' : '') +
+                '<div class="hero-content">' +
+                    (slide.title ? '<h2>' + slide.title + '</h2>' : '') +
+                    (slide.subtitle ? '<p>' + slide.subtitle + '</p>' : '') +
+                    (slide.btnText && slide.btnLink ? '<a href="' + slide.btnLink + '" class="hero-btn">' + slide.btnText + ' <i class="fas fa-arrow-right"></i></a>' : '') +
+                '</div>' +
+            '</div>';
+        });
+
+        if (HERO_SLIDES.length > 1) {
+            html += '<div class="hero-dots">';
+            HERO_SLIDES.forEach(function (_, idx) {
+                html += '<div class="dot ' + (idx === 0 ? 'active' : '') + '" onclick="goToHeroSlide(' + idx + ')"></div>';
+            });
+            html += '</div>';
+        }
+
+        slider.innerHTML = html;
+        if (HERO_SLIDES.length > 1) startHeroAutoSlide();
+    }
+
+    window.goToHeroSlide = function (index) {
+        HERO_INDEX = index;
+        document.querySelectorAll('.hero-slide').forEach(function (s, i) { s.classList.toggle('active', i === index); });
+        document.querySelectorAll('.hero-dots .dot').forEach(function (d, i) { d.classList.toggle('active', i === index); });
+        const slides = document.querySelectorAll('.hero-slide');
+        const activeImg = slides[index] && slides[index].querySelector('img');
+        if (activeImg) {
+            activeImg.style.transition = 'none';
+            activeImg.style.transform = 'scale(1)';
+            setTimeout(function () {
+                activeImg.style.transition = 'transform 6s ease-out';
+                activeImg.style.transform = 'scale(1.12)';
+            }, 50);
+        }
+    };
+
+    function startHeroAutoSlide() {
+        if (HERO_TIMER) clearInterval(HERO_TIMER);
+        HERO_TIMER = setInterval(function () {
+            HERO_INDEX = (HERO_INDEX + 1) % HERO_SLIDES.length;
+            window.goToHeroSlide(HERO_INDEX);
+        }, 6000);
+    }
+
+    // =========================================================
+    // QUICK CARDS — Student Portal → Academic Hub
+    // =========================================================
+    function buildQuickCards() {
+    const grid = document.getElementById('quickCardsGrid');
+    const fallback = [
+        { icon: 'fas fa-trophy', title: 'ফলাফল', desc: 'অনলাইনে পরীক্ষার ফলাফল দেখুন', link: 'public-pages/results.html' },
+        { icon: 'fas fa-user-plus', title: 'ভর্তি তথ্য', desc: 'ভর্তি সংক্রান্ত তথ্য ও নির্দেশনা', link: 'public-pages/admission.html' },
+        { icon: 'fas fa-phone', title: 'যোগাযোগ', desc: 'আমাদের সাথে যোগাযোগ করুন', link: 'public-pages/contact.html' },
+        { icon: 'fas fa-flag', title: 'বিএনসিসি', desc: 'বাংলাদেশ ন্যাশনাল ক্যাডেট কোর', link: 'public-pages/bncc.html' },
+        { icon: 'fas fa-campground', title: 'স্কাউটস', desc: 'বাংলাদেশ স্কাউটস কার্যক্রম', link: 'public-pages/scouts.html' },
+        { icon: 'fas fa-graduation-cap', title: 'একাডেমিক হাব', desc: 'ক্যালেন্ডার ও ক্লাস রুটিন', link: 'public-pages/academic-hub.html' }
+    ];
+
+    let html = '';
+    for (let i = 1; i <= 6; i++) {
+        const dbIcon = getSetting('quick_card_' + i + '_icon');
+        const dbTitle = getSetting('quick_card_' + i + '_title');
+        const dbDesc = getSetting('quick_card_' + i + '_desc');
+        const dbLink = getSetting('quick_card_' + i + '_link');
+
+        const fb = fallback[i - 1];
+        const icon = dbIcon || fb.icon;
+        const title = dbTitle || fb.title;
+        const desc = dbDesc || fb.desc;
+        const link = dbLink || fb.link;
+
+        if (!title) continue;
+        html += '<a href="' + link + '" class="quick-card">' +
+            '<div class="quick-card-icon"><i class="' + icon + '"></i></div>' +
+            '<h3>' + escapeHtml(title) + '</h3>' +
+            '<p>' + escapeHtml(desc) + '</p>' +
+            '<span class="card-link">বিস্তারিত <i class="fas fa-arrow-right"></i></span>' +
+        '</a>';
+    }
+    grid.innerHTML = html;
+    observeNewReveals(grid);
+}
+         
+
+    // =========================================================
+    // PRINCIPAL
+    // =========================================================
+    function loadPrincipal() {
+        const name = getSetting('principal_name', 'অধ্যক্ষের নাম');
+        const designation = getSetting('principal_designation', 'অধ্যক্ষ');
+        const image = getSetting('principal_image');
+        const shortMsg = getSetting('principal_short_message', '');
+
+        document.getElementById('principalName').textContent = name;
+        document.getElementById('principalDesignation').textContent = designation;
+        document.getElementById('principalShortMessage').textContent = shortMsg ? '"' + shortMsg + '"' : '';
+        if (image) document.getElementById('principalImage').src = image;
+    }
+
+    window.openPrincipalModal = function () {
+        const name = getSetting('principal_name', 'অধ্যক্ষ');
+        const designation = getSetting('principal_designation', 'অধ্যক্ষ');
+        const fullMsg = getSetting('principal_full_message', 'বিস্তারিত বাণী যোগ করা হয়নি।');
+        openSmartModal(
+            name + ' এর বাণী',
+            '<p><strong>' + name + '</strong><br><em>' + designation + '</em></p><hr style="margin:16px 0;border-color:var(--border);">' + fullMsg.replace(/\n/g, '<br>')
+        );
+    };
+
+    // =========================================================
+    // DEPARTMENT HEADS
+    // =========================================================
+    async function loadDepartmentHeads() {
+        const slider = document.getElementById('deptSlider');
+        try {
+            const supabase = window.FDC_SUPABASE;
+            const { data, error } = await supabase
+                .from('department_heads')
+                .select('*')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true });
+
+            if (error) throw error;
+            if (!data || data.length === 0) {
+                slider.innerHTML = '<p style="text-align:center;color:var(--grey);width:100%;padding:30px;">কোনো তথ্য পাওয়া যায়নি</p>';
+                return;
+            }
+
+            function buildCard(head) {
+                const img = head.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22280%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22260%22 height=%22280%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%230a1655%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E👤%3C/text%3E%3C/svg%3E';
+                return '<div class="dept-card">' +
+                    '<img src="' + img + '" alt="' + escapeHtml(head.name) + '" class="dept-img" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22280%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22260%22 height=%22280%22/%3E%3C/svg%3E\'">' +
+                    '<div class="dept-info">' +
+                        '<h4>' + escapeHtml(head.name) + '</h4>' +
+                        '<p class="dept-designation">' + escapeHtml(head.designation) + '</p>' +
+                        '<p class="dept-department">' + escapeHtml(head.department || '') + '</p>' +
+                    '</div>' +
+                '</div>';
+            }
+
+            const cardsHtml = data.map(buildCard).join('');
+            slider.innerHTML = cardsHtml + cardsHtml;
+            const duration = Math.max(data.length * 8, 30);
+            slider.style.animationDuration = duration + 's';
+
+        } catch (err) {
+            console.error('Dept error:', err);
+            slider.innerHTML = '<p style="text-align:center;color:var(--grey);width:100%;padding:30px;">লোড করা যায়নি</p>';
+        }
+    }
+
+    // =========================================================
+    // WELCOME
+    // =========================================================
+    function loadWelcome() {
+        document.getElementById('welcomeTitle').textContent = getSetting('welcome_title', 'স্বাগতম');
+        document.getElementById('welcomeShortText').textContent = getSetting('welcome_short_text', 'ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।');
+    }
+
+    window.openWelcomeModal = function () {
+        const title = getSetting('welcome_title', 'স্বাগতম');
+        const desc = getSetting('welcome_description', 'বিস্তারিত তথ্য যোগ করা হয়নি।');
+        const readMoreLink = getSetting('welcome_read_more_link', '');
+        let body = desc.replace(/\n/g, '<br>');
+        if (readMoreLink) {
+            body += '<br><br><a href="' + readMoreLink + '" class="btn-navy" style="margin-top:10px;">আরও জানুন <i class="fas fa-arrow-right"></i></a>';
+        }
+        openSmartModal(title, body);
+    };
+
+    // =========================================================
+    // COUNTER
+    // =========================================================
+    function buildCounter() {
+        const wrap = document.getElementById('counterSliderWrap');
+        const section = document.getElementById('counterSection');
+        const bg = getSetting('counter_bg_image');
+        if (bg && section) section.style.setProperty('--counter-bg', 'url(\'' + bg + '\')');
+
+        let html = '';
+        let total = 0;
+
+        for (let i = 1; i <= 4; i++) {
+            const icon = getSetting('counter_' + i + '_icon', 'fas fa-graduation-cap');
+            const value = getSetting('counter_' + i + '_value');
+            const label = getSetting('counter_' + i + '_label');
+            if (!value && !label) continue;
+
+            const active = total === 0 ? 'active' : '';
+            html += '<div class="counter-slide ' + active + '" data-index="' + total + '">' +
+                '<div class="counter-glass">' +
+                    '<div class="counter-fm-icon"><i class="' + icon + '"></i></div>' +
+                    '<div class="counter-info">' +
+                        '<span class="counter-label">' + escapeHtml(label || '') + '</span>' +
+                        '<span class="counter-value">' + escapeHtml(value || '0') + '</span>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
+            total++;
+        }
+
+        if (total === 0) {
+            wrap.innerHTML = '<div class="counter-slide active"><div class="counter-glass"><div class="counter-fm-icon"><i class="fas fa-graduation-cap"></i></div><div class="counter-info"><span class="counter-label">WELCOME</span><span class="counter-value">FDC</span></div></div></div>';
+            COUNTER_TOTAL = 1;
+            return;
+        }
+
+        wrap.innerHTML = html;
+        COUNTER_TOTAL = total;
+        COUNTER_INDEX = 0;
+
+        if (total > 1) startCounterAuto();
+    }
+
+    function goToCounterSlide(index) {
+        const slides = document.querySelectorAll('.counter-slide');
+        const prevIndex = COUNTER_INDEX;
+        slides.forEach(function (s, i) {
+            if (i === index) {
+                s.classList.remove('exit-left');
+                s.classList.add('active');
+            } else if (i === prevIndex && prevIndex !== index) {
+                s.classList.remove('active');
+                s.classList.add('exit-left');
+                setTimeout(function () {
+                    if (!s.classList.contains('active')) s.classList.remove('exit-left');
+                }, 800);
+            } else {
+                s.classList.remove('active', 'exit-left');
+            }
+        });
+        COUNTER_INDEX = index;
+    }
+
+    function startCounterAuto() {
+        if (COUNTER_TIMER) clearInterval(COUNTER_TIMER);
+        const speed = parseInt(getSetting('counter_slide_speed', '4000')) || 4000;
+        COUNTER_TIMER = setInterval(function () {
+            const next = (COUNTER_INDEX + 1) % COUNTER_TOTAL;
+            goToCounterSlide(next);
+        }, speed);
+    }
+
+    // =========================================================
+    // NOTICE TICKER
+    // =========================================================
+    async function loadNoticeTicker() {
+        const enabled = getSetting('notice_ticker_enabled', 'true') === 'true';
+        if (!enabled) return;
+
+        const label = getSetting('notice_ticker_label', 'জরুরি');
+        const limit = parseInt(getSetting('notice_ticker_limit', '10')) || 10;
+        document.getElementById('tickerLabel').textContent = label;
+
+        try {
+            const supabase = window.FDC_SUPABASE;
+            const { data, error } = await supabase
+                .from('notices')
+                .select('id, title, is_important, is_featured')
+                .eq('is_published', true)
+                .order('is_important', { ascending: false })
+                .order('date', { ascending: false })
+                .limit(limit);
+
+            if (error) throw error;
+            if (!data || data.length === 0) return;
+
+            document.getElementById('noticeTicker').style.display = 'block';
+
+            const items = data.concat(data);
+            let html = '';
+            items.forEach(function (n) {
+                const star = n.is_featured ? ' <i class="fas fa-star" style="color:#f2d27b;"></i>' : '';
+                html += '<a href="public-pages/notice-details.html?id=' + n.id + '" class="ticker-item">' +
+                    '<i class="fas fa-circle"></i> ' + escapeHtml(n.title) + star +
+                '</a>';
+            });
+
+            const track = document.getElementById('tickerTrack');
+            track.innerHTML = html;
+            const speedSec = 0.3;
+            track.style.animationDuration = Math.max(data.length * speedSec, 5) + 's';
+
+            document.getElementById('tickerPrev').addEventListener('click', function () {
+                track.style.animationPlayState = 'paused';
+                track.style.transform = 'translateX(20px)';
+                setTimeout(function () {
+                    track.style.transform = '';
+                    track.style.animationPlayState = 'running';
+                }, 400);
+            });
+            document.getElementById('tickerNext').addEventListener('click', function () {
+                track.style.animationPlayState = 'paused';
+                track.style.transform = 'translateX(-20px)';
+                setTimeout(function () {
+                    track.style.transform = '';
+                    track.style.animationPlayState = 'running';
+                }, 400);
+            });
+        } catch (err) {
+            console.error('Ticker error:', err);
+        }
+    }
+
+    // =========================================================
+    // NOTICE BOARD
+    // =========================================================
+    async function loadNoticeBoard() {
+        const list = document.getElementById('noticeBoardList');
+        const title = getSetting('notice_board_title', 'নোটিশ বোর্ড');
+        const viewAll = getSetting('notice_board_view_all_text', 'সব দেখুন');
+
+        document.getElementById('noticeBoardTitle').textContent = title;
+        document.getElementById('noticeBoardViewAll').innerHTML = viewAll + ' <i class="fas fa-arrow-right"></i>';
+
+        try {
+            const supabase = window.FDC_SUPABASE;
+            let { data: featured } = await supabase
+                .from('notices')
+                .select('id, title, description, date, is_featured, is_important')
+                .eq('is_published', true)
+                .eq('is_featured', true)
+                .order('date', { ascending: false })
+                .limit(5);
+
+            let { data: recent } = await supabase
+                .from('notices')
+                .select('id, title, description, date, is_featured, is_important')
+                .eq('is_published', true)
+                .eq('is_featured', false)
+                .order('date', { ascending: false })
+                .limit(5);
+
+            featured = featured || [];
+            recent = recent || [];
+            const combined = featured.concat(recent).slice(0, 6);
+
+            if (combined.length === 0) {
+                list.innerHTML = '<div style="padding:30px;text-align:center;color:var(--grey);">কোনো নোটিশ নেই</div>';
+                return;
+            }
+
+            const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+            let html = '';
+
+            combined.forEach(function (n) {
+                const d = n.date ? new Date(n.date) : new Date();
+                const day = d.getDate();
+                const month = months[d.getMonth()];
+                const star = n.is_featured ? '<i class="fas fa-star featured-star"></i>' : '';
+                const important = n.is_important ? '<i class="fas fa-exclamation-circle" style="color:#ef4444;margin-left:6px;font-size:11px;"></i>' : '';
+
+                html += '<a href="public-pages/notice-details.html?id=' + n.id + '" class="notice-item">' +
+                    '<div class="notice-date">' +
+                        '<div class="day">' + day + '</div>' +
+                        '<div class="month">' + month + '</div>' +
+                    '</div>' +
+                    '<div class="notice-body">' +
+                        '<h4>' + escapeHtml(n.title) + star + important + '</h4>' +
+                        '<p>' + escapeHtml(n.description || '') + '</p>' +
+                    '</div>' +
+                '</a>';
+            });
+            list.innerHTML = html;
+
+            setupNoticeAutoScroll(list);
+
+        } catch (err) {
+            console.error('Notice board error:', err);
+            list.innerHTML = '<div style="padding:30px;text-align:center;color:var(--grey);">লোড করা যায়নি</div>';
+        }
+    }
+
+    function setupNoticeAutoScroll(listEl) {
+        listEl.addEventListener('mouseenter', function () { NOTICE_IS_HOVERED = true; });
+        listEl.addEventListener('mouseleave', function () { NOTICE_IS_HOVERED = false; });
+
+        listEl.addEventListener('touchstart', function () { NOTICE_IS_HOVERED = true; }, { passive: true });
+        listEl.addEventListener('touchend', function () {
+            setTimeout(function () { NOTICE_IS_HOVERED = false; }, 2000);
+        }, { passive: true });
+
+        let isDown = false;
+        let startY = 0;
+        let startScrollTop = 0;
+        let moved = false;
+
+        listEl.addEventListener('mousedown', function (e) {
+            isDown = true;
+            moved = false;
+            NOTICE_IS_DRAGGING = true;
+            startY = e.pageY - listEl.offsetTop;
+            startScrollTop = listEl.scrollTop;
+            listEl.style.scrollBehavior = 'auto';
+        });
+
+        listEl.addEventListener('mousemove', function (e) {
+            if (!isDown) return;
+            e.preventDefault();
+            const y = e.pageY - listEl.offsetTop;
+            const walk = (y - startY) * 1.5;
+            if (Math.abs(walk) > 3) moved = true;
+            listEl.scrollTop = startScrollTop - walk;
+        });
+
+        function endDrag() {
+            if (!isDown) return;
+            isDown = false;
+            setTimeout(function () {
+                NOTICE_IS_DRAGGING = false;
+                listEl.style.scrollBehavior = 'smooth';
+            }, 500);
+        }
+
+        listEl.addEventListener('mouseup', endDrag);
+        listEl.addEventListener('mouseleave', endDrag);
+
+        listEl.addEventListener('click', function (e) {
+            if (moved) {
+                e.preventDefault();
+                e.stopPropagation();
+                moved = false;
+            }
+        }, true);
+
+        if (NOTICE_AUTOSCROLL_TIMER) clearInterval(NOTICE_AUTOSCROLL_TIMER);
+
+        const SCROLL_SPEED = 0.5;
+        const TICK_MS = 40;
+
+        NOTICE_AUTOSCROLL_TIMER = setInterval(function () {
+            if (NOTICE_IS_HOVERED || NOTICE_IS_DRAGGING) return;
+            if (listEl.scrollHeight <= listEl.clientHeight) return;
+
+            const maxScroll = listEl.scrollHeight - listEl.clientHeight;
+            if (listEl.scrollTop >= maxScroll - 1) {
+                listEl.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                listEl.scrollTop = listEl.scrollTop + SCROLL_SPEED;
+            }
+        }, TICK_MS);
+    }
+
+    // =========================================================
+    // NEWS
+    // =========================================================
+    async function loadNews() {
+        const grid = document.getElementById('newsGrid');
+        const title = getSetting('news_section_title', 'Latest News and Events');
+        const viewAllText = getSetting('news_section_view_all_text', 'View All');
+
+        document.getElementById('newsSectionTitle').textContent = title;
+        document.getElementById('newsViewAllText').textContent = viewAllText;
+
+        try {
+            const supabase = window.FDC_SUPABASE;
+            const { data, error } = await supabase
+                .from('news')
+                .select('id, title, description, image_url, category, news_date, external_link, is_featured')
+                .eq('is_published', true)
+                .order('is_featured', { ascending: false })
+                .order('display_order', { ascending: true })
+                .order('news_date', { ascending: false })
+                .limit(3);
+
+            if (error) throw error;
+            if (!data || data.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--grey);padding:30px;">কোনো সংবাদ নেই</div>';
+                return;
+            }
+
+            let html = '';
+            data.forEach(function (item) {
+                const img = item.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22300%22 height=%22200%22/%3E%3C/svg%3E';
+                const link = item.external_link || ('public-pages/news-details.html?id=' + item.id);
+                const target = item.external_link ? 'target="_blank" rel="noopener"' : '';
+                const dateStr = item.news_date
+                    ? new Date(item.news_date).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' })
+                    : 'সাম্প্রতিক';
+
+                html += '<a href="' + link + '" ' + target + ' class="news-card">' +
+                    '<div class="news-img-wrap">' +
+                        '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(item.title) + '" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22300%22 height=%22200%22/%3E%3C/svg%3E\'">' +
+                    '</div>' +
+                    '<div class="news-body">' +
+                        '<span class="news-cat">' + escapeHtml(item.category || 'News') + '</span>' +
+                        '<h4>' + escapeHtml(item.title) + '</h4>' +
+                        '<p>' + escapeHtml(item.description || '') + '</p>' +
+                        '<span class="news-date"><i class="fas fa-calendar"></i> ' + dateStr + '</span>' +
+                    '</div>' +
+                '</a>';
+            });
+            grid.innerHTML = html;
+            observeNewReveals(grid);
+        } catch (err) {
+            console.error('News error:', err);
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--grey);padding:30px;">লোড করা যায়নি</div>';
+        }
+    }
+
+    // =========================================================
+    // GALLERY
+    // =========================================================
+    async function loadGalleryHome() {
+        const grid = document.getElementById('galleryGridHome');
+        if (!grid) return;
+
+        try {
+            const supabase = window.FDC_SUPABASE;
+            const { data, error } = await supabase
+                .from('gallery')
+                .select('id, title, description, image_url, category, is_featured')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true })
+                .limit(6);
+
+            if (error) throw error;
+            if (!data || data.length === 0) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--grey);padding:30px;">কোনো ছবি নেই</div>';
+                return;
+            }
+
+            let html = '';
+            data.forEach(function (item) {
+                const img = item.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22300%22 height=%22200%22/%3E%3C/svg%3E';
+                const featuredBadge = item.is_featured
+                    ? '<span class="featured-badge"><i class="fas fa-star"></i> Featured</span>'
+                    : '';
+
+                html += '<a href="public-pages/gallery.html" class="gallery-card">' +
+                    '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(item.title) + '" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22300%22 height=%22200%22/%3E%3C/svg%3E\'">' +
+                    featuredBadge +
+                    '<div class="gallery-text-overlay">' +
+                        '<h4>' + escapeHtml(item.title) + '</h4>' +
+                        (item.description ? '<p>' + escapeHtml(item.description) + '</p>' : '') +
+                    '</div>' +
+                '</a>';
+            });
+            grid.innerHTML = html;
+            observeNewReveals(grid);
+        } catch (err) {
+            console.error('Gallery error:', err);
+            grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--grey);padding:30px;">লোড করা যায়নি</div>';
+        }
+    }
+
+    // =========================================================
+    // VISITOR COUNTER
+    // =========================================================
+    async function initVisitorCounter() {
+        const el = document.getElementById('totalVisitors');
+        if (!el) return;
+
+        const VISIT_KEY = 'fdc_last_visit_date';
+
+        try {
+            const supabase = window.FDC_SUPABASE;
+            if (!supabase) throw new Error('Supabase not ready');
+
+            const today = new Date().toISOString().split('T')[0];
+            const lastVisit = localStorage.getItem(VISIT_KEY);
+            const shouldIncrement = (lastVisit !== today);
+
+            if (shouldIncrement) {
+                const { data, error } = await supabase.rpc('increment_visitor_count');
+                if (error) throw error;
+                localStorage.setItem(VISIT_KEY, today);
+                displayVisitorCount(data);
+            } else {
+                const { data, error } = await supabase
+                    .from('site_stats')
+                    .select('stat_value')
+                    .eq('stat_key', 'total_visits')
+                    .maybeSingle();
+                if (error) throw error;
+                displayVisitorCount(data ? data.stat_value : 0);
+            }
+
+        } catch (e) {
+            console.warn('Visitor counter error:', e);
+            displayVisitorCount(0);
+        }
+    }
+
+    function displayVisitorCount(count) {
+        const el = document.getElementById('totalVisitors');
+        if (!el) return;
+        const num = parseInt(count) || 0;
+        el.textContent = num.toLocaleString('en-IN');
+    }
+
+    // =========================================================
+    // SMART MODAL
+    // =========================================================
+    window.openSmartModal = function (title, bodyHtml) {
+        document.getElementById('smartModalTitle').textContent = title;
+        document.getElementById('smartModalBody').innerHTML = bodyHtml;
+        document.getElementById('smartModal').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.closeSmartModal = function () {
+        document.getElementById('smartModal').classList.remove('show');
+        document.body.style.overflow = '';
+    };
+
+    document.getElementById('smartModal').addEventListener('click', function (e) {
+        if (e.target.id === 'smartModal') window.closeSmartModal();
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') window.closeSmartModal();
+    });
+
+    // =========================================================
+    // UI EVENTS
+    // =========================================================
+    document.getElementById('navToggle').addEventListener('click', function () {
+        document.getElementById('mainNav').classList.toggle('show');
+    });
+
+    const scrollBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', function () {
+        scrollBtn.classList.toggle('show', window.scrollY > 400);
+    }, { passive: true });
+    scrollBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // =========================================================
+    // INIT
+    // =========================================================
+    async function initHomepage() {
+        if (INIT_DONE) return;
+        INIT_DONE = true;
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+        REVEAL_OBSERVER = setupScrollReveal();
+
+        if (!window.FDC_SUPABASE) {
+            await new Promise(function (r) {
+                document.addEventListener('fdc:supabase-ready', r, { once: true });
+                setTimeout(r, 8000);
+            });
+        }
+
+        const ok = await loadSiteSettings();
+        if (ok) {
+            applyCollegeInfo();
+            applySocialLinks();
+            buildHeroSlider();
+            buildQuickCards();
+            loadPrincipal();
+            loadWelcome();
+            buildCounter();
+        }
+
+        await Promise.all([
+            loadDepartmentHeads(),
+            loadNoticeTicker(),
+            loadNoticeBoard(),
+            loadNews(),
+            loadGalleryHome(),
+            initVisitorCounter()
+        ]);
+
+        observeNewReveals(document.body);
+
+        setTimeout(function () {
+            forceCheckVisible();
+        }, 400);
+
+        console.log('🎉 Homepage ready');
+    }
+
+    let revealCheckTimer = null;
+    window.addEventListener('scroll', function () {
+        if (revealCheckTimer) return;
+        revealCheckTimer = setTimeout(function () {
+            forceCheckVisible();
+            revealCheckTimer = null;
+        }, 200);
+    }, { passive: true });
+
+    document.addEventListener('DOMContentLoaded', initHomepage);
+
+})();
+</script>
+
+</body>
+</html>
