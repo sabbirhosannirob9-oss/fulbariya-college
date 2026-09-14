@@ -1,0 +1,1604 @@
+ <!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Notices - Fulbariya College</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1a237e;
+            --primary-light: #0d47a1;
+            --gold: #f2d27b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --grey: #6b7280;
+            --bg: #f0f2f5;
+            --card-bg: #ffffff;
+            --border: rgba(0,0,0,0.06);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+        }
+
+        * {
+            font-family: 'Hind Siliguri', sans-serif;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body { background: var(--bg); margin: 0; }
+
+        /* ============ HEADER ============ */
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .admin-header .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .admin-header .brand-icon {
+            width: 46px; height: 46px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.15);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .admin-header h4 { margin: 0; font-size: 17px; font-weight: 700; }
+        .admin-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+
+        .admin-header .user-box { display: flex; align-items: center; gap: 10px; }
+        .admin-header .user-meta { text-align: right; line-height: 1.2; }
+        .admin-header .user-meta .name { font-size: 13px; font-weight: 600; }
+        .admin-header .user-meta .role { font-size: 11px; opacity: 0.85; }
+
+        .admin-header .avatar {
+            width: 42px; height: 42px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            overflow: hidden;
+        }
+
+        .admin-header .avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .btn-header {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+        }
+
+        .btn-header:hover {
+            background: rgba(255,255,255,0.3);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+        /* ============ MAIN ============ */
+        .main-wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 24px 16px 60px;
+        }
+
+        .page-title {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 22px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .page-title .badge-total {
+            background: linear-gradient(135deg, rgba(26,35,126,0.08), rgba(13,71,161,0.06));
+            color: var(--primary);
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+            border: 1px solid rgba(26,35,126,0.1);
+        }
+
+        .page-sub { color: var(--grey); font-size: 13px; margin-bottom: 20px; }
+
+        /* ============ ADD BUTTON ============ */
+        .btn-add {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 16px rgba(26,35,126,0.25);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(26,35,126,0.35);
+            color: #fff;
+        }
+
+        .toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* ============ FORM CARD ============ */
+        .form-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 26px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+            display: none;
+            border: 1px solid var(--border);
+        }
+
+        .form-card.show {
+            display: block;
+            animation: slideDown 0.4s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 16px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 13px;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .form-label .req { color: var(--danger); }
+
+        .form-control, .form-select {
+            border-radius: 10px;
+            border: 1.5px solid #e0e3eb;
+            padding: 11px 14px;
+            font-size: 13px;
+            transition: 0.25s;
+            background: #fafbff;
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(26,35,126,0.08);
+            background: #fff;
+            outline: none;
+        }
+
+        /* ============ UPLOAD ============ */
+        .upload-zone {
+            border: 2px dashed #c8cdda;
+            border-radius: 14px;
+            padding: 26px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            background: #fafbff;
+        }
+
+        .upload-zone:hover {
+            border-color: var(--primary);
+            background: #f5f7ff;
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--primary);
+            background: #e8eaf6;
+            transform: scale(1.01);
+        }
+
+        .upload-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .upload-zone .upload-icon {
+            font-size: 42px;
+            color: var(--primary);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .upload-zone .upload-text {
+            font-size: 13px;
+            color: #666;
+            margin-top: 8px;
+            pointer-events: none;
+        }
+
+        .upload-zone .upload-text strong { color: var(--primary); }
+
+        .upload-zone .file-types {
+            font-size: 11px;
+            color: #999;
+            margin-top: 4px;
+            pointer-events: none;
+        }
+
+        .file-preview {
+            display: none;
+            margin-top: 12px;
+            padding: 14px;
+            background: #f8f9ff;
+            border-radius: 12px;
+            border: 1.5px solid var(--border);
+            align-items: center;
+            gap: 14px;
+        }
+
+        .file-preview.show { display: flex; }
+
+        .file-preview .file-icon { font-size: 32px; }
+        .file-preview .file-icon.pdf { color: var(--danger); }
+        .file-preview .file-icon.image { color: var(--warning); }
+
+        .file-preview .file-info { flex: 1; }
+        .file-preview .file-name { font-weight: 600; font-size: 13px; }
+        .file-preview .file-size { font-size: 11px; color: #999; }
+
+        .file-preview .file-remove {
+            background: none;
+            border: none;
+            color: var(--danger);
+            font-size: 20px;
+            cursor: pointer;
+            padding: 4px;
+            transition: 0.2s;
+        }
+
+        .file-preview .file-remove:hover { transform: scale(1.15); }
+
+        .existing-file-link {
+            display: none;
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            border: 1px solid rgba(59,130,246,0.2);
+            font-size: 13px;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ============ BUTTONS ============ */
+        .btn-primary-grad {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            border: none;
+            padding: 11px 26px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 4px 16px rgba(26,35,126,0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary-grad:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(26,35,126,0.3);
+            color: #fff;
+        }
+
+        .btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .btn-secondary-grad {
+            background: #f3f4f6;
+            color: #374151;
+            border: 1.5px solid var(--border);
+            padding: 11px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-secondary-grad:hover { background: #e5e7eb; }
+
+        /* ============ FILTER ============ */
+        .filter-bar {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-chip {
+            padding: 7px 14px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            background: var(--card-bg);
+            color: var(--grey);
+            font-weight: 600;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .filter-chip.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(26,35,126,0.2);
+        }
+
+        .search-wrap {
+            position: relative;
+            margin-left: auto;
+            min-width: 220px;
+        }
+
+        .search-wrap i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--grey);
+            font-size: 13px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 14px 10px 38px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border);
+            background: var(--card-bg);
+            font-size: 12px;
+            transition: 0.25s;
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(26,35,126,0.08);
+        }
+
+        /* ============ TABLE ============ */
+        .table-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+        }
+
+        .table-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 15px;
+        }
+
+        .table-title .badge-count {
+            background: linear-gradient(135deg, rgba(26,35,126,0.08), rgba(13,71,161,0.06));
+            color: var(--primary);
+            font-size: 11px;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+
+        .table { margin: 0; }
+
+        .table thead th {
+            background: #f8f9fc;
+            font-weight: 700;
+            color: var(--primary);
+            border-bottom: 2px solid #e8eaf0;
+            font-size: 12px;
+            padding: 12px 10px;
+            white-space: nowrap;
+        }
+
+        .table tbody td {
+            padding: 14px 10px;
+            vertical-align: middle;
+            font-size: 13px;
+            color: #4b5563;
+        }
+
+        .table tbody tr {
+            transition: 0.2s;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .table tbody tr:hover { background: #f8f9ff; }
+
+        .notice-title {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 13px;
+        }
+
+        .notice-desc {
+            font-size: 11px;
+            color: var(--grey);
+            margin-top: 3px;
+        }
+
+        .badge-status {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .badge-published { background: #ecfdf5; color: #047857; border: 1px solid rgba(16,185,129,0.2); }
+        .badge-draft { background: #f3f4f6; color: #4b5563; border: 1px solid rgba(107,114,128,0.2); }
+        .badge-important { background: #fef2f2; color: #b91c1c; border: 1px solid rgba(239,68,68,0.2); }
+        .badge-featured { background: linear-gradient(135deg, #fef3c7, #fde68a); color: #92400e; border: 1px solid rgba(245,158,11,0.3); }
+        .badge-cat { background: #eff6ff; color: #1e40af; border: 1px solid rgba(59,130,246,0.2); padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; }
+
+        .file-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            transition: 0.25s;
+            text-decoration: none;
+        }
+
+        .file-link.pdf { background: #fef2f2; color: var(--danger); }
+        .file-link.image { background: #fff8e1; color: #e65100; }
+        .file-link:hover { transform: scale(1.08); }
+
+        .btn-action {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: none;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 2px;
+        }
+
+        .btn-edit { background: #e3f2fd; color: #1565c0; }
+        .btn-edit:hover { background: #bbdefb; }
+
+        .btn-delete { background: #fef2f2; color: var(--danger); }
+        .btn-delete:hover { background: #fecaca; }
+
+        .btn-star { background: #fef3c7; color: #d97706; }
+        .btn-star:hover { background: #fde68a; }
+        .btn-star.active { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
+
+        /* ============ SKELETON ============ */
+        .skeleton {
+            background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 6px;
+            height: 14px;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* ============ EMPTY STATE ============ */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: var(--grey);
+        }
+
+        .empty-state .icon-wrap {
+            width: 72px;
+            height: 72px;
+            background: linear-gradient(135deg, rgba(26,35,126,0.06), rgba(13,71,161,0.04));
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 14px;
+        }
+
+        .empty-state i {
+            font-size: 32px;
+            color: var(--primary);
+            opacity: 0.4;
+        }
+
+        .empty-state h6 {
+            color: #374151;
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 6px;
+        }
+
+        .empty-state p {
+            font-size: 13px;
+            margin: 0;
+        }
+
+        /* ============ TOAST ============ */
+        #toastContainer {
+            position: fixed;
+            top: 20px; right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast-msg {
+            padding: 14px 22px;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 600;
+            font-size: 13px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            min-width: 240px;
+            animation: slideIn 0.35s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toast-success { background: linear-gradient(135deg, #10b981, #059669); }
+        .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .toast-info { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        /* ============ SMART MODAL ============ */
+        .smart-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            backdrop-filter: blur(4px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .smart-modal-overlay.show { display: flex; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .smart-modal {
+            background: #fff;
+            border-radius: 20px;
+            max-width: 420px;
+            width: 100%;
+            padding: 30px 26px 24px;
+            text-align: center;
+            box-shadow: 0 24px 60px rgba(0,0,0,0.25);
+            animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .smart-modal::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-light), var(--gold));
+        }
+
+        @keyframes modalPop {
+            from { opacity: 0; transform: scale(0.85) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .smart-modal .modal-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+
+        .smart-modal .modal-icon.warn {
+            background: linear-gradient(135deg, #fef2f2, #fee2e2);
+            color: var(--danger);
+        }
+
+        .smart-modal .modal-icon.success {
+            background: linear-gradient(135deg, #ecfdf5, #d1fae5);
+            color: var(--success);
+        }
+
+        .smart-modal .modal-icon.info {
+            background: linear-gradient(135deg, #eff6ff, #dbeafe);
+            color: var(--info);
+        }
+
+        .smart-modal .modal-icon.star {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            color: #d97706;
+        }
+
+        .smart-modal h5 {
+            font-weight: 700;
+            color: #1f2937;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .smart-modal p {
+            color: var(--grey);
+            font-size: 13.5px;
+            margin-bottom: 22px;
+            line-height: 1.6;
+        }
+
+        .smart-modal .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .smart-modal .modal-btn {
+            padding: 11px 26px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+            transition: 0.25s;
+            min-width: 110px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+        }
+
+        .smart-modal .modal-btn.cancel {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .smart-modal .modal-btn.cancel:hover { background: #e5e7eb; }
+
+        .smart-modal .modal-btn.confirm {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(26,35,126,0.3);
+        }
+
+        .smart-modal .modal-btn.confirm:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26,35,126,0.4);
+        }
+
+        .smart-modal .modal-btn.danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(239,68,68,0.3);
+        }
+
+        .smart-modal .modal-btn.danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(239,68,68,0.4);
+        }
+
+        .smart-modal .modal-btn.gold {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(245,158,11,0.3);
+        }
+
+        .smart-modal .modal-btn.gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245,158,11,0.4);
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 640px) {
+            .admin-header { padding: 12px 16px; }
+            .admin-header h4 { font-size: 14px; }
+            .admin-header .brand-icon { width: 40px; height: 40px; font-size: 17px; }
+            .admin-header .user-meta { display: none; }
+            .main-wrap { padding: 16px 12px 50px; }
+            .page-title { font-size: 18px; }
+            .form-card { padding: 18px; }
+            .search-wrap { margin-left: 0; width: 100%; min-width: unset; }
+            .toolbar { flex-direction: column; align-items: stretch; }
+            .table-card { padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon">
+            <i class="fas fa-bullhorn"></i>
+        </div>
+        <div>
+            <h4>Manage Notices</h4>
+            <small>Create, edit and publish college notices</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="user-meta">
+            <div class="name" data-admin-name>Administrator</div>
+            <div class="role" data-admin-role>Role: Admin</div>
+        </div>
+        <div class="avatar" data-admin-avatar>A</div>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+        <button class="btn-header" onclick="adminLogout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</header>
+
+<!-- ============ MAIN ============ -->
+<div class="main-wrap">
+
+    <div class="toolbar">
+        <div>
+            <h4 class="page-title">
+                <i class="fas fa-list"></i> All Notices
+                <span class="badge-total" id="totalNotices">0</span>
+            </h4>
+            <p class="page-sub">College notices তালিকা ও নিয়ন্ত্রণ</p>
+        </div>
+        <button class="btn-add" id="showAddForm">
+            <i class="fas fa-plus-circle"></i> Add New Notice
+        </button>
+    </div>
+
+    <!-- ============ FORM ============ -->
+    <div class="form-card" id="noticeFormCard">
+        <div class="form-title">
+            <i class="fas fa-edit"></i> <span id="formTitle">Add New Notice</span>
+        </div>
+
+        <form id="noticeForm">
+            <input type="hidden" id="noticeId" value="">
+            <input type="hidden" id="existingFileUrl" value="">
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="form-label">Notice Title <span class="req">*</span></label>
+                    <input type="text" class="form-control" id="title" placeholder="Enter notice title" required>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-control" id="description" rows="3" placeholder="Enter notice details..."></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Date</label>
+                    <input type="date" class="form-control" id="noticeDate">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="category">
+                        <option value="general">General</option>
+                        <option value="academic">Academic</option>
+                        <option value="exam">Exam</option>
+                        <option value="admission">Admission</option>
+                        <option value="event">Event</option>
+                        <option value="result">Result</option>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">
+                        <i class="fas fa-paperclip"></i> File Attachment
+                        <span style="color:#999;font-weight:400;">(PDF or Image - Max 5MB)</span>
+                    </label>
+
+                    <div class="upload-zone" id="fileDropArea">
+                        <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="upload-text"><strong>Click to upload</strong> or drag &amp; drop</div>
+                        <div class="file-types">JPG, PNG, GIF, PDF (Max 5MB)</div>
+                        <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.gif,.pdf,image/*,application/pdf">
+                    </div>
+
+                    <div class="file-preview" id="filePreview">
+                        <div class="file-icon" id="fileIcon"><i class="fas fa-file-pdf"></i></div>
+                        <div class="file-info">
+                            <div class="file-name" id="fileName">file.pdf</div>
+                            <div class="file-size" id="fileSize">0 KB</div>
+                        </div>
+                        <button type="button" class="file-remove" id="removeFile">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+
+                    <div class="existing-file-link" id="existingFileLink">
+                        <i class="fas fa-link"></i> Current file:
+                        <a href="#" id="existingFileUrlLink" target="_blank" style="color:var(--primary);font-weight:600;">View</a>
+                        <button type="button" class="btn btn-sm btn-outline-danger ms-auto" id="removeExistingFile" style="font-size:11px;">
+                            <i class="fas fa-times"></i> Remove
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-check form-switch mt-3">
+                        <input class="form-check-input" type="checkbox" id="isPublished" checked>
+                        <label class="form-check-label" for="isPublished" style="font-weight:600;font-size:13px;">Publish Immediately</label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-check form-switch mt-3">
+                        <input class="form-check-input" type="checkbox" id="isImportant">
+                        <label class="form-check-label text-danger" for="isImportant" style="font-weight:600;font-size:13px;">
+                            <i class="fas fa-exclamation-triangle"></i> Mark as Important
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="form-check form-switch mt-3">
+                        <input class="form-check-input" type="checkbox" id="isFeatured">
+                        <label class="form-check-label" for="isFeatured" style="font-weight:600;font-size:13px;color:#d97706;">
+                            <i class="fas fa-star"></i> Featured (Notice Board)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn-primary-grad" id="submitBtn">
+                        <i class="fas fa-save"></i> Save Notice
+                    </button>
+                    <button type="button" class="btn-secondary-grad ms-2" id="cancelForm">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- ============ FILTER + SEARCH ============ -->
+    <div class="filter-bar">
+        <button class="filter-chip active" data-filter="all" onclick="filterNotices('all', this)">
+            <i class="fas fa-list"></i> All
+        </button>
+        <button class="filter-chip" data-filter="published" onclick="filterNotices('published', this)">
+            <i class="fas fa-check-circle"></i> Published
+        </button>
+        <button class="filter-chip" data-filter="draft" onclick="filterNotices('draft', this)">
+            <i class="fas fa-pencil"></i> Draft
+        </button>
+        <button class="filter-chip" data-filter="important" onclick="filterNotices('important', this)">
+            <i class="fas fa-exclamation-triangle"></i> Important
+        </button>
+        <button class="filter-chip" data-filter="featured" onclick="filterNotices('featured', this)">
+            <i class="fas fa-star"></i> Featured
+        </button>
+
+        <div class="search-wrap">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search notices...">
+        </div>
+    </div>
+
+    <!-- ============ TABLE ============ -->
+    <div class="table-card">
+        <div class="table-title">
+            <i class="fas fa-list"></i> Notice List
+            <span class="badge-count" id="filteredCount">0</span>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="width:40px;">#</th>
+                        <th>Notice</th>
+                        <th style="width:110px;">Date</th>
+                        <th style="width:70px;">File</th>
+                        <th style="width:100px;">Status</th>
+                        <th style="width:140px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="noticesTableBody">
+                    <tr><td colspan="6" class="text-center py-4">
+                        <div class="skeleton" style="width:60%;margin:0 auto 8px;"></div>
+                        <div class="skeleton" style="width:40%;margin:0 auto;"></div>
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div id="toastContainer"></div>
+
+<!-- ============ SMART MODAL ============ -->
+<div class="smart-modal-overlay" id="smartModal">
+    <div class="smart-modal">
+        <div class="modal-icon" id="smartModalIcon"><i class="fas fa-question"></i></div>
+        <h5 id="smartModalTitle">Are you sure?</h5>
+        <p id="smartModalText">This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="modal-btn cancel" id="smartModalCancel">Cancel</button>
+            <button class="modal-btn confirm" id="smartModalConfirm">Confirm</button>
+        </div>
+    </div>
+</div>
+
+<!-- =========================================================
+     SCRIPTS
+========================================================= -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/admin-guard.js"></script>
+<script src="../js/cloudinary.js"></script>
+
+<script>
+    // =========================================================
+    // STATE
+    // =========================================================
+    let isEditing = false;
+    let selectedFile = null;
+    let allNotices = [];
+    let currentFilter = 'all';
+
+    // =========================================================
+    // TOAST
+    // =========================================================
+    function showToast(message, type = 'success') {
+        const container = document.getElementById('toastContainer');
+        const icons = {
+            success: 'fa-check-circle',
+            error: 'fa-exclamation-circle',
+            info: 'fa-info-circle'
+        };
+        const toast = document.createElement('div');
+        toast.className = `toast-msg toast-${type}`;
+        toast.innerHTML = `<i class="fas ${icons[type] || icons.info}"></i> <span>${message}</span>`;
+        container.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.animation = 'slideOut 0.35s ease';
+            setTimeout(() => toast.remove(), 350);
+        }, 3500);
+    }
+
+    // =========================================================
+    // SMART MODAL (Premium Confirm)
+    // =========================================================
+    let modalResolver = null;
+
+    function openSmartModal({ title, text, icon = 'warn', confirmText = 'Confirm', cancelText = 'Cancel', confirmStyle = 'confirm' }) {
+        return new Promise((resolve) => {
+            modalResolver = resolve;
+            const overlay = document.getElementById('smartModal');
+            const iconEl = document.getElementById('smartModalIcon');
+            const titleEl = document.getElementById('smartModalTitle');
+            const textEl = document.getElementById('smartModalText');
+            const confirmBtn = document.getElementById('smartModalConfirm');
+            const cancelBtn = document.getElementById('smartModalCancel');
+
+            const iconMap = {
+                warn: 'fa-exclamation-triangle',
+                success: 'fa-check-circle',
+                info: 'fa-info-circle',
+                star: 'fa-star',
+                trash: 'fa-trash-alt'
+            };
+            iconEl.className = 'modal-icon ' + (icon === 'trash' ? 'warn' : icon);
+            iconEl.innerHTML = `<i class="fas ${iconMap[icon] || iconMap.warn}"></i>`;
+            titleEl.textContent = title;
+            textEl.textContent = text;
+            confirmBtn.textContent = confirmText;
+            cancelBtn.textContent = cancelText;
+            confirmBtn.className = 'modal-btn ' + confirmStyle;
+
+            overlay.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+
+    function closeSmartModal(result) {
+        const overlay = document.getElementById('smartModal');
+        overlay.classList.remove('show');
+        document.body.style.overflow = '';
+        if (modalResolver) {
+            modalResolver(result);
+            modalResolver = null;
+        }
+    }
+
+    document.getElementById('smartModalConfirm').addEventListener('click', () => closeSmartModal(true));
+    document.getElementById('smartModalCancel').addEventListener('click', () => closeSmartModal(false));
+    document.getElementById('smartModal').addEventListener('click', (e) => {
+        if (e.target.id === 'smartModal') closeSmartModal(false);
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && document.getElementById('smartModal').classList.contains('show')) {
+            closeSmartModal(false);
+        }
+    });
+
+    // =========================================================
+    // FILE UPLOAD
+    // =========================================================
+    function setupFileUpload() {
+        const dropArea = document.getElementById('fileDropArea');
+        const fileInput = document.getElementById('fileInput');
+        const filePreview = document.getElementById('filePreview');
+        const removeBtn = document.getElementById('removeFile');
+
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files.length > 0) {
+                handleFileSelect(this.files[0]);
+            }
+        });
+
+        dropArea.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        dropArea.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+        });
+
+        dropArea.addEventListener('drop', function (e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            if (e.dataTransfer.files.length > 0) {
+                handleFileSelect(e.dataTransfer.files[0]);
+                const dt = new DataTransfer();
+                dt.items.add(e.dataTransfer.files[0]);
+                fileInput.files = dt.files;
+            }
+        });
+
+        if (removeBtn) {
+            removeBtn.addEventListener('click', function () {
+                selectedFile = null;
+                fileInput.value = '';
+                filePreview.classList.remove('show');
+                showToast('File removed', 'info');
+            });
+        }
+
+        document.getElementById('removeExistingFile')?.addEventListener('click', function () {
+            document.getElementById('existingFileUrl').value = '';
+            document.getElementById('existingFileLink').style.display = 'none';
+            showToast('Existing file removed', 'info');
+        });
+    }
+
+    function handleFileSelect(file) {
+        if (!file) return;
+
+        if (file.size > 5 * 1024 * 1024) {
+            showToast('File too large! Max 5MB allowed', 'error');
+            document.getElementById('fileInput').value = '';
+            return;
+        }
+
+        const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'application/pdf'];
+        if (!validTypes.includes(file.type)) {
+            showToast('Only JPG, PNG, GIF, PDF allowed', 'error');
+            document.getElementById('fileInput').value = '';
+            return;
+        }
+
+        selectedFile = file;
+
+        const isPdf = file.type === 'application/pdf';
+        const fileIcon = document.getElementById('fileIcon');
+        fileIcon.className = `file-icon ${isPdf ? 'pdf' : 'image'}`;
+        fileIcon.innerHTML = isPdf ? '<i class="fas fa-file-pdf"></i>' : '<i class="fas fa-file-image"></i>';
+
+        document.getElementById('fileName').textContent = file.name;
+        document.getElementById('fileSize').textContent = (file.size / 1024).toFixed(1) + ' KB';
+        document.getElementById('filePreview').classList.add('show');
+        document.getElementById('existingFileLink').style.display = 'none';
+
+        showToast(`File "${file.name}" selected`, 'success');
+    }
+
+    // =========================================================
+    // LOAD NOTICES
+    // =========================================================
+    async function loadNotices() {
+        const tbody = document.getElementById('noticesTableBody');
+
+        try {
+            if (!window.FDC_SUPABASE_READY) {
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center py-4 text-muted">
+                    <i class="fas fa-spinner fa-spin me-2"></i> Connecting...
+                </td></tr>`;
+                await new Promise(r => {
+                    if (window.FDC_SUPABASE_READY) return r();
+                    document.addEventListener('fdc:supabase-ready', r, { once: true });
+                    setTimeout(r, 10000);
+                });
+            }
+
+            const supabase = window.FDC_SUPABASE;
+            if (!supabase) throw new Error('Supabase not available');
+
+            const { data, error } = await supabase
+                .from('notices')
+                .select('*')
+                .order('date', { ascending: false });
+
+            if (error) throw error;
+
+            allNotices = data || [];
+            document.getElementById('totalNotices').textContent = allNotices.length;
+
+            renderNotices();
+
+        } catch (error) {
+            console.error('Load error:', error);
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">
+                <i class="fas fa-exclamation-circle me-2"></i> Failed to load notices: ${error.message}
+            </td></tr>`;
+        }
+    }
+
+    // =========================================================
+    // RENDER NOTICES
+    // =========================================================
+    function renderNotices() {
+        const tbody = document.getElementById('noticesTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const q = searchInput ? searchInput.value.toLowerCase().trim() : '';
+
+        let filtered = allNotices.filter(n => {
+            if (currentFilter === 'published' && !n.is_published) return false;
+            if (currentFilter === 'draft' && n.is_published) return false;
+            if (currentFilter === 'important' && !n.is_important) return false;
+            if (currentFilter === 'featured' && !n.is_featured) return false;
+
+            if (q) {
+                const text = (n.title + ' ' + (n.description || '') + ' ' + (n.category || '')).toLowerCase();
+                if (!text.includes(q)) return false;
+            }
+            return true;
+        });
+
+        document.getElementById('filteredCount').textContent = filtered.length;
+
+        if (filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="6">
+                <div class="empty-state">
+                    <div class="icon-wrap"><i class="fas fa-inbox"></i></div>
+                    <h6>No notices found</h6>
+                    <p>Click "Add New Notice" to create one</p>
+                </div>
+            </td></tr>`;
+            return;
+        }
+
+        let html = '';
+        filtered.forEach((notice, i) => {
+            const date = notice.date ? new Date(notice.date).toLocaleDateString('bn-BD', {
+                day: 'numeric', month: 'short', year: 'numeric'
+            }) : '—';
+
+            let fileHtml = '<span class="text-muted">—</span>';
+            if (notice.file_url) {
+                const isPdf = notice.file_url.toLowerCase().includes('.pdf');
+                fileHtml = `<a href="${notice.file_url}" target="_blank" class="file-link ${isPdf ? 'pdf' : 'image'}" title="View file">
+                    <i class="fas ${isPdf ? 'fa-file-pdf' : 'fa-file-image'}"></i>
+                </a>`;
+            }
+
+            const statusHtml = notice.is_published ?
+                `<span class="badge-status badge-published"><i class="fas fa-check-circle"></i> Published</span>` :
+                `<span class="badge-status badge-draft"><i class="fas fa-pencil"></i> Draft</span>`;
+
+            const importantHtml = notice.is_important ?
+                `<span class="badge-status badge-important ms-1"><i class="fas fa-exclamation-triangle"></i></span>` : '';
+
+            const featuredHtml = notice.is_featured ?
+                `<span class="badge-status badge-featured ms-1"><i class="fas fa-star"></i> Featured</span>` : '';
+
+            const catHtml = notice.category ?
+                `<span class="badge-cat ms-1">${notice.category}</span>` : '';
+
+            const starClass = notice.is_featured ? 'btn-star active' : 'btn-star';
+            const starTitle = notice.is_featured ? 'Remove from Featured' : 'Mark as Featured';
+
+            html += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>
+                        <div class="notice-title">${notice.title || 'Untitled'}</div>
+                        <div class="notice-desc">${notice.description ? notice.description.substring(0, 70) + (notice.description.length > 70 ? '...' : '') : ''}</div>
+                        <div class="mt-1">${catHtml}${importantHtml}${featuredHtml}</div>
+                    </td>
+                    <td>${date}</td>
+                    <td class="text-center">${fileHtml}</td>
+                    <td>${statusHtml}</td>
+                    <td>
+                        <button class="btn-action ${starClass}" onclick="toggleFeatured('${notice.id}')" title="${starTitle}">
+                            <i class="fas fa-star"></i>
+                        </button>
+                        <button class="btn-action btn-edit" onclick="editNotice('${notice.id}')" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn-action btn-delete" onclick="deleteNotice('${notice.id}')" title="Delete">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+
+        tbody.innerHTML = html;
+    }
+
+    // =========================================================
+    // FILTER
+    // =========================================================
+    window.filterNotices = function (filter, btn) {
+        currentFilter = filter;
+        document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        renderNotices();
+    };
+
+    // =========================================================
+    // TOGGLE FEATURED (Quick action from table)
+    // =========================================================
+    window.toggleFeatured = async function (id) {
+        try {
+            const notice = allNotices.find(n => n.id === id);
+            if (!notice) return;
+
+            const newState = !notice.is_featured;
+
+            const supabase = window.FDC_SUPABASE;
+            const { error } = await supabase
+                .from('notices')
+                .update({ is_featured: newState })
+                .eq('id', id);
+
+            if (error) throw error;
+
+            notice.is_featured = newState;
+            showToast(newState ? '⭐ Marked as Featured' : 'Removed from Featured', 'success');
+            renderNotices();
+
+        } catch (error) {
+            console.error('Toggle featured error:', error);
+            showToast('Failed to update: ' + error.message, 'error');
+        }
+    };
+
+    // =========================================================
+    // SHOW ADD FORM
+    // =========================================================
+    function showAddForm() {
+        isEditing = false;
+        document.getElementById('noticeId').value = '';
+        document.getElementById('formTitle').textContent = 'Add New Notice';
+        document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Save Notice';
+        document.getElementById('noticeForm').reset();
+        document.getElementById('existingFileUrl').value = '';
+        document.getElementById('existingFileLink').style.display = 'none';
+        document.getElementById('filePreview').classList.remove('show');
+        selectedFile = null;
+        document.getElementById('fileInput').value = '';
+        document.getElementById('isPublished').checked = true;
+        document.getElementById('isImportant').checked = false;
+        document.getElementById('isFeatured').checked = false;
+
+        const card = document.getElementById('noticeFormCard');
+        card.classList.add('show');
+        setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    }
+
+    // =========================================================
+    // EDIT NOTICE
+    // =========================================================
+    window.editNotice = async function (id) {
+        try {
+            const supabase = window.FDC_SUPABASE;
+            const { data, error } = await supabase
+                .from('notices').select('*').eq('id', id).single();
+
+            if (error) throw error;
+
+            isEditing = true;
+            document.getElementById('noticeId').value = data.id;
+            document.getElementById('title').value = data.title || '';
+            document.getElementById('description').value = data.description || '';
+            document.getElementById('noticeDate').value = data.date || '';
+            document.getElementById('category').value = data.category || 'general';
+            document.getElementById('isPublished').checked = !!data.is_published;
+            document.getElementById('isImportant').checked = !!data.is_important;
+            document.getElementById('isFeatured').checked = !!data.is_featured;
+            document.getElementById('existingFileUrl').value = data.file_url || '';
+
+            const existingLink = document.getElementById('existingFileLink');
+            if (data.file_url) {
+                document.getElementById('existingFileUrlLink').href = data.file_url;
+                existingLink.style.display = 'flex';
+            } else {
+                existingLink.style.display = 'none';
+            }
+
+            document.getElementById('filePreview').classList.remove('show');
+            selectedFile = null;
+            document.getElementById('fileInput').value = '';
+
+            document.getElementById('formTitle').textContent = 'Edit Notice';
+            document.getElementById('submitBtn').innerHTML = '<i class="fas fa-save"></i> Update Notice';
+
+            const card = document.getElementById('noticeFormCard');
+            card.classList.add('show');
+            setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+
+        } catch (error) {
+            console.error('Edit error:', error);
+            showToast('Failed to load notice', 'error');
+        }
+    };
+
+    // =========================================================
+    // DELETE NOTICE (Smart Modal)
+    // =========================================================
+    window.deleteNotice = async function (id) {
+        const confirmed = await openSmartModal({
+            title: 'Delete Notice?',
+            text: 'This notice will be permanently deleted. This action cannot be undone.',
+            icon: 'trash',
+            confirmText: 'Delete',
+            cancelText: 'Cancel',
+            confirmStyle: 'danger'
+        });
+
+        if (!confirmed) return;
+
+        try {
+            const supabase = window.FDC_SUPABASE;
+            const { error } = await supabase.from('notices').delete().eq('id', id);
+            if (error) throw error;
+
+            showToast('Notice deleted!', 'success');
+            await loadNotices();
+        } catch (error) {
+            console.error('Delete error:', error);
+            showToast('Failed to delete notice', 'error');
+        }
+    };
+
+    // =========================================================
+    // FORM SUBMIT
+    // =========================================================
+    document.getElementById('noticeForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const id = document.getElementById('noticeId').value;
+        const title = document.getElementById('title').value.trim();
+        const description = document.getElementById('description').value.trim();
+        const date = document.getElementById('noticeDate').value;
+        const category = document.getElementById('category').value;
+        const isPublished = document.getElementById('isPublished').checked;
+        const isImportant = document.getElementById('isImportant').checked;
+        const isFeatured = document.getElementById('isFeatured').checked;
+        const existingFileUrl = document.getElementById('existingFileUrl').value;
+
+        if (!title) {
+            showToast('Please enter a title', 'error');
+            return;
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        try {
+            let fileUrl = existingFileUrl;
+
+            if (selectedFile) {
+                const isPdf = selectedFile.type === 'application/pdf';
+                let result;
+
+                if (isPdf && typeof window.FDCUploadPDF === 'function') {
+                    result = await window.FDCUploadPDF(selectedFile);
+                } else if (typeof window.FDCUploadImage === 'function') {
+                    result = await window.FDCUploadImage(selectedFile);
+                } else {
+                    throw new Error('Upload function not available');
+                }
+
+                fileUrl = result.url;
+                showToast(`${isPdf ? 'PDF' : 'Image'} uploaded`, 'success');
+            }
+
+            const noticeData = {
+                title,
+                description: description || null,
+                date: date || new Date().toISOString().split('T')[0],
+                category: category || 'general',
+                file_url: fileUrl || null,
+                is_published: isPublished,
+                is_important: isImportant,
+                is_featured: isFeatured
+            };
+
+            const supabase = window.FDC_SUPABASE;
+            let result;
+
+            if (id) {
+                result = await supabase.from('notices').update(noticeData).eq('id', id).select();
+                showToast('Notice updated!', 'success');
+            } else {
+                result = await supabase.from('notices').insert([noticeData]).select();
+                showToast('Notice created!', 'success');
+            }
+
+            if (result.error) throw result.error;
+
+            document.getElementById('noticeFormCard').classList.remove('show');
+            document.getElementById('noticeForm').reset();
+            document.getElementById('filePreview').classList.remove('show');
+            selectedFile = null;
+            await loadNotices();
+
+        } catch (error) {
+            console.error('Save error:', error);
+            showToast('Failed: ' + error.message, 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+        }
+    });
+
+    // =========================================================
+    // CANCEL
+    // =========================================================
+    document.getElementById('cancelForm').addEventListener('click', function () {
+        document.getElementById('noticeFormCard').classList.remove('show');
+        document.getElementById('noticeForm').reset();
+        document.getElementById('filePreview').classList.remove('show');
+        selectedFile = null;
+    });
+
+    document.getElementById('showAddForm').addEventListener('click', showAddForm);
+
+    // =========================================================
+    // SEARCH
+    // =========================================================
+    document.getElementById('searchInput').addEventListener('input', function () {
+        renderNotices();
+    });
+
+    // =========================================================
+    // INIT
+    // =========================================================
+    document.addEventListener('admin:session-ready', () => {
+        console.log('✅ Admin session ready, loading notices');
+        loadNotices();
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        console.log('🚀 Admin Notices page initialized');
+        setupFileUpload();
+    });
+
+</script>
+
+</body>
+</html>

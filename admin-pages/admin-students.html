@@ -1,0 +1,1419 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Management - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --white: #ffffff;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* ============ HEADER ============ */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.admin-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.admin-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+    flex-shrink: 0;
+}
+.admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.admin-header .user-box { display: flex; align-items: center; gap: 8px; }
+.avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    border: 2px solid rgba(242,210,123,0.4);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* ============ MAIN ============ */
+.main-wrap {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+}
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-title .badge-total {
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.06));
+    color: var(--navy);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    border: 1px solid rgba(10,22,85,0.1);
+}
+.page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
+
+/* ============ TOOLBAR ============ */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+.toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn-primary-grad {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-primary-grad:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(10,22,85,0.35);
+    color: #fff;
+}
+.btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary-grad i { color: var(--gold); }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid #e5e7eb;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
+.btn-secondary i { color: var(--navy); }
+
+.btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(212,175,55,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.4); color: var(--navy); }
+
+/* ============ STATS ============ */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.stat-pill {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
+.stat-pill .sp-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+.stat-pill .sp-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
+.stat-pill .sp-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.stat-pill .sp-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.stat-pill .sp-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
+.stat-pill .sp-info { min-width: 0; }
+.stat-pill .sp-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.stat-pill .sp-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 3px;
+}
+
+/* ============ FILTER ============ */
+.filter-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+}
+.filter-card .filter-item { position: relative; }
+.filter-card label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+    margin-bottom: 4px;
+}
+.filter-card select,
+.filter-card input {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13px;
+    outline: none;
+    transition: 0.25s;
+}
+.filter-card select:focus,
+.filter-card input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+    background: #fff;
+}
+
+.search-wrap { position: relative; }
+.search-wrap input { padding-left: 36px; }
+.search-wrap i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--grey);
+    font-size: 12px;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* ============ TABLE ============ */
+.table-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+}
+.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.student-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    min-width: 720px;
+}
+.student-table thead {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+}
+.student-table thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-weight: 700;
+    font-size: 11.5px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+.student-table thead th:first-child { width: 40px; }
+.student-table thead th:last-child { text-align: center; width: 180px; }
+
+.student-table tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    transition: 0.2s;
+}
+.student-table tbody tr:hover { background: #fafbff; }
+.student-table tbody td {
+    padding: 11px 14px;
+    color: var(--dark);
+    vertical-align: middle;
+}
+.student-table tbody td:first-child { width: 40px; }
+.student-table tbody td:last-child { text-align: center; }
+
+.student-table .cell-roll {
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+}
+.student-table .cell-name {
+    font-weight: 600;
+    color: var(--dark);
+}
+.student-table .cell-name small {
+    display: block;
+    font-size: 11px;
+    color: var(--grey);
+    font-weight: 500;
+    margin-top: 2px;
+}
+
+.group-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+.group-tag.Science { background: #dbeafe; color: #1e40af; }
+.group-tag.Humanities { background: #fef3c7; color: #92400e; }
+.group-tag.Business { background: #dcfce7; color: #166534; }
+.group-tag.BM { background: #f3e8ff; color: #6b21a8; }
+
+.branch-tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-left: 4px;
+}
+.branch-tag.HSC { background: rgba(10,22,85,0.08); color: var(--navy); }
+.branch-tag.BM { background: rgba(139,92,246,0.12); color: #6b21a8; }
+
+.action-btns {
+    display: inline-flex;
+    gap: 5px;
+    justify-content: center;
+}
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.action-btn:hover { transform: scale(1.1); }
+.action-btn.edit { background: #e3f2fd; color: #1565c0; }
+.action-btn.edit:hover { background: #bbdefb; }
+.action-btn.subject { background: #fef3c7; color: #d97706; }
+.action-btn.subject:hover { background: #fde68a; }
+.action-btn.view { background: #f3e8ff; color: #7c3aed; }
+.action-btn.view:hover { background: #e9d5ff; }
+.action-btn.toggle { background: #dcfce7; color: #166534; }
+.action-btn.toggle:hover { background: #bbf7d0; }
+.action-btn.toggle.off { background: #fef2f2; color: #dc2626; }
+.action-btn.toggle.off:hover { background: #fecaca; }
+
+/* Checkbox */
+.row-checkbox {
+    width: 16px; height: 16px;
+    cursor: pointer;
+    accent-color: var(--navy);
+}
+
+/* Pagination */
+.pagination-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-top: 1px solid var(--border-light);
+    background: #fafbff;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.pagination-info { font-size: 12px; color: var(--grey); }
+.pagination-btns { display: flex; gap: 5px; flex-wrap: wrap; }
+.page-btn {
+    min-width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    color: var(--dark);
+    font-size: 12.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    padding: 0 10px;
+}
+.page-btn:hover:not(:disabled) { border-color: var(--navy); color: var(--navy); }
+.page-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+.empty-state .icon-wrap {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.empty-state i { font-size: 36px; color: var(--navy); opacity: 0.35; }
+.empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
+
+/* Skeleton */
+.skeleton-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 1fr 1fr 1fr 180px;
+    gap: 12px;
+    padding: 14px;
+    border-bottom: 1px solid var(--border-light);
+    align-items: center;
+}
+.skeleton-line {
+    height: 12px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ============ MODAL ============ */
+.fdc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.25s ease;
+}
+.fdc-modal-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.fdc-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 720px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    position: relative;
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.fdc-modal.wide { max-width: 900px; }
+
+.fdc-modal-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    padding: 22px 24px;
+    border-radius: 20px 20px 0 0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+.fdc-modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.fdc-modal-header .mh-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.fdc-modal-header .mh-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.fdc-modal-header h5 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
+.fdc-modal-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.fdc-modal-close {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.fdc-modal-close:hover { background: var(--danger); transform: rotate(90deg); }
+
+.fdc-modal-body { padding: 22px 24px; }
+
+.fdc-form-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #4b5563;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+}
+.fdc-form-label .req { color: var(--danger); }
+.fdc-form-label .opt { color: var(--grey); font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 10.5px; }
+
+.fdc-input, .fdc-select, .fdc-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13.5px;
+    transition: 0.25s;
+    outline: none;
+    font-family: inherit;
+}
+.fdc-input:focus, .fdc-select:focus, .fdc-textarea:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+    background: #fff;
+}
+
+.fdc-modal-footer {
+    padding: 16px 24px 22px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border-light);
+    background: #fafbff;
+    position: sticky;
+    bottom: 0;
+}
+
+/* ============ SUBJECT SELECTION ============ */
+.subjects-section {
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 2px solid var(--border-light);
+}
+.subjects-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.subjects-section-title i { color: var(--gold-dark); }
+.subjects-section-title .badge {
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 50px;
+    background: rgba(10,22,85,0.08);
+    color: var(--navy);
+    font-weight: 700;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: auto;
+}
+
+.subject-group-box {
+    background: #fafbff;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+}
+.subject-group-box.locked { background: #f0f4f8; }
+.subject-group-box .sgb-header {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.subject-group-box .sgb-header i { color: var(--gold-dark); }
+.subject-group-box .sgb-header .hint {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 500;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-left: auto;
+}
+
+.subject-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 640px) { .subject-list { grid-template-columns: 1fr; } }
+
+.subject-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
+}
+.subject-item:hover { border-color: var(--navy); background: #f5f7ff; }
+.subject-item.checked {
+    border-color: var(--navy);
+    background: linear-gradient(135deg, rgba(10,22,85,0.04), rgba(13,71,161,0.03));
+    box-shadow: 0 0 0 3px rgba(10,22,85,0.06);
+}
+.subject-item.disabled { opacity: 0.7; cursor: not-allowed; background: #f0f4f8; }
+.subject-item.disabled:hover { border-color: #e5e7eb; background: #f0f4f8; }
+
+.subject-item .si-check {
+    width: 18px; height: 18px;
+    border-radius: 5px;
+    border: 2px solid #cbd5e1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #fff;
+    transition: 0.2s;
+    background: #fff;
+}
+.subject-item.checked .si-check {
+    background: var(--navy);
+    border-color: var(--navy);
+}
+.subject-item .si-radio {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.2s;
+    background: #fff;
+    position: relative;
+}
+.subject-item.checked .si-radio {
+    border-color: var(--navy);
+}
+.subject-item.checked .si-radio::after {
+    content: '';
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--navy);
+}
+
+.subject-item .si-content { flex: 1; min-width: 0; }
+.subject-item .si-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--dark);
+    line-height: 1.3;
+}
+.subject-item .si-meta {
+    font-size: 10.5px;
+    color: var(--grey);
+    margin-top: 2px;
+}
+.subject-item .si-meta .code {
+    background: rgba(10,22,85,0.06);
+    color: var(--navy);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    margin-right: 4px;
+}
+
+/* Alert message inside modal */
+.fdc-alert {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+.fdc-alert.info { background: #eff6ff; color: #1e40af; border-left: 3px solid #3b82f6; }
+.fdc-alert.warn { background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; }
+.fdc-alert i { margin-top: 2px; }
+
+/* Bulk import textarea */
+.bulk-textarea {
+    width: 100%;
+    min-height: 160px;
+    padding: 14px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-family: 'Courier New', monospace;
+    font-size: 12.5px;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+}
+.bulk-textarea:focus { border-color: var(--navy); background: #fff; }
+
+.preview-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 12px;
+}
+.preview-table th, .preview-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-light);
+}
+.preview-table th {
+    background: #fafbff;
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 11px;
+    text-transform: uppercase;
+}
+.preview-table tbody tr:hover { background: #fafbff; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-header { padding: 10px 14px; }
+    .admin-header h4 { font-size: 14px; }
+    .main-wrap { padding: 14px 12px 50px; }
+    .page-title { font-size: 17px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar-actions { justify-content: center; }
+    .filter-card { grid-template-columns: 1fr 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-pill { padding: 11px 12px; }
+    .stat-pill .sp-value { font-size: 17px; }
+    .fdc-modal-header { padding: 18px 18px; }
+    .fdc-modal-body { padding: 18px 18px; }
+    .fdc-modal-footer { padding: 14px 18px 18px; }
+    .fdc-modal-header h5 { font-size: 14px; }
+    .pagination-wrap { flex-direction: column; }
+}
+
+@media (max-width: 480px) {
+    .btn-header span { display: none; }
+    .filter-card { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-user-graduate"></i></div>
+        <div>
+            <h4>Student Management</h4>
+            <small>ছাত্র-ছাত্রী পরিচালনা</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="avatar-circle" data-admin-avatar>A</div>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+        </a>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div>
+            <h4 class="page-title">
+                <i class="fas fa-users"></i> Students
+                <span class="badge-total" id="totalStudents">0</span>
+            </h4>
+            <p class="page-sub">সব শাখার ছাত্র-ছাত্রীদের তথ্য পরিচালনা করুন</p>
+        </div>
+        <div class="toolbar-actions">
+            <button class="btn-secondary" id="btnBulkImport">
+                <i class="fas fa-file-import"></i> Bulk Import
+            </button>
+            <button class="btn-secondary" id="btnCopyYear">
+                <i class="fas fa-copy"></i> Copy Year
+            </button>
+            <button class="btn-primary-grad" id="btnAddStudent">
+                <i class="fas fa-plus-circle"></i> Add Student
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-pill">
+            <div class="sp-icon navy"><i class="fas fa-users"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statTotal">0</div>
+                <div class="sp-label">Total</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon gold"><i class="fas fa-flask"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statHSC">0</div>
+                <div class="sp-label">HSC</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon purple"><i class="fas fa-briefcase"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statBM">0</div>
+                <div class="sp-label">BM</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon green"><i class="fas fa-check-circle"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statActive">0</div>
+                <div class="sp-label">Active</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-card">
+        <div class="filter-item">
+            <label>Class</label>
+            <select id="filterClass">
+                <option value="">All Classes</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Year</label>
+            <select id="filterYear">
+                <option value="">All Years</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Branch</label>
+            <select id="filterBranch">
+                <option value="">All Branches</option>
+                <option value="HSC">HSC</option>
+                <option value="BM">BM</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Group</label>
+            <select id="filterGroup">
+                <option value="">All Groups</option>
+            </select>
+        </div>
+        <div class="filter-item search-wrap">
+            <label>Search</label>
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Roll / Name...">
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-card">
+        <div class="table-scroll">
+            <table class="student-table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" class="row-checkbox" id="selectAll"></th>
+                        <th>Roll</th>
+                        <th>Name</th>
+                        <th>Class</th>
+                        <th>Branch</th>
+                        <th>Group</th>
+                        <th style="text-align:center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="studentTableBody">
+                    <tr><td colspan="7" style="padding:0;">
+                        <div class="skeleton-row">
+                            <div class="skeleton-line" style="height:16px;"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                            <div class="skeleton-line"></div>
+                        </div>
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="pagination-wrap" id="paginationWrap" style="display:none;">
+            <div class="pagination-info" id="paginationInfo"></div>
+            <div class="pagination-btns" id="paginationBtns"></div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: Add/Edit Student -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="studentModal">
+    <div class="fdc-modal wide">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-user-plus" id="studentModalIcon"></i></div>
+                <div>
+                    <h5 id="studentModalTitle">Add New Student</h5>
+                    <small id="studentModalSub">ছাত্র-ছাত্রীর তথ্য পূরণ করুন</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeStudentModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="fdc-modal-body">
+            <input type="hidden" id="editStudentId" value="">
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="fdc-form-label">Name <span class="req">*</span></label>
+                    <input type="text" class="fdc-input" id="studentName" placeholder="যেমন: মোঃ রহিম উদ্দিন">
+                </div>
+                <div class="col-md-6">
+                    <label class="fdc-form-label">Roll <span class="req">*</span></label>
+                    <input type="text" class="fdc-input" id="studentRoll" placeholder="যেমন: 101">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Class <span class="req">*</span></label>
+                    <select class="fdc-select" id="studentClass">
+                        <option value="">Select Class</option>
+                        <option value="11">Class 11</option>
+                        <option value="12">Class 12</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Year <span class="req">*</span></label>
+                    <select class="fdc-select" id="studentYear"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Session <span class="opt">(auto)</span></label>
+                    <input type="text" class="fdc-input" id="studentSession" readonly style="background:#f0f4f8;cursor:not-allowed;">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="fdc-form-label">Branch <span class="req">*</span></label>
+                    <select class="fdc-select" id="studentBranch">
+                        <option value="">Select Branch</option>
+                        <option value="HSC">HSC (সাধারণ)</option>
+                        <option value="BM">BM (বিএমটি)</option>
+                    </select>
+                </div>
+                <div class="col-md-6" id="groupFieldWrap" style="display:none;">
+                    <label class="fdc-form-label">Group <span class="req">*</span></label>
+                    <select class="fdc-select" id="studentGroup">
+                        <option value="">Select Group</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Subjects Section (only shown when group selected) -->
+            <div class="subjects-section" id="subjectsSection" style="display:none;">
+
+                <div class="subjects-section-title">
+                    <i class="fas fa-book"></i> Subject Selection
+                    <span class="badge" id="subjectBadge">0 / 3</span>
+                </div>
+
+                <div class="fdc-alert info" id="subjectInfo" style="display:none;"></div>
+
+                <!-- Compulsory -->
+                <div class="subject-group-box locked" id="compulsoryBox" style="display:none;">
+                    <div class="sgb-header">
+                        <i class="fas fa-lock"></i> আবশ্যিক বিষয়
+                        <span class="hint">সবাইকে নিতে হবে</span>
+                    </div>
+                    <div class="subject-list" id="compulsoryList"></div>
+                </div>
+
+                <!-- Group subjects -->
+                <div class="subject-group-box" id="groupBox" style="display:none;">
+                    <div class="sgb-header">
+                        <i class="fas fa-layer-group"></i> গ্রুপের বিষয়
+                        <span class="hint" id="groupHint">৩টি সিলেক্ট করুন</span>
+                    </div>
+                    <div class="subject-list" id="groupList"></div>
+                </div>
+
+                <!-- Optional subject -->
+                <div class="subject-group-box" id="optionalBox" style="display:none;">
+                    <div class="sgb-header">
+                        <i class="fas fa-star"></i> ঐচ্ছিক বিষয় (৪র্থ)
+                        <span class="hint" id="optionalHint">১টি সিলেক্ট করুন</span>
+                    </div>
+                    <div class="subject-list" id="optionalList"></div>
+                </div>
+
+                <!-- BM Trade -->
+                <div class="subject-group-box" id="tradeBox" style="display:none;">
+                    <div class="sgb-header">
+                        <i class="fas fa-tools"></i> Trade Subject
+                        <span class="hint" id="tradeHint">১টি সিলেক্ট করুন</span>
+                    </div>
+                    <div class="subject-list" id="tradeList"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="cancelStudentBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-primary-grad" id="saveStudentBtn">
+                <i class="fas fa-save"></i> Save Student
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: Bulk Import -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="bulkImportModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-file-import"></i></div>
+                <div>
+                    <h5>Bulk Import Students</h5>
+                    <small>Excel থেকে copy করে paste করুন</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeBulkModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="fdc-modal-body">
+            <div class="fdc-alert info">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Format:</strong> প্রতিটি লাইনে — Roll, Name<br>
+                    যেমন: <code>101, মোঃ রহিম</code>
+                </div>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Class <span class="req">*</span></label>
+                    <select class="fdc-select" id="bulkClass">
+                        <option value="">Select</option>
+                        <option value="11">Class 11</option>
+                        <option value="12">Class 12</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Year <span class="req">*</span></label>
+                    <select class="fdc-select" id="bulkYear"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Branch <span class="req">*</span></label>
+                    <select class="fdc-select" id="bulkBranch">
+                        <option value="">Select</option>
+                        <option value="HSC">HSC</option>
+                        <option value="BM">BM</option>
+                    </select>
+                </div>
+            </div>
+
+            <label class="fdc-form-label">Paste Data <span class="req">*</span></label>
+            <textarea class="bulk-textarea" id="bulkData" placeholder="101, মোঃ রহিম উদ্দিন&#10;102, করিম উদ্দিন&#10;103, সজীব আহমেদ"></textarea>
+
+            <div id="bulkPreview" style="display:none;">
+                <label class="fdc-form-label" style="margin-top:14px;">
+                    Preview <span class="opt" id="bulkCount">(0 rows)</span>
+                </label>
+                <div style="max-height:220px;overflow-y:auto;border:1px solid var(--border-light);border-radius:10px;">
+                    <table class="preview-table">
+                        <thead>
+                            <tr><th style="width:60px;">#</th><th>Roll</th><th>Name</th></tr>
+                        </thead>
+                        <tbody id="bulkPreviewBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="cancelBulkBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-gold" id="previewBulkBtn">
+                <i class="fas fa-eye"></i> Preview
+            </button>
+            <button class="btn-primary-grad" id="saveBulkBtn">
+                <i class="fas fa-save"></i> Save All
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: Bulk Subject Assignment -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="bulkSubjectModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-book-reader"></i></div>
+                <div>
+                    <h5>Bulk Subject Assignment</h5>
+                    <small>এক group-এর সব student-কে subject assign করুন</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeBulkSubjectModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="fdc-modal-body">
+            <div class="row g-3 mb-3">
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Class</label>
+                    <select class="fdc-select" id="bsClass">
+                        <option value="">Select</option>
+                        <option value="11">Class 11</option>
+                        <option value="12">Class 12</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Branch</label>
+                    <select class="fdc-select" id="bsBranch">
+                        <option value="">Select</option>
+                        <option value="HSC">HSC</option>
+                        <option value="BM">BM</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Group</label>
+                    <select class="fdc-select" id="bsGroup">
+                        <option value="">Select</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="fdc-alert warn" id="bsInfo" style="display:none;">
+                <i class="fas fa-users"></i>
+                <span id="bsInfoText"></span>
+            </div>
+
+            <div id="bsSubjectsArea" style="display:none;">
+
+                <div class="subject-group-box locked">
+                    <div class="sgb-header">
+                        <i class="fas fa-lock"></i> আবশ্যিক বিষয় (সবাইকে)
+                    </div>
+                    <div class="subject-list" id="bsCompulsoryList"></div>
+                </div>
+
+                <div class="subject-group-box">
+                    <div class="sgb-header">
+                        <i class="fas fa-layer-group"></i> গ্রুপের বিষয়
+                        <span class="hint" id="bsGroupHint">৩টি সিলেক্ট করুন</span>
+                    </div>
+                    <div class="subject-list" id="bsGroupList"></div>
+                </div>
+
+                <div class="subject-group-box">
+                    <div class="sgb-header">
+                        <i class="fas fa-star"></i> ঐচ্ছিক বিষয়
+                        <span class="hint" id="bsOptionalHint">১টি সিলেক্ট করুন</span>
+                    </div>
+                    <div class="subject-list" id="bsOptionalList"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="cancelBsBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-primary-grad" id="applyBsBtn" disabled>
+                <i class="fas fa-check-circle"></i> Apply to All
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: Copy from Previous Year -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="copyYearModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-copy"></i></div>
+                <div>
+                    <h5>Copy from Previous Year</h5>
+                    <small>গত বছরের student list নতুন বছরে নিয়ে যান</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeCopyModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="fdc-modal-body">
+            <div class="fdc-alert info">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    Source class থেকে সব student নতুন class/year/session-এ copy হবে।<br>
+                    <small>নাম, রোল, group, subject — সব একই থাকবে।</small>
+                </div>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">Source (যেখান থেকে)</label>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Class</label>
+                    <select class="fdc-select" id="copyFromClass">
+                        <option value="">Select</option>
+                        <option value="11">Class 11</option>
+                        <option value="12">Class 12</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Year</label>
+                    <select class="fdc-select" id="copyFromYear"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Branch</label>
+                    <select class="fdc-select" id="copyFromBranch">
+                        <option value="">All</option>
+                        <option value="HSC">HSC</option>
+                        <option value="BM">BM</option>
+                    </select>
+                </div>
+
+                <div class="col-12" style="margin-top:14px;">
+                    <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">Target (যেখানে যাবে)</label>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Class</label>
+                    <select class="fdc-select" id="copyToClass">
+                        <option value="">Select</option>
+                        <option value="11">Class 11</option>
+                        <option value="12">Class 12</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Year</label>
+                    <select class="fdc-select" id="copyToYear"></select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Session (auto)</label>
+                    <input type="text" class="fdc-input" id="copyToSession" readonly style="background:#f0f4f8;">
+                </div>
+            </div>
+
+            <div class="fdc-alert warn" id="copyInfo" style="display:none;margin-top:16px;">
+                <i class="fas fa-users"></i>
+                <span id="copyInfoText"></span>
+            </div>
+        </div>
+
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="cancelCopyBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-primary-grad" id="applyCopyBtn" disabled>
+                <i class="fas fa-copy"></i> Copy Students
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: View Student Details -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="viewStudentModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-user-circle"></i></div>
+                <div>
+                    <h5>Student Details</h5>
+                    <small>বিস্তারিত তথ্য</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeViewModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="fdc-modal-body" id="viewStudentBody"></div>
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="closeViewBtn">
+                <i class="fas fa-times"></i> Close
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin-popup.js"></script>
+<script src="../js/admin-students.js?v=3"></script>
+</body>
+</html>

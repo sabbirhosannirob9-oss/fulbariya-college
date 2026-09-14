@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Heads - Fulbariya College</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1a237e;
+            --primary-light: #0d47a1;
+            --primary-dark: #0a1655;
+            --gold: #f2d27b;
+            --gold-dark: #d8ad45;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f0f2f5;
+            --border: rgba(0,0,0,0.06);
+        }
+
+        * { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; }
+        body { background: var(--bg); margin: 0; color: #1a1a2e; }
+
+        /* HEADER */
+        .admin-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .admin-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            opacity: 0.4;
+        }
+        .admin-header .brand { display: flex; align-items: center; gap: 12px; }
+        .admin-header .brand img { height: 42px; }
+        .admin-header .brand h4 { margin: 0; font-size: 17px; font-weight: 700; }
+        .admin-header .brand small { font-size: 11px; opacity: 0.85; display: block; }
+
+        .admin-header .user-box { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .admin-header .user-meta { text-align: right; line-height: 1.2; }
+        .admin-header .user-meta .name { font-size: 13px; font-weight: 600; }
+        .admin-header .user-meta .role { font-size: 11px; opacity: 0.8; }
+
+        .avatar-circle {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--primary-dark);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .btn-header {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 7px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            text-decoration: none;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .btn-header:hover { background: rgba(255,255,255,0.3); color: #fff; transform: translateY(-1px); }
+
+        /* MAIN */
+        .main-wrap { max-width: 1300px; margin: 0 auto; padding: 20px 16px 60px; }
+
+        .page-title {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 22px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .page-title i { color: var(--gold-dark); }
+        .page-sub { color: #6b7280; font-size: 13px; margin-bottom: 20px; }
+
+        /* CARD */
+        .card-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 20px;
+            border: 1px solid var(--border);
+        }
+
+        .card-header-custom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 18px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid var(--border);
+        }
+
+        .card-header-custom h5 {
+            margin: 0;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 17px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .card-header-custom h5 i { color: var(--gold-dark); }
+
+        /* FORM */
+        .form-label {
+            font-weight: 600;
+            font-size: 12px;
+            color: #555;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            display: block;
+        }
+
+        .form-control, .form-select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid #e0e3eb;
+            border-radius: 10px;
+            font-size: 14px;
+            background: #fafbff;
+            transition: 0.25s;
+            font-weight: 500;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(26,35,126,0.1);
+            background: #fff;
+            outline: none;
+        }
+
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        /* UPLOAD */
+        .upload-zone {
+            border: 2px dashed #c8cdda;
+            border-radius: 12px;
+            padding: 20px 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.25s;
+            position: relative;
+            background: #fafbff;
+        }
+        .upload-zone:hover { border-color: var(--primary); background: #f5f7ff; }
+        .upload-zone input[type="file"] {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            opacity: 0; cursor: pointer; z-index: 10;
+        }
+        .upload-zone i {
+            font-size: 32px;
+            color: var(--primary);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        .upload-zone .txt { font-size: 13px; color: #666; margin-top: 6px; pointer-events: none; }
+        .upload-zone .hint { font-size: 11px; color: #999; margin-top: 4px; pointer-events: none; }
+
+        .upload-preview {
+            display: none;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            margin-top: 12px;
+        }
+        .upload-preview.show { display: flex; }
+        .upload-preview img {
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        /* BUTTONS */
+        .btn-primary-grad {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: #fff;
+            border: none;
+            padding: 11px 26px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(26,35,126,0.2);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .btn-primary-grad:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(26,35,126,0.3);
+            color: #fff;
+        }
+        .btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .btn-cancel {
+            background: #e0e3eb;
+            color: #333;
+            border: none;
+            padding: 11px 22px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+        .btn-cancel:hover { background: #d0d3db; }
+
+        /* TABLE */
+        .heads-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .heads-table thead th {
+            background: linear-gradient(135deg, #f8f9fc, #eef1f6);
+            color: var(--primary);
+            padding: 12px 10px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+        }
+        .heads-table tbody td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #f0f0f0;
+            vertical-align: middle;
+        }
+        .heads-table tbody tr:hover { background: #f8f9fc; }
+
+        .head-photo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+            background: #f0f2f5;
+        }
+
+        .head-name {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .head-designation {
+            font-size: 12px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .head-department {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            background: rgba(26,35,126,0.08);
+            color: var(--primary);
+        }
+
+        .status-badge-active {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status-badge-inactive {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .btn-icon {
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.25s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            margin-right: 4px;
+        }
+        .btn-icon:hover { transform: scale(1.1); }
+        .btn-edit { background: #dbeafe; color: #1e40af; }
+        .btn-delete { background: #fee2e2; color: #991b1b; }
+        .btn-toggle { background: #fef3c7; color: #d97706; }
+
+        /* EMPTY */
+        .empty-state {
+            text-align: center;
+            padding: 50px 20px;
+            color: #999;
+        }
+        .empty-state i { font-size: 56px; opacity: 0.2; margin-bottom: 14px; display: block; }
+        .empty-state p { margin: 0; font-size: 14px; }
+
+        /* TOAST */
+        #toastContainer {
+            position: fixed;
+            top: 20px; right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-width: 380px;
+        }
+        .toast-msg {
+            padding: 14px 22px;
+            border-radius: 12px;
+            color: #fff;
+            font-weight: 500;
+            font-size: 13px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            animation: slideIn 0.35s ease;
+            min-width: 240px;
+        }
+        .toast-success { background: linear-gradient(135deg, #10b981, #059669); }
+        .toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .toast-info { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .admin-header { padding: 10px 14px; }
+            .admin-header .brand h4 { font-size: 14px; }
+            .admin-header .user-meta { display: none; }
+            .main-wrap { padding: 14px 12px 50px; }
+            .card-box { padding: 16px; }
+            .page-title { font-size: 18px; }
+            .heads-table { font-size: 12px; }
+            .head-photo { width: 40px; height: 40px; }
+            .btn-icon { width: 30px; height: 30px; font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <img src="../assets/images/logo1.png" alt="Logo">
+        <div>
+            <h4>Fulbariya Degree College</h4>
+            <small>Admin Panel — Department Heads</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="user-meta">
+            <div class="name" id="adminName">Administrator</div>
+            <div class="role" id="adminRole">Role: Admin</div>
+        </div>
+        <div class="avatar-circle" id="adminAvatar">A</div>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <h4 class="page-title">
+        <i class="fas fa-users-cog"></i> Department Heads
+    </h4>
+    <p class="page-sub">
+        <i class="fas fa-info-circle me-1"></i>
+        যেসব বিভাগের প্রধানদের হোমপেজে দেখাবেন — তাদের ছবি, নাম, পদবি ও বিভাগ যোগ করুন।
+    </p>
+
+    <!-- ADD/EDIT FORM -->
+    <div class="card-box" id="formCard">
+        <div class="card-header-custom">
+            <h5>
+                <i class="fas fa-plus-circle"></i>
+                <span id="formTitle">নতুন বিভাগীয় প্রধান যোগ করুন</span>
+            </h5>
+            <button class="btn-cancel" id="cancelBtn" style="display:none; padding: 6px 14px; font-size: 12px;">
+                <i class="fas fa-times"></i> বাতিল
+            </button>
+        </div>
+
+        <form id="headForm">
+            <input type="hidden" id="editId" value="">
+
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">নাম *</label>
+                    <input type="text" class="form-control" id="headName"
+                           placeholder="জনাব মোঃ রেজাউল করিম" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">পদবি *</label>
+                    <input type="text" class="form-control" id="headDesignation"
+                           placeholder="Head of the Department" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">বিভাগ *</label>
+                    <input type="text" class="form-control" id="headDepartment"
+                           placeholder="Finance & Banking" required>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Display Order</label>
+                    <input type="number" class="form-control" id="headOrder"
+                           placeholder="0" value="0" min="0">
+                    <small class="text-muted" style="font-size:10px;">ছোট সংখ্যা আগে</small>
+                </div>
+
+                <div class="col-md-3">
+                    <label class="form-label">Status</label>
+                    <label class="form-check d-flex align-items-center gap-2 mt-2" style="cursor: pointer;">
+                        <input class="form-check-input" type="checkbox" id="headActive" checked>
+                        <span style="font-weight: 600; font-size: 13px;">Active</span>
+                    </label>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">ছবি</label>
+                    <div class="upload-zone" id="headImageDrop">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="txt"><strong>Click to upload</strong> বা drag & drop</div>
+                        <div class="hint">JPG, PNG, WEBP (Max 2MB)</div>
+                        <input type="file" id="headImageInput" accept="image/*">
+                    </div>
+
+                    <div class="upload-preview" id="headImagePreview">
+                        <img id="previewImg" src="" alt="preview" style="display:none;">
+                        <i class="fas fa-file-image" id="previewIcon" style="font-size:28px;color:#e65100;"></i>
+                        <div style="flex:1;">
+                            <div id="headImageName" style="font-size:13px;font-weight:600;">image.jpg</div>
+                            <div id="headImageSize" style="font-size:11px;color:#999;">0 KB</div>
+                        </div>
+                        <button type="button" id="removeHeadImage" style="background:none;border:none;color:#ef4444;font-size:18px;cursor:pointer;">
+                            <i class="fas fa-times-circle"></i>
+                        </button>
+                    </div>
+
+                    <div class="upload-preview" id="existingHeadImage">
+                        <img src="" alt="Current" id="existingHeadImg">
+                        <div style="flex:1;">
+                            <div style="font-size:13px;font-weight:600;">বর্তমান ছবি</div>
+                            <div style="font-size:11px;color:#999;" id="existingHeadUrl">URL</div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="headImageUrl" value="">
+                </div>
+
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn-primary-grad" id="saveBtn">
+                        <i class="fas fa-save"></i> <span id="saveBtnText">যোগ করুন</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- LIST -->
+    <div class="card-box">
+        <div class="card-header-custom">
+            <h5>
+                <i class="fas fa-list"></i> সব বিভাগীয় প্রধান
+                <span class="badge" style="background: var(--primary); color:#fff; padding: 4px 12px; border-radius: 20px; font-size: 11px;" id="countBadge">0</span>
+            </h5>
+            <button class="btn-cancel" id="refreshBtn" style="padding: 6px 14px; font-size: 12px;">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="heads-table" id="headsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ছবি</th>
+                        <th>নাম</th>
+                        <th>পদবি</th>
+                        <th>বিভাগ</th>
+                        <th style="width: 60px;">ক্রম</th>
+                        <th style="width: 80px;">Status</th>
+                        <th style="width: 150px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="headsTableBody">
+                    <tr>
+                        <td colspan="7" class="text-center py-4" style="color:#999;">
+                            <i class="fas fa-spinner fa-spin"></i> Loading...
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- TOAST -->
+<div id="toastContainer"></div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/cloudinary.js"></script>
+<script src="../js/admin-department-heads.js"></script>
+
+</body>
+</html>

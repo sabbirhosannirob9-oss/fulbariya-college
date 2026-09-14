@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --white: #ffffff;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --border: rgba(0,0,0,0.06);
+    --shadow-sm: 0 2px 10px rgba(10,22,85,0.06);
+    --shadow-md: 0 8px 30px rgba(10,22,85,0.10);
+    --shadow-lg: 0 20px 60px rgba(10,22,85,0.15);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* PAGE LOADER */
+.page-loader {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 18px;
+    z-index: 9999; transition: opacity 0.3s;
+}
+.page-loader.hide { opacity: 0; pointer-events: none; }
+.loader-spinner {
+    width: 55px; height: 55px;
+    border: 4px solid rgba(242,210,123,0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.page-loader p { color: var(--gold); font-size: 14px; font-weight: 600; letter-spacing: 0.5px; }
+
+/* HEADER */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff; padding: 14px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    flex-wrap: wrap; gap: 12px;
+}
+.admin-header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; }
+.admin-header .brand-icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: var(--gold);
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.admin-header h4 { margin: 0; font-size: 17px; font-weight: 700; }
+.admin-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.admin-header .user-info { display: flex; align-items: center; gap: 14px; }
+.admin-header .user-info .avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: rgba(242,210,123,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 16px; color: var(--gold);
+    border: 2px solid rgba(242,210,123,0.4);
+    overflow: hidden;
+}
+.admin-header .user-info .avatar img { width: 100%; height: 100%; object-fit: cover; }
+.admin-header .user-info .admin-details { text-align: right; line-height: 1.2; }
+.admin-header .user-info .admin-details .name { font-weight: 600; font-size: 13px; }
+.admin-header .user-info .admin-details .role { font-size: 11px; opacity: 0.8; }
+
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; padding: 8px 16px; border-radius: 10px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: 0.25s; display: inline-flex;
+    align-items: center; gap: 6px; text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+
+/* MAIN */
+.main-wrap { max-width: 1300px; margin: 0 auto; padding: 24px 20px 60px; }
+
+/* WELCOME BANNER */
+.welcome-banner {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    border-radius: 20px; padding: 28px 30px;
+    box-shadow: var(--shadow-lg);
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 16px;
+    margin-bottom: 26px; position: relative; overflow: hidden;
+    color: #fff;
+}
+.welcome-banner::before {
+    content: ''; position: absolute;
+    top: -50%; right: -10%;
+    width: 350px; height: 350px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.welcome-banner::after {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-2), var(--gold));
+}
+.welcome-banner h3 {
+    font-weight: 700; margin: 0 0 6px; font-size: 22px;
+    position: relative; z-index: 1;
+}
+.welcome-banner h3 span { color: var(--gold); }
+.welcome-banner p {
+    font-size: 13px; margin: 0; opacity: 0.85;
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 6px;
+}
+.welcome-banner p i { color: var(--gold); }
+
+.welcome-meta { display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 1; }
+.badge-info {
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    padding: 8px 16px; border-radius: 50px;
+    font-size: 12px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid rgba(242,210,123,0.3);
+    backdrop-filter: blur(10px);
+}
+.badge-time {
+    background: rgba(16,185,129,0.15);
+    color: #6ee7b7;
+    padding: 8px 16px; border-radius: 50px;
+    font-size: 12px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+    border: 1px solid rgba(16,185,129,0.3);
+    backdrop-filter: blur(10px);
+}
+
+/* SECTION TITLE */
+.section-title {
+    color: var(--navy); font-weight: 700; font-size: 18px;
+    margin: 32px 0 18px;
+    display: flex; align-items: center; gap: 10px;
+}
+.section-title i { color: var(--gold-2); }
+.section-title::after {
+    content: ''; flex: 1; height: 2px;
+    background: linear-gradient(90deg, rgba(10,22,85,0.15), transparent);
+    border-radius: 2px;
+}
+
+/* STATS */
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 14px;
+    margin-bottom: 8px;
+}
+.stat-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+.stat-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+    background: var(--navy);
+}
+.stat-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); }
+
+.stat-card .stat-number {
+    font-size: 28px; font-weight: 700;
+    color: var(--navy); line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.stat-card .stat-label {
+    color: var(--grey); font-size: 11px;
+    margin-top: 8px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.stat-card .stat-icon {
+    font-size: 24px; opacity: 0.12; color: var(--navy);
+}
+
+.stat-card.gold::before { background: linear-gradient(180deg, var(--gold), var(--gold-2)); }
+.stat-card.gold .stat-number { color: var(--gold-dark); }
+.stat-card.gold .stat-icon { color: var(--gold-dark); }
+
+.stat-card.green::before { background: linear-gradient(180deg, #10b981, #059669); }
+.stat-card.green .stat-number { color: #059669; }
+.stat-card.green .stat-icon { color: #059669; }
+
+.stat-card.orange::before { background: linear-gradient(180deg, #f97316, #ea580c); }
+.stat-card.orange .stat-number { color: #ea580c; }
+.stat-card.orange .stat-icon { color: #ea580c; }
+
+.stat-card.purple::before { background: linear-gradient(180deg, #8b5cf6, #7c3aed); }
+.stat-card.purple .stat-number { color: #7c3aed; }
+.stat-card.purple .stat-icon { color: #7c3aed; }
+
+.stat-card.red::before { background: linear-gradient(180deg, #ef4444, #dc2626); }
+.stat-card.red .stat-number { color: #dc2626; }
+.stat-card.red .stat-icon { color: #dc2626; }
+
+.stat-card.teal::before { background: linear-gradient(180deg, #14b8a6, #0d9488); }
+.stat-card.teal .stat-number { color: #0d9488; }
+.stat-card.teal .stat-icon { color: #0d9488; }
+
+.stat-card.indigo::before { background: linear-gradient(180deg, #6366f1, #4f46e5); }
+.stat-card.indigo .stat-number { color: #4f46e5; }
+.stat-card.indigo .stat-icon { color: #4f46e5; }
+
+.stat-card.rose::before { background: linear-gradient(180deg, #f43f5e, #e11d48); }
+.stat-card.rose .stat-number { color: #e11d48; }
+.stat-card.rose .stat-icon { color: #e11d48; }
+
+/* FEATURED CARD */
+.featured-card {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 20px;
+    padding: 26px 28px;
+    margin: 26px 0;
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    transition: 0.4s;
+}
+.featured-card::before {
+    content: ''; position: absolute;
+    top: -50%; right: -20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+    transition: 0.6s;
+}
+.featured-card:hover::before { transform: scale(1.3); }
+.featured-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 70px rgba(10,22,85,0.35);
+    color: #fff;
+}
+.featured-card .fc-icon {
+    width: 70px; height: 70px; border-radius: 18px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; color: var(--navy);
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba(242,210,123,0.4);
+    position: relative; z-index: 1;
+    transition: 0.4s;
+}
+.featured-card:hover .fc-icon { transform: rotate(-8deg) scale(1.08); }
+.featured-card .fc-content { flex: 1; min-width: 200px; position: relative; z-index: 1; }
+.featured-card .fc-content .fc-badge {
+    display: inline-block;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 4px 12px; border-radius: 50px;
+    margin-bottom: 10px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.featured-card .fc-content h3 {
+    margin: 0 0 6px; font-size: 22px; font-weight: 700;
+}
+.featured-card .fc-content p {
+    margin: 0; font-size: 13px; opacity: 0.85; line-height: 1.6;
+}
+.featured-card .fc-arrow {
+    width: 50px; height: 50px; border-radius: 50%;
+    background: rgba(242,210,123,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; color: var(--gold);
+    flex-shrink: 0; position: relative; z-index: 1;
+    border: 1px solid rgba(242,210,123,0.3);
+    transition: 0.3s;
+}
+.featured-card:hover .fc-arrow {
+    background: var(--gold);
+    color: var(--navy);
+    transform: translateX(6px);
+}
+
+/* MANAGEMENT GRID */
+.management-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+}
+.management-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 20px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    border: 1.5px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+.management-card::after {
+    content: '\f054';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 18px; top: 50%;
+    transform: translateY(-50%);
+    color: rgba(10,22,85,0.1);
+    font-size: 14px; transition: 0.3s;
+}
+.management-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(10,22,85,0.15);
+}
+.management-card:hover::after { color: var(--navy); right: 14px; }
+
+.management-card .card-icon {
+    width: 52px; height: 52px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; color: #fff;
+    flex-shrink: 0; transition: 0.3s;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+.management-card:hover .card-icon { transform: scale(1.08) rotate(-5deg); }
+
+.management-card .card-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); }
+.management-card .card-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+.management-card .card-icon.orange { background: linear-gradient(135deg, #f97316, #ea580c); }
+.management-card .card-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); }
+.management-card .card-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.management-card .card-icon.teal { background: linear-gradient(135deg, #14b8a6, #0d9488); }
+.management-card .card-icon.pink { background: linear-gradient(135deg, #ec4899, #db2777); }
+.management-card .card-icon.indigo { background: linear-gradient(135deg, #6366f1, #4f46e5); }
+.management-card .card-icon.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
+.management-card .card-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.management-card .card-icon.rose { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+
+.management-card .card-content { flex: 1; min-width: 0; padding-right: 22px; }
+.management-card .card-content h6 {
+    font-weight: 700; margin: 0 0 4px;
+    color: var(--navy); font-size: 14.5px;
+}
+.management-card .card-content p {
+    font-size: 11.5px; color: var(--grey);
+    margin: 0 0 8px; line-height: 1.5;
+}
+.management-card .badge-count {
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.06));
+    color: var(--navy);
+    padding: 3px 12px; border-radius: 20px;
+    font-size: 11px; font-weight: 700;
+    display: inline-block;
+    border: 1px solid rgba(10,22,85,0.1);
+}
+.management-card .badge-count.gold {
+    background: linear-gradient(135deg, rgba(242,210,123,0.25), rgba(212,175,55,0.15));
+    color: var(--gold-dark);
+    border-color: rgba(212,175,55,0.3);
+}
+
+/* FOOTER */
+.footer {
+    text-align: center; padding: 40px 20px 20px;
+    color: var(--grey); font-size: 12px;
+}
+.footer i { color: var(--gold-2); }
+.footer .footer-line {
+    max-width: 400px; margin: 0 auto 16px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(10,22,85,0.15), transparent);
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeInUp 0.55s ease both; }
+.fade-in-delay-1 { animation-delay: 0.08s; }
+.fade-in-delay-2 { animation-delay: 0.16s; }
+.fade-in-delay-3 { animation-delay: 0.24s; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .admin-header { padding: 12px 16px; }
+    .admin-header h4 { font-size: 14px; }
+    .admin-header .brand-icon { width: 40px; height: 40px; font-size: 17px; }
+    .admin-header .user-info .admin-details { display: none; }
+    .main-wrap { padding: 16px 12px 40px; }
+    .welcome-banner { padding: 22px 20px; }
+    .welcome-banner h3 { font-size: 17px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .stat-card { padding: 14px; }
+    .stat-card .stat-number { font-size: 22px; }
+    .stat-card .stat-icon { font-size: 18px; }
+    .management-grid { grid-template-columns: 1fr; }
+    .section-title { font-size: 16px; }
+    .featured-card { padding: 22px; }
+    .featured-card .fc-icon { width: 55px; height: 55px; font-size: 24px; }
+    .featured-card .fc-content h3 { font-size: 18px; }
+    .featured-card .fc-arrow { display: none; }
+    .management-card { padding: 16px; }
+    .management-card .card-icon { width: 46px; height: 46px; font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div class="page-loader" id="pageLoader">
+    <div class="loader-spinner"></div>
+    <p>যাচাই করা হচ্ছে...</p>
+</div>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-shield-alt"></i></div>
+        <div>
+            <h4>Fulbariya Degree College</h4>
+            <small>Admin Panel v2.1</small>
+        </div>
+    </div>
+    <div class="user-info">
+        <div class="admin-details">
+            <div class="name" id="adminName">Administrator</div>
+            <div class="role" id="adminRole">Role: Admin</div>
+        </div>
+        <div class="avatar" id="adminAvatar">A</div>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- WELCOME -->
+    <div class="welcome-banner fade-in">
+        <div>
+            <h3>আসসালামু আলাইকুম, <span id="welcomeName">Administrator</span>! 👋</h3>
+            <p><i class="fas fa-shield-alt"></i> Secure Administration Panel</p>
+        </div>
+        <div class="welcome-meta">
+            <span class="badge-info"><i class="fas fa-building"></i> Code: 5215</span>
+            <span class="badge-time" id="loginTimeBadge"><i class="fas fa-clock"></i> --:--</span>
+        </div>
+    </div>
+
+    <!-- STATS -->
+    <h3 class="section-title fade-in fade-in-delay-1">
+        <i class="fas fa-chart-line"></i> Overview
+    </h3>
+
+    <div class="stat-grid fade-in fade-in-delay-1">
+        <div class="stat-card">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number" id="statNotices">0</div>
+                    <div class="stat-label"><i class="fas fa-bullhorn"></i> Notices</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-bullhorn"></i></div>
+            </div>
+        </div>
+
+        <div class="stat-card indigo">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number" id="statNews">0</div>
+                    <div class="stat-label"><i class="fas fa-newspaper"></i> News</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-newspaper"></i></div>
+            </div>
+        </div>
+
+        <div class="stat-card green">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number" id="statResults">0</div>
+                    <div class="stat-label"><i class="fas fa-table"></i> Results</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-table"></i></div>
+            </div>
+        </div>
+
+        <div class="stat-card orange">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number" id="statStudents">0</div>
+                    <div class="stat-label"><i class="fas fa-user-graduate"></i> Students</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-user-graduate"></i></div>
+            </div>
+        </div>
+
+        <div class="stat-card rose">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number" id="statCalendar">0</div>
+                    <div class="stat-label"><i class="fas fa-calendar-alt"></i> Calendar</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-calendar-alt"></i></div>
+            </div>
+        </div>
+
+        <div class="stat-card teal">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number" id="statRoutine">0</div>
+                    <div class="stat-label"><i class="fas fa-calendar-week"></i> Routines</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-calendar-week"></i></div>
+            </div>
+        </div>
+
+        <div class="stat-card purple">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number" id="statGallery">0</div>
+                    <div class="stat-label"><i class="fas fa-images"></i> Gallery</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-images"></i></div>
+            </div>
+        </div>
+
+        <div class="stat-card gold">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <div class="stat-number" id="statHeads">0</div>
+                    <div class="stat-label"><i class="fas fa-user-tie"></i> Dept Heads</div>
+                </div>
+                <div class="stat-icon"><i class="fas fa-user-tie"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FEATURED: ACADEMIC HUB -->
+    <a href="admin-calendar.html" class="featured-card fade-in fade-in-delay-2">
+        <div class="fc-icon"><i class="fas fa-graduation-cap"></i></div>
+        <div class="fc-content">
+            <span class="fc-badge">⭐ Featured</span>
+            <h3>Academic Hub</h3>
+            <p>ক্যালেন্ডার ও ক্লাস রুটিন — এক জায়গায় পরিচালনা করুন</p>
+        </div>
+        <div class="fc-arrow"><i class="fas fa-arrow-right"></i></div>
+    </a>
+
+    <!-- MANAGEMENT -->
+    <h3 class="section-title fade-in fade-in-delay-2">
+        <i class="fas fa-th-large"></i> Management
+    </h3>
+
+    <div class="management-grid fade-in fade-in-delay-3">
+
+        <a href="admin-notices.html" class="management-card">
+            <div class="card-icon navy"><i class="fas fa-bullhorn"></i></div>
+            <div class="card-content">
+                <h6>01. Notices</h6>
+                <p>Create, edit and publish college notices</p>
+                <span class="badge-count" id="badgeNotices">0</span>
+            </div>
+        </a>
+
+        <a href="admin-news.html" class="management-card">
+            <div class="card-icon indigo"><i class="fas fa-newspaper"></i></div>
+            <div class="card-content">
+                <h6>02. News & Events</h6>
+                <p>Manage latest news, events & updates</p>
+                <span class="badge-count" id="badgeNews">0</span>
+            </div>
+        </a>
+
+        <a href="admin-results.html" class="management-card">
+            <div class="card-icon green"><i class="fas fa-table"></i></div>
+            <div class="card-content">
+                <h6>03. Results</h6>
+                <p>Enter and manage examination results</p>
+                <span class="badge-count" id="badgeResults">0</span>
+            </div>
+        </a>
+
+        <a href="admin-students.html" class="management-card">
+            <div class="card-icon orange"><i class="fas fa-user-graduate"></i></div>
+            <div class="card-content">
+                <h6>04. Students</h6>
+                <p>Add, update and manage student data</p>
+                <span class="badge-count" id="badgeStudents">0</span>
+            </div>
+        </a>
+
+        <a href="admin-calendar.html" class="management-card">
+            <div class="card-icon rose"><i class="fas fa-calendar-alt"></i></div>
+            <div class="card-content">
+                <h6>05. Academic Calendar</h6>
+                <p>পরীক্ষা, ছুটি ও ইভেন্টের সময়সূচি</p>
+                <span class="badge-count" id="badgeCalendar">0</span>
+            </div>
+        </a>
+
+        <a href="admin-routine.html" class="management-card">
+            <div class="card-icon teal"><i class="fas fa-calendar-week"></i></div>
+            <div class="card-content">
+                <h6>06. Class Routine</h6>
+                <p>শাখা অনুযায়ী রুটিনের ছবি পরিচালনা</p>
+                <span class="badge-count" id="badgeRoutine">0</span>
+            </div>
+        </a>
+
+        <a href="admin-bncc.html" class="management-card">
+            <div class="card-icon purple"><i class="fas fa-flag"></i></div>
+            <div class="card-content">
+                <h6>07. BNCC</h6>
+                <p>Manage BNCC activities and events</p>
+                <span class="badge-count" id="badgeBncc">0</span>
+            </div>
+        </a>
+
+        <a href="admin-scouts.html" class="management-card">
+            <div class="card-icon pink"><i class="fas fa-campground"></i></div>
+            <div class="card-content">
+                <h6>08. Scouts</h6>
+                <p>Manage Scouts activities and photos</p>
+                <span class="badge-count" id="badgeScouts">0</span>
+            </div>
+        </a>
+
+        <a href="admin-gallery.html" class="management-card">
+            <div class="card-icon amber"><i class="fas fa-images"></i></div>
+            <div class="card-content">
+                <h6>09. Gallery</h6>
+                <p>Upload and manage gallery images</p>
+                <span class="badge-count" id="badgeGallery">0</span>
+            </div>
+        </a>
+
+        <a href="admin-department-heads.html" class="management-card">
+            <div class="card-icon gold"><i class="fas fa-users-cog"></i></div>
+            <div class="card-content">
+                <h6>10. Department Heads</h6>
+                <p>Manage department heads & photos</p>
+                <span class="badge-count gold" id="badgeHeads">0</span>
+            </div>
+        </a>
+
+        <a href="admin-settings.html" class="management-card">
+            <div class="card-icon navy"><i class="fas fa-cog"></i></div>
+            <div class="card-content">
+                <h6>11. Settings</h6>
+                <p>Manage website and system settings</p>
+                <span class="badge-count">⚙️</span>
+            </div>
+        </a>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <div class="footer-line"></div>
+        <p><i class="fas fa-shield-alt"></i> Fulbariya Degree College · Admin Panel v2.1</p>
+        <p style="font-size: 11px; margin-top: 6px;">&copy; 2026 All rights reserved</p>
+    </div>
+
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin-popup.js"></script>
+
+<script>
+/**
+ * =========================================================
+ * ADMIN DASHBOARD — SESSION GUARD & STATS (v2.1)
+ * Smart Popup + New Stats
+ * =========================================================
+ */
+(function () {
+    "use strict";
+
+    function waitForSupabase(cb) {
+        if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) return cb();
+        window.addEventListener('fdc:supabase-ready', cb);
+        let n = 0;
+        const i = setInterval(() => {
+            if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) {
+                clearInterval(i); cb();
+            }
+            if (++n > 20) clearInterval(i);
+        }, 500);
+    }
+
+    async function checkSession() {
+        try {
+            if (typeof window.FDCAuth === 'undefined') {
+                console.error('❌ FDCAuth not loaded');
+                redirectToLogin();
+                return;
+            }
+
+            const result = await window.FDCAuth.getCurrentAdmin();
+
+            if (!result || !result.admin) {
+                console.warn('❌ No admin session');
+                redirectToLogin();
+                return;
+            }
+
+            const admin = result.admin;
+            console.log('✅ Admin loaded:', admin.name);
+
+            renderAdmin(
+                admin.name,
+                admin.role,
+                admin.image_url,
+                sessionStorage.getItem('admin_login_time')
+            );
+
+            hideLoader();
+            loadAllStats();
+
+        } catch (err) {
+            console.error('❌ Session check error:', err);
+            redirectToLogin();
+        }
+    }
+
+    function redirectToLogin() {
+        sessionStorage.clear();
+        window.location.replace('admin-login.html');
+    }
+
+    function renderAdmin(name, role, image, loginTime) {
+        name = name || 'Administrator';
+        role = role || 'admin';
+
+        document.getElementById('adminName').textContent = name;
+        document.getElementById('welcomeName').textContent = name;
+        document.getElementById('adminRole').textContent =
+            'Role: ' + (role === 'super_admin' ? 'Super Admin' : 'Admin');
+
+        const avatar = document.getElementById('adminAvatar');
+        if (image) {
+            avatar.innerHTML = `<img src="${image}" alt="avatar">`;
+        } else {
+            avatar.textContent = name.charAt(0).toUpperCase();
+        }
+
+        if (loginTime) {
+            const t = new Date(loginTime).toLocaleTimeString('bn-BD', {
+                hour: '2-digit', minute: '2-digit'
+            });
+            document.getElementById('loginTimeBadge').innerHTML =
+                '<i class="fas fa-clock"></i> লগইন: ' + t;
+        }
+    }
+
+    function hideLoader() {
+        const loader = document.getElementById('pageLoader');
+        if (loader) {
+            loader.classList.add('hide');
+            setTimeout(() => loader.remove(), 300);
+        }
+    }
+
+    function animateCount(el, target, duration) {
+        if (!el) return;
+        duration = duration || 800;
+        const startTime = performance.now();
+
+        function update(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const value = Math.floor(target * progress);
+            el.textContent = value;
+            if (progress < 1) requestAnimationFrame(update);
+            else el.textContent = target;
+        }
+        requestAnimationFrame(update);
+    }
+
+    async function loadAllStats() {
+        try {
+            const supabase = window.FDC_SUPABASE;
+            if (!supabase) return;
+
+            async function getCount(table, filters) {
+                filters = filters || {};
+                try {
+                    let query = supabase.from(table).select('*', { count: 'exact', head: true });
+                    for (const [key, value] of Object.entries(filters)) {
+                        query = query.eq(key, value);
+                    }
+                    const { count, error } = await query;
+                    if (error) return 0;
+                    return count || 0;
+                } catch (e) {
+                    return 0;
+                }
+            }
+
+            const [
+                notices, news, results, students, gallery, heads,
+                bncc, scouts, calendarEvents, routines
+            ] = await Promise.all([
+                getCount('notices'),
+                getCount('news'),
+                getCount('results'),
+                getCount('students'),
+                getCount('gallery'),
+                getCount('department_heads'),
+                getCount('bncc_members'),
+                getCount('scouts_members'),
+                getCount('calendar_events'),
+                getCount('class_routines')
+            ]);
+
+            animateCount(document.getElementById('statNotices'), notices);
+            animateCount(document.getElementById('statNews'), news);
+            animateCount(document.getElementById('statResults'), results);
+            animateCount(document.getElementById('statStudents'), students);
+            animateCount(document.getElementById('statCalendar'), calendarEvents);
+            animateCount(document.getElementById('statRoutine'), routines);
+            animateCount(document.getElementById('statGallery'), gallery);
+            animateCount(document.getElementById('statHeads'), heads);
+
+            document.getElementById('badgeNotices').textContent = notices;
+            document.getElementById('badgeNews').textContent = news;
+            document.getElementById('badgeResults').textContent = results;
+            document.getElementById('badgeStudents').textContent = students;
+            document.getElementById('badgeCalendar').textContent = calendarEvents;
+            document.getElementById('badgeRoutine').textContent = routines;
+            document.getElementById('badgeBncc').textContent = bncc;
+            document.getElementById('badgeScouts').textContent = scouts;
+            document.getElementById('badgeGallery').textContent = gallery;
+            document.getElementById('badgeHeads').textContent = heads;
+
+        } catch (error) {
+            console.error('Stats load error:', error);
+        }
+    }
+
+    // =========================================================
+    // LOGOUT — Smart Popup
+    // =========================================================
+    window.handleLogout = function () {
+        window.fdcConfirm(
+            'আপনি কি লগআউট করতে চান?',
+            async function () {
+                try {
+                    if (window.FDCAuth) {
+                        await window.FDCAuth.logout();
+                    } else if (window.FDC_SUPABASE) {
+                        await window.FDC_SUPABASE.auth.signOut();
+                    }
+                } catch (e) {
+                    console.warn('SignOut error:', e);
+                }
+
+                sessionStorage.clear();
+                window.location.replace('admin-login.html');
+            },
+            {
+                title: 'Logout Confirmation',
+                confirmText: 'Yes, Logout',
+                cancelText: 'Cancel',
+                confirmType: 'danger'
+            }
+        );
+    };
+
+    function init() {
+        console.log('🚀 Admin Dashboard v2.1 initialized');
+        waitForSupabase(checkSession);
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>
+
+</body>
+</html>

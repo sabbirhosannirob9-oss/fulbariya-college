@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result Entry - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --white: #ffffff;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* ============ HEADER ============ */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.admin-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.admin-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+    flex-shrink: 0;
+}
+.admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.admin-header .user-box { display: flex; align-items: center; gap: 8px; }
+.avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    border: 2px solid rgba(242,210,123,0.4);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+
+/* ============ MAIN ============ */
+.main-wrap { max-width: 1600px; margin: 0 auto; padding: 20px 16px 60px; }
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-title .badge-total {
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.06));
+    color: var(--navy);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    border: 1px solid rgba(10,22,85,0.1);
+}
+.page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
+
+/* ============ SETUP CARD ============ */
+.setup-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    align-items: end;
+}
+.setup-card .filter-item { position: relative; }
+.setup-card label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+    margin-bottom: 4px;
+}
+.setup-card select,
+.setup-card input {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13px;
+    outline: none;
+    transition: 0.25s;
+    font-family: inherit;
+}
+.setup-card select:focus,
+.setup-card input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+    background: #fff;
+}
+
+.btn-primary-grad {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    white-space: nowrap;
+}
+.btn-primary-grad:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,85,0.35); color: #fff; }
+.btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary-grad i { color: var(--gold); }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid #e5e7eb;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
+
+.btn-gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    border: none;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(212,175,55,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.btn-gold:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.4); color: var(--navy); }
+.btn-gold:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ============ STATS ============ */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+.stat-pill {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
+.stat-pill .sp-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+.stat-pill .sp-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
+.stat-pill .sp-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.stat-pill .sp-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.stat-pill .sp-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
+.stat-pill .sp-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+.stat-pill .sp-info { min-width: 0; }
+.stat-pill .sp-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.stat-pill .sp-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 3px;
+}
+
+/* ============ ACTION BAR ============ */
+.action-bar {
+    background: #fff;
+    border-radius: 16px;
+    padding: 12px 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.action-bar-left { display: flex; gap: 8px; flex-wrap: wrap; }
+.action-bar-right { display: flex; gap: 8px; flex-wrap: wrap; }
+.status-badge {
+    padding: 5px 14px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.status-badge.draft { background: #fef3c7; color: #92400e; }
+.status-badge.published { background: #dcfce7; color: #166534; }
+.status-badge.unsaved { background: #fee2e2; color: #991b1b; }
+
+/* ============ MARKS TABLE ============ */
+.marks-wrap {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+}
+.marks-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.marks-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+}
+.marks-table thead {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+}
+.marks-table thead th {
+    padding: 8px 6px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    white-space: nowrap;
+    border-right: 1px solid rgba(255,255,255,0.08);
+}
+.marks-table thead th:last-child { border-right: none; }
+
+/* Section headers (rowspan) */
+.marks-table thead .section-header {
+    background: rgba(0,0,0,0.15);
+    font-size: 10.5px;
+    padding: 10px 6px;
+    border-bottom: 2px solid var(--gold);
+}
+.marks-table thead .subject-header {
+    background: rgba(255,255,255,0.05);
+    border-bottom: 1px solid rgba(255,255,255,0.15);
+    color: var(--gold);
+}
+
+.marks-table thead .col-roll { width: 55px; min-width: 55px; }
+.marks-table thead .col-name { width: 150px; min-width: 150px; text-align: left; padding-left: 12px; }
+.marks-table thead .col-sub { width: 90px; min-width: 90px; }
+.marks-table thead .col-gpa { width: 70px; min-width: 70px; }
+.marks-table thead .col-grade { width: 60px; min-width: 60px; }
+.marks-table thead .col-status { width: 70px; min-width: 70px; }
+
+.marks-table tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    transition: 0.2s;
+}
+.marks-table tbody tr:hover { background: #fafbff; }
+.marks-table tbody tr:nth-child(even) { background: #fafbff; }
+.marks-table tbody tr:nth-child(even):hover { background: #f3f6fc; }
+
+.marks-table tbody td {
+    padding: 6px 6px;
+    text-align: center;
+    vertical-align: middle;
+    border-right: 1px solid var(--border-light);
+}
+.marks-table tbody td:last-child { border-right: none; }
+.marks-table tbody td.cell-roll {
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+}
+.marks-table tbody td.cell-name {
+    text-align: left;
+    padding-left: 12px;
+    font-weight: 600;
+    font-size: 12.5px;
+    color: var(--dark);
+    white-space: nowrap;
+}
+
+/* Marks input field */
+.marks-input-wrap {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.marks-input {
+    width: 100%;
+    padding: 5px 4px;
+    border-radius: 6px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    font-size: 12px;
+    text-align: center;
+    outline: none;
+    transition: 0.2s;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-weight: 600;
+    color: var(--navy);
+}
+.marks-input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(10,22,85,0.1);
+    background: #fff;
+}
+.marks-input.filled { background: #f0fdf4; border-color: #86efac; }
+.marks-input.error { background: #fef2f2; border-color: #fca5a5; color: var(--danger); }
+.marks-input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
+
+.max-hint {
+    font-size: 9px;
+    color: var(--grey);
+    display: block;
+    line-height: 1;
+    margin-top: 1px;
+}
+
+.gpa-cell {
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--navy);
+}
+.gpa-cell.high { color: #059669; }
+.gpa-cell.mid { color: #d97706; }
+.gpa-cell.low { color: #dc2626; }
+
+.grade-cell {
+    font-weight: 700;
+    font-size: 12px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    min-width: 32px;
+}
+.grade-cell.Aplus { background: #dcfce7; color: #166534; }
+.grade-cell.A { background: #d1fae5; color: #065f46; }
+.grade-cell.Aminus { background: #dbeafe; color: #1e40af; }
+.grade-cell.B { background: #fef3c7; color: #92400e; }
+.grade-cell.C { background: #fed7aa; color: #9a3412; }
+.grade-cell.D { background: #fecaca; color: #991b1b; }
+.grade-cell.F { background: #7f1d1d; color: #fff; }
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+.empty-state .icon-wrap {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.empty-state i { font-size: 36px; color: var(--navy); opacity: 0.35; }
+.empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
+
+/* Skeleton */
+.skeleton-row {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.skeleton-line {
+    height: 14px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .admin-header { padding: 10px 14px; }
+    .admin-header h4 { font-size: 14px; }
+    .main-wrap { padding: 14px 12px 50px; }
+    .page-title { font-size: 17px; }
+    .setup-card { padding: 14px; grid-template-columns: 1fr 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-pill { padding: 11px 12px; }
+    .stat-pill .sp-value { font-size: 17px; }
+    .action-bar { flex-direction: column; align-items: stretch; }
+    .action-bar-left, .action-bar-right { justify-content: center; }
+    .marks-table thead .col-name { width: 110px; min-width: 110px; }
+    .marks-input { font-size: 11px; padding: 4px 2px; }
+}
+
+@media (max-width: 480px) {
+    .btn-header span { display: none; }
+    .setup-card { grid-template-columns: 1fr; }
+}
+
+/* Notice */
+.info-notice {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-left: 4px solid #3b82f6;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    color: #1e40af;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.info-notice i { font-size: 16px; }
+.info-notice strong { color: #1e3a8a; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-clipboard-list"></i></div>
+        <div>
+            <h4>Result Entry</h4>
+            <small>মার্ক এন্ট্রি ও রেজাল্ট প্রকাশ</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="avatar-circle" data-admin-avatar>A</div>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+        </a>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- Page Title -->
+    <h4 class="page-title">
+        <i class="fas fa-clipboard-list"></i> Result Entry
+        <span class="badge-total" id="totalStudents">0</span>
+    </h4>
+    <p class="page-sub">একটি exam-এর জন্য student-দের marks এন্ট্রি করুন</p>
+
+    <!-- Info Notice -->
+    <div class="info-notice">
+        <i class="fas fa-info-circle"></i>
+        <div>
+            <strong>ব্যবহারবিধি:</strong> Class + Year + Branch + Group + Exam সিলেক্ট করে <strong>"Load Students"</strong> চাপুন। তারপর প্রতিটি student-এর CQ / MCQ / Practical marks দিন।
+        </div>
+    </div>
+
+    <!-- Setup Card -->
+    <div class="setup-card">
+        <div class="filter-item">
+            <label>Exam <span style="color:var(--danger);">*</span></label>
+            <select id="filterExam">
+                <option value="">Select Exam</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Class <span style="color:var(--danger);">*</span></label>
+            <select id="filterClass">
+                <option value="">Select Class</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Year <span style="color:var(--danger);">*</span></label>
+            <select id="filterYear">
+                <option value="">Select Year</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Branch <span style="color:var(--danger);">*</span></label>
+            <select id="filterBranch">
+                <option value="">Select Branch</option>
+                <option value="HSC">HSC</option>
+                <option value="BM">BM</option>
+            </select>
+        </div>
+        <div class="filter-item" id="groupFieldWrap">
+            <label>Group <span style="color:var(--danger);">*</span></label>
+            <select id="filterGroup">
+                <option value="">Select Group</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <button class="btn-primary-grad" id="btnLoadStudents" style="width:100%;">
+                <i class="fas fa-search"></i> Load Students
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-pill">
+            <div class="sp-icon navy"><i class="fas fa-users"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statTotal">0</div>
+                <div class="sp-label">Students</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon gold"><i class="fas fa-pen"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statFilled">0</div>
+                <div class="sp-label">Filled</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon green"><i class="fas fa-check-circle"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statPassed">0</div>
+                <div class="sp-label">Passed</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon red"><i class="fas fa-times-circle"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statFailed">0</div>
+                <div class="sp-label">Failed</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="action-bar" id="actionBar" style="display:none;">
+        <div class="action-bar-left">
+            <span class="status-badge draft" id="statusBadge">
+                <i class="fas fa-pen"></i> Draft
+            </span>
+        </div>
+        <div class="action-bar-right">
+            <button class="btn-secondary" id="btnFillPractical">
+                <i class="fas fa-bolt"></i> সব Practical = 25
+            </button>
+            <button class="btn-secondary" id="btnClearAll">
+                <i class="fas fa-eraser"></i> Clear All
+            </button>
+            <button class="btn-primary-grad" id="btnSaveDraft">
+                <i class="fas fa-save"></i> Save Draft
+            </button>
+            <button class="btn-gold" id="btnPublish">
+                <i class="fas fa-check-circle"></i> Publish
+            </button>
+        </div>
+    </div>
+
+    <!-- Marks Table -->
+    <div class="marks-wrap">
+        <div class="marks-scroll">
+            <table class="marks-table" id="marksTable">
+                <thead id="tableHead">
+                    <!-- Dynamically generated -->
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="10" style="padding:0;">
+                        <div class="skeleton-row">
+                            <div class="skeleton-line" style="width:80%;"></div>
+                            <div class="skeleton-line" style="width:90%;"></div>
+                            <div class="skeleton-line" style="width:85%;"></div>
+                        </div>
+                    </td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Empty state (before load) -->
+    <div class="marks-wrap" id="emptyState" style="display:none;">
+        <div class="empty-state">
+            <div class="icon-wrap"><i class="fas fa-clipboard-list"></i></div>
+            <h6>এখনো কোনো data লোড হয়নি</h6>
+            <p>উপরে Exam + Class + Year + Branch + Group সিলেক্ট করে "Load Students" চাপুন</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin-popup.js"></script>
+<script src="../js/admin-results.js"></script>
+
+</body>
+</html>

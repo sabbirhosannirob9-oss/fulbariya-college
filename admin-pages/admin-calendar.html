@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Academic Calendar - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --danger: #ef4444;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --purple: #8b5cf6;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* HEADER */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.admin-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; }
+.admin-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+.admin-header .user-box { display: flex; align-items: center; gap: 8px; }
+.avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    border: 2px solid rgba(242,210,123,0.4);
+    overflow: hidden;
+}
+.avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+
+/* MAIN */
+.main-wrap { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-title .badge-total {
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.06));
+    color: var(--navy);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    border: 1px solid rgba(10,22,85,0.1);
+}
+.page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
+
+/* TOOLBAR */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.btn-primary-grad {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-primary-grad:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,85,0.35); color: #fff; }
+.btn-primary-grad i { color: var(--gold); }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid #e5e7eb;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
+
+/* FILTER */
+.filter-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+.filter-card label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+    margin-bottom: 4px;
+}
+.filter-card select,
+.filter-card input {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13px;
+    outline: none;
+    transition: 0.25s;
+    font-family: inherit;
+}
+.filter-card select:focus,
+.filter-card input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+    background: #fff;
+}
+
+/* EVENTS LIST */
+.events-list {
+    display: grid;
+    gap: 12px;
+}
+
+.event-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    transition: 0.25s;
+    position: relative;
+    overflow: hidden;
+}
+.event-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--navy);
+}
+.event-card.exam::before { background: linear-gradient(180deg, #dc2626, #ef4444); }
+.event-card.holiday::before { background: linear-gradient(180deg, #059669, #10b981); }
+.event-card.event::before { background: linear-gradient(180deg, #8b5cf6, #a78bfa); }
+.event-card.result::before { background: linear-gradient(180deg, #f59e0b, #fbbf24); }
+.event-card.admission::before { background: linear-gradient(180deg, #2563eb, #3b82f6); }
+.event-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+
+.event-date-box {
+    flex-shrink: 0;
+    width: 70px;
+    text-align: center;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 12px;
+    padding: 10px 6px;
+}
+.event-date-box .day {
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.event-date-box .month {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-top: 4px;
+    color: var(--gold);
+    font-weight: 600;
+}
+
+.event-body { flex: 1; min-width: 0; }
+.event-body h4 {
+    font-size: 16px;
+    color: var(--navy);
+    margin: 0 0 6px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.event-body p {
+    font-size: 13px;
+    color: var(--grey);
+    margin: 0 0 8px;
+    line-height: 1.6;
+}
+.event-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 11.5px;
+    color: var(--grey);
+}
+.event-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.event-meta i { color: var(--gold-dark); }
+
+.event-type-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+.event-type-badge.exam { background: #fef2f2; color: #991b1b; }
+.event-type-badge.holiday { background: #dcfce7; color: #166534; }
+.event-type-badge.event { background: #f3e8ff; color: #6b21a8; }
+.event-type-badge.result { background: #fef3c7; color: #92400e; }
+.event-type-badge.admission { background: #dbeafe; color: #1e40af; }
+.event-type-badge.general { background: #f3f4f6; color: #374151; }
+
+.event-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.action-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.action-btn:hover { transform: scale(1.1); }
+.action-btn.edit { background: #e3f2fd; color: #1565c0; }
+.action-btn.delete { background: #fef2f2; color: var(--danger); }
+.action-btn.toggle { background: #dcfce7; color: #166534; }
+.action-btn.toggle.off { background: #fef2f2; color: #dc2626; }
+
+/* EMPTY STATE */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+}
+.empty-state .icon-wrap {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.empty-state i { font-size: 36px; color: var(--navy); opacity: 0.35; }
+.empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
+
+/* LOADING */
+.loading-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px;
+    text-align: center;
+    border: 1px solid var(--border-light);
+}
+.loading-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 14px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-card p { color: var(--grey); font-size: 13px; margin: 0; }
+
+/* MODAL */
+.fdc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.7);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.25s ease;
+}
+.fdc-modal-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.fdc-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 640px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.fdc-modal-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    padding: 22px 24px;
+    border-radius: 20px 20px 0 0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+.fdc-modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.fdc-modal-header .mh-left { display: flex; align-items: center; gap: 12px; }
+.fdc-modal-header .mh-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.fdc-modal-header h5 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
+.fdc-modal-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.fdc-modal-close {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.fdc-modal-close:hover { background: var(--danger); transform: rotate(90deg); }
+
+.fdc-modal-body { padding: 22px 24px; }
+
+.fdc-form-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #4b5563;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+}
+.fdc-form-label .req { color: var(--danger); }
+
+.fdc-input, .fdc-select, .fdc-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13.5px;
+    transition: 0.25s;
+    outline: none;
+    font-family: inherit;
+}
+.fdc-input:focus, .fdc-select:focus, .fdc-textarea:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+    background: #fff;
+}
+.fdc-textarea { min-height: 90px; resize: vertical; }
+
+.switch-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #fafbff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+}
+.switch-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--navy);
+    cursor: pointer;
+}
+.switch-row label {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--dark);
+    cursor: pointer;
+    margin: 0;
+}
+
+.fdc-modal-footer {
+    padding: 16px 24px 22px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border-light);
+    background: #fafbff;
+    position: sticky;
+    bottom: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .admin-header { padding: 10px 14px; }
+    .admin-header h4 { font-size: 14px; }
+    .main-wrap { padding: 14px 12px 50px; }
+    .page-title { font-size: 17px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .filter-card { grid-template-columns: 1fr 1fr; }
+    .event-card { padding: 14px 16px; gap: 12px; flex-wrap: wrap; }
+    .event-date-box { width: 60px; padding: 8px 4px; }
+    .event-date-box .day { font-size: 22px; }
+    .event-actions {
+        flex-direction: row;
+        margin-left: auto;
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+@media (max-width: 480px) {
+    .filter-card { grid-template-columns: 1fr; }
+    .btn-header span { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-calendar-alt"></i></div>
+        <div>
+            <h4>Academic Calendar</h4>
+            <small>একাডেমিক ক্যালেন্ডার</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="avatar-circle" data-admin-avatar>A</div>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+        </a>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div>
+            <h4 class="page-title">
+                <i class="fas fa-calendar-alt"></i> Calendar Events
+                <span class="badge-total" id="totalEvents">0</span>
+            </h4>
+            <p class="page-sub">পরীক্ষা, ছুটি ও ইভেন্টের সময়সূচি</p>
+        </div>
+        <button class="btn-primary-grad" id="btnAddEvent">
+            <i class="fas fa-plus-circle"></i> Add New Event
+        </button>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-card">
+        <div>
+            <label>Year</label>
+            <select id="filterYear">
+                <option value="">All Years</option>
+            </select>
+        </div>
+        <div>
+            <label>Event Type</label>
+            <select id="filterType">
+                <option value="">All Types</option>
+                <option value="exam">📝 পরীক্ষা</option>
+                <option value="holiday">🏖️ ছুটি</option>
+                <option value="event">🎉 ইভেন্ট</option>
+                <option value="result">🏆 ফলাফল</option>
+                <option value="admission">📋 ভর্তি</option>
+                <option value="general">📌 সাধারণ</option>
+            </select>
+        </div>
+        <div>
+            <label>Status</label>
+            <select id="filterStatus">
+                <option value="all">All</option>
+                <option value="published">Published</option>
+                <option value="unpublished">Unpublished</option>
+            </select>
+        </div>
+        <div>
+            <label>Search</label>
+            <input type="text" id="searchInput" placeholder="Event title...">
+        </div>
+    </div>
+
+    <!-- Events List -->
+    <div class="events-list" id="eventsList">
+        <div class="loading-card">
+            <div class="loading-spinner"></div>
+            <p>লোড হচ্ছে...</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="fdc-modal-overlay" id="eventModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-calendar-plus" id="modalIcon"></i></div>
+                <div>
+                    <h5 id="modalTitle">Add New Event</h5>
+                    <small id="modalSub">ইভেন্টের তথ্য পূরণ করুন</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="fdc-modal-body">
+            <input type="hidden" id="editId" value="">
+
+            <div class="row g-3">
+                <div class="col-12">
+                    <label class="fdc-form-label">Event Title <span class="req">*</span></label>
+                    <input type="text" class="fdc-input" id="eventTitle" placeholder="যেমন: প্রথম সাময়িক পরীক্ষা">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="fdc-form-label">Event Type <span class="req">*</span></label>
+                    <select class="fdc-select" id="eventType">
+                        <option value="">Select Type</option>
+                        <option value="exam">📝 পরীক্ষা (Exam)</option>
+                        <option value="holiday">🏖️ ছুটি (Holiday)</option>
+                        <option value="event">🎉 ইভেন্ট (Event)</option>
+                        <option value="result">🏆 ফলাফল (Result)</option>
+                        <option value="admission">📋 ভর্তি (Admission)</option>
+                        <option value="general">📌 সাধারণ (General)</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="fdc-form-label">Year <span class="req">*</span></label>
+                    <select class="fdc-select" id="eventYear"></select>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="fdc-form-label">Start Date <span class="req">*</span></label>
+                    <input type="date" class="fdc-input" id="eventStart">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="fdc-form-label">End Date <span style="color:var(--grey);font-weight:500;text-transform:none;letter-spacing:0;font-size:10.5px;">(ঐচ্ছিক)</span></label>
+                    <input type="date" class="fdc-input" id="eventEnd">
+                </div>
+
+                <div class="col-12">
+                    <label class="fdc-form-label">Description</label>
+                    <textarea class="fdc-textarea" id="eventDescription" placeholder="ইভেন্ট সম্পর্কে বিস্তারিত..."></textarea>
+                </div>
+
+                <div class="col-12">
+                    <div class="switch-row">
+                        <input type="checkbox" id="eventPublished" checked>
+                        <label for="eventPublished">Published (Public page-এ দেখাবে)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="cancelBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-primary-grad" id="saveBtn">
+                <i class="fas fa-save"></i> Save Event
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin-popup.js"></script>
+<script src="../js/admin-calendar.js"></script>
+
+</body>
+</html>
