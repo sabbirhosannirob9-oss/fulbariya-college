@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Profile - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+    --danger: #ef4444;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* PAGE LOADER */
+.page-loader {
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 18px;
+    z-index: 9999; transition: opacity 0.3s;
+}
+.page-loader.hide { opacity: 0; pointer-events: none; }
+.loader-spinner {
+    width: 55px; height: 55px;
+    border: 4px solid rgba(242,210,123,0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.page-loader p { color: var(--gold); font-size: 14px; font-weight: 600; }
+
+/* HEADER */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff; padding: 14px 24px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 1000;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    flex-wrap: wrap; gap: 12px;
+}
+.admin-header::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; }
+.admin-header .brand-icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: var(--gold);
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.admin-header h4 { margin: 0; font-size: 17px; font-weight: 700; }
+.admin-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff; padding: 8px 16px; border-radius: 10px;
+    font-size: 12px; font-weight: 600; cursor: pointer;
+    transition: 0.25s; display: inline-flex;
+    align-items: center; gap: 6px; text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+
+/* MAIN */
+.main-wrap { max-width: 900px; margin: 0 auto; padding: 24px 16px 60px; }
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-sub { color: var(--grey); font-size: 13px; margin-bottom: 24px; }
+
+/* PROFILE HERO CARD */
+.profile-hero {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    border-radius: 24px;
+    padding: 36px 30px;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    color: #fff;
+    text-align: center;
+}
+.profile-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.profile-hero::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-2), var(--gold));
+}
+
+.profile-avatar-wrap {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 18px;
+    z-index: 1;
+}
+.profile-avatar {
+    width: 130px; height: 130px;
+    border-radius: 50%;
+    background: rgba(242,210,123,0.2);
+    border: 4px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 54px; font-weight: 700; color: var(--gold);
+    overflow: hidden;
+    margin: 0 auto;
+    box-shadow: 0 12px 40px rgba(242,210,123,0.3);
+}
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+.avatar-edit-btn {
+    position: absolute;
+    bottom: 0; right: 0;
+    width: 40px; height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    border: 3px solid var(--navy);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    transition: 0.3s;
+    z-index: 2;
+}
+.avatar-edit-btn:hover { transform: scale(1.1) rotate(-8deg); }
+
+.profile-hero h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 6px;
+    position: relative; z-index: 1;
+}
+.profile-hero .profile-role {
+    display: inline-block;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    border: 1px solid rgba(242,210,123,0.3);
+    margin-top: 4px;
+    position: relative; z-index: 1;
+}
+.profile-hero .profile-email {
+    font-size: 13px;
+    opacity: 0.75;
+    margin-top: 10px;
+    position: relative; z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* PROFILE META GRID */
+.profile-meta {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-top: 22px;
+    position: relative; z-index: 1;
+}
+.meta-item {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px 16px;
+    text-align: left;
+    backdrop-filter: blur(10px);
+}
+.meta-item .mi-label {
+    font-size: 10px;
+    opacity: 0.7;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.meta-item .mi-label i { color: var(--gold); font-size: 11px; }
+.meta-item .mi-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* SECTION CARD */
+.section-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 26px 24px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+.section-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 4px; height: 100%;
+}
+.section-card.blue::before { background: linear-gradient(180deg, var(--navy), var(--navy-2)); }
+.section-card.gold::before { background: linear-gradient(180deg, var(--gold), var(--gold-2)); }
+.section-card.green::before { background: linear-gradient(180deg, #10b981, #059669); }
+
+.section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border-light);
+}
+.section-header .sh-icon {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    color: #fff;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+.section-header .sh-icon.blue { background: linear-gradient(135deg, var(--navy), var(--navy-2)); }
+.section-header .sh-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.section-header .sh-icon.green { background: linear-gradient(135deg, #10b981, #059669); }
+
+.section-header .sh-text { flex: 1; min-width: 0; }
+.section-header .sh-text h3 {
+    margin: 0 0 3px;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy);
+}
+.section-header .sh-text p {
+    margin: 0;
+    font-size: 12px;
+    color: var(--grey);
+}
+
+/* FORM */
+.form-row { margin-bottom: 18px; }
+
+.form-label-admin {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #4b5563;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 7px;
+}
+.form-label-admin .req { color: var(--danger); }
+.form-label-admin .opt { color: var(--grey); font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 10.5px; }
+
+.form-input-admin {
+    width: 100%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 14px;
+    font-family: inherit;
+    transition: 0.25s;
+    outline: none;
+    color: var(--dark);
+}
+.form-input-admin:focus {
+    border-color: var(--navy);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+}
+.form-input-admin:disabled {
+    background: #f3f4f6;
+    color: var(--grey);
+    cursor: not-allowed;
+}
+
+/* Password field wrapper */
+.password-wrap-admin {
+    position: relative;
+}
+.password-wrap-admin .form-input-admin {
+    padding-right: 48px;
+}
+.password-toggle-admin {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: transparent;
+    border: none;
+    color: var(--grey);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px;
+    transition: 0.2s;
+}
+.password-toggle-admin:hover {
+    background: rgba(10,22,85,0.06);
+    color: var(--navy);
+}
+
+/* Password strength */
+.strength-wrap-admin {
+    margin-top: 10px;
+    display: none;
+}
+.strength-wrap-admin.show { display: block; }
+.strength-bar-admin {
+    height: 4px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    gap: 3px;
+}
+.strength-seg-admin {
+    flex: 1;
+    background: #e5e7eb;
+    border-radius: 4px;
+    transition: 0.3s;
+}
+.strength-seg-admin.weak { background: #ef4444; }
+.strength-seg-admin.fair { background: #f59e0b; }
+.strength-seg-admin.good { background: #10b981; }
+.strength-seg-admin.strong { background: #059669; }
+.strength-text-admin {
+    font-size: 11.5px;
+    margin-top: 6px;
+    color: var(--grey);
+    font-weight: 600;
+}
+
+/* Requirements */
+.requirements-admin {
+    background: #fafbff;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    display: none;
+}
+.requirements-admin.show { display: block; }
+.req-item-admin {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--grey);
+    margin-bottom: 6px;
+    transition: 0.2s;
+}
+.req-item-admin:last-child { margin-bottom: 0; }
+.req-item-admin.met { color: #059669; }
+.req-item-admin i { width: 14px; font-size: 11px; }
+
+/* ALERT */
+.alert-admin {
+    border-radius: 12px;
+    padding: 13px 16px;
+    display: none;
+    margin-bottom: 16px;
+    font-size: 13px;
+    font-weight: 500;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+}
+.alert-admin.show { display: flex; animation: shakeIn 0.4s ease; }
+@keyframes shakeIn {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-6px); }
+    75% { transform: translateX(6px); }
+}
+.alert-admin.error {
+    background: #fef2f2;
+    color: #991b1b;
+    border: 1px solid #fecaca;
+}
+.alert-admin.success {
+    background: #dcfce7;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+}
+.alert-admin.info {
+    background: #dbeafe;
+    color: #1e40af;
+    border: 1px solid #bfdbfe;
+}
+
+/* BUTTONS */
+.btn-primary-admin {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 6px 20px rgba(10,22,85,0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+}
+.btn-primary-admin:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(10,22,85,0.3);
+}
+.btn-primary-admin:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.btn-primary-admin i { color: var(--gold); }
+
+.btn-gold-admin {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 6px 20px rgba(212,175,55,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+}
+.btn-gold-admin:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(212,175,55,0.4);
+}
+.btn-gold-admin:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-secondary-admin {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1.5px solid var(--border);
+    padding: 12px 22px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: inherit;
+}
+.btn-secondary-admin:hover { background: #e5e7eb; }
+
+.form-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 6px;
+    padding-top: 6px;
+}
+
+/* INFO GRID */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 14px;
+}
+.info-item {
+    background: #fafbff;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 14px 16px;
+}
+.info-item .ii-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.info-item .ii-label i { color: var(--navy); font-size: 11px; }
+.info-item .ii-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    word-break: break-word;
+}
+
+/* Badge */
+.role-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.role-badge.super { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
+
+/* Image preview (upload) */
+.img-preview-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px;
+    background: #fafbff;
+    border-radius: 12px;
+    border: 1px solid var(--border-light);
+    flex-wrap: wrap;
+}
+.img-preview-wrap .preview-box {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--gold);
+    font-size: 30px;
+    font-weight: 700;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 3px solid var(--gold);
+}
+.img-preview-wrap .preview-box img { width: 100%; height: 100%; object-fit: cover; }
+
+.img-upload-btn {
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    color: var(--navy);
+    padding: 10px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+}
+.img-upload-btn:hover { border-color: var(--navy); background: #f5f7ff; }
+.img-upload-btn input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.img-remove-btn {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    color: var(--danger);
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+}
+.img-remove-btn:hover { background: #fee2e2; }
+
+/* Footer */
+.footer {
+    text-align: center; padding: 40px 20px 20px;
+    color: var(--grey); font-size: 12px;
+}
+.footer i { color: var(--gold-2); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .admin-header { padding: 12px 16px; }
+    .admin-header h4 { font-size: 14px; }
+    .admin-header .brand-icon { width: 40px; height: 40px; font-size: 17px; }
+    .main-wrap { padding: 16px 12px 40px; }
+    .page-title { font-size: 18px; }
+    .profile-hero { padding: 26px 20px; border-radius: 20px; }
+    .profile-avatar { width: 100px; height: 100px; font-size: 40px; }
+    .avatar-edit-btn { width: 36px; height: 36px; font-size: 12px; }
+    .profile-hero h2 { font-size: 19px; }
+    .section-card { padding: 20px 18px; border-radius: 16px; }
+    .section-header { gap: 12px; margin-bottom: 18px; padding-bottom: 14px; }
+    .section-header .sh-icon { width: 42px; height: 42px; font-size: 17px; }
+    .section-header .sh-text h3 { font-size: 15px; }
+    .form-actions { flex-direction: column; }
+    .form-actions button { width: 100%; justify-content: center; }
+    .info-grid { grid-template-columns: 1fr; }
+    .img-preview-wrap { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div class="page-loader" id="pageLoader">
+    <div class="loader-spinner"></div>
+    <p>যাচাই করা হচ্ছে...</p>
+</div>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-user-circle"></i></div>
+        <div>
+            <h4>My Profile</h4>
+            <small>Admin Settings</small>
+        </div>
+    </div>
+    <div style="display: flex; gap: 8px;">
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> Dashboard
+        </a>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <h4 class="page-title">
+        <i class="fas fa-user-circle"></i> Profile Settings
+    </h4>
+    <p class="page-sub">আপনার প্রোফাইল তথ্য ও পাসওয়ার্ড পরিবর্তন করুন</p>
+
+    <!-- PROFILE HERO -->
+    <div class="profile-hero">
+        <div class="profile-avatar-wrap">
+            <div class="profile-avatar" id="heroAvatar">A</div>
+            <button class="avatar-edit-btn" onclick="triggerAvatarUpload()" title="Change Photo">
+                <i class="fas fa-camera"></i>
+            </button>
+        </div>
+        <h2 id="heroName">Administrator</h2>
+        <span class="profile-role" id="heroRole">Admin</span>
+        <div class="profile-email" id="heroEmail">
+            <i class="fas fa-envelope"></i> admin@fulbariyacollege.com
+        </div>
+
+        <div class="profile-meta">
+            <div class="meta-item">
+                <div class="mi-label"><i class="fas fa-phone"></i> Phone</div>
+                <div class="mi-value" id="metaPhone">—</div>
+            </div>
+            <div class="meta-item">
+                <div class="mi-label"><i class="fas fa-map-marker-alt"></i> Address</div>
+                <div class="mi-value" id="metaAddress">—</div>
+            </div>
+            <div class="meta-item">
+                <div class="mi-label"><i class="fas fa-clock"></i> Last Login</div>
+                <div class="mi-value" id="metaLastLogin">—</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 1: PROFILE INFO -->
+    <div class="section-card blue">
+        <div class="section-header">
+            <div class="sh-icon blue"><i class="fas fa-user-edit"></i></div>
+            <div class="sh-text">
+                <h3>Profile Information</h3>
+                <p>আপনার ব্যক্তিগত তথ্য আপডেট করুন</p>
+            </div>
+        </div>
+
+        <form id="profileForm">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label-admin">
+                        Name <span class="req">*</span>
+                    </label>
+                    <input type="text" 
+                           class="form-input-admin" 
+                           id="profileName" 
+                           placeholder="Full Name">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label-admin">
+                        Email <span class="opt">(read-only)</span>
+                    </label>
+                    <input type="email" 
+                           class="form-input-admin" 
+                           id="profileEmail" 
+                           disabled>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label-admin">
+                        Phone <span class="opt">(optional)</span>
+                    </label>
+                    <input type="tel" 
+                           class="form-input-admin" 
+                           id="profilePhone" 
+                           placeholder="+880 1XXX-XXXXXX">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label-admin">
+                        Address <span class="opt">(optional)</span>
+                    </label>
+                    <input type="text" 
+                           class="form-input-admin" 
+                           id="profileAddress" 
+                           placeholder="Your address">
+                </div>
+            </div>
+
+            <div class="alert-admin" id="profileAlert"></div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-primary-admin" id="saveProfileBtn">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button type="button" class="btn-secondary-admin" onclick="resetProfileForm()">
+                    <i class="fas fa-undo"></i> Reset
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- SECTION 2: CHANGE PASSWORD -->
+    <div class="section-card gold">
+        <div class="section-header">
+            <div class="sh-icon gold"><i class="fas fa-lock"></i></div>
+            <div class="sh-text">
+                <h3>Change Password</h3>
+                <p>নিয়মিত পাসওয়ার্ড পরিবর্তন করুন</p>
+            </div>
+        </div>
+
+        <form id="passwordForm">
+            <div class="form-row">
+                <label class="form-label-admin">
+                    Current Password <span class="req">*</span>
+                </label>
+                <div class="password-wrap-admin">
+                    <input type="password" 
+                           class="form-input-admin" 
+                           id="currentPassword" 
+                           placeholder="বর্তমান পাসওয়ার্ড"
+                           autocomplete="current-password">
+                    <button type="button" 
+                            class="password-toggle-admin" 
+                            data-target="currentPassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label class="form-label-admin">
+                    New Password <span class="req">*</span>
+                </label>
+                <div class="password-wrap-admin">
+                    <input type="password" 
+                           class="form-input-admin" 
+                           id="newPassword" 
+                           placeholder="নতুন পাসওয়ার্ড"
+                           autocomplete="new-password">
+                    <button type="button" 
+                            class="password-toggle-admin" 
+                            data-target="newPassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="strength-wrap-admin" id="strengthWrap">
+                    <div class="strength-bar-admin">
+                        <div class="strength-seg-admin" id="segA1"></div>
+                        <div class="strength-seg-admin" id="segA2"></div>
+                        <div class="strength-seg-admin" id="segA3"></div>
+                        <div class="strength-seg-admin" id="segA4"></div>
+                    </div>
+                    <div class="strength-text-admin" id="strengthText">Password strength</div>
+                </div>
+                <div class="requirements-admin" id="reqBox">
+                    <div class="req-item-admin" data-req="length">
+                        <i class="fas fa-circle"></i>
+                        <span>কমপক্ষে ৮ অক্ষর</span>
+                    </div>
+                    <div class="req-item-admin" data-req="upper">
+                        <i class="fas fa-circle"></i>
+                        <span>একটি বড় হাতের অক্ষর (A-Z)</span>
+                    </div>
+                    <div class="req-item-admin" data-req="lower">
+                        <i class="fas fa-circle"></i>
+                        <span>একটি ছোট হাতের অক্ষর (a-z)</span>
+                    </div>
+                    <div class="req-item-admin" data-req="number">
+                        <i class="fas fa-circle"></i>
+                        <span>একটি সংখ্যা (0-9)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <label class="form-label-admin">
+                    Confirm New Password <span class="req">*</span>
+                </label>
+                <div class="password-wrap-admin">
+                    <input type="password" 
+                           class="form-input-admin" 
+                           id="confirmPassword" 
+                           placeholder="নতুন পাসওয়ার্ড আবার দিন"
+                           autocomplete="new-password">
+                    <button type="button" 
+                            class="password-toggle-admin" 
+                            data-target="confirmPassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="alert-admin" id="passwordAlert"></div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-gold-admin" id="changePasswordBtn">
+                    <i class="fas fa-key"></i> Update Password
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- SECTION 3: ACCOUNT INFO -->
+    <div class="section-card green">
+        <div class="section-header">
+            <div class="sh-icon green"><i class="fas fa-info-circle"></i></div>
+            <div class="sh-text">
+                <h3>Account Information</h3>
+                <p>আপনার account সম্পর্কিত তথ্য</p>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="ii-label"><i class="fas fa-user-tag"></i> Role</div>
+                <div class="ii-value">
+                    <span class="role-badge" id="infoRole">Admin</span>
+                </div>
+            </div>
+            <div class="info-item">
+                <div class="ii-label"><i class="fas fa-calendar-plus"></i> Account Created</div>
+                <div class="ii-value" id="infoCreated">—</div>
+            </div>
+            <div class="info-item">
+                <div class="ii-label"><i class="fas fa-sign-in-alt"></i> Last Login</div>
+                <div class="ii-value" id="infoLastLogin">—</div>
+            </div>
+            <div class="info-item">
+                <div class="ii-label"><i class="fas fa-check-circle"></i> Status</div>
+                <div class="ii-value" style="color: #059669;">
+                    <i class="fas fa-circle" style="font-size: 8px;"></i> Active
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p><i class="fas fa-shield-alt"></i> Fulbariya College · Admin Profile</p>
+        <p style="font-size: 11px; margin-top: 6px;">&copy; 2026 All rights reserved</p>
+    </div>
+
+</div>
+
+<!-- HIDDEN AVATAR FILE INPUT -->
+<input type="file" id="avatarInput" accept="image/*" style="display: none;">
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/cloudinary.js"></script>
+<script src="../js/admin-popup.js"></script>
+<script src="../js/admin-profile.js"></script>
+
+</body>
+</html>
