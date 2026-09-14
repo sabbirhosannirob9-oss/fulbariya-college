@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result Details - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --white: #ffffff;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* HEADER */
+.public-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.public-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.public-header .brand { display: flex; align-items: center; gap: 12px; }
+.public-header .brand-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    border: 1px solid rgba(242,210,123,0.3);
+    flex-shrink: 0;
+}
+.public-header h4 { margin: 0; font-size: 17px; font-weight: 700; }
+.public-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+
+/* MAIN */
+.main-wrap { max-width: 900px; margin: 24px auto 40px; padding: 0 16px; }
+
+/* Action bar */
+.top-action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+.top-action-bar .tab-info {
+    font-size: 13px;
+    color: var(--grey);
+}
+.top-action-bar .tab-info strong { color: var(--navy); }
+.top-action-bar .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn-print {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-print:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,85,0.35); color: #fff; }
+.btn-print i { color: var(--gold); }
+
+.btn-back {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid #e5e7eb;
+    padding: 11px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    text-decoration: none;
+}
+.btn-back:hover { border-color: var(--navy); background: #f5f7ff; color: var(--navy); }
+
+/* Marksheet */
+.marksheet {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+    position: relative;
+}
+.marksheet::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+
+/* Marksheet header */
+.ms-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 28px 24px;
+    text-align: center;
+    position: relative;
+}
+.ms-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.ms-header .ms-logo {
+    width: 66px; height: 66px;
+    border-radius: 16px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    border: 2px solid rgba(242,210,123,0.3);
+    margin-bottom: 12px;
+}
+.ms-header h2 {
+    margin: 0 0 4px;
+    font-size: 24px;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    color: #fff;
+    letter-spacing: 0.5px;
+}
+.ms-header .ms-subtitle {
+    font-size: 12px;
+    opacity: 0.85;
+    margin: 0;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+.ms-header .ms-exam-badge {
+    display: inline-block;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    padding: 5px 16px;
+    border-radius: 50px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 12px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+
+/* Student info */
+.ms-student-info {
+    background: #fafbff;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+    border-bottom: 1px solid var(--border-light);
+}
+.ms-info-item { display: flex; flex-direction: column; gap: 3px; }
+.ms-info-item .label {
+    font-size: 10px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.ms-info-item .value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+}
+
+/* Body */
+.ms-body { padding: 20px 24px; }
+
+.ms-section { margin-bottom: 22px; }
+.ms-section:last-child { margin-bottom: 0; }
+
+.ms-section-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 10px 10px 0 0;
+    font-size: 13px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.ms-section-header i { color: var(--gold); }
+
+.ms-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+}
+.ms-table thead { background: #fafbff; }
+.ms-table thead th {
+    padding: 10px 8px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 10.5px;
+    color: var(--navy);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+}
+.ms-table thead th:first-child { text-align: left; padding-left: 14px; }
+.ms-table tbody td {
+    padding: 10px 8px;
+    text-align: center;
+    border-bottom: 1px solid var(--border-light);
+    font-weight: 600;
+    color: var(--dark);
+}
+.ms-table tbody td:first-child {
+    text-align: left;
+    padding-left: 14px;
+    font-weight: 600;
+    color: var(--navy);
+}
+.ms-table tbody tr:last-child td { border-bottom: none; }
+.ms-table tbody tr:hover { background: #fafbff; }
+.ms-table .code-cell {
+    background: rgba(10,22,85,0.06);
+    color: var(--navy);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    margin-left: 6px;
+}
+.ms-table .total-cell { font-weight: 700; color: var(--navy); font-family: 'Playfair Display', serif; font-size: 13.5px; }
+
+.grade-mini {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 30px;
+}
+.grade-mini.Aplus { background: #dcfce7; color: #166534; }
+.grade-mini.A { background: #d1fae5; color: #065f46; }
+.grade-mini.Aminus { background: #dbeafe; color: #1e40af; }
+.grade-mini.B { background: #fef3c7; color: #92400e; }
+.grade-mini.C { background: #fed7aa; color: #9a3412; }
+.grade-mini.D { background: #fecaca; color: #991b1b; }
+.grade-mini.F { background: #7f1d1d; color: #fff; }
+
+/* GPA Summary */
+.ms-summary {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 26px 24px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.ms-summary::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.ms-summary-item { position: relative; z-index: 1; }
+.ms-summary-item .s-label {
+    font-size: 10.5px;
+    opacity: 0.85;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+.ms-summary-item .s-value {
+    font-size: 30px;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    color: var(--gold);
+    line-height: 1;
+}
+.ms-summary-item .s-value.gpa-high { color: #6ee7b7; }
+.ms-summary-item .s-value.gpa-mid { color: #fcd34d; }
+.ms-summary-item .s-value.gpa-low { color: #fca5a5; }
+
+/* Footer */
+.ms-footer {
+    padding: 20px 24px;
+    background: #fafbff;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    font-size: 11px;
+    color: var(--grey);
+}
+.ms-footer .ms-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.ms-footer .ms-note i { color: var(--gold-dark); }
+
+/* Empty */
+.empty-state-public {
+    background: #fff;
+    border-radius: 20px;
+    padding: 60px 24px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+}
+.empty-state-public .icon-wrap {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+}
+.empty-state-public i { font-size: 34px; color: var(--navy); opacity: 0.35; }
+.empty-state-public h5 { color: var(--navy); font-weight: 700; font-size: 17px; margin-bottom: 8px; }
+.empty-state-public p { font-size: 13px; color: var(--grey); margin: 0; line-height: 1.7; }
+
+.btn-primary-big {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 6px 24px rgba(10,22,85,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    margin-top: 16px;
+}
+.btn-primary-big:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(10,22,85,0.4); color: #fff; }
+.btn-primary-big i { color: var(--gold); }
+
+/* Loading */
+.loading-area {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+}
+.loading-area.show { display: block; }
+.loader-spinner {
+    width: 50px; height: 50px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-area p { color: var(--grey); font-size: 13px; margin: 0; }
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 30px 20px 40px;
+    color: var(--grey);
+    font-size: 12px;
+}
+.footer i { color: var(--gold-2); }
+.footer .footer-line {
+    max-width: 400px;
+    margin: 0 auto 16px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(10,22,85,0.15), transparent);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .public-header { padding: 10px 14px; }
+    .public-header h4 { font-size: 14px; }
+    .main-wrap { padding: 0 12px; margin: 16px auto 30px; }
+    .ms-header { padding: 22px 18px; }
+    .ms-header h2 { font-size: 18px; }
+    .ms-header .ms-logo { width: 54px; height: 54px; font-size: 22px; }
+    .ms-student-info { padding: 16px 18px; gap: 12px; }
+    .ms-body { padding: 16px 18px; }
+    .ms-table { font-size: 11px; }
+    .ms-table thead th { padding: 8px 5px; font-size: 9.5px; }
+    .ms-table tbody td { padding: 8px 5px; }
+    .ms-summary { padding: 20px 16px; gap: 12px; }
+    .ms-summary-item .s-value { font-size: 22px; }
+    .ms-summary-item .s-label { font-size: 9.5px; }
+    .ms-footer { padding: 16px 18px; font-size: 10.5px; }
+    .top-action-bar { flex-direction: column; align-items: stretch; }
+    .top-action-bar .actions { justify-content: center; }
+}
+@media (max-width: 480px) {
+    .ms-summary { grid-template-columns: 1fr; gap: 16px; }
+    .ms-summary-item { border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 12px; }
+    .ms-summary-item:last-child { border-bottom: none; padding-bottom: 0; }
+}
+
+/* Print */
+@media print {
+    .public-header, .top-action-bar, .footer, .btn-header { display: none !important; }
+    body { background: #fff !important; }
+    .main-wrap { margin: 0 !important; max-width: 100% !important; padding: 0 !important; }
+    .marksheet { box-shadow: none !important; border: 2px solid #000 !important; border-radius: 0 !important; }
+    .marksheet::before { display: none; }
+    .ms-header { background: #0a1655 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .ms-summary { background: #0a1655 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .ms-section-header { background: #0a1655 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .ms-body { padding: 14px 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="public-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
+        <div>
+            <h4>Result Details</h4>
+            <small>Fulbariya Degree College</small>
+        </div>
+    </div>
+    <a href="results.html" class="btn-header">
+        <i class="fas fa-search"></i> <span>Search Again</span>
+    </a>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- Action Bar -->
+    <div class="top-action-bar" id="actionBar" style="display:none;">
+        <div class="tab-info">
+            <i class="fas fa-file-alt" style="color:var(--gold-dark);"></i>
+            <strong id="detailInfoLabel">Marksheet</strong>
+        </div>
+        <div class="actions">
+            <a href="results.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Search Another
+            </a>
+            <button class="btn-print" onclick="window.print()">
+                <i class="fas fa-print"></i> Print / Download
+            </button>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-area" id="loadingArea">
+        <div class="loader-spinner"></div>
+        <p>রেজাল্ট লোড হচ্ছে...</p>
+    </div>
+
+    <!-- Result Area -->
+    <div class="result-area" id="resultArea">
+        <!-- Dynamically generated -->
+    </div>
+
+    <!-- Empty state (default) -->
+    <div class="empty-state-public" id="emptyState">
+        <div class="icon-wrap"><i class="fas fa-file-invoice"></i></div>
+        <h5>রেজাল্ট ডিটেইলস</h5>
+        <p>এই পেজে একটি নির্দিষ্ট student-এর পূর্ণাঙ্গ marksheet দেখা যায়।<br>নিচের বাটনে ক্লিক করে roll number দিয়ে খুঁজুন।</p>
+        <a href="results.html" class="btn-primary-big">
+            <i class="fas fa-search"></i> রেজাল্ট খুঁজুন
+        </a>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="footer-line"></div>
+    <p><i class="fas fa-shield-alt"></i> Fulbariya Degree College · Result System</p>
+    <p style="font-size: 11px; margin-top: 6px;">&copy; 2026 All rights reserved</p>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/admin-popup.js"></script>
+<script src="../js/result-details.js"></script>
+
+</body>
+</html>

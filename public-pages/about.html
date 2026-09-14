@@ -1,0 +1,1711 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>আমাদের সম্পর্কে | ফুলবাড়ীয়া কলেজ</title>
+<meta name="description" content="ফুলবাড়ীয়া কলেজের ইতিহাস, ঐতিহ্য, সরকারিকরণ আন্দোলন ও অর্জন">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --white: #ffffff;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --grey-light: #9ca3af;
+    --dark: #1f2937;
+    --border: rgba(0,0,0,0.08);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 2px 10px rgba(10,22,85,0.06);
+    --shadow-md: 0 8px 30px rgba(10,22,85,0.10);
+    --shadow-lg: 0 20px 60px rgba(10,22,85,0.15);
+    --shadow-xl: 0 30px 80px rgba(10,22,85,0.20);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; overflow-x: hidden; width: 100%; }
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--off-white);
+    color: var(--dark);
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+    width: 100%;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+
+.container-custom { max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
+
+/* =========================================================
+   REVEAL ANIMATIONS
+========================================================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.reveal-left { transform: translateX(-80px); }
+.reveal.reveal-right { transform: translateX(80px); }
+.reveal.reveal-scale { transform: scale(0.9) translateY(30px); }
+.reveal.in-view { opacity: 1; transform: translateX(0) translateY(0) scale(1); }
+
+.reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(50px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-stagger.in-view > * { opacity: 1; transform: translateY(0); }
+.reveal-stagger.in-view > *:nth-child(1) { transition-delay: 0s; }
+.reveal-stagger.in-view > *:nth-child(2) { transition-delay: 0.15s; }
+.reveal-stagger.in-view > *:nth-child(3) { transition-delay: 0.30s; }
+.reveal-stagger.in-view > *:nth-child(4) { transition-delay: 0.45s; }
+.reveal-stagger.in-view > *:nth-child(5) { transition-delay: 0.60s; }
+.reveal-stagger.in-view > *:nth-child(6) { transition-delay: 0.75s; }
+
+/* =========================================================
+   HEADER
+========================================================= */
+.main-header {
+    background: #fff;
+    padding: 12px 0;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    border-bottom: 1px solid var(--border-light);
+}
+.main-header .container-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+.logo-box { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.logo-box img {
+    width: 50px; height: 50px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: var(--off-white);
+    padding: 3px;
+    flex-shrink: 0;
+}
+.logo-box .logo-text h1 {
+    font-size: 18px;
+    color: var(--navy);
+    margin: 0;
+    font-weight: 700;
+    white-space: nowrap;
+    line-height: 1.2;
+}
+.logo-box .logo-text p {
+    font-size: 10px;
+    color: var(--grey-light);
+    margin: 2px 0 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.header-nav { display: flex; gap: 6px; align-items: center; flex-shrink: 0; }
+.header-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 13px;
+    transition: 0.25s;
+}
+.header-nav a.nav-home {
+    color: var(--navy);
+    background: var(--off-white);
+    border: 1px solid var(--border);
+}
+.header-nav a.nav-home:hover { background: #eef1f8; transform: translateY(-1px); }
+.header-nav a.nav-gallery {
+    color: #fff;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    box-shadow: 0 4px 14px rgba(10,22,85,0.25);
+}
+.header-nav a.nav-gallery:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(10,22,85,0.4);
+    color: #fff;
+}
+.header-nav a i { font-size: 12px; }
+.header-nav a.nav-gallery i { color: var(--gold); }
+
+/* =========================================================
+   PAGE HERO
+========================================================= */
+.page-hero {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 60px 0 100px;
+    position: relative;
+    overflow: hidden;
+}
+.page-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(242,210,123,0.12), transparent 65%);
+    border-radius: 50%;
+}
+.page-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.page-hero .container-custom { position: relative; z-index: 1; text-align: center; }
+.hero-icon {
+    width: 80px; height: 80px;
+    border-radius: 22px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(242,210,123,0.3);
+    box-shadow: 0 8px 30px rgba(242,210,123,0.15);
+    animation: iconFloat 3s ease-in-out infinite;
+}
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+.page-hero .hero-badge {
+    display: inline-block;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    border: 1px solid rgba(242,210,123,0.3);
+    margin-bottom: 16px;
+}
+.page-hero h1 {
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.25;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+}
+.page-hero h1 span { color: var(--gold); }
+.page-hero p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.75;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+.main-content {
+    padding: 0 0 80px;
+    margin-top: -60px;
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================================
+   STATS BAR
+========================================================= */
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 14px;
+    margin-bottom: 30px;
+}
+.stat-item {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    transition: 0.3s;
+}
+.stat-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+}
+.stat-item .si-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.stat-item .si-icon.gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+}
+.stat-item .si-icon.green {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+}
+.stat-item .si-icon.purple {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: #fff;
+}
+.stat-item .si-info { flex: 1; min-width: 0; }
+.stat-item .si-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    margin-bottom: 4px;
+}
+.stat-item .si-label {
+    font-size: 11.5px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   SECTION HEADER
+========================================================= */
+.section-head {
+    text-align: center;
+    margin-bottom: 40px;
+    margin-top: 50px;
+}
+.section-head .sh-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.05));
+    color: var(--navy);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(10,22,85,0.1);
+}
+.section-head h2 {
+    font-size: clamp(24px, 4vw, 32px);
+    color: var(--navy);
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-family: 'Playfair Display', serif;
+}
+.section-head h2 span { color: var(--gold-dark); }
+.section-head .sh-line {
+    width: 70px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--navy), var(--gold));
+    margin: 0 auto;
+    border-radius: 4px;
+}
+
+/* =========================================================
+   INTRO CARD
+========================================================= */
+.intro-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 50px 44px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+.intro-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+.intro-card .ic-quote-icon {
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.05));
+    color: var(--navy);
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+.intro-card h3 {
+    font-size: 24px;
+    color: var(--navy);
+    margin-bottom: 18px;
+    font-family: 'Playfair Display', serif;
+}
+.intro-card p {
+    font-size: 16px;
+    line-height: 1.95;
+    color: #4b5563;
+    margin-bottom: 16px;
+}
+.intro-card p:last-child { margin-bottom: 0; }
+.intro-card .highlight {
+    color: var(--gold-dark);
+    font-weight: 700;
+}
+
+/* =========================================================
+   TIMELINE
+========================================================= */
+.timeline {
+    position: relative;
+    padding: 20px 0;
+    margin: 40px 0;
+}
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--navy), var(--gold), var(--navy));
+    transform: translateX(-50%);
+    border-radius: 3px;
+}
+.timeline-item {
+    position: relative;
+    width: 50%;
+    padding: 20px 40px;
+    margin-bottom: 20px;
+}
+.timeline-item:nth-child(odd) {
+    left: 0;
+    padding-right: 60px;
+    text-align: right;
+}
+.timeline-item:nth-child(even) {
+    left: 50%;
+    padding-left: 60px;
+    text-align: left;
+}
+.timeline-item .ti-dot {
+    position: absolute;
+    top: 30px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    border: 4px solid var(--gold);
+    box-shadow: 0 4px 16px rgba(242,210,123,0.4);
+    z-index: 2;
+}
+.timeline-item:nth-child(odd) .ti-dot { right: -10px; }
+.timeline-item:nth-child(even) .ti-dot { left: -10px; }
+
+.timeline-item .ti-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 26px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    position: relative;
+    transition: 0.35s;
+}
+.timeline-item .ti-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(10,22,85,0.12);
+}
+.timeline-item .ti-year {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 12px;
+    font-family: 'Playfair Display', serif;
+}
+.timeline-item .ti-card h4 {
+    font-size: 18px;
+    color: var(--navy);
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+.timeline-item .ti-card p {
+    font-size: 14px;
+    color: #4b5563;
+    line-height: 1.75;
+    margin: 0;
+}
+
+/* Mobile Timeline */
+@media (max-width: 768px) {
+    .timeline::before { left: 20px; }
+    .timeline-item {
+        width: 100%;
+        left: 0 !important;
+        padding-left: 55px !important;
+        padding-right: 20px !important;
+        text-align: left !important;
+    }
+    .timeline-item .ti-dot { left: 12px !important; right: auto !important; }
+}
+
+/* =========================================================
+   MOVEMENT SECTION — Highlighted
+========================================================= */
+.movement-section {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 24px;
+    padding: 50px 44px;
+    margin: 50px 0;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-xl);
+}
+.movement-section::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.movement-section::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-2), var(--gold));
+}
+.movement-section .mv-inner {
+    position: relative;
+    z-index: 1;
+}
+.movement-section .mv-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    border: 1px solid rgba(242,210,123,0.3);
+    margin-bottom: 18px;
+}
+.movement-section h3 {
+    font-size: clamp(24px, 4vw, 32px);
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    line-height: 1.3;
+}
+.movement-section h3 span { color: var(--gold); }
+.movement-section p {
+    font-size: 15.5px;
+    line-height: 1.95;
+    color: rgba(255,255,255,0.9);
+    margin-bottom: 16px;
+}
+.movement-section .mv-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+    margin-top: 30px;
+}
+.movement-section .mv-stat {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 20px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    transition: 0.3s;
+}
+.movement-section .mv-stat:hover {
+    background: rgba(255,255,255,0.12);
+    transform: translateY(-3px);
+}
+.movement-section .mv-stat .mvs-value {
+    font-size: 30px;
+    font-weight: 700;
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    margin-bottom: 8px;
+}
+.movement-section .mv-stat .mvs-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.85);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* =========================================================
+   MISSION / VISION
+========================================================= */
+.mv-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+    margin: 40px 0;
+}
+.mv-card {
+    background: #fff;
+    border-radius: 22px;
+    padding: 36px 32px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    position: relative;
+    overflow: hidden;
+    transition: 0.4s;
+}
+.mv-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--navy), var(--gold));
+}
+.mv-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+}
+.mv-card .mv-icon {
+    width: 64px; height: 64px;
+    border-radius: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 20px;
+}
+.mv-card .mv-icon.mission {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+}
+.mv-card .mv-icon.vision {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+}
+.mv-card .mv-icon.motto {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+}
+.mv-card h4 {
+    font-size: 20px;
+    color: var(--navy);
+    margin-bottom: 12px;
+    font-weight: 700;
+}
+.mv-card p {
+    font-size: 14.5px;
+    color: #4b5563;
+    line-height: 1.85;
+    margin: 0;
+    font-style: italic;
+}
+
+/* =========================================================
+   FACTS TABLE
+========================================================= */
+.facts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 30px 0;
+}
+.fact-item {
+    background: #fff;
+    border-radius: 14px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    transition: 0.3s;
+}
+.fact-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(10,22,85,0.12);
+}
+.fact-item .fi-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.05));
+    color: var(--navy);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.fact-item .fi-info { flex: 1; min-width: 0; }
+.fact-item .fi-label {
+    font-size: 11px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+.fact-item .fi-value {
+    font-size: 15px;
+    color: var(--navy);
+    font-weight: 700;
+}
+
+/* =========================================================
+   PRINCIPAL SECTION
+========================================================= */
+.principal-about {
+    background: linear-gradient(135deg, #f8f9fc, #eef1f8);
+    border-radius: 24px;
+    padding: 50px 44px;
+    margin: 50px 0;
+    position: relative;
+    overflow: hidden;
+}
+.principal-about::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+.principal-about .pa-grid {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+    align-items: center;
+}
+.principal-about .pa-img {
+    position: relative;
+}
+.principal-about .pa-img img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    background: var(--off-white);
+}
+.principal-about .pa-img::after {
+    content: '';
+    position: absolute;
+    inset: -12px -12px 12px 12px;
+    border: 3px solid var(--gold);
+    border-radius: 20px;
+    z-index: -1;
+}
+.principal-about .pa-content h3 {
+    font-size: 26px;
+    color: var(--navy);
+    margin-bottom: 6px;
+    font-family: 'Playfair Display', serif;
+}
+.principal-about .pa-content .pa-designation {
+    color: var(--gold-dark);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+}
+.principal-about .pa-content .pa-quote {
+    font-size: 15px;
+    line-height: 1.95;
+    color: #4b5563;
+    font-style: italic;
+    padding: 20px 0 20px 24px;
+    border-left: 4px solid var(--gold);
+    background: rgba(242,210,123,0.05);
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 20px;
+}
+
+/* =========================================================
+   CO-CURRICULAR
+========================================================= */
+.cocurricular-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin: 30px 0;
+}
+.cocurricular-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px 24px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    text-align: center;
+    transition: 0.4s;
+    position: relative;
+    overflow: hidden;
+}
+.cocurricular-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--navy), var(--gold));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: 0.4s;
+}
+.cocurricular-card:hover::before { transform: scaleX(1); }
+.cocurricular-card:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(10,22,85,0.12);
+}
+.cocurricular-card .cc-icon {
+    width: 70px; height: 70px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 18px;
+    transition: 0.4s;
+}
+.cocurricular-card:hover .cc-icon {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    transform: rotate(-6deg) scale(1.08);
+}
+.cocurricular-card h4 {
+    font-size: 17px;
+    color: var(--navy);
+    margin-bottom: 8px;
+    font-weight: 700;
+}
+.cocurricular-card p {
+    font-size: 13.5px;
+    color: var(--grey);
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* =========================================================
+   CTA SECTION
+========================================================= */
+.cta-section {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 24px;
+    padding: 50px 44px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin-top: 50px;
+}
+.cta-section::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -20%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.cta-section::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-2), var(--gold));
+}
+.cta-section .cta-inner { position: relative; z-index: 1; }
+.cta-section h2 {
+    font-size: clamp(24px, 4vw, 34px);
+    font-weight: 700;
+    margin-bottom: 14px;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    line-height: 1.3;
+}
+.cta-section h2 span { color: var(--gold); }
+.cta-section p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.85);
+    max-width: 620px;
+    margin: 0 auto 26px;
+    line-height: 1.8;
+}
+.cta-section .cta-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.btn-gold {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 32px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 24px rgba(242,210,123,0.4);
+}
+.btn-gold:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(242,210,123,0.6);
+    color: var(--navy);
+}
+.btn-white-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 32px;
+    background: transparent;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 50px;
+    border: 2px solid rgba(255,255,255,0.4);
+    cursor: pointer;
+    transition: 0.3s;
+}
+.btn-white-outline:hover {
+    background: rgba(255,255,255,0.15);
+    border-color: var(--gold);
+    color: #fff;
+    transform: translateY(-3px);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+.page-footer {
+    background: linear-gradient(135deg, #061040, var(--navy));
+    color: rgba(255,255,255,0.85);
+    padding: 40px 0 20px;
+    margin-top: 60px;
+}
+.page-footer .footer-content {
+    text-align: center;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.page-footer .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.page-footer .footer-brand img {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    padding: 4px;
+}
+.page-footer h3 {
+    font-size: 20px;
+    color: #fff;
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+}
+.page-footer h3 span { color: var(--gold); }
+.page-footer .footer-tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 16px;
+}
+.page-footer .footer-social {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 12px;
+}
+.page-footer .footer-social a {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    transition: 0.3s;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.page-footer .footer-social a:hover {
+    background: var(--gold);
+    color: var(--navy);
+    transform: translateY(-3px);
+}
+.page-footer .footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+}
+.page-footer .footer-bottom strong { color: var(--gold); }
+
+/* =========================================================
+   SCROLL TOP
+========================================================= */
+.scroll-top {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff; border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 8px 24px rgba(10,22,85,0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    z-index: 900;
+}
+.scroll-top.show { opacity: 1; visibility: visible; }
+.scroll-top:hover {
+    background: var(--gold);
+    color: var(--navy);
+    transform: translateY(-4px);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 992px) {
+    .principal-about .pa-grid { grid-template-columns: 1fr; gap: 30px; text-align: center; }
+    .principal-about .pa-img { max-width: 300px; margin: 0 auto; }
+    .principal-about .pa-content .pa-quote { padding: 16px 0 16px 20px; }
+}
+@media (max-width: 768px) {
+    .container-custom { padding: 0 14px; }
+    .logo-box img { width: 42px; height: 42px; }
+    .logo-box .logo-text h1 { font-size: 15px; }
+    .logo-box .logo-text p { font-size: 9px; }
+    .header-nav a { padding: 8px 12px; font-size: 12px; }
+    .header-nav a span { display: none; }
+
+    .page-hero { padding: 40px 0 80px; }
+    .hero-icon { width: 64px; height: 64px; font-size: 26px; margin-bottom: 14px; }
+    .page-hero h1 { font-size: 24px; }
+    .page-hero p { font-size: 13px; }
+
+    .main-content { margin-top: -50px; padding-bottom: 60px; }
+
+    .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+    .stat-item { padding: 14px; gap: 10px; border-radius: 14px; }
+    .stat-item .si-icon { width: 40px; height: 40px; font-size: 16px; border-radius: 10px; }
+    .stat-item .si-value { font-size: 20px; }
+    .stat-item .si-label { font-size: 10px; }
+
+    .section-head { margin-bottom: 24px; margin-top: 30px; }
+    .section-head h2 { font-size: 20px; }
+
+    .intro-card { padding: 30px 22px; border-radius: 18px; }
+    .intro-card h3 { font-size: 20px; }
+    .intro-card p { font-size: 15px; line-height: 1.85; }
+
+    .movement-section { padding: 32px 22px; border-radius: 20px; }
+    .movement-section h3 { font-size: 22px; }
+    .movement-section p { font-size: 14.5px; }
+    .movement-section .mv-stats { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .movement-section .mv-stat { padding: 14px 10px; border-radius: 12px; }
+    .movement-section .mv-stat .mvs-value { font-size: 22px; }
+    .movement-section .mv-stat .mvs-label { font-size: 10px; }
+
+    .mv-grid { grid-template-columns: 1fr; gap: 16px; margin: 30px 0; }
+    .mv-card { padding: 28px 22px; border-radius: 18px; }
+    .mv-card h4 { font-size: 18px; }
+    .mv-card p { font-size: 14px; }
+
+    .facts-grid { grid-template-columns: 1fr; gap: 12px; }
+    .fact-item { padding: 16px 18px; }
+
+    .principal-about { padding: 32px 22px; border-radius: 20px; }
+    .principal-about .pa-content h3 { font-size: 22px; }
+    .principal-about .pa-content .pa-quote { font-size: 14px; }
+
+    .cocurricular-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .cocurricular-card { padding: 22px 16px; border-radius: 14px; }
+    .cocurricular-card .cc-icon { width: 56px; height: 56px; font-size: 24px; margin-bottom: 14px; }
+    .cocurricular-card h4 { font-size: 15px; }
+    .cocurricular-card p { font-size: 12.5px; }
+
+    .cta-section { padding: 32px 22px; border-radius: 20px; }
+    .cta-section h2 { font-size: 22px; }
+    .cta-section p { font-size: 14px; }
+    .btn-gold, .btn-white-outline { padding: 11px 24px; font-size: 13px; }
+
+    .scroll-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
+    .page-footer .footer-bottom { font-size: 11px; }
+
+    .reveal.reveal-left { transform: translateX(-40px); }
+    .reveal.reveal-right { transform: translateX(40px); }
+}
+@media (max-width: 400px) {
+    .stats-bar { grid-template-columns: 1fr; }
+    .cocurricular-grid { grid-template-columns: 1fr; }
+    .movement-section .mv-stats { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="main-header">
+    <div class="container-custom">
+        <a href="../index.html" class="logo-box">
+            <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
+            <div class="logo-text">
+                <h1 data-college-name>ফুলবাড়ীয়া কলেজ</h1>
+                <p>Fulbariya College</p>
+            </div>
+        </a>
+        <nav class="header-nav">
+            <a href="../index.html" class="nav-home">
+                <i class="fas fa-home"></i> <span>হোম</span>
+            </a>
+            <a href="gallery.html" class="nav-gallery">
+                <i class="fas fa-images"></i> <span>গ্যালারি</span>
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+    <div class="container-custom">
+        <div class="hero-icon">
+            <i class="fas fa-landmark"></i>
+        </div>
+        <div class="hero-badge">Our Story · Since 1972</div>
+        <h1>আমাদের <span>সম্পর্কে</span></h1>
+        <p>১৯৭২ সাল থেকে শিক্ষার আলো ছড়িয়ে দেওয়া ফুলবাড়ীয়া কলেজের ইতিহাস, ঐতিহ্য, সংগ্রাম ও অর্জনের গল্প</p>
+    </div>
+</section>
+
+<!-- MAIN -->
+<div class="main-content">
+    <div class="container-custom">
+
+        <!-- STATS BAR -->
+        <div class="stats-bar reveal reveal-scale">
+            <div class="stat-item">
+                <div class="si-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="si-info">
+                    <div class="si-value" data-established>১৯৭২</div>
+                    <div class="si-label">প্রতিষ্ঠাকাল</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="si-icon gold"><i class="fas fa-users"></i></div>
+                <div class="si-info">
+                    <div class="si-value">৩৮,০০০+</div>
+                    <div class="si-label">শিক্ষার্থী</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="si-icon green"><i class="fas fa-chalkboard-teacher"></i></div>
+                <div class="si-info">
+                    <div class="si-value">৮০+</div>
+                    <div class="si-label">শিক্ষক-কর্মচারী</div>
+                </div>
+            </div>
+            <div class="stat-item">
+                <div class="si-icon purple"><i class="fas fa-award"></i></div>
+                <div class="si-info">
+                    <div class="si-value">৫০+</div>
+                    <div class="si-label">বছরের ঐতিহ্য</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTRO -->
+        <div class="intro-card reveal reveal-scale">
+            <div class="ic-quote-icon"><i class="fas fa-quote-left"></i></div>
+            <h3>একটি স্বপ্নের নাম — ফুলবাড়ীয়া কলেজ</h3>
+            <p>
+                <span class="highlight">১৯৭২ সাল।</span> বাংলাদেশ সদ্য স্বাধীন। সারা দেশে নতুন করে গড়ে ওঠার স্বপ্ন দেখা হচ্ছে। এরই মধ্যে ময়মনসিংহের ফুলবাড়ীয়া উপজেলার মানুষ বুঝতে পারলেন, একটি উন্নত শিক্ষা প্রতিষ্ঠান ছাড়া এলাকার সার্বিক উন্নতি সম্ভব নয়।
+            </p>
+            <p>
+                এই চেতনা থেকেই জন্ম নেয় <strong>ফুলবাড়ীয়া কলেজ</strong>। শুরুতে কলেজটির নাম ছিল <em>ফুলবাড়ীয়া মহাবিদ্যালয়</em>। পরবর্তীতে ডিগ্রি কলেজ এবং বর্তমানে অনার্স কোর্স চালু হওয়ায় এটি ফুলবাড়ীয়া কলেজ নামে পরিচিত। স্থানীয়ভাবে এখনো অনেকেই এটিকে <span class="highlight">ফুলবাড়ীয়া ডিগ্রি কলেজ</span> নামে চেনেন।
+            </p>
+            <p>
+                আজ এই কলেজ ময়মনসিংহ জেলার অন্যতম সর্বোচ্চ বিদ্যাপীঠ — শিক্ষার আলো ছড়িয়ে যাচ্ছে ৫০ বছরের বেশি সময় ধরে, গড়ে তুলছে আগামীর নাগরিক।
+            </p>
+        </div>
+
+        <!-- TIMELINE -->
+        <div class="section-head reveal reveal-scale">
+            <span class="sh-badge">Our Journey</span>
+            <h2>ইতিহাসের <span>ধারাবাহিকতা</span></h2>
+            <div class="sh-line"></div>
+        </div>
+
+        <div class="timeline">
+            <div class="timeline-item reveal reveal-left">
+                <div class="ti-dot"></div>
+                <div class="ti-card">
+                    <span class="ti-year">১৯৭২</span>
+                    <h4>প্রতিষ্ঠা ও যাত্রা শুরু</h4>
+                    <p>মুক্তিযুদ্ধের পর ফুলবাড়ীয়া উপজেলার মানুষের শিক্ষার চাহিদা পূরণে কলেজ প্রতিষ্ঠার উদ্যোগ নেওয়া হয়। মুক্তিযোদ্ধাদের প্রত্যক্ষ সহযোগিতায় কলেজের কার্যক্রম শুরু হয়।</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal reveal-right">
+                <div class="ti-dot"></div>
+                <div class="ti-card">
+                    <span class="ti-year">২১ ফেব্রুয়ারি ১৯৭৩</span>
+                    <h4>ভিত্তিপ্রস্তর স্থাপন</h4>
+                    <p>মুজিবনগর সরকারের অস্থায়ী রাষ্ট্রপতি <strong>শহীদ সৈয়দ নজরুল ইসলাম</strong> কলেজের ভিত্তিপ্রস্তর স্থাপন করেন। এ দিনটি কলেজের ইতিহাসে স্মরণীয় অধ্যায়।</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal reveal-left">
+                <div class="ti-dot"></div>
+                <div class="ti-card">
+                    <span class="ti-year">০১ জুলাই ১৯৭৮</span>
+                    <h4>সরকারি স্বীকৃতি লাভ</h4>
+                    <p>দীর্ঘ ৬ বছরের চেষ্টায় কলেজটি সরকারি স্বীকৃতি লাভ করে। শুরুতে উচ্চ মাধ্যমিক (HSC) কোর্স দিয়ে একাডেমিক যাত্রা শুরু হয়।</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal reveal-right">
+                <div class="ti-dot"></div>
+                <div class="ti-card">
+                    <span class="ti-year">পরবর্তী বছরগুলো</span>
+                    <h4>ডিগ্রি কোর্স চালু</h4>
+                    <p>HSC কোর্সের সফলতার পর কলেজে ডিগ্রি (পাস) কোর্স চালু হয়। শিক্ষার্থীর সংখ্যা বাড়তে থাকে, প্রতিষ্ঠান আরও প্রসারিত হয়।</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal reveal-left">
+                <div class="ti-dot"></div>
+                <div class="ti-card">
+                    <span class="ti-year">২০১৬</span>
+                    <h4>সরকারিকরণের আন্দোলন</h4>
+                    <p>৪৪ বছর পেরিয়ে গেলেও কলেজটি কাঙ্ক্ষিত সরকারিকরণ পায়নি। শিক্ষক-শিক্ষার্থী ও এলাকাবাসী একজোট হয়ে দীর্ঘ ২৪ দিনের অবরোধ কর্মসূচি পালন করেন।</p>
+                </div>
+            </div>
+
+            <div class="timeline-item reveal reveal-right">
+                <div class="ti-dot"></div>
+                <div class="ti-card">
+                    <span class="ti-year">বর্তমান</span>
+                    <h4>অনার্স কোর্স চালু</h4>
+                    <p>বাংলাদেশ জাতীয় বিশ্ববিদ্যালয়ের অধিভুক্ত হয়ে ৭টি বিষয়ে অনার্স কোর্স চালু হয়েছে। ফুলবাড়ীয়া কলেজ এখন জেলার অন্যতম শিক্ষাকেন্দ্র।</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- GOVERNMENT MOVEMENT -->
+        <div class="movement-section reveal reveal-scale">
+            <div class="mv-inner">
+                <span class="mv-badge"><i class="fas fa-fist-raised"></i> Movement History</span>
+                <h3>সরকারিকরণ <span>আন্দোলনের ইতিহাস</span></h3>
+                <p>
+                    ফুলবাড়ীয়া কলেজের ইতিহাসে সবচেয়ে উল্লেখযোগ্য অধ্যায় হলো <strong>সরকারিকরণের দাবিতে দীর্ঘ আন্দোলন</strong>। ৪৪ বছর পেরিয়ে গেলেও কলেজটি কাঙ্ক্ষিত সরকারিকরণ পায়নি।
+                </p>
+                <p>
+                    <strong>২০১৬ সালের অক্টোবর-নভেম্বর</strong> মাসে আন্দোলন চরম আকার ধারণ করে। শিক্ষক, শিক্ষার্থী ও এলাকাবাসী একজোট হয়ে জাতীয় প্রেসক্লাবের সামনে মানববন্ধন করেন। ১৭৫ জন শিক্ষক-কর্মচারী ও পাঁচ হাজার ছাত্র-ছাত্রী দীর্ঘ ২৪ দিন অবরোধ কর্মসূচি পালন করেন।
+                </p>
+                <p>
+                    ৪৪ বছরের পুরনো কলেজকে বাদ দিয়ে মাত্র কয়েক বছর আগে (২০০৯ সালে) প্রতিষ্ঠিত একটি নন-এমপিও কলেজকে সরকারিকরণের তালিকায় অন্তর্ভুক্ত করা হলে এলাকাবাসীর মধ্যে তীব্র ক্ষোভ ছড়িয়ে পড়ে। এই আন্দোলন ফুলবাড়ীয়া কলেজের ইতিহাসে এক অবিস্মরণীয় অধ্যায় হয়ে আছে।
+                </p>
+
+                <div class="mv-stats">
+                    <div class="mv-stat">
+                        <div class="mvs-value">২৪</div>
+                        <div class="mvs-label">দিনের অবরোধ</div>
+                    </div>
+                    <div class="mv-stat">
+                        <div class="mvs-value">১৭৫</div>
+                        <div class="mvs-label">শিক্ষক-কর্মচারী</div>
+                    </div>
+                    <div class="mv-stat">
+                        <div class="mvs-value">৫,০০০+</div>
+                        <div class="mvs-label">শিক্ষার্থী</div>
+                    </div>
+                    <div class="mv-stat">
+                        <div class="mvs-value">৪৪</div>
+                        <div class="mvs-label">বছরের অপেক্ষা</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MISSION / VISION / MOTTO -->
+        <div class="section-head reveal reveal-scale">
+            <span class="sh-badge">Our Purpose</span>
+            <h2>লক্ষ্য, <span>স্বপ্ন ও নীতিবাক্য</span></h2>
+            <div class="sh-line"></div>
+        </div>
+
+        <div class="mv-grid">
+            <div class="mv-card reveal reveal-left">
+                <div class="mv-icon mission"><i class="fas fa-bullseye"></i></div>
+                <h4>Our Mission</h4>
+                <p>মানসম্মত শিক্ষা ও নৈতিক মূল্যবোধের সমন্বয়ে শিক্ষার্থীদের ভবিষ্যতের জন্য প্রস্তুত করা। প্রতিটি শিক্ষার্থীকে আধুনিক জ্ঞান, দক্ষতা ও দেশপ্রেমে উদ্বুদ্ধ করে গড়ে তোলা।</p>
+            </div>
+
+            <div class="mv-card reveal reveal-scale">
+                <div class="mv-icon vision"><i class="fas fa-eye"></i></div>
+                <h4>Our Vision</h4>
+                <p>ময়মনসিংহ অঞ্চলের শ্রেষ্ঠ শিক্ষা প্রতিষ্ঠান হিসেবে প্রতিষ্ঠিত হওয়া, যেখানে প্রতিটি শিক্ষার্থী তার পূর্ণ সম্ভাবনা বিকশিত করতে পারবে।</p>
+            </div>
+
+            <div class="mv-card reveal reveal-right">
+                <div class="mv-icon motto"><i class="fas fa-star"></i></div>
+                <h4>Our Motto</h4>
+                <p>"জ্ঞানের জন্য এসো, সেবার জন্য বেরিয়ে যাও" — এই নীতিবাক্য ফুলবাড়ীয়া কলেজের প্রতিটি শিক্ষার্থীর হৃদয়ে গেঁথে আছে।</p>
+            </div>
+        </div>
+
+        <!-- FACTS -->
+        <div class="section-head reveal reveal-scale">
+            <span class="sh-badge">Quick Info</span>
+            <h2>কলেজের <span>খুঁটিনাটি</span></h2>
+            <div class="sh-line"></div>
+        </div>
+
+        <div class="facts-grid reveal-stagger">
+            <div class="fact-item">
+                <div class="fi-icon"><i class="fas fa-id-card"></i></div>
+                <div class="fi-info">
+                    <div class="fi-label">EIIN</div>
+                    <div class="fi-value" data-eiin>111516</div>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fi-icon"><i class="fas fa-calendar-alt"></i></div>
+                <div class="fi-info">
+                    <div class="fi-label">প্রতিষ্ঠাকাল</div>
+                    <div class="fi-value">১৯৭২</div>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fi-icon"><i class="fas fa-check-circle"></i></div>
+                <div class="fi-info">
+                    <div class="fi-label">MPO অন্তর্ভুক্তি</div>
+                    <div class="fi-value">হ্যাঁ</div>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fi-icon"><i class="fas fa-graduation-cap"></i></div>
+                <div class="fi-info">
+                    <div class="fi-label">অধিভুক্তি</div>
+                    <div class="fi-value">জাতীয় বিশ্ববিদ্যালয়</div>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fi-icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="fi-info">
+                    <div class="fi-label">অবস্থান</div>
+                    <div class="fi-value">ফুলবাড়ীয়া, ময়মনসিংহ</div>
+                </div>
+            </div>
+
+            <div class="fact-item">
+                <div class="fi-icon"><i class="fas fa-layer-group"></i></div>
+                <div class="fi-info">
+                    <div class="fi-label">কোর্স</div>
+                    <div class="fi-value">HSC, ডিগ্রি, অনার্স, উন্মুক্ত বিশ্ববিদ্যালয় </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PRINCIPAL -->
+        <div class="principal-about reveal reveal-scale">
+            <div class="pa-grid">
+                <div class="pa-img">
+                    <img src="../assets/images/principal.jpg" alt="Principal" id="principalImage" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22500%22%3E%3Crect fill=%22%230a1655%22 width=%22400%22 height=%22500%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23f2d27b%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E👤%3C/text%3E%3C/svg%3E'">
+                </div>
+                <div class="pa-content">
+                    <h3 id="principalName">অধ্যক্ষের নাম</h3>
+                    <p class="pa-designation" id="principalDesignation">অধ্যক্ষ</p>
+                    <div class="pa-quote" id="principalShortMessage">"শিক্ষাই জাতির মেরুদণ্ড — আমরা প্রতিটি শিক্ষার্থীকে আধুনিক ও নৈতিক শিক্ষায় গড়ে তুলতে প্রতিশ্রুতিবদ্ধ।"</div>
+                    <button class="btn-navy" onclick="openPrincipalModal()" style="display:inline-flex;align-items:center;gap:8px;padding:12px 28px;background:linear-gradient(135deg,#0a1655,#1a237e);color:#fff;border-radius:50px;font-weight:600;font-size:14px;border:none;cursor:pointer;box-shadow:0 8px 24px rgba(10,22,85,0.2);transition:0.3s;">
+                        <i class="fas fa-book-open"></i> সম্পূর্ণ বাণী পড়ুন
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- CO-CURRICULAR -->
+        <div class="section-head reveal reveal-scale">
+            <span class="sh-badge">Beyond Books</span>
+            <h2>সহশিক্ষা <span>কার্যক্রম</span></h2>
+            <div class="sh-line"></div>
+        </div>
+
+        <div class="cocurricular-grid reveal-stagger">
+            <div class="cocurricular-card">
+                <div class="cc-icon"><i class="fas fa-flag"></i></div>
+                <h4>বিএনসিসি</h4>
+                <p>নেতৃত্ব, শৃঙ্খলা ও দেশপ্রেমের প্রশিক্ষণ</p>
+            </div>
+
+            <div class="cocurricular-card">
+                <div class="cc-icon"><i class="fas fa-campground"></i></div>
+                <h4>রোভার স্কাউট</h4>
+                <p>আত্মবিশ্বাস ও দায়িত্ববোধ গড়ে তোলার কার্যক্রম</p>
+            </div>
+
+            <div class="cocurricular-card">
+                <div class="cc-icon"><i class="fas fa-theater-masks"></i></div>
+                <h4>সাহিত্য ও সংস্কৃতি</h4>
+                <p>সাংস্কৃতিক প্রতিযোগিতা ও অনুষ্ঠান</p>
+            </div>
+
+            <div class="cocurricular-card">
+                <div class="cc-icon"><i class="fas fa-running"></i></div>
+                <h4>খেলাধুলা</h4>
+                <p>বিভিন্ন ক্রীড়া প্রতিযোগিতা ও শারীরিক বিকাশ</p>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="cta-section reveal reveal-scale">
+            <div class="cta-inner">
+                <h2>ভর্তি <span>হতে চান?</span></h2>
+                <p>ফুলবাড়ীয়া কলেজে ভর্তির জন্য আবেদন করুন এবং আপনার শিক্ষার পথচলা শুরু করুন আমাদের সাথে।</p>
+                <div class="cta-buttons">
+                    <a href="admission.html" class="btn-gold">
+                        <i class="fas fa-user-plus"></i> ভর্তি তথ্য দেখুন
+                    </a>
+                    <a href="contact.html" class="btn-white-outline">
+                        <i class="fas fa-envelope"></i> যোগাযোগ করুন
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+    <div class="container-custom">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
+                <h3><span data-college-name>ফুলবাড়ীয়া কলেজ</span></h3>
+            </div>
+            <p class="footer-tagline">শিক্ষা, নৈতিকতা ও আধুনিকতার সমন্বয়ে একটি আদর্শ শিক্ষা প্রতিষ্ঠান</p>
+            <div class="footer-social">
+                <a href="#" data-social="facebook" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="#" data-social="youtube" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="#" data-social="website" target="_blank" title="Website"><i class="fas fa-globe"></i></a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            © <span id="year"></span> <strong data-college-name>ফুলবাড়ীয়া কলেজ</strong>। সর্বস্বত্ব সংরক্ষিত।
+        </div>
+    </div>
+</footer>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- SMART MODAL -->
+<div class="smart-modal-overlay" id="smartModal" style="position:fixed;inset:0;background:rgba(6,10,40,0.65);backdrop-filter:blur(6px);z-index:10000;display:none;align-items:center;justify-content:center;padding:20px;">
+    <div class="smart-modal" style="background:#fff;border-radius:24px;max-width:750px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,0.4);position:relative;">
+        <div style="padding:26px 30px 18px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:14px;">
+            <h3 id="smartModalTitle" style="font-size:22px;color:var(--navy);margin:0;">শিরোনাম</h3>
+            <button onclick="closeSmartModal()" style="width:40px;height:40px;border-radius:50%;border:none;background:var(--off-white);color:var(--navy);cursor:pointer;font-size:16px;display:inline-flex;align-items:center;justify-content:center;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="smartModalBody" style="padding:24px 30px 30px;font-size:15px;color:#4b5563;line-height:1.9;"></div>
+    </div>
+</div>
+
+<!-- SCROLL RESTORE -->
+<script src="../js/scroll-restore.js"></script>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    let SITE_SETTINGS = {};
+    let REVEAL_OBSERVER = null;
+
+    function getSetting(key, fallback) {
+        if (fallback === undefined) fallback = '';
+        return SITE_SETTINGS[key] !== undefined && SITE_SETTINGS[key] !== null && SITE_SETTINGS[key] !== ''
+            ? SITE_SETTINGS[key]
+            : fallback;
+    }
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // =========================================================
+    // SCROLL REVEAL
+    // =========================================================
+    function setupScrollReveal() {
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) {
+                el.classList.add('in-view');
+            });
+            return null;
+        }
+        const observer = new IntersectionObserver(function (entries) {
+            entries.forEach(function (entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal:not(.in-view), .reveal-stagger:not(.in-view)').forEach(function (el) {
+            observer.observe(el);
+        });
+        return observer;
+    }
+
+    function forceCheckVisible() {
+        document.querySelectorAll('.reveal:not(.in-view), .reveal-stagger:not(.in-view)').forEach(function (el) {
+            const rect = el.getBoundingClientRect();
+            const isVisible = rect.top < window.innerHeight - 80 && rect.bottom > 0;
+            if (isVisible) el.classList.add('in-view');
+        });
+    }
+
+    // =========================================================
+    // SUPABASE
+    // =========================================================
+    async function ensureSupabase() {
+        if (window.FDC_SUPABASE) return window.FDC_SUPABASE;
+        if (!window.FDC_SUPABASE_READY) {
+            await new Promise(function (r) {
+                const t = setTimeout(r, 5000);
+                document.addEventListener('fdc:supabase-ready', function () {
+                    clearTimeout(t); r();
+                }, { once: true });
+            });
+        }
+        if (window.FDC_SUPABASE) return window.FDC_SUPABASE;
+        if (!window.FDC_CONFIG || !window.FDC_CONFIG.SUPABASE_URL) throw new Error('Config missing');
+        if (typeof window.supabase === 'undefined') throw new Error('Supabase library not loaded');
+        const client = window.supabase.createClient(
+            window.FDC_CONFIG.SUPABASE_URL,
+            window.FDC_CONFIG.SUPABASE_PUBLISHABLE_KEY
+        );
+        window.FDC_SUPABASE = client;
+        return client;
+    }
+
+    // =========================================================
+    // LOAD COLLEGE INFO
+    // =========================================================
+    async function loadCollegeInfo() {
+        try {
+            const supabase = await ensureSupabase();
+            const { data } = await supabase
+                .from('site_settings')
+                .select('key, value')
+                .in('key', [
+                    'college_name', 'college_eiin', 'established_year',
+                    'principal_name', 'principal_designation',
+                    'principal_image', 'principal_short_message', 'principal_full_message',
+                    'social_facebook', 'social_youtube', 'social_website'
+                ]);
+
+            (data || []).forEach(function (item) { SITE_SETTINGS[item.key] = item.value; });
+
+            // College name
+            const name = getSetting('college_name', 'ফুলবাড়ীয়া কলেজ');
+            document.querySelectorAll('[data-college-name]').forEach(function (el) { el.textContent = name; });
+            document.title = 'আমাদের সম্পর্কে | ' + name;
+
+            // EIIN
+            const eiin = getSetting('college_eiin', '111516');
+            document.querySelectorAll('[data-eiin]').forEach(function (el) { el.textContent = eiin; });
+
+            // Established year
+            const established = getSetting('established_year', '১৯৭২');
+            document.querySelectorAll('[data-established]').forEach(function (el) { el.textContent = established; });
+
+            // Principal
+            const pName = getSetting('principal_name', 'অধ্যক্ষের নাম');
+            const pDesignation = getSetting('principal_designation', 'অধ্যক্ষ');
+            const pImage = getSetting('principal_image');
+            const pShort = getSetting('principal_short_message', '');
+
+            const pNameEl = document.getElementById('principalName');
+            const pDesigEl = document.getElementById('principalDesignation');
+            const pImgEl = document.getElementById('principalImage');
+            const pShortEl = document.getElementById('principalShortMessage');
+
+            if (pNameEl) pNameEl.textContent = pName;
+            if (pDesigEl) pDesigEl.textContent = pDesignation;
+            if (pShortEl) pShortEl.textContent = pShort ? '"' + pShort + '"' : '';
+            if (pImage && pImgEl) pImgEl.src = pImage;
+
+            // Social links
+            document.querySelectorAll('[data-social]').forEach(function (el) {
+                const key = 'social_' + el.dataset.social;
+                const url = getSetting(key);
+                if (url) el.href = url;
+                else el.style.display = 'none';
+            });
+
+        } catch (e) {
+            console.warn('College info error:', e);
+        }
+    }
+
+    // =========================================================
+    // PRINCIPAL MODAL
+    // =========================================================
+    window.openPrincipalModal = function () {
+        const name = getSetting('principal_name', 'অধ্যক্ষ');
+        const designation = getSetting('principal_designation', 'অধ্যক্ষ');
+        const fullMsg = getSetting('principal_full_message', 'বিস্তারিত বাণী যোগ করা হয়নি।');
+
+        const titleEl = document.getElementById('smartModalTitle');
+        const bodyEl = document.getElementById('smartModalBody');
+        const modal = document.getElementById('smartModal');
+
+        if (titleEl) titleEl.textContent = name + ' এর বাণী';
+        if (bodyEl) {
+            bodyEl.innerHTML =
+                '<p><strong>' + escapeHtml(name) + '</strong><br><em>' + escapeHtml(designation) + '</em></p>' +
+                '<hr style="margin:16px 0;border-color:var(--border);">' +
+                fullMsg.replace(/\n/g, '<br>');
+        }
+        if (modal) {
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    window.closeSmartModal = function () {
+        const modal = document.getElementById('smartModal');
+        if (modal) modal.style.display = 'none';
+        document.body.style.overflow = '';
+    };
+
+    document.getElementById('smartModal').addEventListener('click', function (e) {
+        if (e.target.id === 'smartModal') window.closeSmartModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') window.closeSmartModal();
+    });
+
+    // =========================================================
+    // SCROLL TOP
+    // =========================================================
+    const scrollBtn = document.getElementById('scrollTop');
+    window.addEventListener('scroll', function () {
+        scrollBtn.classList.toggle('show', window.scrollY > 400);
+    }, { passive: true });
+    scrollBtn.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // =========================================================
+    // INIT
+    // =========================================================
+    async function init() {
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        REVEAL_OBSERVER = setupScrollReveal();
+
+        await loadCollegeInfo();
+
+        setTimeout(function () {
+            forceCheckVisible();
+        }, 400);
+
+        console.log('✅ About page ready');
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    // Fallback scroll check
+    let scrollTimer = null;
+    window.addEventListener('scroll', function () {
+        if (scrollTimer) return;
+        scrollTimer = setTimeout(function () {
+            forceCheckVisible();
+            scrollTimer = null;
+        }, 200);
+    }, { passive: true });
+
+})();
+</script>
+
+</body>
+</html>

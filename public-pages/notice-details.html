@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>নোটিশ বিস্তারিত - ফুলবাড়ীয়া কলেজ</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --white: #ffffff;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --border: rgba(0,0,0,0.08);
+    --shadow-sm: 0 2px 10px rgba(10,22,85,0.06);
+    --shadow-md: 0 8px 30px rgba(10,22,85,0.10);
+    --shadow-lg: 0 20px 60px rgba(10,22,85,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--off-white);
+    color: var(--dark);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+/* TOP BAR */
+.top-bar {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+}
+.top-bar .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.top-bar .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 8px 18px;
+    border-radius: 50px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: 0.25s;
+}
+.top-bar .back-btn:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateX(-3px);
+    color: #fff;
+}
+.top-bar .back-btn i { color: var(--gold); }
+.top-bar .brand {
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.top-bar .brand i { font-size: 16px; }
+
+/* MAIN WRAPPER */
+.notice-wrapper {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 20px 60px;
+}
+
+/* MAIN CARD */
+.notice-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* HEADER */
+.notice-head {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 30px 32px 26px;
+    position: relative;
+    overflow: hidden;
+}
+.notice-head::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.notice-head::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+
+.notice-badges {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+}
+.notice-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.notice-badge i { font-size: 10px; }
+.notice-badge.important {
+    background: rgba(239,68,68,0.2);
+    color: #fca5a5;
+    border-color: rgba(239,68,68,0.3);
+}
+.notice-badge.featured {
+    background: rgba(242,210,123,0.35);
+    color: #fff;
+    border-color: rgba(242,210,123,0.5);
+}
+
+.notice-head h1 {
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 700;
+    line-height: 1.4;
+    color: #fff;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+}
+
+.notice-meta {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    position: relative;
+    z-index: 1;
+    color: rgba(255,255,255,0.85);
+}
+.notice-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.notice-meta i { color: var(--gold); }
+
+/* BODY */
+.notice-body {
+    padding: 30px 32px;
+    font-size: 16px;
+    line-height: 1.95;
+    color: #374151;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+.notice-body br { line-height: 1.95; }
+
+/* FILE PREVIEW */
+.file-preview-section {
+    padding: 0 32px 24px;
+    border-top: 1px solid var(--border);
+    padding-top: 24px;
+    margin-top: 8px;
+}
+.file-preview-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 15px;
+    margin-bottom: 16px;
+}
+.file-preview-label i {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.06));
+    color: var(--navy);
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+
+.file-preview-box {
+    background: var(--off-white);
+    border-radius: 14px;
+    padding: 12px;
+    border: 1px solid var(--border);
+    text-align: center;
+    overflow: hidden;
+}
+
+.file-preview-box img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
+    margin: 0 auto;
+    cursor: zoom-in;
+    transition: transform 0.3s;
+}
+.file-preview-box img:hover { transform: scale(1.01); }
+
+.file-preview-box iframe {
+    width: 100%;
+    height: 600px;
+    border: none;
+    border-radius: 10px;
+    background: #fff;
+}
+
+/* DOWNLOAD */
+.download-section {
+    padding: 24px 32px 32px;
+    text-align: center;
+    border-top: 1px solid var(--border);
+}
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 14px 32px;
+    border-radius: 50px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 8px 24px rgba(10,22,85,0.25);
+    text-decoration: none;
+    font-family: inherit;
+}
+.download-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(10,22,85,0.4);
+    color: #fff;
+}
+.download-btn:active { transform: translateY(-1px); }
+.download-btn:disabled {
+    opacity: 0.7;
+    cursor: wait;
+    transform: none;
+}
+.download-btn i { font-size: 14px; }
+
+.file-hint {
+    font-size: 12px;
+    color: var(--grey);
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    word-break: break-all;
+    padding: 0 10px;
+}
+.file-hint i { color: var(--gold-2); flex-shrink: 0; }
+
+/* LOADER */
+.loader-box {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--grey);
+}
+.loader-spinner {
+    width: 50px; height: 50px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ERROR */
+.error-box {
+    text-align: center;
+    padding: 60px 30px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+}
+.error-box .error-icon {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    color: #dc2626;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    margin-bottom: 20px;
+}
+.error-box h3 {
+    color: var(--navy);
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+.error-box p {
+    color: var(--grey);
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+/* LIGHTBOX */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 10, 40, 0.95);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    cursor: zoom-out;
+    animation: fadeIn 0.3s ease;
+}
+.lightbox.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.lightbox img {
+    max-width: 95%;
+    max-height: 95vh;
+    border-radius: 8px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    animation: zoomIn 0.35s ease;
+    cursor: default;
+}
+@keyframes zoomIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+.lightbox-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    border: 1px solid rgba(255,255,255,0.3);
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.25s;
+}
+.lightbox-close:hover {
+    background: var(--gold);
+    color: var(--navy);
+    transform: rotate(90deg);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .notice-wrapper { padding: 16px 12px 50px; }
+    .notice-head { padding: 24px 22px 20px; }
+    .notice-body { padding: 22px; font-size: 15px; }
+    .file-preview-section { padding: 20px 22px; }
+    .download-section { padding: 20px 22px 26px; }
+    .file-preview-box iframe { height: 400px; }
+    .top-bar .brand { display: none; }
+    .download-btn { font-size: 14px; padding: 12px 26px; }
+    .lightbox-close { top: 12px; right: 12px; width: 42px; height: 42px; font-size: 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+    <div class="container">
+        <a href="notices.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> সব নোটিশ
+        </a>
+        <div class="brand">
+            <i class="fas fa-graduation-cap"></i> ফুলবাড়ীয়া কলেজ
+        </div>
+    </div>
+</div>
+
+<!-- MAIN -->
+<div class="notice-wrapper">
+    <div id="noticeDetails">
+        <div class="loader-box">
+            <div class="loader-spinner"></div>
+            <p>লোড হচ্ছে...</p>
+        </div>
+    </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+    <button class="lightbox-close" onclick="closeLightbox()">
+        <i class="fas fa-times"></i>
+    </button>
+    <img src="" alt="Preview" id="lightboxImg">
+</div>
+
+<!-- SCROLL RESTORE -->
+<script src="../js/scroll-restore.js"></script>
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    const container = document.getElementById('noticeDetails');
+    const params = new URLSearchParams(window.location.search);
+    const noticeId = params.get('id');
+
+    // =========================================================
+    // ENSURE SUPABASE
+    // =========================================================
+    async function ensureSupabase() {
+        if (window.FDC_SUPABASE) return window.FDC_SUPABASE;
+
+        if (!window.FDC_SUPABASE_READY) {
+            await new Promise(r => {
+                const t = setTimeout(r, 4000);
+                document.addEventListener('fdc:supabase-ready', () => {
+                    clearTimeout(t); r();
+                }, { once: true });
+            });
+        }
+
+        if (window.FDC_SUPABASE) return window.FDC_SUPABASE;
+
+        // Fallback
+        if (!window.FDC_CONFIG || !window.FDC_CONFIG.SUPABASE_URL) {
+            throw new Error('FDC_CONFIG missing SUPABASE_URL');
+        }
+        if (typeof window.supabase === 'undefined') {
+            throw new Error('Supabase library not loaded');
+        }
+
+        const client = window.supabase.createClient(
+            window.FDC_CONFIG.SUPABASE_URL,
+            window.FDC_CONFIG.SUPABASE_PUBLISHABLE_KEY
+        );
+        window.FDC_SUPABASE = client;
+        return client;
+    }
+
+    // =========================================================
+    // HELPERS
+    // =========================================================
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    function escapeAttr(str) {
+        if (str === null || str === undefined) return '';
+        return String(str).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        try {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('bn-BD', {
+                year: 'numeric', month: 'long', day: 'numeric'
+            });
+        } catch (e) { return dateStr; }
+    }
+
+    function getFileType(url) {
+        if (!url) return null;
+        const lower = url.toLowerCase().split('?')[0];
+        if (lower.endsWith('.pdf')) return 'pdf';
+        if (lower.match(/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/)) return 'image';
+        return 'unknown';
+    }
+
+    function getFileName(url) {
+        if (!url) return 'file';
+        try {
+            let name = url.split('/').pop().split('?')[0];
+            name = name.replace(/^v\d+_/, '');
+            return decodeURIComponent(name);
+        } catch (e) { return 'file'; }
+    }
+
+    // =========================================================
+    // FORCE DOWNLOAD — Cloudinary compatible
+    // =========================================================
+    window.forceDownload = function (url, filename) {
+        if (!url) return;
+
+        const btn = event && event.target ? event.target.closest('.download-btn') : null;
+        const originalHtml = btn ? btn.innerHTML : '';
+
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ডাউনলোড হচ্ছে...';
+        }
+
+        try {
+            let downloadUrl = url;
+
+            // Cloudinary: add fl_attachment for forced download
+            if (url.includes('res.cloudinary.com') && url.includes('/upload/')) {
+                // Remove existing transformation fl_attachment if any
+                const cleanUrl = url.replace(/\/upload\/fl_attachment[^/]*\//, '/upload/');
+                // Use filename without extension for Cloudinary
+                const nameNoExt = (filename || 'file').replace(/\.[^/.]+$/, '');
+                downloadUrl = cleanUrl.replace(
+                    '/upload/',
+                    '/upload/fl_attachment:' + encodeURIComponent(nameNoExt) + '/'
+                );
+            }
+
+            // Trigger download
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = filename || '';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+
+            setTimeout(() => {
+                document.body.removeChild(a);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = originalHtml;
+                }
+            }, 1500);
+
+        } catch (err) {
+            console.error('Download error:', err);
+            window.open(url, '_blank');
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
+        }
+    };
+
+    // =========================================================
+    // LIGHTBOX
+    // =========================================================
+    window.openLightbox = function (src) {
+        document.getElementById('lightboxImg').src = src;
+        document.getElementById('lightbox').classList.add('show');
+        document.body.style.overflow = 'hidden';
+    };
+    window.closeLightbox = function () {
+        document.getElementById('lightbox').classList.remove('show');
+        document.body.style.overflow = '';
+    };
+    document.getElementById('lightbox').addEventListener('click', function (e) {
+        if (e.target.id === 'lightbox' || e.target.id === 'lightboxImg') {
+            // Close only if clicking outside image, or on image? Let's close on backdrop click
+            if (e.target.id === 'lightbox') window.closeLightbox();
+        }
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') window.closeLightbox();
+    });
+
+    // =========================================================
+    // LOAD NOTICE
+    // =========================================================
+    async function loadNotice() {
+        if (!noticeId) {
+            showError('নোটিশ আইডি পাওয়া যায়নি', 'URL-এ ?id=... যোগ করা হয়নি');
+            return;
+        }
+
+        try {
+            const supabase = await ensureSupabase();
+
+            const { data, error } = await supabase
+                .from('notices')
+                .select('*')
+                .eq('id', noticeId)
+                .single();
+
+            if (error) throw error;
+            if (!data) throw new Error('Notice not found');
+
+            renderNotice(data);
+            document.title = (data.title || 'নোটিশ') + ' - ফুলবাড়ীয়া কলেজ';
+
+        } catch (err) {
+            console.error('❌ Notice load error:', err);
+            showError('নোটিশ লোড করা যায়নি', err.message);
+        }
+    }
+
+    // =========================================================
+    // RENDER
+    // =========================================================
+    function renderNotice(data) {
+        const title = escapeHtml(data.title || 'শিরোনাম নেই');
+        const description = data.description || data.details || '';
+        const date = formatDate(data.date || data.notice_date || data.created_at);
+        const category = data.category || 'general';
+        const fileUrl = data.file_url;
+        const imageUrl = data.image_url;
+
+        const catLabels = {
+            general: 'সাধারণ', academic: 'একাডেমিক', exam: 'পরীক্ষা',
+            admission: 'ভর্তি', event: 'ইভেন্ট', result: 'ফলাফল',
+            notice: 'নোটিশ', important: 'গুরুত্বপূর্ণ'
+        };
+        const categoryLabel = catLabels[category] || category;
+
+        // Badges
+        const badges = [];
+        badges.push(`<span class="notice-badge"><i class="fas fa-tag"></i> ${escapeHtml(categoryLabel)}</span>`);
+        if (data.is_featured) {
+            badges.push(`<span class="notice-badge featured"><i class="fas fa-star"></i> Featured</span>`);
+        }
+        if (data.is_important) {
+            badges.push(`<span class="notice-badge important"><i class="fas fa-exclamation-triangle"></i> জরুরি</span>`);
+        }
+
+        // Body
+        const bodyHtml = description
+            ? `<div class="notice-body">${escapeHtml(description).replace(/\n/g, '<br>')}</div>`
+            : '';
+
+        // File preview + download
+        let filePreviewHtml = '';
+        let downloadHtml = '';
+
+        if (fileUrl) {
+            const fileType = getFileType(fileUrl);
+            const fileName = getFileName(fileUrl);
+
+            if (fileType === 'image') {
+                filePreviewHtml = `
+                    <div class="file-preview-section">
+                        <div class="file-preview-label"><i class="fas fa-image"></i> সংযুক্ত ছবি</div>
+                        <div class="file-preview-box">
+                            <img src="${escapeHtml(fileUrl)}"
+                                 alt="${escapeHtml(fileName)}"
+                                 onclick="openLightbox('${escapeAttr(fileUrl)}')"
+                                 onerror="this.parentElement.innerHTML='<p style=&quot;color:#999;padding:20px;&quot;>ছবি লোড করা যায়নি</p>'">
+                        </div>
+                    </div>`;
+            } else if (fileType === 'pdf') {
+                filePreviewHtml = `
+                    <div class="file-preview-section">
+                        <div class="file-preview-label"><i class="fas fa-file-pdf"></i> PDF প্রিভিউ</div>
+                        <div class="file-preview-box">
+                            <iframe src="${escapeHtml(fileUrl)}#toolbar=1&view=FitH" title="PDF Preview"></iframe>
+                        </div>
+                    </div>`;
+            }
+
+            const iconClass = fileType === 'pdf' ? 'fa-file-pdf'
+                            : fileType === 'image' ? 'fa-file-image'
+                            : 'fa-file';
+
+            downloadHtml = `
+                <div class="download-section">
+                    <button type="button"
+                            onclick="forceDownload('${escapeAttr(fileUrl)}', '${escapeAttr(fileName)}')"
+                            class="download-btn">
+                        <i class="fas fa-download"></i> ডাউনলোড করুন
+                    </button>
+                    <p class="file-hint">
+                        <i class="fas ${iconClass}"></i>
+                        ${escapeHtml(fileName)}
+                    </p>
+                </div>`;
+        }
+
+        // Extra image (if image_url ≠ file_url)
+        let extraImageHtml = '';
+        if (imageUrl && imageUrl !== fileUrl) {
+            extraImageHtml = `
+                <div class="file-preview-section">
+                    <div class="file-preview-label"><i class="fas fa-image"></i> সংযুক্ত ছবি</div>
+                    <div class="file-preview-box">
+                        <img src="${escapeHtml(imageUrl)}"
+                             alt="Notice image"
+                             onclick="openLightbox('${escapeAttr(imageUrl)}')">
+                    </div>
+                </div>`;
+        }
+
+        container.innerHTML = `
+            <div class="notice-card">
+                <div class="notice-head">
+                    <div class="notice-badges">${badges.join('')}</div>
+                    <h1>${title}</h1>
+                    <div class="notice-meta">
+                        ${date ? `<span><i class="fas fa-calendar-alt"></i> ${escapeHtml(date)}</span>` : ''}
+                    </div>
+                </div>
+                ${bodyHtml}
+                ${extraImageHtml}
+                ${filePreviewHtml}
+                ${downloadHtml}
+            </div>
+        `;
+    }
+
+    // =========================================================
+    // ERROR
+    // =========================================================
+    function showError(title, message) {
+        container.innerHTML = `
+            <div class="error-box">
+                <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3>${escapeHtml(title)}</h3>
+                <p>${escapeHtml(message || '')}</p>
+                <a href="notices.html" class="download-btn" style="background:linear-gradient(135deg,#1a237e,#0d47a1);">
+                    <i class="fas fa-arrow-left"></i> সব নোটিশে ফিরুন
+                </a>
+            </div>
+        `;
+    }
+
+    // =========================================================
+    // INIT
+    // =========================================================
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadNotice);
+    } else {
+        loadNotice();
+    }
+
+    console.log('✅ notice-details loaded');
+})();
+</script>
+
+</body>
+</html>

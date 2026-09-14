@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>সংবাদ বিস্তারিত | ফুলবাড়ীয়া কলেজ</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --grey-light: #9ca3af;
+    --dark: #1f2937;
+    --border: rgba(0,0,0,0.08);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Hind Siliguri', sans-serif; background: var(--off-white); color: var(--dark); line-height: 1.6; min-height: 100vh; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+
+.top-bar {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff; padding: 12px 0;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+}
+.top-bar .container {
+    max-width: 900px; margin: 0 auto; padding: 0 20px;
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+}
+.back-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: #fff; font-weight: 600; font-size: 14px;
+    padding: 8px 18px; border-radius: 50px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    transition: 0.25s;
+}
+.back-btn:hover { background: rgba(255,255,255,0.2); transform: translateX(-3px); color: #fff; }
+.back-btn i { color: var(--gold); }
+.top-bar .brand { color: var(--gold); font-weight: 700; font-size: 14px; }
+.top-bar .brand i { margin-right: 6px; }
+
+.news-wrapper { max-width: 900px; margin: 0 auto; padding: 30px 20px 60px; }
+
+.news-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    overflow: hidden;
+    animation: fadeInUp 0.5s ease;
+}
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+.news-head {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff; padding: 28px 32px 24px;
+    position: relative; overflow: hidden;
+}
+.news-head::before {
+    content: ''; position: absolute; top: -50%; right: -20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.news-head::after {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.news-badges {
+    display: flex; gap: 8px; flex-wrap: wrap;
+    margin-bottom: 14px; position: relative; z-index: 1;
+}
+.news-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 50px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.news-badge.featured { background: rgba(242,210,123,0.35); color: #fff; }
+.news-head h1 {
+    font-size: clamp(20px, 3.5vw, 28px);
+    font-weight: 700; line-height: 1.4; color: #fff;
+    margin-bottom: 14px; position: relative; z-index: 1;
+}
+.news-meta {
+    display: flex; gap: 20px; flex-wrap: wrap;
+    font-size: 13px;
+    color: rgba(255,255,255,0.85);
+    position: relative; z-index: 1;
+}
+.news-meta span { display: inline-flex; align-items: center; gap: 7px; }
+.news-meta i { color: var(--gold); }
+
+.news-image-wrap {
+    padding: 0;
+    background: #f0f2f5;
+}
+.news-image-wrap img { width: 100%; height: auto; max-height: 500px; object-fit: cover; }
+
+.news-body {
+    padding: 30px 32px;
+    font-size: 16px;
+    line-height: 1.95;
+    color: #374151;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.news-actions {
+    padding: 24px 32px 32px;
+    border-top: 1px solid var(--border-light);
+    text-align: center;
+}
+.external-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    font-weight: 700; font-size: 15px;
+    padding: 14px 32px; border-radius: 50px;
+    transition: 0.3s;
+    box-shadow: 0 8px 24px rgba(10,22,85,0.25);
+}
+.external-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(10,22,85,0.4); color: #fff; }
+
+.loader-box { text-align: center; padding: 60px 20px; color: var(--grey); }
+.loader-spinner {
+    width: 50px; height: 50px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.error-box {
+    text-align: center; padding: 60px 30px;
+    background: #fff; border-radius: 20px;
+    box-shadow: var(--shadow-md);
+}
+.error-icon {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    color: #dc2626; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 34px; margin-bottom: 20px;
+}
+.error-box h3 { color: var(--navy); font-size: 20px; margin-bottom: 8px; }
+.error-box p { color: var(--grey); font-size: 14px; margin-bottom: 20px; }
+
+@media (max-width: 768px) {
+    .news-wrapper { padding: 16px 12px 50px; }
+    .news-head { padding: 22px 20px; }
+    .news-body { padding: 22px 20px; font-size: 15px; }
+    .news-actions { padding: 20px; }
+    .top-bar .brand { display: none; }
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+    <div class="container">
+        <a href="news.html" class="back-btn">
+            <i class="fas fa-arrow-left"></i> সব সংবাদ
+        </a>
+        <div class="brand">
+            <i class="fas fa-graduation-cap"></i> ফুলবাড়ীয়া কলেজ
+        </div>
+    </div>
+</div>
+
+<div class="news-wrapper">
+    <div id="newsDetails">
+        <div class="loader-box">
+            <div class="loader-spinner"></div>
+            <p>লোড হচ্ছে...</p>
+        </div>
+    </div>
+</div>
+
+<script src="../js/scroll-restore.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    const container = document.getElementById('newsDetails');
+    const params = new URLSearchParams(window.location.search);
+    const newsId = params.get('id');
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        try {
+            const d = new Date(dateStr);
+            return d.toLocaleDateString('bn-BD', { year: 'numeric', month: 'long', day: 'numeric' });
+        } catch (e) { return dateStr; }
+    }
+
+    function getCategoryLabel(cat) {
+        const labels = {
+            news: 'সংবাদ', event: 'ইভেন্ট', achievement: 'অর্জন',
+            admission: 'ভর্তি', result: 'ফলাফল', notice: 'নোটিশ'
+        };
+        return labels[cat] || cat;
+    }
+
+    async function ensureSupabase() {
+        if (window.FDC_SUPABASE) return window.FDC_SUPABASE;
+        if (!window.FDC_SUPABASE_READY) {
+            await new Promise(r => {
+                const t = setTimeout(r, 5000);
+                document.addEventListener('fdc:supabase-ready', () => { clearTimeout(t); r(); }, { once: true });
+            });
+        }
+        if (window.FDC_SUPABASE) return window.FDC_SUPABASE;
+        if (!window.FDC_CONFIG || !window.FDC_CONFIG.SUPABASE_URL) throw new Error('Config missing');
+        if (typeof window.supabase === 'undefined') throw new Error('Supabase library not loaded');
+        const client = window.supabase.createClient(
+            window.FDC_CONFIG.SUPABASE_URL,
+            window.FDC_CONFIG.SUPABASE_PUBLISHABLE_KEY
+        );
+        window.FDC_SUPABASE = client;
+        return client;
+    }
+
+    async function loadNews() {
+        if (!newsId) {
+            showError('সংবাদ আইডি পাওয়া যায়নি', 'URL-এ ?id=... যোগ করা হয়নি');
+            return;
+        }
+
+        try {
+            const supabase = await ensureSupabase();
+            const { data, error } = await supabase
+                .from('news')
+                .select('*')
+                .eq('id', newsId)
+                .single();
+
+            if (error) throw error;
+            if (!data) throw new Error('News not found');
+
+            render(data);
+            document.title = (data.title || 'সংবাদ') + ' - ফুলবাড়ীয়া কলেজ';
+
+        } catch (err) {
+            console.error('❌ News load error:', err);
+            showError('সংবাদ লোড করা যায়নি', err.message);
+        }
+    }
+
+    function render(data) {
+        const title = escapeHtml(data.title || 'শিরোনাম নেই');
+        const description = data.description || '';
+        const date = formatDate(data.news_date || data.created_at);
+        const categoryLabel = getCategoryLabel(data.category || 'news');
+
+        const badges = [];
+        badges.push(`<span class="news-badge"><i class="fas fa-tag"></i> ${escapeHtml(categoryLabel)}</span>`);
+        if (data.is_featured) {
+            badges.push(`<span class="news-badge featured"><i class="fas fa-star"></i> Featured</span>`);
+        }
+
+        const imageHtml = data.image_url
+            ? `<div class="news-image-wrap"><img src="${escapeHtml(data.image_url)}" alt="${title}"></div>`
+            : '';
+
+        const bodyHtml = description
+            ? `<div class="news-body">${escapeHtml(description).replace(/\n/g, '<br>')}</div>`
+            : '';
+
+        const externalHtml = data.external_link
+            ? `<div class="news-actions">
+                <a href="${escapeHtml(data.external_link)}" target="_blank" rel="noopener" class="external-btn">
+                    <i class="fas fa-external-link-alt"></i> বিস্তারিত দেখুন
+                </a>
+               </div>`
+            : '';
+
+        container.innerHTML = `
+            <div class="news-card">
+                <div class="news-head">
+                    <div class="news-badges">${badges.join('')}</div>
+                    <h1>${title}</h1>
+                    <div class="news-meta">
+                        ${date ? `<span><i class="fas fa-calendar-alt"></i> ${escapeHtml(date)}</span>` : ''}
+                    </div>
+                </div>
+                ${imageHtml}
+                ${bodyHtml}
+                ${externalHtml}
+            </div>
+        `;
+    }
+
+    function showError(title, message) {
+        container.innerHTML = `
+            <div class="error-box">
+                <div class="error-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                <h3>${escapeHtml(title)}</h3>
+                <p>${escapeHtml(message || '')}</p>
+                <a href="news.html" class="external-btn" style="background:linear-gradient(135deg,#1a237e,#0d47a1);">
+                    <i class="fas fa-arrow-left"></i> সব সংবাদে ফিরুন
+                </a>
+            </div>
+        `;
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadNews);
+    } else {
+        loadNews();
+    }
+
+    console.log('✅ news-details loaded');
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>সকল সংবাদ | ফুলবাড়ীয়া কলেজ</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --white: #fff;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --grey-light: #9ca3af;
+    --dark: #1f2937;
+    --border: rgba(0,0,0,0.08);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Hind Siliguri', sans-serif; background: var(--off-white); color: var(--dark); line-height: 1.6; }
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+.container-custom { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+
+/* HEADER */
+.main-header {
+    background: #fff;
+    padding: 12px 0;
+    box-shadow: var(--shadow-sm);
+    position: sticky; top: 0; z-index: 900;
+    border-bottom: 1px solid var(--border-light);
+}
+.main-header .container-custom {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+}
+.logo-box { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.logo-box img { width: 46px; height: 46px; object-fit: contain; border-radius: 10px; background: var(--off-white); padding: 3px; flex-shrink: 0; }
+.logo-box .logo-text h1 { font-size: 17px; color: var(--navy); margin: 0; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.logo-box .logo-text p { font-size: 10px; color: var(--grey-light); margin: 2px 0 0; letter-spacing: 1px; text-transform: uppercase; font-weight: 600; }
+.home-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 16px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff; border-radius: 50px;
+    font-weight: 600; font-size: 13px;
+    transition: 0.3s;
+    box-shadow: 0 4px 12px rgba(10,22,85,0.2);
+    flex-shrink: 0;
+}
+.home-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 18px rgba(10,22,85,0.35); color: #fff; }
+.home-btn i { color: var(--gold); font-size: 12px; }
+
+/* HERO */
+.page-hero {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 32px 0 70px;
+    position: relative; overflow: hidden;
+}
+.page-hero::before {
+    content: '';
+    position: absolute; top: -60%; right: -15%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(242,210,123,0.12), transparent 65%);
+    border-radius: 50%;
+}
+.page-hero .container-custom { position: relative; z-index: 1; text-align: center; }
+.hero-icon {
+    width: 56px; height: 56px;
+    border-radius: 16px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 22px; margin-bottom: 14px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.page-hero h1 { font-size: clamp(22px, 4vw, 30px); font-weight: 700; margin-bottom: 6px; }
+.page-hero h1 span { color: var(--gold); }
+.page-hero p { font-size: 13.5px; opacity: 0.85; max-width: 520px; margin: 0 auto; }
+
+/* MAIN */
+.main-content { padding: 0 0 70px; margin-top: -40px; position: relative; z-index: 2; }
+
+/* STATS */
+.stats-row { display: flex; gap: 10px; margin-bottom: 18px; flex-wrap: wrap; }
+.stat-pill {
+    flex: 1; min-width: 130px;
+    background: #fff; border-radius: 14px;
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
+.stat-pill .sp-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+}
+.stat-pill .sp-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
+.stat-pill .sp-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.stat-pill .sp-value { font-size: 20px; font-weight: 700; color: var(--navy); line-height: 1; font-family: 'Playfair Display', serif; }
+.stat-pill .sp-label { font-size: 10.5px; color: var(--grey); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 3px; }
+
+/* TOOLBAR */
+.toolbar {
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 18px;
+}
+.filter-scroll {
+    display: flex; gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 6px; margin-bottom: 12px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+.filter-scroll::-webkit-scrollbar { display: none; }
+.filter-chip {
+    padding: 8px 15px;
+    border-radius: 50px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff; color: var(--grey);
+    font-weight: 600; font-size: 12px;
+    cursor: pointer; transition: 0.25s;
+    display: inline-flex; align-items: center; gap: 6px;
+    white-space: nowrap; flex-shrink: 0;
+}
+.filter-chip:hover { border-color: var(--navy); color: var(--navy); }
+.filter-chip.active {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff; border-color: transparent;
+    box-shadow: 0 4px 12px rgba(10,22,85,0.2);
+}
+.filter-chip i { font-size: 10px; }
+.search-wrap { position: relative; }
+.search-wrap i { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--grey-light); font-size: 13px; pointer-events: none; }
+.search-input {
+    width: 100%; padding: 11px 14px 11px 40px;
+    border-radius: 50px; border: 1.5px solid #e5e7eb;
+    background: var(--off-white); font-size: 13px;
+    outline: none; color: var(--dark); transition: 0.25s;
+}
+.search-input:focus { border-color: var(--navy); background: #fff; box-shadow: 0 0 0 4px rgba(10,22,85,0.06); }
+
+/* GRID */
+.news-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+
+.news-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+    border: 1px solid var(--border-light);
+    text-decoration: none; color: inherit;
+    display: flex; flex-direction: column;
+    position: relative;
+    cursor: pointer;
+    animation: cardFadeIn 0.5s ease both;
+}
+@keyframes cardFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.news-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); color: inherit; }
+
+.news-thumb {
+    width: 100%; height: 180px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    overflow: hidden;
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+}
+.news-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+.news-card:hover .news-thumb img { transform: scale(1.05); }
+.news-thumb .thumb-placeholder { font-size: 44px; color: rgba(242,210,123,0.4); }
+
+.news-thumb .thumb-badges {
+    position: absolute; top: 12px; left: 12px;
+    display: flex; gap: 6px; flex-wrap: wrap; z-index: 2;
+}
+.thumb-badge {
+    padding: 4px 10px; border-radius: 50px;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 4px;
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+.thumb-badge.category { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.thumb-badge.featured { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
+.thumb-badge i { font-size: 9px; }
+
+.news-date-badge {
+    position: absolute; bottom: 12px; right: 12px;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(8px);
+    border-radius: 10px; padding: 6px 12px;
+    text-align: center; min-width: 60px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 2;
+}
+.news-date-badge .day { font-size: 18px; font-weight: 700; color: var(--navy); line-height: 1; font-family: 'Playfair Display', serif; }
+.news-date-badge .month { font-size: 9px; color: var(--grey); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 2px; }
+
+.news-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+.news-body h4 {
+    font-size: 16px; font-weight: 700; color: var(--navy);
+    line-height: 1.45; margin-bottom: 10px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.news-body p {
+    font-size: 13px; color: var(--grey); line-height: 1.7;
+    margin-bottom: 14px;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    flex: 1;
+}
+.news-footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 12px; border-top: 1px solid var(--border-light);
+    margin-top: auto;
+}
+.news-footer .read-more {
+    font-size: 12px; font-weight: 700; color: var(--navy);
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: 0.25s;
+}
+.news-card:hover .news-footer .read-more { gap: 12px; color: var(--gold-dark); }
+
+/* SKELETON */
+.skeleton-card {
+    background: #fff; border-radius: 16px;
+    overflow: hidden; border: 1px solid var(--border-light);
+    animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.skeleton-thumb {
+    width: 100%; height: 180px;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%; animation: shimmer 1.5s infinite;
+}
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+.skeleton-body { padding: 18px 20px; }
+.skeleton-line {
+    height: 14px; border-radius: 6px;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%; animation: shimmer 1.5s infinite;
+    margin-bottom: 10px;
+}
+
+/* EMPTY */
+.empty-state {
+    grid-column: 1/-1;
+    text-align: center; padding: 50px 20px;
+    background: #fff; border-radius: 16px;
+    border: 1px solid var(--border-light);
+}
+.empty-state .empty-icon {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.05), rgba(13,71,161,0.03));
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 32px; color: var(--navy); opacity: 0.6;
+    margin-bottom: 16px;
+}
+.empty-state h3 { font-size: 17px; color: var(--navy); margin-bottom: 6px; font-weight: 700; }
+.empty-state p { font-size: 13px; color: var(--grey); margin-bottom: 18px; }
+.empty-state .clear-btn {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff; border-radius: 50px;
+    font-weight: 600; font-size: 12.5px;
+    border: none; transition: 0.3s;
+    box-shadow: 0 4px 14px rgba(10,22,85,0.25);
+}
+
+/* FOOTER */
+.page-footer {
+    background: linear-gradient(135deg, #061040, var(--navy));
+    color: rgba(255,255,255,0.85);
+    padding: 30px 0 20px; margin-top: 40px;
+}
+.page-footer .footer-content { text-align: center; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.page-footer h3 { font-size: 18px; color: #fff; margin-bottom: 6px; font-family: 'Playfair Display', serif; }
+.page-footer h3 span { color: var(--gold); }
+.page-footer p { font-size: 12.5px; opacity: 0.75; }
+.page-footer .footer-bottom { text-align: center; padding: 16px 0 0; font-size: 11.5px; color: rgba(255,255,255,0.55); }
+.page-footer .footer-bottom strong { color: var(--gold); }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .container-custom { padding: 0 14px; }
+    .logo-box img { width: 42px; height: 42px; }
+    .logo-box .logo-text h1 { font-size: 15px; }
+    .home-btn { padding: 8px 14px; font-size: 12px; }
+    .home-btn span { display: none; }
+    .page-hero { padding: 28px 0 60px; }
+    .hero-icon { width: 48px; height: 48px; font-size: 19px; margin-bottom: 10px; }
+    .page-hero h1 { font-size: 20px; }
+    .page-hero p { font-size: 12.5px; }
+    .main-content { margin-top: -35px; }
+    .stats-row { gap: 8px; margin-bottom: 14px; }
+    .stat-pill { min-width: calc(50% - 4px); padding: 11px 12px; gap: 9px; border-radius: 12px; }
+    .stat-pill .sp-icon { width: 34px; height: 34px; font-size: 14px; border-radius: 9px; }
+    .stat-pill .sp-value { font-size: 17px; }
+    .stat-pill .sp-label { font-size: 9.5px; }
+    .toolbar { padding: 12px; border-radius: 14px; }
+    .filter-chip { padding: 7px 13px; font-size: 11.5px; }
+    .search-input { padding: 10px 14px 10px 38px; font-size: 12.5px; }
+    .news-grid { grid-template-columns: 1fr; gap: 12px; }
+    .news-thumb { height: 160px; }
+    .news-body { padding: 16px; }
+    .news-body h4 { font-size: 15px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="main-header">
+    <div class="container-custom">
+        <a href="../index.html" class="logo-box">
+            <img src="../assets/icons/logo.png" alt="Logo" onerror="this.style.display='none'">
+            <div class="logo-text">
+                <h1 data-college-name>ফুলবাড়ীয়া কলেজ</h1>
+                <p>Fulbariya College</p>
+            </div>
+        </a>
+        <a href="../index.html" class="home-btn">
+            <i class="fas fa-home"></i> <span>হোম</span>
+        </a>
+    </div>
+</header>
+
+<!-- HERO -->
+<section class="page-hero">
+    <div class="container-custom">
+        <div class="hero-icon"><i class="fas fa-newspaper"></i></div>
+        <h1>সকল <span>সংবাদ</span></h1>
+        <p>কলেজের সর্বশেষ খবর, ইভেন্ট ও কার্যক্রমের আপডেট</p>
+    </div>
+</section>
+
+<!-- MAIN -->
+<div class="main-content">
+    <div class="container-custom">
+
+        <!-- STATS -->
+        <div class="stats-row">
+            <div class="stat-pill">
+                <div class="sp-icon navy"><i class="fas fa-newspaper"></i></div>
+                <div>
+                    <div class="sp-value" id="statTotal">0</div>
+                    <div class="sp-label">মোট সংবাদ</div>
+                </div>
+            </div>
+            <div class="stat-pill">
+                <div class="sp-icon gold"><i class="fas fa-star"></i></div>
+                <div>
+                    <div class="sp-value" id="statFeatured">0</div>
+                    <div class="sp-label">Featured</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOOLBAR -->
+        <div class="toolbar">
+            <div class="filter-scroll">
+                <button class="filter-chip active" data-filter="all"><i class="fas fa-list"></i> সব</button>
+                <button class="filter-chip" data-filter="news"><i class="fas fa-newspaper"></i> সংবাদ</button>
+                <button class="filter-chip" data-filter="event"><i class="fas fa-calendar-alt"></i> ইভেন্ট</button>
+                <button class="filter-chip" data-filter="achievement"><i class="fas fa-trophy"></i> অর্জন</button>
+                <button class="filter-chip" data-filter="admission"><i class="fas fa-user-plus"></i> ভর্তি</button>
+                <button class="filter-chip" data-filter="result"><i class="fas fa-graduation-cap"></i> ফলাফল</button>
+                <button class="filter-chip" data-filter="notice"><i class="fas fa-bullhorn"></i> নোটিশ</button>
+            </div>
+            <div class="search-wrap">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="সংবাদ খুঁজুন...">
+            </div>
+        </div>
+
+        <!-- GRID -->
+        <div class="news-grid" id="newsGrid">
+            <div class="skeleton-card">
+                <div class="skeleton-thumb"></div>
+                <div class="skeleton-body">
+                    <div class="skeleton-line" style="width:80%;"></div>
+                    <div class="skeleton-line" style="width:100%;"></div>
+                    <div class="skeleton-line" style="width:60%;"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumb"></div>
+                <div class="skeleton-body">
+                    <div class="skeleton-line" style="width:75%;"></div>
+                    <div class="skeleton-line" style="width:100%;"></div>
+                    <div class="skeleton-line" style="width:55%;"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumb"></div>
+                <div class="skeleton-body">
+                    <div class="skeleton-line" style="width:70%;"></div>
+                    <div class="skeleton-line" style="width:100%;"></div>
+                    <div class="skeleton-line" style="width:50%;"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+    <div class="container-custom">
+        <div class="footer-content">
+            <h3><span data-college-name>ফুলবাড়ীয়া কলেজ</span></h3>
+            <p>শিক্ষা, নৈতিকতা ও আধুনিকতার সমন্বয়ে একটি আদর্শ শিক্ষা প্রতিষ্ঠান</p>
+        </div>
+        <div class="footer-bottom">
+            © <span id="year"></span> <strong data-college-name>ফুলবাড়ীয়া কলেজ</strong>। সর্বস্বত্ব সংরক্ষিত।
+        </div>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="../js/scroll-restore.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    let ALL_NEWS = [];
+    let currentFilter = 'all';
+    let searchQuery = '';
+
+    const grid = document.getElementById('newsGrid');
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function getCategoryLabel(cat) {
+        const labels = {
+            news: 'সংবাদ', event: 'ইভেন্ট', achievement: 'অর্জন',
+            admission: 'ভর্তি', result: 'ফলাফল', notice: 'নোটিশ'
+        };
+        return labels[cat] || cat;
+    }
+
+    async function ensureSupabase() {
+        if (window.FDC_SUPABASE) return window.FDC_SUPABASE;
+        if (!window.FDC_SUPABASE_READY) {
+            await new Promise(r => {
+                const t = setTimeout(r, 5000);
+                document.addEventListener('fdc:supabase-ready', () => { clearTimeout(t); r(); }, { once: true });
+            });
+        }
+        if (window.FDC_SUPABASE) return window.FDC_SUPABASE;
+        if (!window.FDC_CONFIG || !window.FDC_CONFIG.SUPABASE_URL) throw new Error('Config missing');
+        if (typeof window.supabase === 'undefined') throw new Error('Supabase library not loaded');
+        const client = window.supabase.createClient(
+            window.FDC_CONFIG.SUPABASE_URL,
+            window.FDC_CONFIG.SUPABASE_PUBLISHABLE_KEY
+        );
+        window.FDC_SUPABASE = client;
+        return client;
+    }
+
+    async function loadCollegeInfo() {
+        try {
+            const supabase = await ensureSupabase();
+            const { data } = await supabase.from('site_settings').select('key, value').in('key', ['college_name']);
+            const settings = {};
+            (data || []).forEach(item => { settings[item.key] = item.value; });
+            if (settings.college_name) {
+                document.querySelectorAll('[data-college-name]').forEach(el => {
+                    el.textContent = settings.college_name;
+                });
+                document.title = 'সকল সংবাদ | ' + settings.college_name;
+            }
+        } catch (e) { console.warn(e); }
+    }
+
+    async function loadNews() {
+        try {
+            const supabase = await ensureSupabase();
+            const { data, error } = await supabase
+                .from('news')
+                .select('id, title, description, image_url, category, news_date, external_link, is_featured')
+                .eq('is_published', true)
+                .order('is_featured', { ascending: false })
+                .order('display_order', { ascending: true })
+                .order('news_date', { ascending: false });
+
+            if (error) throw error;
+            ALL_NEWS = data || [];
+            updateStats();
+            render();
+        } catch (err) {
+            console.error('❌ News load error:', err);
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h3>সংবাদ লোড করা যায়নি</h3>
+                    <p>${escapeHtml(err.message)}</p>
+                    <button class="clear-btn" onclick="location.reload()">
+                        <i class="fas fa-redo"></i> আবার চেষ্টা করুন
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    function updateStats() {
+        const total = ALL_NEWS.length;
+        const featured = ALL_NEWS.filter(n => n.is_featured).length;
+        document.getElementById('statTotal').textContent = total;
+        document.getElementById('statFeatured').textContent = featured;
+    }
+
+    function render() {
+        let filtered = ALL_NEWS.filter(n => {
+            if (currentFilter !== 'all' && (n.category || 'news') !== currentFilter) return false;
+            if (searchQuery) {
+                const text = ((n.title || '') + ' ' + (n.description || '')).toLowerCase();
+                if (!text.includes(searchQuery)) return false;
+            }
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            grid.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="fas fa-inbox"></i></div>
+                    <h3>কোনো সংবাদ পাওয়া যায়নি</h3>
+                    <p>${searchQuery ? 'আপনার সার্চের সাথে মিলে এমন কোনো সংবাদ নেই' : 'এই বিভাগে এখনো কোনো সংবাদ নেই'}</p>
+                    <button class="clear-btn" onclick="clearFilters()">
+                        <i class="fas fa-times"></i> ফিল্টার রিসেট
+                    </button>
+                </div>
+            `;
+            return;
+        }
+
+        const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+        let html = '';
+
+        filtered.forEach((n, idx) => {
+            const d = n.news_date ? new Date(n.news_date) : new Date();
+            const day = d.getDate();
+            const month = months[d.getMonth()];
+
+            const badges = [];
+            badges.push(`<span class="thumb-badge category"><i class="fas fa-tag"></i> ${escapeHtml(getCategoryLabel(n.category))}</span>`);
+            if (n.is_featured) badges.push(`<span class="thumb-badge featured"><i class="fas fa-star"></i> Featured</span>`);
+
+            let thumbHtml = '';
+            if (n.image_url) {
+                thumbHtml = `<img src="${escapeHtml(n.image_url)}" alt="${escapeHtml(n.title)}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">`;
+            }
+
+            // Details URL: external link > details page
+            const detailsUrl = n.external_link
+                ? n.external_link
+                : `news-details.html?id=${n.id}`;
+            const targetAttr = n.external_link ? 'target="_blank" rel="noopener"' : '';
+
+            const delay = Math.min(idx * 50, 500);
+
+            html += `
+                <a href="${escapeHtml(detailsUrl)}" ${targetAttr} class="news-card" style="animation-delay:${delay}ms;">
+                    <div class="news-thumb">
+                        ${thumbHtml}
+                        <div class="thumb-placeholder" style="display:${thumbHtml ? 'none' : 'flex'};">
+                            <i class="fas fa-newspaper"></i>
+                        </div>
+                        <div class="thumb-badges">${badges.join('')}</div>
+                        <div class="news-date-badge">
+                            <div class="day">${day}</div>
+                            <div class="month">${month}</div>
+                        </div>
+                    </div>
+                    <div class="news-body">
+                        <h4>${escapeHtml(n.title || 'Untitled')}</h4>
+                        <p>${escapeHtml(n.description || 'বিস্তারিত দেখতে ক্লিক করুন...')}</p>
+                        <div class="news-footer">
+                            <span class="read-more">
+                                ${n.external_link ? 'বিস্তারিত দেখুন' : 'পড়ুন'} <i class="fas fa-arrow-right"></i>
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            `;
+        });
+
+        grid.innerHTML = html;
+    }
+
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.addEventListener('click', function () {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            render();
+        });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+        searchQuery = this.value.toLowerCase().trim();
+        render();
+    });
+
+    window.clearFilters = function () {
+        currentFilter = 'all';
+        searchQuery = '';
+        document.getElementById('searchInput').value = '';
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        document.querySelector('.filter-chip[data-filter="all"]').classList.add('active');
+        render();
+    };
+
+    async function init() {
+        document.getElementById('year').textContent = new Date().getFullYear();
+        await loadCollegeInfo();
+        await loadNews();
+        console.log('✅ News page ready');
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
+</script>
+
+</body>
+</html>
