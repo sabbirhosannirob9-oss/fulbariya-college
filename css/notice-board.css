@@ -1,0 +1,875 @@
+/* =========================================================
+   PREMIUM NOTICE BOARD STYLES
+   FULBARIYA DEGREE COLLEGE
+   ========================================================= */
+
+/* =========================================================
+   MAIN WRAPPER
+   ========================================================= */
+
+.notice-board-wrapper {
+    background: linear-gradient(135deg, #061d36, #0b3156);
+    border-radius: 20px;
+    padding: 20px 22px 18px;
+    box-shadow: 0 20px 60px rgba(3,22,42,.25);
+    position: relative;
+    overflow: hidden;
+    max-height: 480px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(255,255,255,.06);
+}
+
+.notice-board-wrapper::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 70% 30%, rgba(216,173,69,.05), transparent 50%);
+    pointer-events: none;
+}
+
+.notice-board-wrapper::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -20%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(216,173,69,.03), transparent 70%);
+    pointer-events: none;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.notice-board-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+    margin-bottom: 12px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+}
+
+.notice-board-header .title-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notice-board-header .title-group .live-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,89,89,.12);
+    padding: 3px 12px 3px 8px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,89,89,.15);
+}
+
+.notice-board-header .title-group .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ff5959;
+    animation: livePulse 1.6s infinite;
+    box-shadow: 0 0 0 3px rgba(255,89,89,.12);
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: .3;
+        transform: scale(.8);
+    }
+}
+
+.notice-board-header .title-group h3 {
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+    font-family: 'Hind Siliguri', 'Inter', sans-serif;
+    letter-spacing: 0.3px;
+}
+
+.notice-board-header .title-group small {
+    color: rgba(255,255,255,.4);
+    font-size: 10px;
+    margin-left: 6px;
+    font-weight: 400;
+}
+
+.notice-count-badge {
+    background: rgba(216,173,69,.12);
+    color: #f5c75d;
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid rgba(216,173,69,.15);
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* =========================================================
+   SCROLLABLE LIST
+   ========================================================= */
+
+.notice-scroll-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
+    min-height: 0;
+    max-height: 340px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Custom Scrollbar - Webkit */
+.notice-scroll-wrapper::-webkit-scrollbar {
+    width: 3px;
+}
+
+.notice-scroll-wrapper::-webkit-scrollbar-track {
+    background: rgba(255,255,255,.04);
+    border-radius: 10px;
+}
+
+.notice-scroll-wrapper::-webkit-scrollbar-thumb {
+    background: rgba(216,173,69,.3);
+    border-radius: 10px;
+    transition: background 0.3s;
+}
+
+.notice-scroll-wrapper::-webkit-scrollbar-thumb:hover {
+    background: rgba(216,173,69,.5);
+}
+
+/* Custom Scrollbar - Firefox */
+.notice-scroll-wrapper {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(216,173,69,.3) transparent;
+}
+
+.notice-list-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding-bottom: 4px;
+}
+
+/* =========================================================
+   NOTICE CARD
+   ========================================================= */
+
+.notice-card {
+    background: rgba(255,255,255,.04);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: 1px solid rgba(255,255,255,.05);
+    border-radius: 12px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: grid;
+    grid-template-columns: 65px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    overflow: hidden;
+}
+
+.notice-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(216,173,69,.04), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    pointer-events: none;
+}
+
+.notice-card:hover {
+    transform: translateX(3px);
+    border-color: rgba(216,173,69,.25);
+    background: rgba(255,255,255,.07);
+    box-shadow: 0 4px 20px rgba(0,0,0,.15);
+}
+
+.notice-card:hover::before {
+    opacity: 1;
+}
+
+.notice-card:active {
+    transform: scale(.98);
+}
+
+.notice-card.important {
+    border-left: 3px solid #dc3545;
+    background: rgba(220,53,69,.04);
+}
+
+.notice-card.important:hover {
+    background: rgba(220,53,69,.08);
+}
+
+.notice-card.important::before {
+    background: linear-gradient(135deg, rgba(220,53,69,.06), transparent 60%);
+}
+
+/* --- Date Box --- */
+.notice-card-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,.04);
+    border-radius: 8px;
+    padding: 4px 8px;
+    min-width: 50px;
+    border: 1px solid rgba(255,255,255,.05);
+    flex-shrink: 0;
+    transition: all 0.3s;
+}
+
+.notice-card:hover .notice-card-date {
+    background: rgba(255,255,255,.08);
+    border-color: rgba(216,173,69,.15);
+}
+
+.notice-card-date .notice-day {
+    font-size: 18px;
+    font-weight: 800;
+    color: #f5c75d;
+    line-height: 1.1;
+    font-family: 'Inter', sans-serif;
+}
+
+.notice-card-date .notice-month {
+    font-size: 8px;
+    color: rgba(255,255,255,.4);
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    font-weight: 600;
+}
+
+/* --- Content --- */
+.notice-card-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.notice-card-title {
+    margin: 0 0 2px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.3;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-family: 'Hind Siliguri', 'Inter', sans-serif;
+}
+
+.notice-card-preview {
+    margin: 0;
+    color: rgba(255,255,255,.4);
+    font-size: 10px;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    font-weight: 400;
+}
+
+/* --- Badges --- */
+.notice-badge-important {
+    display: inline-block;
+    background: rgba(220,53,69,.12);
+    color: #ff6b6b;
+    font-size: 8px;
+    font-weight: 700;
+    padding: 1px 8px;
+    border-radius: 10px;
+    border: 1px solid rgba(220,53,69,.1);
+    margin-left: 6px;
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* --- File Icon --- */
+.notice-file-icon {
+    font-size: 14px;
+    opacity: 0.3;
+    transition: opacity 0.3s;
+    flex-shrink: 0;
+}
+
+.notice-card:hover .notice-file-icon {
+    opacity: 0.6;
+}
+
+/* --- Read More Arrow --- */
+.notice-read-more {
+    font-size: 10px;
+    color: rgba(216,173,69,.4);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.notice-card:hover .notice-read-more {
+    color: #f5c75d;
+}
+
+.notice-read-more i {
+    font-size: 9px;
+    transition: transform 0.3s;
+}
+
+.notice-card:hover .notice-read-more i {
+    transform: translateX(2px);
+}
+
+/* =========================================================
+   EMPTY / ERROR STATE
+   ========================================================= */
+
+.notice-empty-state,
+.notice-error-state {
+    text-align: center;
+    padding: 30px 20px;
+    color: rgba(255,255,255,.4);
+}
+
+.notice-empty-state i,
+.notice-error-state i {
+    font-size: 32px;
+    opacity: 0.3;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.notice-empty-state p,
+.notice-error-state p {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.notice-error-state button {
+    margin-top: 10px;
+    background: rgba(216,173,69,.12);
+    border: 1px solid rgba(216,173,69,.15);
+    color: #f5c75d;
+    padding: 6px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 12px;
+    transition: all 0.3s;
+    font-family: 'Inter', sans-serif;
+}
+
+.notice-error-state button:hover {
+    background: rgba(216,173,69,.2);
+    transform: translateY(-1px);
+}
+
+/* =========================================================
+   PREMIUM MODAL
+   ========================================================= */
+
+.notice-detail-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(1,10,20,.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.notice-detail-modal.show {
+    display: flex;
+}
+
+.notice-detail-modal .modal-content {
+    background: linear-gradient(145deg, #071e36, #0b3155);
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 24px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 40px 120px rgba(0,0,0,.5);
+    animation: modalSlideUp 0.35s ease;
+}
+
+@keyframes modalSlideUp {
+    from {
+        opacity: 0;
+        transform: scale(.95) translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* --- Modal Header --- */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 24px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+}
+
+.modal-header .modal-title-group {
+    flex: 1;
+    padding-right: 12px;
+}
+
+.modal-header .modal-title-group h2 {
+    margin: 0;
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.3;
+    font-family: 'Hind Siliguri', 'Playfair Display', serif;
+}
+
+.modal-header .modal-title-group .modal-date {
+    display: inline-block;
+    margin-top: 6px;
+    color: rgba(255,255,255,.35);
+    font-size: 11px;
+    background: rgba(255,255,255,.04);
+    padding: 2px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,.05);
+    font-weight: 400;
+}
+
+.modal-close-btn {
+    width: 36px;
+    height: 36px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 50%;
+    background: rgba(255,255,255,.04);
+    color: rgba(255,255,255,.5);
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close-btn:hover {
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    transform: rotate(90deg);
+}
+
+/* --- Modal Body --- */
+.modal-body {
+    padding: 20px 24px;
+    overflow-y: auto;
+    max-height: 45vh;
+}
+
+.modal-body::-webkit-scrollbar {
+    width: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+    background: rgba(216,173,69,.25);
+    border-radius: 10px;
+}
+
+.modal-body .modal-description {
+    color: rgba(255,255,255,.8);
+    font-size: 14px;
+    line-height: 1.9;
+    text-align: justify;
+    font-weight: 400;
+}
+
+/* --- File Download --- */
+.modal-file-section {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.modal-file-box {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,.04);
+    border-radius: 12px;
+    padding: 12px 16px;
+    border: 1px solid rgba(255,255,255,.05);
+    transition: all 0.3s;
+}
+
+.modal-file-box:hover {
+    background: rgba(255,255,255,.07);
+    border-color: rgba(216,173,69,.15);
+}
+
+.modal-file-box .modal-file-info {
+    flex: 1;
+}
+
+.modal-file-box .modal-file-info .modal-file-name {
+    display: block;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.modal-file-box .modal-file-info .modal-file-size {
+    font-size: 10px;
+    color: rgba(255,255,255,.35);
+    font-weight: 400;
+}
+
+.modal-download-btn {
+    background: rgba(216,173,69,.12);
+    border: 1px solid rgba(216,173,69,.15);
+    color: #f5c75d;
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    font-family: 'Inter', sans-serif;
+}
+
+.modal-download-btn:hover {
+    background: rgba(216,173,69,.2);
+    transform: translateY(-1px);
+    color: #f5c75d;
+    box-shadow: 0 4px 15px rgba(216,173,69,.15);
+}
+
+/* --- Modal Navigation --- */
+.modal-nav {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px 24px 20px;
+    border-top: 1px solid rgba(255,255,255,.05);
+}
+
+.modal-nav-btn {
+    background: rgba(255,255,255,.04);
+    border: 1px solid rgba(255,255,255,.06);
+    color: rgba(255,255,255,.4);
+    padding: 6px 16px;
+    border-radius: 8px;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Inter', sans-serif;
+}
+
+.modal-nav-btn:hover {
+    background: rgba(255,255,255,.07);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.modal-nav-btn.primary {
+    background: rgba(216,173,69,.1);
+    border-color: rgba(216,173,69,.15);
+    color: #f5c75d;
+}
+
+.modal-nav-btn.primary:hover {
+    background: rgba(216,173,69,.18);
+    box-shadow: 0 4px 15px rgba(216,173,69,.1);
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .notice-board-wrapper {
+        max-height: 400px;
+        padding: 16px 16px 14px;
+        border-radius: 16px;
+    }
+
+    .notice-scroll-wrapper {
+        max-height: 280px;
+    }
+
+    .notice-card {
+        grid-template-columns: 55px 1fr;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 10px;
+    }
+
+    .notice-card-date .notice-day {
+        font-size: 15px;
+    }
+
+    .notice-card-date .notice-month {
+        font-size: 7px;
+    }
+
+    .notice-card-title {
+        font-size: 12px;
+    }
+
+    .notice-read-more {
+        display: none;
+    }
+
+    .notice-board-header .title-group small {
+        display: none;
+    }
+
+    .notice-board-header .title-group h3 {
+        font-size: 14px;
+    }
+
+    .notice-count-badge {
+        font-size: 10px;
+        padding: 2px 10px;
+    }
+
+    /* Modal */
+    .notice-detail-modal .modal-content {
+        max-width: 100%;
+        border-radius: 16px;
+        max-height: 95vh;
+    }
+
+    .modal-header {
+        padding: 16px 16px 10px;
+    }
+
+    .modal-header .modal-title-group h2 {
+        font-size: 17px;
+    }
+
+    .modal-body {
+        padding: 14px 16px;
+        max-height: 35vh;
+    }
+
+    .modal-body .modal-description {
+        font-size: 13px;
+        line-height: 1.8;
+    }
+
+    .modal-file-box {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .modal-download-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .modal-nav {
+        flex-wrap: wrap;
+        gap: 8px;
+        padding: 10px 16px 16px;
+    }
+
+    .modal-nav-btn {
+        flex: 1;
+        justify-content: center;
+        padding: 5px 10px;
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .notice-board-wrapper {
+        max-height: 350px;
+        padding: 12px 12px 10px;
+        border-radius: 14px;
+    }
+
+    .notice-scroll-wrapper {
+        max-height: 230px;
+    }
+
+    .notice-card {
+        grid-template-columns: 45px 1fr;
+        gap: 8px;
+        padding: 8px 10px;
+        border-radius: 8px;
+    }
+
+    .notice-card-date {
+        padding: 3px 6px;
+        min-width: 38px;
+    }
+
+    .notice-card-date .notice-day {
+        font-size: 14px;
+    }
+
+    .notice-card-date .notice-month {
+        font-size: 6px;
+    }
+
+    .notice-card-title {
+        font-size: 11px;
+        -webkit-line-clamp: 2;
+    }
+
+    .notice-card-preview {
+        font-size: 9px;
+        -webkit-line-clamp: 1;
+    }
+
+    .notice-file-icon {
+        font-size: 12px;
+    }
+
+    .notice-board-header .title-group .live-badge {
+        padding: 2px 8px 2px 6px;
+    }
+
+    .notice-board-header .title-group .live-dot {
+        width: 5px;
+        height: 5px;
+    }
+
+    .notice-board-header .title-group h3 {
+        font-size: 13px;
+    }
+
+    .notice-count-badge {
+        font-size: 9px;
+        padding: 2px 8px;
+    }
+
+    /* Modal Mobile */
+    .modal-header .modal-title-group h2 {
+        font-size: 15px;
+    }
+
+    .modal-body .modal-description {
+        font-size: 12px;
+        line-height: 1.7;
+    }
+
+    .modal-nav-btn {
+        font-size: 9px;
+        padding: 4px 8px;
+    }
+}
+
+/* =========================================================
+   DARK MODE SUPPORT (Optional)
+   ========================================================= */
+
+@media (prefers-color-scheme: dark) {
+    .notice-board-wrapper {
+        background: linear-gradient(135deg, #061d36, #0b3156);
+    }
+}
+
+/* =========================================================
+   PRINT STYLES
+   ========================================================= */
+
+@media print {
+    .notice-board-wrapper {
+        max-height: none !important;
+        overflow: visible !important;
+        background: #fff !important;
+        color: #000 !important;
+        border: 1px solid #ddd !important;
+        padding: 20px !important;
+    }
+
+    .notice-board-wrapper .live-badge,
+    .notice-board-wrapper .live-dot {
+        display: none !important;
+    }
+
+    .notice-card {
+        background: #f8f8f8 !important;
+        border: 1px solid #ddd !important;
+        color: #000 !important;
+    }
+
+    .notice-card-title {
+        color: #000 !important;
+    }
+
+    .notice-card-date .notice-day {
+        color: #000 !important;
+    }
+
+    .notice-read-more {
+        display: none !important;
+    }
+
+    .notice-detail-modal {
+        display: none !important;
+    }
+
+    .notice-scroll-wrapper {
+        max-height: none !important;
+        overflow: visible !important;
+    }
+
+    .notice-card-body {
+        overflow: visible !important;
+    }
+
+    .notice-card-title,
+    .notice-card-preview {
+        -webkit-line-clamp: unset !important;
+        display: block !important;
+        overflow: visible !important;
+    }
+}
