@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result Overview - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --light-grey: #e5e7eb;
+    --dark: #1f2937;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --border-light: rgba(0,0,0,0.05);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 8px 30px rgba(10,22,85,0.08);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: #fff; margin: 0; color: var(--dark); }
+
+/* ============ HEADER ============ */
+.pub-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.pub-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.pub-header .brand { display: flex; align-items: center; gap: 12px; }
+.pub-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.pub-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.pub-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+
+/* ============ HERO ============ */
+.hero {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 50px 20px 80px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(242,210,123,0.12), transparent 70%);
+    border-radius: 50%;
+    animation: floatGlow 12s ease-in-out infinite;
+}
+@keyframes floatGlow {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(20px, -20px) scale(1.1); }
+}
+.hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 42px);
+    font-weight: 700;
+    margin: 0 0 10px;
+    position: relative;
+    z-index: 1;
+    letter-spacing: -0.5px;
+}
+.hero h1 .highlight { color: var(--gold); }
+.hero p {
+    font-size: 14px;
+    margin: 0;
+    opacity: 0.85;
+    position: relative;
+    z-index: 1;
+}
+
+/* ============ MAIN ============ */
+.main-wrap {
+    max-width: 1100px;
+    margin: -50px auto 0;
+    padding: 0 20px 60px;
+    position: relative;
+    z-index: 2;
+}
+
+/* ============ SECTION ============ */
+.section {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: 0 20px 60px rgba(10,22,85,0.10);
+    padding: 32px 30px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+}
+.section::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+
+.section-head {
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+.section-head .sh-icon {
+    width: 52px; height: 52px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba(10,22,85,0.2);
+}
+.section-head .sh-icon.gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+}
+.section-head .sh-icon.purple {
+    background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+    color: #fff;
+}
+.section-head .sh-icon.teal {
+    background: linear-gradient(135deg, #14b8a6, #0d9488);
+    color: #fff;
+}
+.section-head .sh-icon.rose {
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    color: #fff;
+}
+.section-head h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+}
+.section-head small {
+    display: block;
+    color: var(--grey);
+    font-size: 12px;
+    margin-top: 3px;
+    font-weight: 500;
+}
+
+/* ============ EXAM TABS ============ */
+.exam-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 32px;
+    padding: 6px;
+    background: var(--off-white);
+    border-radius: 14px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+.exam-tabs::-webkit-scrollbar { display: none; }
+.exam-tab {
+    flex: 1;
+    min-width: 110px;
+    padding: 12px 18px;
+    border: none;
+    background: transparent;
+    color: var(--grey);
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.exam-tab:hover { color: var(--navy); }
+.exam-tab.active {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(10,22,85,0.25);
+    transform: translateY(-1px);
+}
+.exam-tab i { font-size: 13px; }
+.exam-tab.active i { color: var(--gold); }
+
+/* ============ MAIN STATS ROW ============ */
+.main-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    padding: 20px 0 40px;
+    border-bottom: 1px solid var(--border-light);
+}
+@media (max-width: 640px) {
+    .main-stats { grid-template-columns: 1fr; gap: 24px; }
+}
+
+.main-pie-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 260px;
+    margin: 0 auto;
+}
+.main-pie-wrap canvas { max-width: 100%; }
+
+.stat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.stat-row {
+    display: grid;
+    grid-template-columns: 100px 1fr 60px;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 4px;
+    border-bottom: 1px dashed var(--light-grey);
+    transition: 0.2s;
+}
+.stat-row:last-child { border-bottom: none; }
+.stat-row:hover { padding-left: 8px; }
+.stat-row .stat-label {
+    font-size: 13px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+.stat-row .stat-bar {
+    height: 10px;
+    background: var(--off-white);
+    border-radius: 6px;
+    overflow: hidden;
+}
+.stat-row .stat-bar-fill {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 0;
+}
+.stat-row .stat-bar-fill.total { background: linear-gradient(90deg, var(--navy), var(--navy-3)); }
+.stat-row .stat-bar-fill.pass { background: linear-gradient(90deg, #10b981, #059669); }
+.stat-row .stat-bar-fill.fail { background: linear-gradient(90deg, #ef4444, #dc2626); }
+.stat-row .stat-bar-fill.absent { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.stat-row .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: right;
+    color: var(--navy);
+}
+.stat-row.pass .stat-value { color: #059669; }
+.stat-row.fail .stat-value { color: #dc2626; }
+.stat-row.absent .stat-value { color: #d97706; }
+
+/* ============ GROUP CHARTS ROW ============ */
+.group-row-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 32px 0 20px;
+    text-align: center;
+    position: relative;
+}
+.group-row-title::before,
+.group-row-title::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 1px;
+    background: var(--light-grey);
+}
+.group-row-title::before { left: calc(50% - 80px); }
+.group-row-title::after { right: calc(50% - 80px); }
+
+.group-charts-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 10px 0 20px;
+}
+@media (max-width: 768px) {
+    .group-charts-row { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+}
+@media (max-width: 420px) {
+    .group-charts-row { grid-template-columns: 1fr; }
+}
+
+/* Scrollable row for Honours (11 items) */
+.group-charts-scroll {
+    display: flex;
+    gap: 20px;
+    padding: 10px 4px 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(10,22,85,0.2) transparent;
+}
+.group-charts-scroll::-webkit-scrollbar { height: 6px; }
+.group-charts-scroll::-webkit-scrollbar-track { background: transparent; }
+.group-charts-scroll::-webkit-scrollbar-thumb {
+    background: rgba(10,22,85,0.15);
+    border-radius: 3px;
+}
+.group-charts-scroll .group-pie-item {
+    flex: 0 0 160px;
+    scroll-snap-align: start;
+}
+
+.group-pie-item {
+    text-align: center;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: default;
+}
+.group-pie-item:hover { transform: translateY(-4px); }
+
+.group-pie-item .gp-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 36px;
+    line-height: 1.15;
+}
+.group-pie-item .gp-title i { font-size: 13px; }
+.group-pie-item .gp-title i.science    { color: #1e40af; }
+.group-pie-item .gp-title i.humanities { color: #92400e; }
+.group-pie-item .gp-title i.business   { color: #166534; }
+.group-pie-item .gp-title i.bm         { color: #6b21a8; }
+.group-pie-item .gp-title i.purple     { color: #7c3aed; }
+.group-pie-item .gp-title i.teal       { color: #0d9488; }
+.group-pie-item .gp-title i.rose       { color: #e11d48; }
+
+.group-pie-item .gp-pie {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    max-width: 160px;
+    margin: 0 auto;
+}
+.group-pie-item .gp-pie canvas { max-width: 100%; }
+
+.group-pie-item .gp-sub {
+    font-size: 11px;
+    color: var(--grey);
+    margin-top: 8px;
+    font-weight: 600;
+}
+
+.group-pie-item.empty .gp-pie {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.4;
+}
+.group-pie-item.empty .gp-pie i { font-size: 42px; color: var(--grey); }
+
+/* ============ YEAR SELECTOR ============ */
+.year-selector {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 32px;
+    padding: 16px;
+    background: var(--off-white);
+    border-radius: 14px;
+    flex-wrap: wrap;
+}
+.year-selector label {
+    font-size: 12px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.year-selector select {
+    padding: 10px 20px;
+    border-radius: 10px;
+    border: 2px solid var(--light-grey);
+    background: #fff;
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 700;
+    color: var(--navy);
+    outline: none;
+    cursor: pointer;
+    transition: 0.25s;
+    min-width: 140px;
+}
+.year-selector select:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+}
+
+/* ============ BAR COMPARISON ============ */
+.bar-compare-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin: 40px 0 24px;
+    text-align: center;
+    position: relative;
+}
+.bar-compare-title::before,
+.bar-compare-title::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 1px;
+    background: var(--light-grey);
+}
+.bar-compare-title::before { left: calc(50% - 90px); }
+.bar-compare-title::after { right: calc(50% - 90px); }
+
+.bar-compare {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 10px 0 20px;
+}
+.bar-compare-item {
+    display: grid;
+    grid-template-columns: 140px 1fr 70px;
+    gap: 16px;
+    align-items: center;
+}
+@media (max-width: 480px) {
+    .bar-compare-item { grid-template-columns: 100px 1fr 55px; gap: 10px; }
+}
+.bar-compare-item .bc-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.bar-compare-item .bc-label i { font-size: 13px; }
+.bar-compare-item .bc-bar {
+    height: 26px;
+    background: var(--off-white);
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+}
+.bar-compare-item .bc-bar-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 0;
+    background: linear-gradient(90deg, var(--navy), var(--navy-3));
+    box-shadow: 0 2px 8px rgba(10,22,85,0.15);
+}
+.bar-compare-item .bc-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    text-align: right;
+}
+.bar-compare-item .bc-value small {
+    display: block;
+    font-size: 10px;
+    color: var(--grey);
+    font-weight: 600;
+    font-family: 'Hind Siliguri', sans-serif;
+    margin-top: -2px;
+}
+
+/* ============ TABLE ============ */
+.table-clean {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 40px;
+    font-size: 13px;
+}
+.table-clean thead th {
+    text-align: left;
+    padding: 12px 10px;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    border-bottom: 2px solid var(--light-grey);
+}
+.table-clean thead th:not(:first-child) { text-align: center; }
+.table-clean tbody td {
+    padding: 14px 10px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 14px;
+}
+.table-clean tbody td:first-child {
+    font-weight: 700;
+    color: var(--navy);
+}
+.table-clean tbody td:not(:first-child) {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 15px;
+}
+.table-clean tbody td.pass-col { color: #059669; }
+.table-clean tbody td.fail-col { color: #dc2626; }
+.table-clean tbody td.absent-col { color: #d97706; }
+.table-clean tbody tr:last-child td { border-bottom: none; }
+
+/* ============ LOADING ============ */
+.loading-wrap {
+    padding: 80px 20px;
+    text-align: center;
+}
+.spinner-fdc {
+    width: 50px; height: 50px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 18px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-wrap p { color: var(--grey); font-size: 13px; margin: 0; }
+
+/* ============ EMPTY ============ */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+.empty-state .es-icon {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--off-white);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    color: var(--grey);
+    margin-bottom: 16px;
+    opacity: 0.7;
+}
+.empty-state h6 {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 16px;
+    margin: 0 0 6px;
+}
+.empty-state p { color: var(--grey); font-size: 13px; margin: 0; }
+
+/* ============ REVEAL ============ */
+.reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-on-scroll.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ============ FOOTER ============ */
+.pub-footer {
+    text-align: center;
+    padding: 40px 20px 30px;
+    color: var(--grey);
+    font-size: 12px;
+}
+.pub-footer i { color: var(--gold-2); }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+    .main-wrap { padding: 0 14px 40px; margin-top: -40px; }
+    .section { padding: 24px 20px; border-radius: 18px; }
+    .section-head h2 { font-size: 18px; }
+    .section-head .sh-icon { width: 46px; height: 46px; font-size: 19px; }
+    .exam-tab { min-width: 95px; padding: 10px 14px; font-size: 12px; }
+    .exam-tab i { display: none; }
+    .stat-row { grid-template-columns: 80px 1fr 50px; gap: 10px; }
+    .stat-row .stat-label { font-size: 11.5px; }
+    .stat-row .stat-value { font-size: 18px; }
+    .bar-compare-item { grid-template-columns: 100px 1fr 55px; gap: 10px; }
+    .bar-compare-item .bc-value { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+    .btn-header span { display: none; }
+    .hero { padding: 40px 16px 70px; }
+    .exam-tabs { padding: 4px; gap: 4px; }
+    .exam-tab { min-width: 80px; padding: 10px 10px; font-size: 11.5px; }
+    .section { padding: 20px 16px; }
+    .section-head h2 { font-size: 16px; }
+    .main-pie-wrap { max-width: 220px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="pub-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-chart-pie"></i></div>
+        <div>
+            <h4>Result Overview</h4>
+            <small>Fulbariya College</small>
+        </div>
+    </div>
+    <div>
+        <a href="../index.html" class="btn-header">
+            <i class="fas fa-home"></i> <span>Home</span>
+        </a>
+    </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+    <h1>Result <span class="highlight">Overview</span></h1>
+    <p>HSC, Degree ও Honours — সকল পরীক্ষার ফলাফলের সামগ্রিক চিত্র</p>
+</section>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- ============================================================ -->
+    <!-- SECTION 1: HSC Internal -->
+    <!-- ============================================================ -->
+    <div class="section reveal-on-scroll">
+        <div class="section-head">
+            <div class="sh-icon"><i class="fas fa-clipboard-check"></i></div>
+            <div>
+                <h2>HSC অভ্যন্তরীণ পরীক্ষা</h2>
+                <small>Internal Exams — প্রতিটি পরীক্ষার সর্বশেষ ফলাফল</small>
+            </div>
+        </div>
+
+        <div class="exam-tabs" id="internalExamTabs">
+            <button class="exam-tab" data-exam="1st Terminal"><i class="fas fa-file-alt"></i> ১ম সাময়িক</button>
+            <button class="exam-tab" data-exam="2nd Terminal"><i class="fas fa-file-alt"></i> ২য় সাময়িক</button>
+            <button class="exam-tab" data-exam="Test"><i class="fas fa-file-alt"></i> টেস্ট</button>
+            <button class="exam-tab" data-exam="Final"><i class="fas fa-file-alt"></i> ফাইনাল</button>
+        </div>
+
+        <div id="internalLoading" class="loading-wrap">
+            <div class="spinner-fdc"></div>
+            <p>লোড হচ্ছে...</p>
+        </div>
+
+        <div id="internalContent" style="display:none;">
+            <div class="main-stats">
+                <div class="main-pie-wrap">
+                    <canvas id="internalOverallChart"></canvas>
+                </div>
+                <div class="stat-list" id="internalStatList"></div>
+            </div>
+
+            <h6 class="group-row-title">শাখা অনুযায়ী ফলাফল</h6>
+            <div class="group-charts-row" id="internalGroupCharts"></div>
+
+            <table class="table-clean">
+                <thead>
+                    <tr>
+                        <th>শাখা</th>
+                        <th>মোট</th>
+                        <th>পাস</th>
+                        <th>ফেল</th>
+                        <th>অনুপস্থিত</th>
+                        <th>পাসের হার</th>
+                    </tr>
+                </thead>
+                <tbody id="internalTableBody"></tbody>
+            </table>
+        </div>
+
+        <div id="internalEmpty" class="empty-state" style="display:none;">
+            <div class="es-icon"><i class="fas fa-inbox"></i></div>
+            <h6>এই পরীক্ষার ফলাফল এখনো প্রকাশ হয়নি</h6>
+            <p>অন্য পরীক্ষা সিলেক্ট করুন</p>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 2: HSC Board Final -->
+    <!-- ============================================================ -->
+    <div class="section reveal-on-scroll">
+        <div class="section-head">
+            <div class="sh-icon gold"><i class="fas fa-graduation-cap"></i></div>
+            <div>
+                <h2>HSC বোর্ড ফাইনাল পরীক্ষা</h2>
+                <small>Board Final — বছর অনুযায়ী শাখাভিত্তিক ফলাফল</small>
+            </div>
+        </div>
+
+        <div class="year-selector">
+            <label for="hscBoardYear"><i class="fas fa-calendar"></i> বছর</label>
+            <select id="hscBoardYear"><option value="">লোড হচ্ছে...</option></select>
+        </div>
+
+        <div id="hscBoardLoading" class="loading-wrap" style="display:none;">
+            <div class="spinner-fdc"></div>
+            <p>লোড হচ্ছে...</p>
+        </div>
+
+        <div id="hscBoardContent" style="display:none;">
+            <h6 class="group-row-title">শাখা অনুযায়ী ফলাফল</h6>
+            <div class="group-charts-row" id="hscBoardGroupCharts"></div>
+
+            <h6 class="bar-compare-title">শাখাভিত্তিক তুলনা</h6>
+            <div class="bar-compare" id="hscBoardBarCompare"></div>
+
+            <table class="table-clean">
+                <thead>
+                    <tr>
+                        <th>শাখা</th>
+                        <th>মোট</th>
+                        <th>পাস</th>
+                        <th>ফেল</th>
+                        <th>অনুপস্থিত</th>
+                        <th>পাসের হার</th>
+                    </tr>
+                </thead>
+                <tbody id="hscBoardTableBody"></tbody>
+            </table>
+        </div>
+
+        <div id="hscBoardEmpty" class="empty-state" style="display:none;">
+            <div class="es-icon"><i class="fas fa-search"></i></div>
+            <h6>এই বছরের কোনো ফলাফল পাওয়া যায়নি</h6>
+            <p>অন্য বছর সিলেক্ট করুন</p>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 3: Degree Board Final -->
+    <!-- ============================================================ -->
+    <div class="section reveal-on-scroll">
+        <div class="section-head">
+            <div class="sh-icon purple"><i class="fas fa-user-graduate"></i></div>
+            <div>
+                <h2>ডিগ্রি (পাস কোর্স) বোর্ড ফাইনাল</h2>
+                <small>Degree Final — বছর অনুযায়ী কোর্সভিত্তিক ফলাফল</small>
+            </div>
+        </div>
+
+        <div class="year-selector">
+            <label for="degreeBoardYear"><i class="fas fa-calendar"></i> বছর</label>
+            <select id="degreeBoardYear"><option value="">লোড হচ্ছে...</option></select>
+        </div>
+
+        <div id="degreeBoardLoading" class="loading-wrap" style="display:none;">
+            <div class="spinner-fdc"></div>
+            <p>লোড হচ্ছে...</p>
+        </div>
+
+        <div id="degreeBoardContent" style="display:none;">
+            <h6 class="group-row-title">কোর্স অনুযায়ী ফলাফল</h6>
+            <div class="group-charts-row" id="degreeBoardGroupCharts"></div>
+
+            <h6 class="bar-compare-title">কোর্সভিত্তিক তুলনা</h6>
+            <div class="bar-compare" id="degreeBoardBarCompare"></div>
+
+            <table class="table-clean">
+                <thead>
+                    <tr>
+                        <th>কোর্স</th>
+                        <th>মোট</th>
+                        <th>পাস</th>
+                        <th>ফেল</th>
+                        <th>অনুপস্থিত</th>
+                        <th>পাসের হার</th>
+                    </tr>
+                </thead>
+                <tbody id="degreeBoardTableBody"></tbody>
+            </table>
+        </div>
+
+        <div id="degreeBoardEmpty" class="empty-state" style="display:none;">
+            <div class="es-icon"><i class="fas fa-search"></i></div>
+            <h6>এই বছরের কোনো ফলাফল পাওয়া যায়নি</h6>
+            <p>অন্য বছর সিলেক্ট করুন</p>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 4: Honours Board Final -->
+    <!-- ============================================================ -->
+    <div class="section reveal-on-scroll">
+        <div class="section-head">
+            <div class="sh-icon teal"><i class="fas fa-award"></i></div>
+            <div>
+                <h2>অনার্স (স্নাতক সম্মান) বোর্ড ফাইনাল</h2>
+                <small>Honours Final — বছর অনুযায়ী বিভাগভিত্তিক ফলাফল</small>
+            </div>
+        </div>
+
+        <div class="year-selector">
+            <label for="honoursBoardYear"><i class="fas fa-calendar"></i> বছর</label>
+            <select id="honoursBoardYear"><option value="">লোড হচ্ছে...</option></select>
+        </div>
+
+        <div id="honoursBoardLoading" class="loading-wrap" style="display:none;">
+            <div class="spinner-fdc"></div>
+            <p>লোড হচ্ছে...</p>
+        </div>
+
+        <div id="honoursBoardContent" style="display:none;">
+            <h6 class="group-row-title">বিভাগ অনুযায়ী ফলাফল (স্লাইড করুন →)</h6>
+            <div class="group-charts-scroll" id="honoursBoardGroupCharts"></div>
+
+            <h6 class="bar-compare-title">বিভাগভিত্তিক তুলনা</h6>
+            <div class="bar-compare" id="honoursBoardBarCompare"></div>
+
+            <table class="table-clean">
+                <thead>
+                    <tr>
+                        <th>বিভাগ</th>
+                        <th>মোট</th>
+                        <th>পাস</th>
+                        <th>ফেল</th>
+                        <th>অনুপস্থিত</th>
+                        <th>পাসের হার</th>
+                    </tr>
+                </thead>
+                <tbody id="honoursBoardTableBody"></tbody>
+            </table>
+        </div>
+
+        <div id="honoursBoardEmpty" class="empty-state" style="display:none;">
+            <div class="es-icon"><i class="fas fa-search"></i></div>
+            <h6>এই বছরের কোনো ফলাফল পাওয়া যায়নি</h6>
+            <p>অন্য বছর সিলেক্ট করুন</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="pub-footer">
+    <p><i class="fas fa-graduation-cap"></i> Fulbariya College · Result Overview</p>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/result-overview.js"></script>
+
+</body>
+</html>
