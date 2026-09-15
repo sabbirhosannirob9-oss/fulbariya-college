@@ -47,119 +47,58 @@ a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
 
 /* =========================================================
-   FACEBOOK-STYLE SKELETON LOADING SYSTEM
+   FACEBOOK-STYLE SKELETON LOADING
 ========================================================= */
 @keyframes fdcShimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
 }
 
-/* Base shimmer — moving light gradient */
 .sk-shimmer {
-    background: linear-gradient(
-        90deg,
-        #eef1f6 0%,
-        #e2e6ee 20%,
-        #f5f7fa 40%,
-        #e2e6ee 60%,
-        #eef1f6 80%,
-        #eef1f6 100%
-    );
+    background: linear-gradient(90deg, #eef1f6 0%, #e2e6ee 20%, #f5f7fa 40%, #e2e6ee 60%, #eef1f6 80%, #eef1f6 100%);
     background-size: 200% 100%;
     animation: fdcShimmer 1.8s ease-in-out infinite;
     border-radius: 8px;
 }
-
-/* Shimmer for dark backgrounds (navy hero, counter) */
 .sk-shimmer-dark {
-    background: linear-gradient(
-        90deg,
-        rgba(255,255,255,0.06) 0%,
-        rgba(255,255,255,0.14) 20%,
-        rgba(255,255,255,0.22) 40%,
-        rgba(255,255,255,0.14) 60%,
-        rgba(255,255,255,0.06) 80%,
-        rgba(255,255,255,0.06) 100%
-    );
+    background: linear-gradient(90deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.14) 20%, rgba(255,255,255,0.22) 40%, rgba(255,255,255,0.14) 60%, rgba(255,255,255,0.06) 80%, rgba(255,255,255,0.06) 100%);
     background-size: 200% 100%;
     animation: fdcShimmer 1.8s ease-in-out infinite;
     border-radius: 8px;
 }
-
-/* Gold shimmer for CTA buttons / accents */
 .sk-shimmer-gold {
-    background: linear-gradient(
-        90deg,
-        rgba(242,210,123,0.15) 0%,
-        rgba(242,210,123,0.35) 40%,
-        rgba(242,210,123,0.15) 80%
-    );
+    background: linear-gradient(90deg, rgba(242,210,123,0.15) 0%, rgba(242,210,123,0.35) 40%, rgba(242,210,123,0.15) 80%);
     background-size: 200% 100%;
     animation: fdcShimmer 1.8s ease-in-out infinite;
     border-radius: 8px;
 }
 
-/* Skeleton text line */
-.sk-line {
-    height: 14px;
-    border-radius: 7px;
-    margin-bottom: 10px;
-    width: 100%;
-}
+.sk-line { height: 14px; border-radius: 7px; margin-bottom: 10px; width: 100%; }
 .sk-line.sm { height: 11px; border-radius: 5px; margin-bottom: 8px; }
 .sk-line.lg { height: 20px; border-radius: 10px; margin-bottom: 12px; }
 .sk-line.xl { height: 28px; border-radius: 12px; margin-bottom: 14px; }
-.sk-line.w-30 { width: 30%; }
-.sk-line.w-40 { width: 40%; }
-.sk-line.w-50 { width: 50%; }
-.sk-line.w-60 { width: 60%; }
-.sk-line.w-70 { width: 70%; }
-.sk-line.w-80 { width: 80%; }
-.sk-line.w-90 { width: 90%; }
 
-/* Skeleton circle */
-.sk-circle {
-    border-radius: 50%;
-}
-
-/* Skeleton fade transition — when real data replaces skeleton */
-.sk-fade-in {
-    animation: skFadeIn 0.5s ease;
-}
+.sk-fade-in { animation: skFadeIn 0.5s ease; }
 @keyframes skFadeIn {
     from { opacity: 0; transform: translateY(8px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* ===== Quick Card Skeleton ===== */
+/* Quick Card Skeleton */
 .sk-quick-card {
     background: linear-gradient(135deg, var(--navy), var(--navy-2)) !important;
     border: 1px solid rgba(255,255,255,0.05) !important;
     pointer-events: none;
 }
-.sk-quick-card .sk-quick-icon {
-    width: 60px;
-    height: 60px;
-    border-radius: 16px;
-    margin-bottom: 18px;
-}
-.sk-quick-card .sk-quick-line {
-    height: 16px;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
+.sk-quick-card .sk-quick-icon { width: 60px; height: 60px; border-radius: 16px; margin-bottom: 18px; }
+.sk-quick-card .sk-quick-line { height: 16px; border-radius: 8px; margin-bottom: 10px; }
 .sk-quick-card .sk-quick-line.title { width: 55%; height: 20px; margin-bottom: 14px; }
 .sk-quick-card .sk-quick-line.desc { width: 90%; height: 12px; }
 .sk-quick-card .sk-quick-line.desc2 { width: 65%; height: 12px; margin-bottom: 18px; }
 .sk-quick-card .sk-quick-line.link { width: 38%; height: 12px; }
 
-/* ===== Principal Skeleton ===== */
-.sk-principal-img {
-    width: 100%;
-    aspect-ratio: 4/5;
-    border-radius: 24px;
-    box-shadow: var(--shadow-lg);
-}
+/* Principal Skeleton */
+.sk-principal-img { width: 100%; aspect-ratio: 4/5; border-radius: 24px; box-shadow: var(--shadow-lg); }
 .sk-principal-content .sk-line.designation { width: 30%; height: 15px; margin-bottom: 22px; }
 .sk-principal-content .sk-quote {
     padding: 20px 0 20px 24px;
@@ -182,7 +121,7 @@ img { max-width: 100%; display: block; }
     animation: none;
 }
 
-/* ===== Dept Head Skeleton ===== */
+/* Dept Card Skeleton */
 .sk-dept-card {
     flex: 0 0 260px;
     background: #fff;
@@ -192,19 +131,14 @@ img { max-width: 100%; display: block; }
     border: 1px solid var(--border);
     pointer-events: none;
 }
-.sk-dept-card .sk-dept-img {
-    width: 100%;
-    height: 280px;
-}
-.sk-dept-card .sk-dept-info {
-    padding: 18px 16px 22px;
-}
+.sk-dept-card .sk-dept-img { width: 100%; height: 280px; }
+.sk-dept-card .sk-dept-info { padding: 18px 16px 22px; }
 .sk-dept-card .sk-dept-info .sk-line { margin-bottom: 8px; }
 .sk-dept-card .sk-dept-info .sk-line.name { width: 75%; height: 18px; }
 .sk-dept-card .sk-dept-info .sk-line.role { width: 55%; height: 12px; }
 .sk-dept-card .sk-dept-info .sk-line.dept { width: 65%; height: 12px; margin-bottom: 0; }
 
-/* ===== Welcome Skeleton ===== */
+/* Welcome Skeleton */
 .sk-welcome-wrap {
     max-width: 900px;
     margin: 0 auto;
@@ -223,27 +157,13 @@ img { max-width: 100%; display: block; }
     height: 5px;
     background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
 }
-.sk-welcome-wrap .sk-line.title {
-    width: 40%;
-    height: 30px;
-    margin: 0 auto 26px;
-    border-radius: 10px;
-}
-.sk-welcome-wrap .sk-line.text {
-    width: 100%;
-    height: 14px;
-    margin: 0 auto 12px;
-}
+.sk-welcome-wrap .sk-line.title { width: 40%; height: 30px; margin: 0 auto 26px; border-radius: 10px; }
+.sk-welcome-wrap .sk-line.text { width: 100%; height: 14px; margin: 0 auto 12px; }
 .sk-welcome-wrap .sk-line.text.w2 { width: 92%; }
 .sk-welcome-wrap .sk-line.text.w3 { width: 75%; margin-bottom: 30px; }
-.sk-welcome-wrap .sk-btn {
-    display: inline-block;
-    width: 170px;
-    height: 44px;
-    border-radius: 50px;
-}
+.sk-welcome-wrap .sk-btn { display: inline-block; width: 170px; height: 44px; border-radius: 50px; }
 
-/* ===== Counter Skeleton ===== */
+/* Counter Skeleton */
 .sk-counter-glass {
     background: rgba(255, 255, 255, 0.06);
     backdrop-filter: blur(12px);
@@ -267,30 +187,12 @@ img { max-width: 100%; display: block; }
     background: var(--gold);
     border-radius: 20px 0 0 20px;
 }
-.sk-counter-glass .sk-counter-icon {
-    width: 78px;
-    height: 78px;
-    border-radius: 20px;
-    flex-shrink: 0;
-}
-.sk-counter-glass .sk-counter-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.sk-counter-glass .sk-line.clabel {
-    height: 16px;
-    width: 40%;
-    border-radius: 8px;
-}
-.sk-counter-glass .sk-line.cvalue {
-    height: 56px;
-    width: 60%;
-    border-radius: 12px;
-}
+.sk-counter-glass .sk-counter-icon { width: 78px; height: 78px; border-radius: 20px; flex-shrink: 0; }
+.sk-counter-glass .sk-counter-info { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.sk-counter-glass .sk-line.clabel { height: 16px; width: 40%; border-radius: 8px; }
+.sk-counter-glass .sk-line.cvalue { height: 56px; width: 60%; border-radius: 12px; }
 
-/* ===== Notice Board Skeleton ===== */
+/* Notice Board Skeleton */
 .sk-notice-item {
     padding: 18px 26px;
     border-bottom: 1px solid var(--border);
@@ -300,18 +202,13 @@ img { max-width: 100%; display: block; }
     pointer-events: none;
 }
 .sk-notice-item:last-child { border-bottom: none; }
-.sk-notice-item .sk-date {
-    flex-shrink: 0;
-    width: 60px;
-    height: 60px;
-    border-radius: 10px;
-}
+.sk-notice-item .sk-date { flex-shrink: 0; width: 60px; height: 60px; border-radius: 10px; }
 .sk-notice-item .sk-body { flex: 1; min-width: 0; }
 .sk-notice-item .sk-body .sk-line.title { width: 80%; height: 16px; margin-bottom: 10px; }
 .sk-notice-item .sk-body .sk-line.desc { width: 95%; height: 12px; margin-bottom: 6px; }
 .sk-notice-item .sk-body .sk-line.desc2 { width: 60%; height: 12px; margin-bottom: 0; }
 
-/* ===== News Skeleton ===== */
+/* News Skeleton */
 .sk-news-card {
     background: #fff;
     border-radius: 20px;
@@ -320,13 +217,8 @@ img { max-width: 100%; display: block; }
     border: 1px solid var(--border);
     pointer-events: none;
 }
-.sk-news-card .sk-news-img {
-    width: 100%;
-    height: 200px;
-}
-.sk-news-card .sk-news-body {
-    padding: 20px 22px 24px;
-}
+.sk-news-card .sk-news-img { width: 100%; height: 200px; }
+.sk-news-card .sk-news-body { padding: 20px 22px 24px; }
 .sk-news-card .sk-news-body .sk-line.cat { width: 30%; height: 20px; margin-bottom: 14px; border-radius: 20px; }
 .sk-news-card .sk-news-body .sk-line.title { width: 90%; height: 18px; margin-bottom: 10px; }
 .sk-news-card .sk-news-body .sk-line.title2 { width: 65%; height: 18px; margin-bottom: 16px; }
@@ -340,7 +232,7 @@ img { max-width: 100%; display: block; }
     margin-bottom: 0;
 }
 
-/* ===== Gallery Skeleton ===== */
+/* Gallery Skeleton */
 .sk-gallery-card {
     position: relative;
     border-radius: 18px;
@@ -380,7 +272,7 @@ img { max-width: 100%; display: block; }
     margin-bottom: 0;
 }
 
-/* Staggered animation delays for skeletons */
+/* Staggered skeleton delays */
 .sk-quick-card:nth-child(1) .sk-shimmer-dark, .sk-quick-card:nth-child(1) .sk-shimmer-gold { animation-delay: 0s; }
 .sk-quick-card:nth-child(2) .sk-shimmer-dark, .sk-quick-card:nth-child(2) .sk-shimmer-gold { animation-delay: 0.08s; }
 .sk-quick-card:nth-child(3) .sk-shimmer-dark, .sk-quick-card:nth-child(3) .sk-shimmer-gold { animation-delay: 0.16s; }
@@ -389,21 +281,6 @@ img { max-width: 100%; display: block; }
 .sk-quick-card:nth-child(6) .sk-shimmer-dark, .sk-quick-card:nth-child(6) .sk-shimmer-gold { animation-delay: 0.40s; }
 .sk-quick-card:nth-child(7) .sk-shimmer-dark, .sk-quick-card:nth-child(7) .sk-shimmer-gold { animation-delay: 0.48s; }
 .sk-quick-card:nth-child(8) .sk-shimmer-dark, .sk-quick-card:nth-child(8) .sk-shimmer-gold { animation-delay: 0.56s; }
-
-.sk-news-card:nth-child(1) .sk-shimmer { animation-delay: 0s; }
-.sk-news-card:nth-child(2) .sk-shimmer { animation-delay: 0.15s; }
-.sk-news-card:nth-child(3) .sk-shimmer { animation-delay: 0.30s; }
-
-.sk-notice-item:nth-child(1) .sk-shimmer { animation-delay: 0s; }
-.sk-notice-item:nth-child(2) .sk-shimmer { animation-delay: 0.1s; }
-.sk-notice-item:nth-child(3) .sk-shimmer { animation-delay: 0.2s; }
-
-.sk-gallery-card:nth-child(1) .sk-shimmer { animation-delay: 0s; }
-.sk-gallery-card:nth-child(2) .sk-shimmer { animation-delay: 0.1s; }
-.sk-gallery-card:nth-child(3) .sk-shimmer { animation-delay: 0.2s; }
-.sk-gallery-card:nth-child(4) .sk-shimmer { animation-delay: 0.3s; }
-.sk-gallery-card:nth-child(5) .sk-shimmer { animation-delay: 0.4s; }
-.sk-gallery-card:nth-child(6) .sk-shimmer { animation-delay: 0.5s; }
 
 /* =========================================================
    SCROLL REVEAL
@@ -468,9 +345,7 @@ img { max-width: 100%; display: block; }
     margin-bottom: 40px;
 }
 
-/* =========================================================
-   TOP BAR
-========================================================= */
+/* TOP BAR */
 .top-bar {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
@@ -505,9 +380,7 @@ img { max-width: 100%; display: block; }
     transform: translateY(-2px);
 }
 
-/* =========================================================
-   HEADER
-========================================================= */
+/* HEADER */
 .main-header {
     background: #fff;
     padding: 10px 0;
@@ -598,9 +471,7 @@ img { max-width: 100%; display: block; }
     flex-shrink: 0;
 }
 
-/* =========================================================
-   HERO SLIDER
-========================================================= */
+/* HERO */
 .hero-slider {
     position: relative;
     width: 100%;
@@ -702,7 +573,7 @@ img { max-width: 100%; display: block; }
     border-color: #fff;
 }
 
-/* Hero Skeleton (initial state) */
+/* Hero skeleton */
 .hero-slider.sk-loading {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     display: flex;
@@ -725,44 +596,14 @@ img { max-width: 100%; display: block; }
     text-align: center;
     padding-bottom: 20px;
 }
-.hero-slider .sk-hero-content .sk-line {
-    margin-left: auto;
-    margin-right: auto;
-}
-.hero-slider .sk-hero-content .sk-line.ht {
-    height: 42px;
-    width: 75%;
-    border-radius: 12px;
-    margin-bottom: 14px;
-}
-.hero-slider .sk-hero-content .sk-line.ht2 {
-    height: 42px;
-    width: 50%;
-    border-radius: 12px;
-    margin-bottom: 24px;
-}
-.hero-slider .sk-hero-content .sk-line.hs {
-    height: 18px;
-    width: 60%;
-    border-radius: 8px;
-    margin-bottom: 10px;
-}
-.hero-slider .sk-hero-content .sk-line.hs2 {
-    height: 18px;
-    width: 40%;
-    border-radius: 8px;
-    margin-bottom: 32px;
-}
-.hero-slider .sk-hero-content .sk-hero-btn {
-    display: inline-block;
-    width: 170px;
-    height: 46px;
-    border-radius: 50px;
-}
+.hero-slider .sk-hero-content .sk-line { margin-left: auto; margin-right: auto; }
+.hero-slider .sk-hero-content .sk-line.ht { height: 42px; width: 75%; border-radius: 12px; margin-bottom: 14px; }
+.hero-slider .sk-hero-content .sk-line.ht2 { height: 42px; width: 50%; border-radius: 12px; margin-bottom: 24px; }
+.hero-slider .sk-hero-content .sk-line.hs { height: 18px; width: 60%; border-radius: 8px; margin-bottom: 10px; }
+.hero-slider .sk-hero-content .sk-line.hs2 { height: 18px; width: 40%; border-radius: 8px; margin-bottom: 32px; }
+.hero-slider .sk-hero-content .sk-hero-btn { display: inline-block; width: 170px; height: 46px; border-radius: 50px; }
 
-/* =========================================================
-   NOTICE TICKER
-========================================================= */
+/* NOTICE TICKER */
 .notice-ticker {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
@@ -835,9 +676,7 @@ img { max-width: 100%; display: block; }
     border-color: var(--gold);
 }
 
-/* =========================================================
-   QUICK CARDS
-========================================================= */
+/* QUICK CARDS */
 .quick-cards-section { padding: 70px 0; background: #fff; }
 .quick-cards-grid {
     display: grid;
@@ -889,17 +728,8 @@ img { max-width: 100%; display: block; }
     color: var(--navy);
     transform: rotate(-8deg) scale(1.08);
 }
-.quick-card h3 {
-    font-size: 19px;
-    margin-bottom: 8px;
-    font-weight: 700;
-}
-.quick-card p {
-    font-size: 13.5px;
-    opacity: 0.85;
-    margin-bottom: 16px;
-    line-height: 1.6;
-}
+.quick-card h3 { font-size: 19px; margin-bottom: 8px; font-weight: 700; }
+.quick-card p { font-size: 13.5px; opacity: 0.85; margin-bottom: 16px; line-height: 1.6; }
 .quick-card .card-link {
     display: inline-flex;
     align-items: center;
@@ -911,9 +741,7 @@ img { max-width: 100%; display: block; }
 }
 .quick-card:hover .card-link { gap: 14px; }
 
-/* =========================================================
-   PRINCIPAL
-========================================================= */
+/* PRINCIPAL */
 .principal-section {
     padding: 80px 0;
     background: var(--off-white);
@@ -1031,9 +859,7 @@ img { max-width: 100%; display: block; }
     transform: translateY(-3px);
 }
 
-/* =========================================================
-   DEPARTMENT HEADS
-========================================================= */
+/* DEPARTMENT HEADS */
 .dept-heads-section {
     padding: 80px 0;
     background: #fff;
@@ -1113,9 +939,7 @@ img { max-width: 100%; display: block; }
     color: var(--grey);
 }
 
-/* =========================================================
-   WELCOME
-========================================================= */
+/* WELCOME */
 .welcome-section {
     padding: 80px 0;
     background: linear-gradient(135deg, #f8f9fc, #eef1f8);
@@ -1155,9 +979,7 @@ img { max-width: 100%; display: block; }
     word-wrap: break-word;
 }
 
-/* =========================================================
-   COUNTER
-========================================================= */
+/* COUNTER */
 .counter-section {
     position: relative;
     padding: 100px 0;
@@ -1277,9 +1099,7 @@ img { max-width: 100%; display: block; }
 }
 .counter-dots { display: none; }
 
-/* =========================================================
-   NOTICE BOARD
-========================================================= */
+/* NOTICE BOARD */
 .notice-board-section { padding: 80px 0; background: #fff; }
 .notice-board-box {
     max-width: 850px;
@@ -1393,9 +1213,7 @@ img { max-width: 100%; display: block; }
     margin-left: 6px;
 }
 
-/* =========================================================
-   NEWS
-========================================================= */
+/* NEWS */
 .news-section { padding: 80px 0; background: var(--off-white); }
 .news-grid {
     display: grid;
@@ -1484,9 +1302,7 @@ img { max-width: 100%; display: block; }
 }
 .news-card .news-body .news-date i { color: var(--gold-dark); }
 
-/* =========================================================
-   GALLERY
-========================================================= */
+/* GALLERY */
 .gallery-section { padding: 80px 0; background: #fff; }
 .gallery-grid-home {
     display: grid;
@@ -1568,9 +1384,7 @@ img { max-width: 100%; display: block; }
     overflow: hidden;
 }
 
-/* =========================================================
-   FOOTER
-========================================================= */
+/* FOOTER */
 .main-footer {
     background: linear-gradient(135deg, #061040, var(--navy));
     color: rgba(255,255,255,0.85);
@@ -1683,7 +1497,6 @@ img { max-width: 100%; display: block; }
 }
 .footer-map-link:hover { gap: 10px; }
 
-/* IMPORTANT LINKS */
 .important-links-section {
     padding: 40px 0 30px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -1760,7 +1573,6 @@ img { max-width: 100%; display: block; }
 }
 .important-links-list li a:hover .ext-icon { color: var(--gold); }
 
-/* FOOTER BOTTOM */
 .footer-bottom {
     padding: 26px 0;
     display: flex;
@@ -1855,7 +1667,6 @@ img { max-width: 100%; display: block; }
     50% { transform: scale(1.2); }
 }
 
-/* SMART MODAL */
 .smart-modal-overlay {
     position: fixed;
     inset: 0;
@@ -1931,7 +1742,6 @@ img { max-width: 100%; display: block; }
     line-height: 1.9;
 }
 
-/* SCROLL TOP */
 .scroll-top {
     position: fixed;
     bottom: 30px; right: 30px;
@@ -1958,9 +1768,7 @@ img { max-width: 100%; display: block; }
     transform: translateY(-4px);
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+/* RESPONSIVE */
 @media (max-width: 1100px) {
     .main-nav a { padding: 6px 8px; font-size: 12px; }
     .main-nav a.nav-login { padding: 6px 10px; font-size: 11px; }
@@ -1997,7 +1805,6 @@ img { max-width: 100%; display: block; }
     .counter-info .counter-value { font-size: 44px; }
     .counter-info .counter-label { font-size: 13px; letter-spacing: 3px; }
 }
-
 @media (max-width: 768px) {
     .main-nav {
         display: none;
@@ -2029,12 +1836,9 @@ img { max-width: 100%; display: block; }
     }
     .nav-toggle { display: block; }
     .main-header .container-custom { position: relative; }
-
     .top-bar-left { font-size: 11px; gap: 12px; }
     .top-bar-left span:nth-child(3) { display: none; }
-
     .section-title { font-size: 24px; }
-
     .quick-cards-section,
     .principal-section,
     .dept-heads-section,
@@ -2047,52 +1851,37 @@ img { max-width: 100%; display: block; }
     }
     .counter-section { padding: 60px 0; min-height: 400px; }
     .counter-slider-wrap { min-height: 190px; }
-    .counter-glass {
-        padding: 26px 24px;
-        gap: 18px;
-        min-height: 180px;
-    }
+    .counter-glass { padding: 26px 24px; gap: 18px; min-height: 180px; }
     .counter-fm-icon { font-size: 48px; }
     .counter-info .counter-value { font-size: 34px; }
     .counter-info .counter-label { font-size: 11px; letter-spacing: 2.5px; }
-
     .welcome-wrap { padding: 30px 20px; border-radius: 18px; }
     .welcome-wrap h2 { font-size: 22px; }
-
     .notice-item { padding: 14px 18px; gap: 12px; }
     .notice-item .notice-date { width: 50px; padding: 6px 4px; }
     .notice-item .notice-date .day { font-size: 18px; }
-
     .footer-grid { grid-template-columns: 1fr; gap: 30px; }
     .footer-map-box { max-width: 100%; aspect-ratio: 16/9; }
-
     .footer-bottom {
         flex-direction: column;
         text-align: center;
         gap: 14px;
     }
-
     .scroll-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
-
     .smart-modal-head { padding: 20px 22px 14px; }
     .smart-modal-head h3 { font-size: 18px; }
     .smart-modal-body { padding: 20px 22px 24px; font-size: 14px; }
-
     .ticker-label { font-size: 11px; padding: 5px 12px; }
     .ticker-controls button { width: 28px; height: 28px; font-size: 10px; }
     .ticker-track { animation-duration: 4s !important; }
-
     .dept-slider { animation-duration: 30s; }
     .news-card .news-img-wrap { height: 180px; }
-
     .important-links-section { padding: 30px 0 25px; }
     .important-links-list { grid-template-columns: 1fr; gap: 0; }
     .important-links-header h4 { font-size: 15px; }
-
     .reveal.reveal-left { transform: translateX(-50px); }
     .reveal.reveal-right { transform: translateX(50px); }
 }
-
 @media (max-width: 480px) {
     .logo-box img { width: 44px; height: 44px; }
     .logo-box .logo-text h1 { font-size: 16px; }
@@ -2147,7 +1936,6 @@ img { max-width: 100%; display: block; }
             <a href="public-pages/admission.html">ভর্তি তথ্য</a>
             <a href="public-pages/notices.html">নোটিশ</a>
             <a href="public-pages/results.html">রেজাল্ট</a>
-            
             <a href="public-pages/academic-hub.html">একাডেমিক হাব</a>
             <a href="public-pages/gallery.html">গ্যালারি</a>
             <a href="public-pages/bncc.html">BNCC</a>
@@ -2197,7 +1985,6 @@ img { max-width: 100%; display: block; }
         <h2 class="section-title reveal reveal-scale">আমাদের সেবাসমূহ</h2>
         <p class="section-subtitle reveal reveal-scale">শিক্ষা, তথ্য ও সুবিধার এক ঠিকানা</p>
         <div class="quick-cards-grid reveal-stagger" id="quickCardsGrid">
-            <!-- Skeleton Cards (8) -->
             <div class="quick-card sk-quick-card">
                 <div class="sk-quick-icon sk-shimmer-gold"></div>
                 <div class="sk-quick-line title sk-shimmer-dark"></div>
@@ -2264,22 +2051,25 @@ img { max-width: 100%; display: block; }
         <div class="principal-grid">
             <div class="principal-image-wrap reveal reveal-left">
                 <div class="sk-principal-img sk-shimmer" id="principalImgSkeleton"></div>
-                <img src="assets/images/principal.jpg" alt="Principal" id="principalImage" style="display:none;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22500%22%3E%3Crect fill=%22%230a1655%22 width=%22400%22 height=%22500%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23f2d27b%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E👤%3C/text%3E%3C/svg%3E'">
+                <img src="assets/images/principal.jpg" alt="Principal" id="principalImage" style="display:none;" onerror="this.style.display='none'">
             </div>
-            <div class="principal-content sk-principal-content">
-                <div class="sk-line xl sk-shimmer" style="width: 65%;"></div>
-                <div class="sk-line designation sk-shimmer"></div>
-                <div class="sk-quote">
-                    <div class="sk-line sk-shimmer" style="width: 100%;"></div>
-                    <div class="sk-line sk-shimmer" style="width: 92%;"></div>
-                    <div class="sk-line sk-shimmer" style="width: 60%; margin-bottom: 0;"></div>
-                </div>
-                <div>
-                    <span class="sk-btn sk-shimmer"></span>
-                    <span class="sk-btn outline"></span>
+            <div class="principal-content">
+                <!-- Skeleton Content -->
+                <div id="principalSkeleton" class="sk-principal-content">
+                    <div class="sk-line xl sk-shimmer" style="width: 65%;"></div>
+                    <div class="sk-line designation sk-shimmer"></div>
+                    <div class="sk-quote">
+                        <div class="sk-line sk-shimmer" style="width: 100%;"></div>
+                        <div class="sk-line sk-shimmer" style="width: 92%;"></div>
+                        <div class="sk-line sk-shimmer" style="width: 60%; margin-bottom: 0;"></div>
+                    </div>
+                    <div>
+                        <span class="sk-btn sk-shimmer"></span>
+                        <span class="sk-btn outline"></span>
+                    </div>
                 </div>
 
-                <!-- Real Content (hidden, JS replace করবে) -->
+                <!-- Real Content -->
                 <div id="principalRealContent" style="display:none;">
                     <h2 id="principalName">অধ্যক্ষ</h2>
                     <p class="designation" id="principalDesignation">অধ্যক্ষ</p>
@@ -2367,7 +2157,6 @@ img { max-width: 100%; display: block; }
 <section class="counter-section" id="counterSection">
     <div class="container-custom">
         <div class="counter-slider-wrap" id="counterSliderWrap">
-            <!-- Counter Skeleton -->
             <div class="sk-counter-glass">
                 <div class="sk-counter-icon sk-shimmer-gold"></div>
                 <div class="sk-counter-info">
@@ -2391,7 +2180,6 @@ img { max-width: 100%; display: block; }
                 </a>
             </div>
             <div class="notice-list" id="noticeBoardList">
-                <!-- Notice Skeletons -->
                 <div class="sk-notice-item">
                     <div class="sk-date sk-shimmer"></div>
                     <div class="sk-body">
@@ -2435,7 +2223,6 @@ img { max-width: 100%; display: block; }
         <h2 class="section-title reveal reveal-scale" id="newsSectionTitle">সর্বশেষ সংবাদ</h2>
         <p class="section-subtitle reveal reveal-scale">কলেজের সাম্প্রতিক খবর ও ইভেন্ট</p>
         <div class="news-grid reveal-stagger" id="newsGrid">
-            <!-- News Skeleton Cards -->
             <div class="sk-news-card">
                 <div class="sk-news-img sk-shimmer"></div>
                 <div class="sk-news-body">
@@ -2484,7 +2271,6 @@ img { max-width: 100%; display: block; }
         <h2 class="section-title reveal reveal-scale">আমাদের গ্যালারি</h2>
         <p class="section-subtitle reveal reveal-scale">কলেজের স্মরণীয় মুহূর্তের ছবি</p>
         <div class="gallery-grid-home reveal-stagger" id="galleryGridHome">
-            <!-- Gallery Skeleton Cards -->
             <div class="sk-gallery-card sk-shimmer">
                 <div class="sk-overlay">
                     <div class="sk-line title"></div>
@@ -2567,7 +2353,6 @@ img { max-width: 100%; display: block; }
                     <li><a href="public-pages/admission.html"><i class="fas fa-chevron-right"></i> ভর্তি তথ্য</a></li>
                     <li><a href="public-pages/notices.html"><i class="fas fa-chevron-right"></i> নোটিশ</a></li>
                     <li><a href="public-pages/results.html"><i class="fas fa-chevron-right"></i> রেজাল্ট</a></li>
-                    <li><a href="public-pages/result-overview.html"><i class="fas fa-chevron-right"></i> রেজাল্ট ওভারভিউ</a></li>
                     <li><a href="public-pages/gallery.html"><i class="fas fa-chevron-right"></i> গ্যালারি</a></li>
                 </ul>
             </div>
@@ -2724,9 +2509,6 @@ img { max-width: 100%; display: block; }
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
-    // =========================================================
-    // SCROLL REVEAL
-    // =========================================================
     function setupScrollReveal() {
         if (!('IntersectionObserver' in window)) {
             document.querySelectorAll('.reveal, .reveal-stagger').forEach(function (el) {
@@ -2764,9 +2546,6 @@ img { max-width: 100%; display: block; }
         });
     }
 
-    // =========================================================
-    // LOAD SETTINGS
-    // =========================================================
     async function loadSiteSettings() {
         try {
             try {
@@ -2806,7 +2585,7 @@ img { max-width: 100%; display: block; }
         const name = getSetting('college_name', 'ফুলবাড়ীয়া কলেজ');
         const email = getSetting('college_email', 'info@fulbariyacollege.edu.bd');
         const phone = getSetting('college_phone', '+880 1XXX-XXXXXX');
-        const address = getSetting('college_address', 'ফুলবাড়ীয়া, ময়নসিংহ');
+        const address = getSetting('college_address', 'ফুলবাড়ীয়া, ময়মনসিংহ');
         const eiin = getSetting('college_eiin', 'XXXXXX');
 
         document.querySelectorAll('[data-college-name]').forEach(function (el) { el.textContent = name; });
@@ -2845,9 +2624,6 @@ img { max-width: 100%; display: block; }
         setLink('footerMap', mp);
     }
 
-    // =========================================================
-    // HERO SLIDER
-    // =========================================================
     function buildHeroSlider() {
         const slider = document.getElementById('heroSlider');
         const count = parseInt(getSetting('hero_slide_count', '1')) || 1;
@@ -2864,7 +2640,6 @@ img { max-width: 100%; display: block; }
             }
         }
 
-        // Remove skeleton class
         slider.classList.remove('sk-loading');
 
         if (HERO_SLIDES.length === 0) {
@@ -2925,9 +2700,6 @@ img { max-width: 100%; display: block; }
         }, 6000);
     }
 
-    // =========================================================
-    // QUICK CARDS
-    // =========================================================
     function buildQuickCards() {
         const grid = document.getElementById('quickCardsGrid');
         const fallback = [
@@ -2967,22 +2739,18 @@ img { max-width: 100%; display: block; }
         observeNewReveals(grid);
     }
 
-    // =========================================================
-    // PRINCIPAL
-    // =========================================================
     function loadPrincipal() {
         const name = getSetting('principal_name', 'অধ্যক্ষ');
         const designation = getSetting('principal_designation', 'অধ্যক্ষ');
         const image = getSetting('principal_image');
         const shortMsg = getSetting('principal_short_message', '');
 
-        // Hide skeleton, show real
-        const skeletonEl = document.querySelector('.sk-principal-content');
-        const imgSkeleton = document.getElementById('principalImgSkeleton');
+        const skeleton = document.getElementById('principalSkeleton');
         const realContent = document.getElementById('principalRealContent');
+        const imgSkeleton = document.getElementById('principalImgSkeleton');
         const realImg = document.getElementById('principalImage');
 
-        if (skeletonEl) skeletonEl.style.display = 'none';
+        if (skeleton) skeleton.style.display = 'none';
         if (imgSkeleton) imgSkeleton.style.display = 'none';
         if (realContent) {
             realContent.style.display = 'block';
@@ -2993,9 +2761,13 @@ img { max-width: 100%; display: block; }
             realImg.classList.add('sk-fade-in');
         }
 
-        document.getElementById('principalName').textContent = name;
-        document.getElementById('principalDesignation').textContent = designation;
-        document.getElementById('principalShortMessage').textContent = shortMsg ? '"' + shortMsg + '"' : '';
+        const nameEl = document.getElementById('principalName');
+        const desEl = document.getElementById('principalDesignation');
+        const msgEl = document.getElementById('principalShortMessage');
+
+        if (nameEl) nameEl.textContent = name;
+        if (desEl) desEl.textContent = designation;
+        if (msgEl) msgEl.textContent = shortMsg ? '"' + shortMsg + '"' : '';
         if (image && realImg) realImg.src = image;
     }
 
@@ -3009,9 +2781,6 @@ img { max-width: 100%; display: block; }
         );
     };
 
-    // =========================================================
-    // DEPARTMENT HEADS
-    // =========================================================
     async function loadDepartmentHeads() {
         const slider = document.getElementById('deptSlider');
         try {
@@ -3052,9 +2821,6 @@ img { max-width: 100%; display: block; }
         }
     }
 
-    // =========================================================
-    // WELCOME
-    // =========================================================
     function loadWelcome() {
         const skeleton = document.getElementById('welcomeSkeleton');
         const realContent = document.getElementById('welcomeRealContent');
@@ -3064,8 +2830,10 @@ img { max-width: 100%; display: block; }
             realContent.classList.add('sk-fade-in');
         }
 
-        document.getElementById('welcomeTitle').textContent = getSetting('welcome_title', 'স্বাগতম');
-        document.getElementById('welcomeShortText').textContent = getSetting('welcome_short_text', 'ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।');
+        const titleEl = document.getElementById('welcomeTitle');
+        const textEl = document.getElementById('welcomeShortText');
+        if (titleEl) titleEl.textContent = getSetting('welcome_title', 'স্বাগতম');
+        if (textEl) textEl.textContent = getSetting('welcome_short_text', 'ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।');
     }
 
     window.openWelcomeModal = function () {
@@ -3079,9 +2847,6 @@ img { max-width: 100%; display: block; }
         openSmartModal(title, body);
     };
 
-    // =========================================================
-    // COUNTER
-    // =========================================================
     function buildCounter() {
         const wrap = document.getElementById('counterSliderWrap');
         const section = document.getElementById('counterSection');
@@ -3162,9 +2927,6 @@ img { max-width: 100%; display: block; }
         }, speed);
     }
 
-    // =========================================================
-    // NOTICE TICKER
-    // =========================================================
     async function loadNoticeTicker() {
         const enabled = getSetting('notice_ticker_enabled', 'true') === 'true';
         if (!enabled) return;
@@ -3223,9 +2985,6 @@ img { max-width: 100%; display: block; }
         }
     }
 
-    // =========================================================
-    // NOTICE BOARD
-    // =========================================================
     async function loadNoticeBoard() {
         const list = document.getElementById('noticeBoardList');
         const title = getSetting('notice_board_title', 'নোটিশ বোর্ড');
@@ -3363,9 +3122,6 @@ img { max-width: 100%; display: block; }
         }, TICK_MS);
     }
 
-    // =========================================================
-    // NEWS
-    // =========================================================
     async function loadNews() {
         const grid = document.getElementById('newsGrid');
         const title = getSetting('news_section_title', 'সর্বশেষ সংবাদ');
@@ -3421,9 +3177,6 @@ img { max-width: 100%; display: block; }
         }
     }
 
-    // =========================================================
-    // GALLERY
-    // =========================================================
     async function loadGalleryHome() {
         const grid = document.getElementById('galleryGridHome');
         if (!grid) return;
@@ -3468,9 +3221,6 @@ img { max-width: 100%; display: block; }
         }
     }
 
-    // =========================================================
-    // VISITOR COUNTER
-    // =========================================================
     async function initVisitorCounter() {
         const el = document.getElementById('totalVisitors');
         if (!el) return;
@@ -3513,9 +3263,6 @@ img { max-width: 100%; display: block; }
         el.textContent = num.toLocaleString('en-IN');
     }
 
-    // =========================================================
-    // SMART MODAL
-    // =========================================================
     window.openSmartModal = function (title, bodyHtml) {
         document.getElementById('smartModalTitle').textContent = title;
         document.getElementById('smartModalBody').innerHTML = bodyHtml;
@@ -3535,9 +3282,6 @@ img { max-width: 100%; display: block; }
         if (e.key === 'Escape') window.closeSmartModal();
     });
 
-    // =========================================================
-    // UI EVENTS
-    // =========================================================
     document.getElementById('navToggle').addEventListener('click', function () {
         document.getElementById('mainNav').classList.toggle('show');
     });
@@ -3550,9 +3294,6 @@ img { max-width: 100%; display: block; }
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // =========================================================
-    // INIT
-    // =========================================================
     async function initHomepage() {
         if (INIT_DONE) return;
         INIT_DONE = true;
@@ -3573,6 +3314,11 @@ img { max-width: 100%; display: block; }
             applySocialLinks();
             buildHeroSlider();
             buildQuickCards();
+            loadPrincipal();
+            loadWelcome();
+            buildCounter();
+        } else {
+            // Even if settings fail, still show principal with defaults
             loadPrincipal();
             loadWelcome();
             buildCounter();
