@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="google-site-verification" content="Qvrzl8u8eIqlvoXqVO4Ofjnx_haKcn2Y88RU6VNdCME" />   
+<meta name="google-site-verification" content="Qvrzl8u8eIqlvoXqVO4Ofjnx_haKcn2Y88RU6VNdCME" />
 <title>ফুলবাড়ীয়া কলেজ | Fulbariya College</title>
 <meta name="description" content="ফুলবাড়ীয়া কলেজ - মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়">
 
@@ -75,6 +75,8 @@ img { max-width: 100%; display: block; }
 .reveal-stagger.in-view > *:nth-child(4) { transition-delay: 0.45s; }
 .reveal-stagger.in-view > *:nth-child(5) { transition-delay: 0.60s; }
 .reveal-stagger.in-view > *:nth-child(6) { transition-delay: 0.75s; }
+.reveal-stagger.in-view > *:nth-child(7) { transition-delay: 0.90s; }
+.reveal-stagger.in-view > *:nth-child(8) { transition-delay: 1.05s; }
 
 .container-custom {
     max-width: 1200px;
@@ -216,15 +218,6 @@ img { max-width: 100%; display: block; }
     margin-left: 3px;
 }
 .main-nav a.nav-login i { font-size: 11px; }
-.main-nav a.nav-student {
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    box-shadow: 0 4px 14px rgba(10,22,85,0.25);
-}
-.main-nav a.nav-student:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(10,22,85,0.4);
-    color: #fff !important;
-}
 .main-nav a.nav-admin {
     background: linear-gradient(135deg, var(--gold), var(--gold-2));
     color: var(--navy) !important;
@@ -1273,9 +1266,7 @@ img { max-width: 100%; display: block; }
 }
 .footer-map-link:hover { gap: 10px; }
 
-/* =========================================================
-   IMPORTANT LINKS — Simple list style (like other colleges)
-========================================================= */
+/* IMPORTANT LINKS */
 .important-links-section {
     padding: 40px 0 30px;
     border-bottom: 1px solid rgba(255,255,255,0.1);
@@ -1308,7 +1299,6 @@ img { max-width: 100%; display: block; }
     background: var(--gold);
     border-radius: 3px;
 }
-
 .important-links-list {
     list-style: none;
     padding: 0;
@@ -1317,10 +1307,7 @@ img { max-width: 100%; display: block; }
     grid-template-columns: repeat(2, 1fr);
     gap: 4px 30px;
 }
-.important-links-list li {
-    margin: 0;
-    padding: 0;
-}
+.important-links-list li { margin: 0; padding: 0; }
 .important-links-list li a {
     display: flex;
     align-items: center;
@@ -1354,13 +1341,9 @@ img { max-width: 100%; display: block; }
     font-size: 10px;
     transition: 0.25s;
 }
-.important-links-list li a:hover .ext-icon {
-    color: var(--gold);
-}
+.important-links-list li a:hover .ext-icon { color: var(--gold); }
 
-/* =========================================================
-   FOOTER BOTTOM — Smart Visitor Counter
-========================================================= */
+/* FOOTER BOTTOM */
 .footer-bottom {
     padding: 26px 0;
     display: flex;
@@ -1372,7 +1355,6 @@ img { max-width: 100%; display: block; }
     color: rgba(255,255,255,0.6);
 }
 .footer-bottom strong { color: var(--gold); }
-
 .footer-visitors {
     display: inline-flex;
     align-items: center;
@@ -1437,7 +1419,6 @@ img { max-width: 100%; display: block; }
     min-width: 50px;
     text-align: center;
 }
-
 .footer-credit {
     display: inline-flex;
     align-items: center;
@@ -1561,6 +1542,113 @@ img { max-width: 100%; display: block; }
 }
 
 /* =========================================================
+   SKELETON LOADING (FOUC Fix)
+========================================================= */
+.skeleton-box {
+    background: linear-gradient(
+        90deg,
+        #f0f2f5 25%,
+        #e5e7eb 50%,
+        #f0f2f5 75%
+    );
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.5s infinite;
+    border-radius: 8px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    min-height: 40px;
+}
+@keyframes skeletonShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.skeleton-line-text {
+    display: block;
+    height: 14px;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.5s infinite;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    width: 100%;
+}
+.skeleton-text {
+    color: transparent !important;
+    position: relative;
+    overflow: hidden;
+    user-select: none;
+}
+.skeleton-text::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.5s infinite;
+    border-radius: 6px;
+    min-height: 24px;
+}
+.skeleton-card {
+    pointer-events: none;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2)) !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
+    opacity: 0.85;
+    position: relative;
+    overflow: hidden;
+}
+.skeleton-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.8s infinite;
+}
+.skeleton-card * { opacity: 0 !important; }
+.skeleton-notice { pointer-events: none; }
+.skeleton-notice .notice-date {
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%) !important;
+    background-size: 200% 100% !important;
+    animation: skeletonShimmer 1.5s infinite !important;
+    color: transparent !important;
+}
+.skeleton-news-card {
+    pointer-events: none;
+    background: #fff !important;
+}
+.skeleton-news-card .news-img-wrap {
+    height: 200px;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%) !important;
+    background-size: 200% 100% !important;
+    animation: skeletonShimmer 1.5s infinite !important;
+}
+.skeleton-news-card .news-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.skeleton-dept-card { pointer-events: none; }
+.skeleton-dept-card .dept-img {
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%) !important;
+    background-size: 200% 100% !important;
+    animation: skeletonShimmer 1.5s infinite !important;
+}
+.skeleton-dept-card .dept-info {
+    padding: 18px 16px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.data-loaded {
+    animation: smoothFadeIn 0.5s ease;
+}
+@keyframes smoothFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
    RESPONSIVE
 ========================================================= */
 @media (max-width: 1100px) {
@@ -1587,15 +1675,9 @@ img { max-width: 100%; display: block; }
         font-size: 24px;
         text-align: center;
     }
-    .principal-content .designation {
-        text-align: center;
-    }
-    .principal-content .quote {
-        text-align: left;
-    }
-    .principal-content .principal-actions {
-        justify-content: center;
-    }
+    .principal-content .designation { text-align: center; }
+    .principal-content .quote { text-align: left; }
+    .principal-content .principal-actions { justify-content: center; }
     .welcome-wrap { max-width: 100%; }
     .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
     .main-nav a { padding: 6px 7px; font-size: 11.5px; }
@@ -1694,10 +1776,7 @@ img { max-width: 100%; display: block; }
     .news-card .news-img-wrap { height: 180px; }
 
     .important-links-section { padding: 30px 0 25px; }
-    .important-links-list {
-        grid-template-columns: 1fr;
-        gap: 0;
-    }
+    .important-links-list { grid-template-columns: 1fr; gap: 0; }
     .important-links-header h4 { font-size: 15px; }
 
     .reveal.reveal-left { transform: translateX(-50px); }
@@ -1758,6 +1837,7 @@ img { max-width: 100%; display: block; }
             <a href="public-pages/admission.html">ভর্তি তথ্য</a>
             <a href="public-pages/notices.html">নোটিশ</a>
             <a href="public-pages/results.html">রেজাল্ট</a>
+            
             <a href="public-pages/academic-hub.html">একাডেমিক হাব</a>
             <a href="public-pages/gallery.html">গ্যালারি</a>
             <a href="public-pages/bncc.html">BNCC</a>
@@ -1798,7 +1878,17 @@ img { max-width: 100%; display: block; }
     <div class="container-custom">
         <h2 class="section-title reveal reveal-scale">আমাদের সেবাসমূহ</h2>
         <p class="section-subtitle reveal reveal-scale">শিক্ষা, তথ্য ও সুবিধার এক ঠিকানা</p>
-        <div class="quick-cards-grid reveal-stagger" id="quickCardsGrid"></div>
+        <div class="quick-cards-grid reveal-stagger" id="quickCardsGrid">
+            <!-- Skeleton cards (JS replace করবে) -->
+            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
+            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
+            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
+            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
+            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
+            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
+            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
+            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
+        </div>
     </div>
 </section>
 
@@ -1810,9 +1900,13 @@ img { max-width: 100%; display: block; }
                 <img src="assets/images/principal.jpg" alt="Principal" id="principalImage" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22500%22%3E%3Crect fill=%22%230a1655%22 width=%22400%22 height=%22500%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23f2d27b%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E👤%3C/text%3E%3C/svg%3E'">
             </div>
             <div class="principal-content">
-                <h2 id="principalName">অধ্যক্ষের নাম</h2>
+                <h2 id="principalName" class="skeleton-text">অধ্যক্ষ</h2>
                 <p class="designation" id="principalDesignation">অধ্যক্ষ</p>
-                <div class="quote" id="principalShortMessage">"শিক্ষাই জাতির মেরুদণ্ড — আমরা প্রতিটি শিক্ষার্থীকে আধুনিক ও নৈতিক শিক্ষায় গড়ে তুলতে প্রতিশ্রুতিবদ্ধ।"</div>
+                <div class="quote" id="principalShortMessage">
+                    <span class="skeleton-line-text"></span>
+                    <span class="skeleton-line-text" style="width: 85%;"></span>
+                    <span class="skeleton-line-text" style="width: 70%;"></span>
+                </div>
                 <div class="principal-actions">
                     <button class="btn-navy" onclick="openPrincipalModal()">
                         <i class="fas fa-book-open"></i> সম্পূর্ণ বাণী পড়ুন
@@ -1833,7 +1927,29 @@ img { max-width: 100%; display: block; }
         <p class="section-subtitle reveal reveal-scale">আমাদের অভিজ্ঞ শিক্ষকমণ্ডলী</p>
     </div>
     <div class="dept-slider-viewport">
-        <div class="dept-slider" id="deptSlider"></div>
+        <div class="dept-slider" id="deptSlider">
+            <div class="dept-card skeleton-dept-card">
+                <div class="dept-img skeleton-box"></div>
+                <div class="dept-info">
+                    <span class="skeleton-line-text" style="width: 70%;"></span>
+                    <span class="skeleton-line-text" style="width: 50%;"></span>
+                </div>
+            </div>
+            <div class="dept-card skeleton-dept-card">
+                <div class="dept-img skeleton-box"></div>
+                <div class="dept-info">
+                    <span class="skeleton-line-text" style="width: 70%;"></span>
+                    <span class="skeleton-line-text" style="width: 50%;"></span>
+                </div>
+            </div>
+            <div class="dept-card skeleton-dept-card">
+                <div class="dept-img skeleton-box"></div>
+                <div class="dept-info">
+                    <span class="skeleton-line-text" style="width: 70%;"></span>
+                    <span class="skeleton-line-text" style="width: 50%;"></span>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
@@ -1841,9 +1957,11 @@ img { max-width: 100%; display: block; }
 <section class="welcome-section">
     <div class="container-custom">
         <div class="welcome-wrap reveal reveal-left">
-            <h2 id="welcomeTitle">স্বাগতম</h2>
+            <h2 id="welcomeTitle" class="skeleton-text">স্বাগতম</h2>
             <p id="welcomeShortText">
-                ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম। আমরা মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়ে শিক্ষার্থীদের ভবিষ্যৎ গড়ে তুলছি।
+                <span class="skeleton-line-text"></span>
+                <span class="skeleton-line-text" style="width: 90%;"></span>
+                <span class="skeleton-line-text" style="width: 60%;"></span>
             </p>
             <button class="btn-navy" onclick="openWelcomeModal()">
                 <i class="fas fa-arrow-right"></i> আরও পড়ুন
@@ -1871,8 +1989,26 @@ img { max-width: 100%; display: block; }
                 </a>
             </div>
             <div class="notice-list" id="noticeBoardList">
-                <div style="padding:30px;text-align:center;color:var(--grey);">
-                    <i class="fas fa-spinner fa-spin me-2"></i> লোড হচ্ছে...
+                <div class="notice-item skeleton-notice">
+                    <div class="notice-date skeleton-box"></div>
+                    <div class="notice-body">
+                        <span class="skeleton-line-text"></span>
+                        <span class="skeleton-line-text" style="width: 80%;"></span>
+                    </div>
+                </div>
+                <div class="notice-item skeleton-notice">
+                    <div class="notice-date skeleton-box"></div>
+                    <div class="notice-body">
+                        <span class="skeleton-line-text"></span>
+                        <span class="skeleton-line-text" style="width: 75%;"></span>
+                    </div>
+                </div>
+                <div class="notice-item skeleton-notice">
+                    <div class="notice-date skeleton-box"></div>
+                    <div class="notice-body">
+                        <span class="skeleton-line-text"></span>
+                        <span class="skeleton-line-text" style="width: 85%;"></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1884,7 +2020,32 @@ img { max-width: 100%; display: block; }
     <div class="container-custom">
         <h2 class="section-title reveal reveal-scale" id="newsSectionTitle">সর্বশেষ সংবাদ</h2>
         <p class="section-subtitle reveal reveal-scale">কলেজের সাম্প্রতিক খবর ও ইভেন্ট</p>
-        <div class="news-grid reveal-stagger" id="newsGrid"></div>
+        <div class="news-grid reveal-stagger" id="newsGrid">
+            <div class="news-card skeleton-news-card">
+                <div class="news-img-wrap skeleton-box"></div>
+                <div class="news-body">
+                    <span class="skeleton-line-text" style="width: 40%;"></span>
+                    <span class="skeleton-line-text"></span>
+                    <span class="skeleton-line-text" style="width: 80%;"></span>
+                </div>
+            </div>
+            <div class="news-card skeleton-news-card">
+                <div class="news-img-wrap skeleton-box"></div>
+                <div class="news-body">
+                    <span class="skeleton-line-text" style="width: 40%;"></span>
+                    <span class="skeleton-line-text"></span>
+                    <span class="skeleton-line-text" style="width: 80%;"></span>
+                </div>
+            </div>
+            <div class="news-card skeleton-news-card">
+                <div class="news-img-wrap skeleton-box"></div>
+                <div class="news-body">
+                    <span class="skeleton-line-text" style="width: 40%;"></span>
+                    <span class="skeleton-line-text"></span>
+                    <span class="skeleton-line-text" style="width: 80%;"></span>
+                </div>
+            </div>
+        </div>
         <div style="text-align:center;margin-top:40px;">
             <a href="public-pages/news.html" class="btn-navy">
                 <i class="fas fa-newspaper"></i> <span id="newsViewAllText">সব সংবাদ দেখুন</span>
@@ -1898,7 +2059,14 @@ img { max-width: 100%; display: block; }
     <div class="container-custom">
         <h2 class="section-title reveal reveal-scale">আমাদের গ্যালারি</h2>
         <p class="section-subtitle reveal reveal-scale">কলেজের স্মরণীয় মুহূর্তের ছবি</p>
-        <div class="gallery-grid-home reveal-stagger" id="galleryGridHome"></div>
+        <div class="gallery-grid-home reveal-stagger" id="galleryGridHome">
+            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
+            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
+            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
+            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
+            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
+            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
+        </div>
         <div style="text-align:center;margin-top:40px;">
             <a href="public-pages/gallery.html" class="btn-navy">
                 <i class="fas fa-images"></i> সব ছবি দেখুন
@@ -1944,6 +2112,7 @@ img { max-width: 100%; display: block; }
                     <li><a href="public-pages/admission.html"><i class="fas fa-chevron-right"></i> ভর্তি তথ্য</a></li>
                     <li><a href="public-pages/notices.html"><i class="fas fa-chevron-right"></i> নোটিশ</a></li>
                     <li><a href="public-pages/results.html"><i class="fas fa-chevron-right"></i> রেজাল্ট</a></li>
+                    <li><a href="public-pages/result-overview.html"><i class="fas fa-chevron-right"></i> রেজাল্ট ওভারভিউ</a></li>
                     <li><a href="public-pages/gallery.html"><i class="fas fa-chevron-right"></i> গ্যালারি</a></li>
                 </ul>
             </div>
@@ -1983,7 +2152,6 @@ img { max-width: 100%; display: block; }
             </div>
         </div>
 
-        <!-- IMPORTANT LINKS — Simple list style -->
         <div class="important-links-section">
             <div class="important-links-header">
                 <i class="fas fa-link"></i>
@@ -2065,6 +2233,7 @@ img { max-width: 100%; display: block; }
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="js/config.js"></script>
 <script src="js/supabase.js"></script>
+<script src="js/scroll-restore.js"></script>
 
 <script>
 (function () {
@@ -2077,11 +2246,14 @@ img { max-width: 100%; display: block; }
     let COUNTER_INDEX = 0;
     let COUNTER_TIMER = null;
     let COUNTER_TOTAL = 0;
+    let COUNTER_EXIT_TIMERS = {};
     let INIT_DONE = false;
     let REVEAL_OBSERVER = null;
     let NOTICE_AUTOSCROLL_TIMER = null;
     let NOTICE_IS_HOVERED = false;
     let NOTICE_IS_DRAGGING = false;
+
+    const SETTINGS_CACHE_KEY = 'fdc_site_settings_cache';
 
     function getSetting(key, fallback) {
         if (fallback === undefined) fallback = '';
@@ -2138,21 +2310,43 @@ img { max-width: 100%; display: block; }
     }
 
     // =========================================================
-    // LOAD SETTINGS
+    // LOAD SETTINGS (with LocalStorage cache)
     // =========================================================
     async function loadSiteSettings() {
         try {
+            // 1. Try cache first (instant)
+            try {
+                const cached = localStorage.getItem(SETTINGS_CACHE_KEY);
+                if (cached) {
+                    SITE_SETTINGS = JSON.parse(cached);
+                    console.log('✅ Settings loaded from cache');
+                }
+            } catch (e) {}
+
             const supabase = window.FDC_SUPABASE;
             if (!supabase) throw new Error('Supabase not initialized');
+
+            // 2. Fetch fresh
             const { data, error } = await supabase.from('site_settings').select('key, value');
             if (error) throw error;
-            SITE_SETTINGS = {};
-            (data || []).forEach(function (item) { SITE_SETTINGS[item.key] = item.value; });
-            console.log('✅ Settings loaded:', Object.keys(SITE_SETTINGS).length);
+
+            const freshSettings = {};
+            (data || []).forEach(function (item) { freshSettings[item.key] = item.value; });
+
+            // 3. Update if changed
+            const changed = JSON.stringify(SITE_SETTINGS) !== JSON.stringify(freshSettings);
+            if (changed) {
+                SITE_SETTINGS = freshSettings;
+                try {
+                    localStorage.setItem(SETTINGS_CACHE_KEY, JSON.stringify(freshSettings));
+                } catch (e) {}
+                console.log('✅ Settings updated from Supabase');
+            }
+
             return true;
         } catch (err) {
             console.error('❌ Settings error:', err);
-            return false;
+            return Object.keys(SITE_SETTINGS).length > 0;
         }
     }
 
@@ -2160,7 +2354,7 @@ img { max-width: 100%; display: block; }
         const name = getSetting('college_name', 'ফুলবাড়ীয়া কলেজ');
         const email = getSetting('college_email', 'info@fulbariyacollege.edu.bd');
         const phone = getSetting('college_phone', '+880 1XXX-XXXXXX');
-        const address = getSetting('college_address', 'ফুলবাড়ীয়া, ময়মনসিংহ');
+        const address = getSetting('college_address', 'ফুলবাড়ীয়া, ময়নসিংহ');
         const eiin = getSetting('college_eiin', 'XXXXXX');
 
         document.querySelectorAll('[data-college-name]').forEach(function (el) { el.textContent = name; });
@@ -2169,6 +2363,13 @@ img { max-width: 100%; display: block; }
         document.querySelectorAll('[data-college-address]').forEach(function (el) { el.textContent = address; });
         document.querySelectorAll('[data-college-eiin]').forEach(function (el) { el.textContent = eiin; });
         document.title = name + ' | Fulbariya College';
+
+        // Meta description
+        const metaDesc = document.querySelector('meta[name="description"]');
+        if (metaDesc) {
+            const desc = getSetting('college_meta_description');
+            if (desc) metaDesc.setAttribute('content', desc);
+        }
     }
 
     function applySocialLinks() {
@@ -2224,11 +2425,11 @@ img { max-width: 100%; display: block; }
         HERO_SLIDES.forEach(function (slide, idx) {
             const isActive = idx === 0 ? 'active' : '';
             html += '<div class="hero-slide ' + isActive + '">' +
-                (slide.img ? '<img src="' + slide.img + '" alt="' + (slide.title || 'Slide') + '" onerror="this.style.display=\'none\'">' : '') +
+                (slide.img ? '<img src="' + slide.img + '" alt="' + escapeHtml(slide.title || 'Slide') + '" onerror="this.style.display=\'none\'">' : '') +
                 '<div class="hero-content">' +
-                    (slide.title ? '<h2>' + slide.title + '</h2>' : '') +
-                    (slide.subtitle ? '<p>' + slide.subtitle + '</p>' : '') +
-                    (slide.btnText && slide.btnLink ? '<a href="' + slide.btnLink + '" class="hero-btn">' + slide.btnText + ' <i class="fas fa-arrow-right"></i></a>' : '') +
+                    (slide.title ? '<h2>' + escapeHtml(slide.title) + '</h2>' : '') +
+                    (slide.subtitle ? '<p>' + escapeHtml(slide.subtitle) + '</p>' : '') +
+                    (slide.btnText && slide.btnLink ? '<a href="' + slide.btnLink + '" class="hero-btn">' + escapeHtml(slide.btnText) + ' <i class="fas fa-arrow-right"></i></a>' : '') +
                 '</div>' +
             '</div>';
         });
@@ -2270,57 +2471,70 @@ img { max-width: 100%; display: block; }
     }
 
     // =========================================================
-    // QUICK CARDS — Student Portal → Academic Hub
+    // QUICK CARDS (8 cards: 6 original + 2 new)
     // =========================================================
     function buildQuickCards() {
-    const grid = document.getElementById('quickCardsGrid');
-    const fallback = [
-        { icon: 'fas fa-trophy', title: 'ফলাফল', desc: 'অনলাইনে পরীক্ষার ফলাফল দেখুন', link: 'public-pages/results.html' },
-        { icon: 'fas fa-user-plus', title: 'ভর্তি তথ্য', desc: 'ভর্তি সংক্রান্ত তথ্য ও নির্দেশনা', link: 'public-pages/admission.html' },
-        { icon: 'fas fa-phone', title: 'যোগাযোগ', desc: 'আমাদের সাথে যোগাযোগ করুন', link: 'public-pages/contact.html' },
-        { icon: 'fas fa-flag', title: 'বিএনসিসি', desc: 'বাংলাদেশ ন্যাশনাল ক্যাডেট কোর', link: 'public-pages/bncc.html' },
-        { icon: 'fas fa-campground', title: 'স্কাউটস', desc: 'বাংলাদেশ স্কাউটস কার্যক্রম', link: 'public-pages/scouts.html' },
-        { icon: 'fas fa-graduation-cap', title: 'একাডেমিক হাব', desc: 'ক্যালেন্ডার ও ক্লাস রুটিন', link: 'public-pages/academic-hub.html' }
-    ];
+        const grid = document.getElementById('quickCardsGrid');
+        const fallback = [
+            { icon: 'fas fa-trophy', title: 'ফলাফল', desc: 'অনলাইনে পরীক্ষার ফলাফল দেখুন', link: 'public-pages/results.html' },
+            { icon: 'fas fa-chart-pie', title: 'রেজাল্ট ওভারভিউ', desc: 'পরীক্ষার ফলাফলের সামগ্রিক চিত্র ও পরিসংখ্যান', link: 'public-pages/result-overview.html' },
+            { icon: 'fas fa-user-plus', title: 'ভর্তি তথ্য', desc: 'ভর্তি সংক্রান্ত তথ্য ও নির্দেশনা', link: 'public-pages/admission.html' },
+            { icon: 'fas fa-info-circle', title: 'আমাদের সম্পর্কে', desc: 'কলেজের ইতিহাস, লক্ষ্য ও উদ্দেশ্য', link: 'public-pages/about.html' },
+            { icon: 'fas fa-phone', title: 'যোগাযোগ', desc: 'আমাদের সাথে যোগাযোগ করুন', link: 'public-pages/contact.html' },
+            { icon: 'fas fa-flag', title: 'বিএনসিসি', desc: 'বাংলাদেশ ন্যাশনাল ক্যাডেট কোর', link: 'public-pages/bncc.html' },
+            { icon: 'fas fa-campground', title: 'স্কাউটস', desc: 'বাংলাদেশ স্কাউটস কার্যক্রম', link: 'public-pages/scouts.html' },
+            { icon: 'fas fa-graduation-cap', title: 'একাডেমিক হাব', desc: 'ক্যালেন্ডার ও ক্লাস রুটিন', link: 'public-pages/academic-hub.html' }
+        ];
 
-    let html = '';
-    for (let i = 1; i <= 6; i++) {
-        const dbIcon = getSetting('quick_card_' + i + '_icon');
-        const dbTitle = getSetting('quick_card_' + i + '_title');
-        const dbDesc = getSetting('quick_card_' + i + '_desc');
-        const dbLink = getSetting('quick_card_' + i + '_link');
+        let html = '';
+        for (let i = 1; i <= 8; i++) {
+            const dbIcon = getSetting('quick_card_' + i + '_icon');
+            const dbTitle = getSetting('quick_card_' + i + '_title');
+            const dbDesc = getSetting('quick_card_' + i + '_desc');
+            const dbLink = getSetting('quick_card_' + i + '_link');
 
-        const fb = fallback[i - 1];
-        const icon = dbIcon || fb.icon;
-        const title = dbTitle || fb.title;
-        const desc = dbDesc || fb.desc;
-        const link = dbLink || fb.link;
+            const fb = fallback[i - 1];
+            const icon = dbIcon || fb.icon;
+            const title = dbTitle || fb.title;
+            const desc = dbDesc || fb.desc;
+            const link = dbLink || fb.link;
 
-        if (!title) continue;
-        html += '<a href="' + link + '" class="quick-card">' +
-            '<div class="quick-card-icon"><i class="' + icon + '"></i></div>' +
-            '<h3>' + escapeHtml(title) + '</h3>' +
-            '<p>' + escapeHtml(desc) + '</p>' +
-            '<span class="card-link">বিস্তারিত <i class="fas fa-arrow-right"></i></span>' +
-        '</a>';
+            if (!title) continue;
+            html += '<a href="' + link + '" class="quick-card">' +
+                '<div class="quick-card-icon"><i class="' + icon + '"></i></div>' +
+                '<h3>' + escapeHtml(title) + '</h3>' +
+                '<p>' + escapeHtml(desc) + '</p>' +
+                '<span class="card-link">বিস্তারিত <i class="fas fa-arrow-right"></i></span>' +
+            '</a>';
+        }
+        grid.innerHTML = html;
+        observeNewReveals(grid);
     }
-    grid.innerHTML = html;
-    observeNewReveals(grid);
-}
-         
 
     // =========================================================
     // PRINCIPAL
     // =========================================================
     function loadPrincipal() {
-        const name = getSetting('principal_name', 'অধ্যক্ষের নাম');
+        const name = getSetting('principal_name', 'অধ্যক্ষ');
         const designation = getSetting('principal_designation', 'অধ্যক্ষ');
         const image = getSetting('principal_image');
         const shortMsg = getSetting('principal_short_message', '');
 
-        document.getElementById('principalName').textContent = name;
-        document.getElementById('principalDesignation').textContent = designation;
-        document.getElementById('principalShortMessage').textContent = shortMsg ? '"' + shortMsg + '"' : '';
+        const nameEl = document.getElementById('principalName');
+        const desEl = document.getElementById('principalDesignation');
+        const msgEl = document.getElementById('principalShortMessage');
+
+        nameEl.textContent = name;
+        nameEl.classList.remove('skeleton-text');
+        nameEl.classList.add('data-loaded');
+
+        desEl.textContent = designation;
+
+        if (shortMsg) {
+            msgEl.textContent = '"' + shortMsg + '"';
+            msgEl.classList.add('data-loaded');
+        }
+
         if (image) document.getElementById('principalImage').src = image;
     }
 
@@ -2330,7 +2544,7 @@ img { max-width: 100%; display: block; }
         const fullMsg = getSetting('principal_full_message', 'বিস্তারিত বাণী যোগ করা হয়নি।');
         openSmartModal(
             name + ' এর বাণী',
-            '<p><strong>' + name + '</strong><br><em>' + designation + '</em></p><hr style="margin:16px 0;border-color:var(--border);">' + fullMsg.replace(/\n/g, '<br>')
+            '<p><strong>' + escapeHtml(name) + '</strong><br><em>' + escapeHtml(designation) + '</em></p><hr style="margin:16px 0;border-color:var(--border);">' + fullMsg.replace(/\n/g, '<br>')
         );
     };
 
@@ -2354,9 +2568,9 @@ img { max-width: 100%; display: block; }
             }
 
             function buildCard(head) {
-                const img = head.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22280%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22260%22 height=%22280%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%230a1655%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E👤%3C/text%3E%3C/svg%3E';
+                const img = head.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22280%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22260%22 height=%22280%22/%3E%3C/svg%3E';
                 return '<div class="dept-card">' +
-                    '<img src="' + img + '" alt="' + escapeHtml(head.name) + '" class="dept-img" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22280%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22260%22 height=%22280%22/%3E%3C/svg%3E\'">' +
+                    '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(head.name) + '" class="dept-img" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22280%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22260%22 height=%22280%22/%3E%3C/svg%3E\'">' +
                     '<div class="dept-info">' +
                         '<h4>' + escapeHtml(head.name) + '</h4>' +
                         '<p class="dept-designation">' + escapeHtml(head.designation) + '</p>' +
@@ -2367,6 +2581,7 @@ img { max-width: 100%; display: block; }
 
             const cardsHtml = data.map(buildCard).join('');
             slider.innerHTML = cardsHtml + cardsHtml;
+            slider.classList.add('data-loaded');
             const duration = Math.max(data.length * 8, 30);
             slider.style.animationDuration = duration + 's';
 
@@ -2380,8 +2595,15 @@ img { max-width: 100%; display: block; }
     // WELCOME
     // =========================================================
     function loadWelcome() {
-        document.getElementById('welcomeTitle').textContent = getSetting('welcome_title', 'স্বাগতম');
-        document.getElementById('welcomeShortText').textContent = getSetting('welcome_short_text', 'ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।');
+        const titleEl = document.getElementById('welcomeTitle');
+        const textEl = document.getElementById('welcomeShortText');
+
+        titleEl.textContent = getSetting('welcome_title', 'স্বাগতম');
+        titleEl.classList.remove('skeleton-text');
+        titleEl.classList.add('data-loaded');
+
+        textEl.textContent = getSetting('welcome_short_text', 'ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।');
+        textEl.classList.add('data-loaded');
     }
 
     window.openWelcomeModal = function () {
@@ -2442,6 +2664,13 @@ img { max-width: 100%; display: block; }
     function goToCounterSlide(index) {
         const slides = document.querySelectorAll('.counter-slide');
         const prevIndex = COUNTER_INDEX;
+
+        // Clear all pending exit timers
+        Object.keys(COUNTER_EXIT_TIMERS).forEach(function (key) {
+            clearTimeout(COUNTER_EXIT_TIMERS[key]);
+            delete COUNTER_EXIT_TIMERS[key];
+        });
+
         slides.forEach(function (s, i) {
             if (i === index) {
                 s.classList.remove('exit-left');
@@ -2449,8 +2678,11 @@ img { max-width: 100%; display: block; }
             } else if (i === prevIndex && prevIndex !== index) {
                 s.classList.remove('active');
                 s.classList.add('exit-left');
-                setTimeout(function () {
-                    if (!s.classList.contains('active')) s.classList.remove('exit-left');
+                COUNTER_EXIT_TIMERS['slide_' + i] = setTimeout(function () {
+                    if (!s.classList.contains('active')) {
+                        s.classList.remove('exit-left');
+                    }
+                    delete COUNTER_EXIT_TIMERS['slide_' + i];
                 }, 800);
             } else {
                 s.classList.remove('active', 'exit-left');
@@ -2589,6 +2821,7 @@ img { max-width: 100%; display: block; }
                 '</a>';
             });
             list.innerHTML = html;
+            list.classList.add('data-loaded');
 
             setupNoticeAutoScroll(list);
 
@@ -2663,7 +2896,7 @@ img { max-width: 100%; display: block; }
             if (listEl.scrollTop >= maxScroll - 1) {
                 listEl.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                listEl.scrollTop = listEl.scrollTop + SCROLL_SPEED;
+                listEl.scrollTop = Math.floor(listEl.scrollTop + SCROLL_SPEED);
             }
         }, TICK_MS);
     }
@@ -2673,8 +2906,8 @@ img { max-width: 100%; display: block; }
     // =========================================================
     async function loadNews() {
         const grid = document.getElementById('newsGrid');
-        const title = getSetting('news_section_title', 'Latest News and Events');
-        const viewAllText = getSetting('news_section_view_all_text', 'View All');
+        const title = getSetting('news_section_title', 'সর্বশেষ সংবাদ');
+        const viewAllText = getSetting('news_section_view_all_text', 'সব সংবাদ দেখুন');
 
         document.getElementById('newsSectionTitle').textContent = title;
         document.getElementById('newsViewAllText').textContent = viewAllText;
@@ -2718,6 +2951,7 @@ img { max-width: 100%; display: block; }
                 '</a>';
             });
             grid.innerHTML = html;
+            grid.classList.add('data-loaded');
             observeNewReveals(grid);
         } catch (err) {
             console.error('News error:', err);
@@ -2764,6 +2998,7 @@ img { max-width: 100%; display: block; }
                 '</a>';
             });
             grid.innerHTML = html;
+            grid.classList.add('data-loaded');
             observeNewReveals(grid);
         } catch (err) {
             console.error('Gallery error:', err);
@@ -2854,7 +3089,7 @@ img { max-width: 100%; display: block; }
     });
 
     // =========================================================
-    // INIT
+    // INIT (Priority loading)
     // =========================================================
     async function initHomepage() {
         if (INIT_DONE) return;
@@ -2872,6 +3107,7 @@ img { max-width: 100%; display: block; }
 
         const ok = await loadSiteSettings();
         if (ok) {
+            // Above-the-fold (priority)
             applyCollegeInfo();
             applySocialLinks();
             buildHeroSlider();
@@ -2881,6 +3117,7 @@ img { max-width: 100%; display: block; }
             buildCounter();
         }
 
+        // Below-the-fold (parallel)
         await Promise.all([
             loadDepartmentHeads(),
             loadNoticeTicker(),
@@ -2892,9 +3129,10 @@ img { max-width: 100%; display: block; }
 
         observeNewReveals(document.body);
 
-        setTimeout(function () {
-            forceCheckVisible();
-        }, 400);
+        // Multi-retry force check
+        setTimeout(forceCheckVisible, 400);
+        setTimeout(forceCheckVisible, 1500);
+        setTimeout(forceCheckVisible, 3000);
 
         console.log('🎉 Homepage ready');
     }
