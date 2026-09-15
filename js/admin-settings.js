@@ -3,7 +3,7 @@
  * FULBARIYA COLLEGE — ADMIN SETTINGS
  * Location: js/admin-settings.js
  * Depends: config.js, supabase.js, auth.js, cloudinary.js
- * Version: 3.0 (Full — 13 Tabs)
+ * Version: 3.1 (Full — 13 Tabs, 8 Quick Cards)
  * =========================================================
  */
 
@@ -283,10 +283,10 @@
     }
 
     // =========================================================
-    // QUICK
+    // QUICK (8 cards)
     // =========================================================
     function loadQuickSettings() {
-        for (let i = 1; i <= 3; i++) {
+        for (let i = 1; i <= 8; i++) {
             setVal(`quickIcon${i}`, settings[`quick_card_${i}_icon`]);
             setVal(`quickTitle${i}`, settings[`quick_card_${i}_title`]);
             setVal(`quickDesc${i}`, settings[`quick_card_${i}_desc`]);
@@ -422,7 +422,7 @@
     }
 
     // =========================================================
-    // COUNTER SLIDER (NEW)
+    // COUNTER SLIDER
     // =========================================================
     function loadCounterSettings() {
         const bg = settings.counter_bg_image;
@@ -551,7 +551,7 @@
         } else {
             const { error } = await supabase
                 .from('site_settings')
-                .insert([{ key: key, value: value }]);
+                .insert([{ key: key, value: value, category: 'quick_cards' }]);
             if (error) throw error;
         }
     }
@@ -784,7 +784,6 @@
                     preview.classList.add('show');
                 }
 
-                // Hide current
                 const currentBox = preview && preview.parentElement && preview.parentElement.querySelector('.current-image-preview');
                 if (currentBox) currentBox.classList.remove('show');
 
@@ -846,19 +845,34 @@
             });
         }
 
-        // ========== QUICK ==========
+        // ========== QUICK (8 cards) ==========
         const quickForm = document.getElementById('quickForm');
         if (quickForm) {
             quickForm.addEventListener('submit', async function (e) {
                 e.preventDefault();
-                const data = {};
-                for (let i = 1; i <= 3; i++) {
-                    data[`quick_card_${i}_icon`] = (document.getElementById(`quickIcon${i}`) || {}).value || '';
-                    data[`quick_card_${i}_title`] = (document.getElementById(`quickTitle${i}`) || {}).value || '';
-                    data[`quick_card_${i}_desc`] = (document.getElementById(`quickDesc${i}`) || {}).value || '';
-                    data[`quick_card_${i}_link`] = (document.getElementById(`quickLink${i}`) || {}).value || '';
+                const btn = document.getElementById('quickSaveBtn');
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
                 }
-                await saveMany(data, 'quickAlert', 'Quick cards updated!');
+
+                try {
+                    const data = {};
+                    for (let i = 1; i <= 8; i++) {
+                        data[`quick_card_${i}_icon`] = (document.getElementById(`quickIcon${i}`) || {}).value || '';
+                        data[`quick_card_${i}_title`] = (document.getElementById(`quickTitle${i}`) || {}).value || '';
+                        data[`quick_card_${i}_desc`] = (document.getElementById(`quickDesc${i}`) || {}).value || '';
+                        data[`quick_card_${i}_link`] = (document.getElementById(`quickLink${i}`) || {}).value || '';
+                    }
+                    await saveMany(data, 'quickAlert', 'Quick cards updated!');
+                } catch (err) {
+                    showToast('❌ ' + err.message, 'error');
+                } finally {
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-save"></i> Update Quick Cards';
+                    }
+                }
             });
         }
 
@@ -958,7 +972,7 @@
             });
         }
 
-        // ========== COUNTER (NEW) ==========
+        // ========== COUNTER ==========
         const counterForm = document.getElementById('counterForm');
         if (counterForm) {
             counterForm.addEventListener('submit', async function (e) {
@@ -994,7 +1008,7 @@
             });
         }
 
-        // ========== WELCOME (NEW) ==========
+        // ========== WELCOME ==========
         const welcomeForm = document.getElementById('welcomeForm');
         if (welcomeForm) {
             welcomeForm.addEventListener('submit', async function (e) {
@@ -1009,7 +1023,7 @@
             });
         }
 
-        // ========== TICKER (NEW) ==========
+        // ========== TICKER ==========
         const tickerForm = document.getElementById('tickerForm');
         if (tickerForm) {
             tickerForm.addEventListener('submit', async function (e) {
@@ -1024,7 +1038,7 @@
             });
         }
 
-        // ========== HEADINGS (NEW) ==========
+        // ========== HEADINGS ==========
         const headingsForm = document.getElementById('headingsForm');
         if (headingsForm) {
             headingsForm.addEventListener('submit', async function (e) {
@@ -1106,7 +1120,7 @@
             });
         });
 
-        document.querySelectorAll('.quick-title-input, #quickTitle1, #quickTitle2, #quickTitle3').forEach(function (input) {
+        document.querySelectorAll('.quick-title-input').forEach(function (input) {
             input.addEventListener('input', function () {
                 const n = this.id.replace('quickTitle', '');
                 updateQuickPreview(n);
@@ -1125,13 +1139,12 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Settings v3.0 initialized');
+        console.log('🚀 Admin Settings v3.1 initialized');
 
         setupTabs();
         setupHeroUploads();
         setupCampusUploads();
 
-        // Single uploads
         setupSingleUpload('aboutImageDrop', 'aboutImageInput', 'aboutImagePreview', 'aboutImageName', 'aboutImageSize', 'aboutImageRemove', 'about');
         setupSingleUpload('principalImageDrop', 'principalImageInput', 'principalImagePreview', 'principalImageName', 'principalImageSize', 'principalImageRemove', 'principal');
         setupSingleUpload('counterBgDrop', 'counterBgInput', 'counterBgPreview', 'counterBgName', 'counterBgSize', 'counterBgRemove', 'counterBg');
