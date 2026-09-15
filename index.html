@@ -47,6 +47,365 @@ a { text-decoration: none; color: inherit; }
 img { max-width: 100%; display: block; }
 
 /* =========================================================
+   FACEBOOK-STYLE SKELETON LOADING SYSTEM
+========================================================= */
+@keyframes fdcShimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Base shimmer — moving light gradient */
+.sk-shimmer {
+    background: linear-gradient(
+        90deg,
+        #eef1f6 0%,
+        #e2e6ee 20%,
+        #f5f7fa 40%,
+        #e2e6ee 60%,
+        #eef1f6 80%,
+        #eef1f6 100%
+    );
+    background-size: 200% 100%;
+    animation: fdcShimmer 1.8s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+/* Shimmer for dark backgrounds (navy hero, counter) */
+.sk-shimmer-dark {
+    background: linear-gradient(
+        90deg,
+        rgba(255,255,255,0.06) 0%,
+        rgba(255,255,255,0.14) 20%,
+        rgba(255,255,255,0.22) 40%,
+        rgba(255,255,255,0.14) 60%,
+        rgba(255,255,255,0.06) 80%,
+        rgba(255,255,255,0.06) 100%
+    );
+    background-size: 200% 100%;
+    animation: fdcShimmer 1.8s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+/* Gold shimmer for CTA buttons / accents */
+.sk-shimmer-gold {
+    background: linear-gradient(
+        90deg,
+        rgba(242,210,123,0.15) 0%,
+        rgba(242,210,123,0.35) 40%,
+        rgba(242,210,123,0.15) 80%
+    );
+    background-size: 200% 100%;
+    animation: fdcShimmer 1.8s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+/* Skeleton text line */
+.sk-line {
+    height: 14px;
+    border-radius: 7px;
+    margin-bottom: 10px;
+    width: 100%;
+}
+.sk-line.sm { height: 11px; border-radius: 5px; margin-bottom: 8px; }
+.sk-line.lg { height: 20px; border-radius: 10px; margin-bottom: 12px; }
+.sk-line.xl { height: 28px; border-radius: 12px; margin-bottom: 14px; }
+.sk-line.w-30 { width: 30%; }
+.sk-line.w-40 { width: 40%; }
+.sk-line.w-50 { width: 50%; }
+.sk-line.w-60 { width: 60%; }
+.sk-line.w-70 { width: 70%; }
+.sk-line.w-80 { width: 80%; }
+.sk-line.w-90 { width: 90%; }
+
+/* Skeleton circle */
+.sk-circle {
+    border-radius: 50%;
+}
+
+/* Skeleton fade transition — when real data replaces skeleton */
+.sk-fade-in {
+    animation: skFadeIn 0.5s ease;
+}
+@keyframes skFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== Quick Card Skeleton ===== */
+.sk-quick-card {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2)) !important;
+    border: 1px solid rgba(255,255,255,0.05) !important;
+    pointer-events: none;
+}
+.sk-quick-card .sk-quick-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    margin-bottom: 18px;
+}
+.sk-quick-card .sk-quick-line {
+    height: 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+.sk-quick-card .sk-quick-line.title { width: 55%; height: 20px; margin-bottom: 14px; }
+.sk-quick-card .sk-quick-line.desc { width: 90%; height: 12px; }
+.sk-quick-card .sk-quick-line.desc2 { width: 65%; height: 12px; margin-bottom: 18px; }
+.sk-quick-card .sk-quick-line.link { width: 38%; height: 12px; }
+
+/* ===== Principal Skeleton ===== */
+.sk-principal-img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+}
+.sk-principal-content .sk-line.designation { width: 30%; height: 15px; margin-bottom: 22px; }
+.sk-principal-content .sk-quote {
+    padding: 20px 0 20px 24px;
+    border-left: 4px solid var(--gold);
+    background: rgba(242,210,123,0.05);
+    border-radius: 0 12px 12px 0;
+    margin-bottom: 24px;
+}
+.sk-principal-content .sk-btn {
+    display: inline-block;
+    width: 190px;
+    height: 44px;
+    border-radius: 50px;
+    margin-right: 12px;
+}
+.sk-principal-content .sk-btn.outline {
+    width: 140px;
+    background: transparent;
+    border: 2px solid #e2e6ee;
+    animation: none;
+}
+
+/* ===== Dept Head Skeleton ===== */
+.sk-dept-card {
+    flex: 0 0 260px;
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    pointer-events: none;
+}
+.sk-dept-card .sk-dept-img {
+    width: 100%;
+    height: 280px;
+}
+.sk-dept-card .sk-dept-info {
+    padding: 18px 16px 22px;
+}
+.sk-dept-card .sk-dept-info .sk-line { margin-bottom: 8px; }
+.sk-dept-card .sk-dept-info .sk-line.name { width: 75%; height: 18px; }
+.sk-dept-card .sk-dept-info .sk-line.role { width: 55%; height: 12px; }
+.sk-dept-card .sk-dept-info .sk-line.dept { width: 65%; height: 12px; margin-bottom: 0; }
+
+/* ===== Welcome Skeleton ===== */
+.sk-welcome-wrap {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 50px 40px;
+    border-radius: 24px;
+    box-shadow: var(--shadow-md);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+.sk-welcome-wrap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+.sk-welcome-wrap .sk-line.title {
+    width: 40%;
+    height: 30px;
+    margin: 0 auto 26px;
+    border-radius: 10px;
+}
+.sk-welcome-wrap .sk-line.text {
+    width: 100%;
+    height: 14px;
+    margin: 0 auto 12px;
+}
+.sk-welcome-wrap .sk-line.text.w2 { width: 92%; }
+.sk-welcome-wrap .sk-line.text.w3 { width: 75%; margin-bottom: 30px; }
+.sk-welcome-wrap .sk-btn {
+    display: inline-block;
+    width: 170px;
+    height: 44px;
+    border-radius: 50px;
+}
+
+/* ===== Counter Skeleton ===== */
+.sk-counter-glass {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid rgba(242, 210, 123, 0.4);
+    padding: 40px 50px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    min-height: 200px;
+    max-width: 780px;
+    margin: 0 auto;
+    position: relative;
+}
+.sk-counter-glass::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 5px;
+    background: var(--gold);
+    border-radius: 20px 0 0 20px;
+}
+.sk-counter-glass .sk-counter-icon {
+    width: 78px;
+    height: 78px;
+    border-radius: 20px;
+    flex-shrink: 0;
+}
+.sk-counter-glass .sk-counter-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.sk-counter-glass .sk-line.clabel {
+    height: 16px;
+    width: 40%;
+    border-radius: 8px;
+}
+.sk-counter-glass .sk-line.cvalue {
+    height: 56px;
+    width: 60%;
+    border-radius: 12px;
+}
+
+/* ===== Notice Board Skeleton ===== */
+.sk-notice-item {
+    padding: 18px 26px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    pointer-events: none;
+}
+.sk-notice-item:last-child { border-bottom: none; }
+.sk-notice-item .sk-date {
+    flex-shrink: 0;
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+}
+.sk-notice-item .sk-body { flex: 1; min-width: 0; }
+.sk-notice-item .sk-body .sk-line.title { width: 80%; height: 16px; margin-bottom: 10px; }
+.sk-notice-item .sk-body .sk-line.desc { width: 95%; height: 12px; margin-bottom: 6px; }
+.sk-notice-item .sk-body .sk-line.desc2 { width: 60%; height: 12px; margin-bottom: 0; }
+
+/* ===== News Skeleton ===== */
+.sk-news-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    pointer-events: none;
+}
+.sk-news-card .sk-news-img {
+    width: 100%;
+    height: 200px;
+}
+.sk-news-card .sk-news-body {
+    padding: 20px 22px 24px;
+}
+.sk-news-card .sk-news-body .sk-line.cat { width: 30%; height: 20px; margin-bottom: 14px; border-radius: 20px; }
+.sk-news-card .sk-news-body .sk-line.title { width: 90%; height: 18px; margin-bottom: 10px; }
+.sk-news-card .sk-news-body .sk-line.title2 { width: 65%; height: 18px; margin-bottom: 16px; }
+.sk-news-card .sk-news-body .sk-line.desc { width: 100%; height: 13px; margin-bottom: 8px; }
+.sk-news-card .sk-news-body .sk-line.desc2 { width: 80%; height: 13px; margin-bottom: 20px; }
+.sk-news-card .sk-news-body .sk-line.date {
+    width: 40%;
+    height: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+    margin-bottom: 0;
+}
+
+/* ===== Gallery Skeleton ===== */
+.sk-gallery-card {
+    position: relative;
+    border-radius: 18px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    pointer-events: none;
+}
+.sk-gallery-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.15) 0%, transparent 60%);
+}
+.sk-gallery-card .sk-overlay {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    z-index: 2;
+}
+.sk-gallery-card .sk-overlay .sk-line.title {
+    width: 70%;
+    height: 16px;
+    margin-bottom: 8px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0.15) 80%);
+    background-size: 200% 100%;
+    animation: fdcShimmer 1.8s ease-in-out infinite;
+    border-radius: 8px;
+}
+.sk-gallery-card .sk-overlay .sk-line.desc {
+    width: 45%;
+    height: 11px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.22) 40%, rgba(255,255,255,0.1) 80%);
+    background-size: 200% 100%;
+    animation: fdcShimmer 1.8s ease-in-out infinite;
+    border-radius: 6px;
+    margin-bottom: 0;
+}
+
+/* Staggered animation delays for skeletons */
+.sk-quick-card:nth-child(1) .sk-shimmer-dark, .sk-quick-card:nth-child(1) .sk-shimmer-gold { animation-delay: 0s; }
+.sk-quick-card:nth-child(2) .sk-shimmer-dark, .sk-quick-card:nth-child(2) .sk-shimmer-gold { animation-delay: 0.08s; }
+.sk-quick-card:nth-child(3) .sk-shimmer-dark, .sk-quick-card:nth-child(3) .sk-shimmer-gold { animation-delay: 0.16s; }
+.sk-quick-card:nth-child(4) .sk-shimmer-dark, .sk-quick-card:nth-child(4) .sk-shimmer-gold { animation-delay: 0.24s; }
+.sk-quick-card:nth-child(5) .sk-shimmer-dark, .sk-quick-card:nth-child(5) .sk-shimmer-gold { animation-delay: 0.32s; }
+.sk-quick-card:nth-child(6) .sk-shimmer-dark, .sk-quick-card:nth-child(6) .sk-shimmer-gold { animation-delay: 0.40s; }
+.sk-quick-card:nth-child(7) .sk-shimmer-dark, .sk-quick-card:nth-child(7) .sk-shimmer-gold { animation-delay: 0.48s; }
+.sk-quick-card:nth-child(8) .sk-shimmer-dark, .sk-quick-card:nth-child(8) .sk-shimmer-gold { animation-delay: 0.56s; }
+
+.sk-news-card:nth-child(1) .sk-shimmer { animation-delay: 0s; }
+.sk-news-card:nth-child(2) .sk-shimmer { animation-delay: 0.15s; }
+.sk-news-card:nth-child(3) .sk-shimmer { animation-delay: 0.30s; }
+
+.sk-notice-item:nth-child(1) .sk-shimmer { animation-delay: 0s; }
+.sk-notice-item:nth-child(2) .sk-shimmer { animation-delay: 0.1s; }
+.sk-notice-item:nth-child(3) .sk-shimmer { animation-delay: 0.2s; }
+
+.sk-gallery-card:nth-child(1) .sk-shimmer { animation-delay: 0s; }
+.sk-gallery-card:nth-child(2) .sk-shimmer { animation-delay: 0.1s; }
+.sk-gallery-card:nth-child(3) .sk-shimmer { animation-delay: 0.2s; }
+.sk-gallery-card:nth-child(4) .sk-shimmer { animation-delay: 0.3s; }
+.sk-gallery-card:nth-child(5) .sk-shimmer { animation-delay: 0.4s; }
+.sk-gallery-card:nth-child(6) .sk-shimmer { animation-delay: 0.5s; }
+
+/* =========================================================
    SCROLL REVEAL
 ========================================================= */
 .reveal {
@@ -341,6 +700,64 @@ img { max-width: 100%; display: block; }
     background: var(--gold);
     transform: scale(1.2);
     border-color: #fff;
+}
+
+/* Hero Skeleton (initial state) */
+.hero-slider.sk-loading {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 0 20px 60px;
+}
+.hero-slider.sk-loading::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(242,210,123,0.08), transparent 60%),
+                radial-gradient(circle at 70% 30%, rgba(13,71,161,0.15), transparent 60%);
+}
+.hero-slider .sk-hero-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+    padding-bottom: 20px;
+}
+.hero-slider .sk-hero-content .sk-line {
+    margin-left: auto;
+    margin-right: auto;
+}
+.hero-slider .sk-hero-content .sk-line.ht {
+    height: 42px;
+    width: 75%;
+    border-radius: 12px;
+    margin-bottom: 14px;
+}
+.hero-slider .sk-hero-content .sk-line.ht2 {
+    height: 42px;
+    width: 50%;
+    border-radius: 12px;
+    margin-bottom: 24px;
+}
+.hero-slider .sk-hero-content .sk-line.hs {
+    height: 18px;
+    width: 60%;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+.hero-slider .sk-hero-content .sk-line.hs2 {
+    height: 18px;
+    width: 40%;
+    border-radius: 8px;
+    margin-bottom: 32px;
+}
+.hero-slider .sk-hero-content .sk-hero-btn {
+    display: inline-block;
+    width: 170px;
+    height: 46px;
+    border-radius: 50px;
 }
 
 /* =========================================================
@@ -1542,113 +1959,6 @@ img { max-width: 100%; display: block; }
 }
 
 /* =========================================================
-   SKELETON LOADING (FOUC Fix)
-========================================================= */
-.skeleton-box {
-    background: linear-gradient(
-        90deg,
-        #f0f2f5 25%,
-        #e5e7eb 50%,
-        #f0f2f5 75%
-    );
-    background-size: 200% 100%;
-    animation: skeletonShimmer 1.5s infinite;
-    border-radius: 8px;
-    display: block;
-    width: 100%;
-    height: 100%;
-    min-height: 40px;
-}
-@keyframes skeletonShimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-.skeleton-line-text {
-    display: block;
-    height: 14px;
-    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
-    background-size: 200% 100%;
-    animation: skeletonShimmer 1.5s infinite;
-    border-radius: 6px;
-    margin-bottom: 8px;
-    width: 100%;
-}
-.skeleton-text {
-    color: transparent !important;
-    position: relative;
-    overflow: hidden;
-    user-select: none;
-}
-.skeleton-text::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
-    background-size: 200% 100%;
-    animation: skeletonShimmer 1.5s infinite;
-    border-radius: 6px;
-    min-height: 24px;
-}
-.skeleton-card {
-    pointer-events: none;
-    background: linear-gradient(135deg, var(--navy), var(--navy-2)) !important;
-    border: 1px solid rgba(255,255,255,0.05) !important;
-    opacity: 0.85;
-    position: relative;
-    overflow: hidden;
-}
-.skeleton-card::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
-    background-size: 200% 100%;
-    animation: skeletonShimmer 1.8s infinite;
-}
-.skeleton-card * { opacity: 0 !important; }
-.skeleton-notice { pointer-events: none; }
-.skeleton-notice .notice-date {
-    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%) !important;
-    background-size: 200% 100% !important;
-    animation: skeletonShimmer 1.5s infinite !important;
-    color: transparent !important;
-}
-.skeleton-news-card {
-    pointer-events: none;
-    background: #fff !important;
-}
-.skeleton-news-card .news-img-wrap {
-    height: 200px;
-    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%) !important;
-    background-size: 200% 100% !important;
-    animation: skeletonShimmer 1.5s infinite !important;
-}
-.skeleton-news-card .news-body {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.skeleton-dept-card { pointer-events: none; }
-.skeleton-dept-card .dept-img {
-    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%) !important;
-    background-size: 200% 100% !important;
-    animation: skeletonShimmer 1.5s infinite !important;
-}
-.skeleton-dept-card .dept-info {
-    padding: 18px 16px 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-.data-loaded {
-    animation: smoothFadeIn 0.5s ease;
-}
-@keyframes smoothFadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-/* =========================================================
    RESPONSIVE
 ========================================================= */
 @media (max-width: 1100px) {
@@ -1854,8 +2164,16 @@ img { max-width: 100%; display: block; }
     </div>
 </header>
 
-<!-- HERO SLIDER -->
-<section class="hero-slider" id="heroSlider"></section>
+<!-- HERO SLIDER (with skeleton) -->
+<section class="hero-slider sk-loading" id="heroSlider">
+    <div class="sk-hero-content">
+        <div class="sk-line ht sk-shimmer-dark"></div>
+        <div class="sk-line ht2 sk-shimmer-dark"></div>
+        <div class="sk-line hs sk-shimmer-dark"></div>
+        <div class="sk-line hs2 sk-shimmer-dark"></div>
+        <div class="sk-hero-btn sk-shimmer-gold"></div>
+    </div>
+</section>
 
 <!-- NOTICE TICKER -->
 <section class="notice-ticker" id="noticeTicker" style="display:none;">
@@ -1879,15 +2197,63 @@ img { max-width: 100%; display: block; }
         <h2 class="section-title reveal reveal-scale">আমাদের সেবাসমূহ</h2>
         <p class="section-subtitle reveal reveal-scale">শিক্ষা, তথ্য ও সুবিধার এক ঠিকানা</p>
         <div class="quick-cards-grid reveal-stagger" id="quickCardsGrid">
-            <!-- Skeleton cards (JS replace করবে) -->
-            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
-            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
-            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
-            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
-            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
-            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
-            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
-            <div class="quick-card skeleton-card"><div class="quick-card-icon"></div><h3>Loading</h3><p>Loading...</p></div>
+            <!-- Skeleton Cards (8) -->
+            <div class="quick-card sk-quick-card">
+                <div class="sk-quick-icon sk-shimmer-gold"></div>
+                <div class="sk-quick-line title sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc2 sk-shimmer-dark"></div>
+                <div class="sk-quick-line link sk-shimmer-gold"></div>
+            </div>
+            <div class="quick-card sk-quick-card">
+                <div class="sk-quick-icon sk-shimmer-gold"></div>
+                <div class="sk-quick-line title sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc2 sk-shimmer-dark"></div>
+                <div class="sk-quick-line link sk-shimmer-gold"></div>
+            </div>
+            <div class="quick-card sk-quick-card">
+                <div class="sk-quick-icon sk-shimmer-gold"></div>
+                <div class="sk-quick-line title sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc2 sk-shimmer-dark"></div>
+                <div class="sk-quick-line link sk-shimmer-gold"></div>
+            </div>
+            <div class="quick-card sk-quick-card">
+                <div class="sk-quick-icon sk-shimmer-gold"></div>
+                <div class="sk-quick-line title sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc2 sk-shimmer-dark"></div>
+                <div class="sk-quick-line link sk-shimmer-gold"></div>
+            </div>
+            <div class="quick-card sk-quick-card">
+                <div class="sk-quick-icon sk-shimmer-gold"></div>
+                <div class="sk-quick-line title sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc2 sk-shimmer-dark"></div>
+                <div class="sk-quick-line link sk-shimmer-gold"></div>
+            </div>
+            <div class="quick-card sk-quick-card">
+                <div class="sk-quick-icon sk-shimmer-gold"></div>
+                <div class="sk-quick-line title sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc2 sk-shimmer-dark"></div>
+                <div class="sk-quick-line link sk-shimmer-gold"></div>
+            </div>
+            <div class="quick-card sk-quick-card">
+                <div class="sk-quick-icon sk-shimmer-gold"></div>
+                <div class="sk-quick-line title sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc2 sk-shimmer-dark"></div>
+                <div class="sk-quick-line link sk-shimmer-gold"></div>
+            </div>
+            <div class="quick-card sk-quick-card">
+                <div class="sk-quick-icon sk-shimmer-gold"></div>
+                <div class="sk-quick-line title sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc sk-shimmer-dark"></div>
+                <div class="sk-quick-line desc2 sk-shimmer-dark"></div>
+                <div class="sk-quick-line link sk-shimmer-gold"></div>
+            </div>
         </div>
     </div>
 </section>
@@ -1897,23 +2263,35 @@ img { max-width: 100%; display: block; }
     <div class="container-custom">
         <div class="principal-grid">
             <div class="principal-image-wrap reveal reveal-left">
-                <img src="assets/images/principal.jpg" alt="Principal" id="principalImage" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22500%22%3E%3Crect fill=%22%230a1655%22 width=%22400%22 height=%22500%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23f2d27b%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E👤%3C/text%3E%3C/svg%3E'">
+                <div class="sk-principal-img sk-shimmer" id="principalImgSkeleton"></div>
+                <img src="assets/images/principal.jpg" alt="Principal" id="principalImage" style="display:none;" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22500%22%3E%3Crect fill=%22%230a1655%22 width=%22400%22 height=%22500%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%23f2d27b%22 font-size=%2260%22 text-anchor=%22middle%22 dy=%22.3em%22%3E👤%3C/text%3E%3C/svg%3E'">
             </div>
-            <div class="principal-content">
-                <h2 id="principalName" class="skeleton-text">অধ্যক্ষ</h2>
-                <p class="designation" id="principalDesignation">অধ্যক্ষ</p>
-                <div class="quote" id="principalShortMessage">
-                    <span class="skeleton-line-text"></span>
-                    <span class="skeleton-line-text" style="width: 85%;"></span>
-                    <span class="skeleton-line-text" style="width: 70%;"></span>
+            <div class="principal-content sk-principal-content">
+                <div class="sk-line xl sk-shimmer" style="width: 65%;"></div>
+                <div class="sk-line designation sk-shimmer"></div>
+                <div class="sk-quote">
+                    <div class="sk-line sk-shimmer" style="width: 100%;"></div>
+                    <div class="sk-line sk-shimmer" style="width: 92%;"></div>
+                    <div class="sk-line sk-shimmer" style="width: 60%; margin-bottom: 0;"></div>
                 </div>
-                <div class="principal-actions">
-                    <button class="btn-navy" onclick="openPrincipalModal()">
-                        <i class="fas fa-book-open"></i> সম্পূর্ণ বাণী পড়ুন
-                    </button>
-                    <a href="public-pages/about.html" class="btn-outline-navy">
-                        <i class="fas fa-info-circle"></i> বিস্তারিত
-                    </a>
+                <div>
+                    <span class="sk-btn sk-shimmer"></span>
+                    <span class="sk-btn outline"></span>
+                </div>
+
+                <!-- Real Content (hidden, JS replace করবে) -->
+                <div id="principalRealContent" style="display:none;">
+                    <h2 id="principalName">অধ্যক্ষ</h2>
+                    <p class="designation" id="principalDesignation">অধ্যক্ষ</p>
+                    <div class="quote" id="principalShortMessage"></div>
+                    <div class="principal-actions">
+                        <button class="btn-navy" onclick="openPrincipalModal()">
+                            <i class="fas fa-book-open"></i> সম্পূর্ণ বাণী পড়ুন
+                        </button>
+                        <a href="public-pages/about.html" class="btn-outline-navy">
+                            <i class="fas fa-info-circle"></i> বিস্তারিত
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1928,25 +2306,36 @@ img { max-width: 100%; display: block; }
     </div>
     <div class="dept-slider-viewport">
         <div class="dept-slider" id="deptSlider">
-            <div class="dept-card skeleton-dept-card">
-                <div class="dept-img skeleton-box"></div>
-                <div class="dept-info">
-                    <span class="skeleton-line-text" style="width: 70%;"></span>
-                    <span class="skeleton-line-text" style="width: 50%;"></span>
+            <div class="dept-card sk-dept-card">
+                <div class="sk-dept-img sk-shimmer"></div>
+                <div class="sk-dept-info">
+                    <div class="sk-line name sk-shimmer"></div>
+                    <div class="sk-line role sk-shimmer"></div>
+                    <div class="sk-line dept sk-shimmer"></div>
                 </div>
             </div>
-            <div class="dept-card skeleton-dept-card">
-                <div class="dept-img skeleton-box"></div>
-                <div class="dept-info">
-                    <span class="skeleton-line-text" style="width: 70%;"></span>
-                    <span class="skeleton-line-text" style="width: 50%;"></span>
+            <div class="dept-card sk-dept-card">
+                <div class="sk-dept-img sk-shimmer"></div>
+                <div class="sk-dept-info">
+                    <div class="sk-line name sk-shimmer"></div>
+                    <div class="sk-line role sk-shimmer"></div>
+                    <div class="sk-line dept sk-shimmer"></div>
                 </div>
             </div>
-            <div class="dept-card skeleton-dept-card">
-                <div class="dept-img skeleton-box"></div>
-                <div class="dept-info">
-                    <span class="skeleton-line-text" style="width: 70%;"></span>
-                    <span class="skeleton-line-text" style="width: 50%;"></span>
+            <div class="dept-card sk-dept-card">
+                <div class="sk-dept-img sk-shimmer"></div>
+                <div class="sk-dept-info">
+                    <div class="sk-line name sk-shimmer"></div>
+                    <div class="sk-line role sk-shimmer"></div>
+                    <div class="sk-line dept sk-shimmer"></div>
+                </div>
+            </div>
+            <div class="dept-card sk-dept-card">
+                <div class="sk-dept-img sk-shimmer"></div>
+                <div class="sk-dept-info">
+                    <div class="sk-line name sk-shimmer"></div>
+                    <div class="sk-line role sk-shimmer"></div>
+                    <div class="sk-line dept sk-shimmer"></div>
                 </div>
             </div>
         </div>
@@ -1956,13 +2345,17 @@ img { max-width: 100%; display: block; }
 <!-- WELCOME -->
 <section class="welcome-section">
     <div class="container-custom">
-        <div class="welcome-wrap reveal reveal-left">
-            <h2 id="welcomeTitle" class="skeleton-text">স্বাগতম</h2>
-            <p id="welcomeShortText">
-                <span class="skeleton-line-text"></span>
-                <span class="skeleton-line-text" style="width: 90%;"></span>
-                <span class="skeleton-line-text" style="width: 60%;"></span>
-            </p>
+        <div class="sk-welcome-wrap reveal reveal-left" id="welcomeSkeleton">
+            <div class="sk-line title sk-shimmer"></div>
+            <div class="sk-line text sk-shimmer"></div>
+            <div class="sk-line text w2 sk-shimmer"></div>
+            <div class="sk-line text w3 sk-shimmer"></div>
+            <div class="sk-btn sk-shimmer"></div>
+        </div>
+
+        <div class="welcome-wrap reveal reveal-left" id="welcomeRealContent" style="display:none;">
+            <h2 id="welcomeTitle">স্বাগতম</h2>
+            <p id="welcomeShortText">ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।</p>
             <button class="btn-navy" onclick="openWelcomeModal()">
                 <i class="fas fa-arrow-right"></i> আরও পড়ুন
             </button>
@@ -1973,7 +2366,16 @@ img { max-width: 100%; display: block; }
 <!-- COUNTER -->
 <section class="counter-section" id="counterSection">
     <div class="container-custom">
-        <div class="counter-slider-wrap" id="counterSliderWrap"></div>
+        <div class="counter-slider-wrap" id="counterSliderWrap">
+            <!-- Counter Skeleton -->
+            <div class="sk-counter-glass">
+                <div class="sk-counter-icon sk-shimmer-gold"></div>
+                <div class="sk-counter-info">
+                    <div class="sk-line clabel sk-shimmer-dark"></div>
+                    <div class="sk-line cvalue sk-shimmer-gold"></div>
+                </div>
+            </div>
+        </div>
         <div class="counter-dots" id="counterDots"></div>
     </div>
 </section>
@@ -1989,25 +2391,37 @@ img { max-width: 100%; display: block; }
                 </a>
             </div>
             <div class="notice-list" id="noticeBoardList">
-                <div class="notice-item skeleton-notice">
-                    <div class="notice-date skeleton-box"></div>
-                    <div class="notice-body">
-                        <span class="skeleton-line-text"></span>
-                        <span class="skeleton-line-text" style="width: 80%;"></span>
+                <!-- Notice Skeletons -->
+                <div class="sk-notice-item">
+                    <div class="sk-date sk-shimmer"></div>
+                    <div class="sk-body">
+                        <div class="sk-line title sk-shimmer"></div>
+                        <div class="sk-line desc sk-shimmer"></div>
+                        <div class="sk-line desc2 sk-shimmer"></div>
                     </div>
                 </div>
-                <div class="notice-item skeleton-notice">
-                    <div class="notice-date skeleton-box"></div>
-                    <div class="notice-body">
-                        <span class="skeleton-line-text"></span>
-                        <span class="skeleton-line-text" style="width: 75%;"></span>
+                <div class="sk-notice-item">
+                    <div class="sk-date sk-shimmer"></div>
+                    <div class="sk-body">
+                        <div class="sk-line title sk-shimmer"></div>
+                        <div class="sk-line desc sk-shimmer"></div>
+                        <div class="sk-line desc2 sk-shimmer"></div>
                     </div>
                 </div>
-                <div class="notice-item skeleton-notice">
-                    <div class="notice-date skeleton-box"></div>
-                    <div class="notice-body">
-                        <span class="skeleton-line-text"></span>
-                        <span class="skeleton-line-text" style="width: 85%;"></span>
+                <div class="sk-notice-item">
+                    <div class="sk-date sk-shimmer"></div>
+                    <div class="sk-body">
+                        <div class="sk-line title sk-shimmer"></div>
+                        <div class="sk-line desc sk-shimmer"></div>
+                        <div class="sk-line desc2 sk-shimmer"></div>
+                    </div>
+                </div>
+                <div class="sk-notice-item">
+                    <div class="sk-date sk-shimmer"></div>
+                    <div class="sk-body">
+                        <div class="sk-line title sk-shimmer"></div>
+                        <div class="sk-line desc sk-shimmer"></div>
+                        <div class="sk-line desc2 sk-shimmer"></div>
                     </div>
                 </div>
             </div>
@@ -2021,28 +2435,38 @@ img { max-width: 100%; display: block; }
         <h2 class="section-title reveal reveal-scale" id="newsSectionTitle">সর্বশেষ সংবাদ</h2>
         <p class="section-subtitle reveal reveal-scale">কলেজের সাম্প্রতিক খবর ও ইভেন্ট</p>
         <div class="news-grid reveal-stagger" id="newsGrid">
-            <div class="news-card skeleton-news-card">
-                <div class="news-img-wrap skeleton-box"></div>
-                <div class="news-body">
-                    <span class="skeleton-line-text" style="width: 40%;"></span>
-                    <span class="skeleton-line-text"></span>
-                    <span class="skeleton-line-text" style="width: 80%;"></span>
+            <!-- News Skeleton Cards -->
+            <div class="sk-news-card">
+                <div class="sk-news-img sk-shimmer"></div>
+                <div class="sk-news-body">
+                    <div class="sk-line cat sk-shimmer"></div>
+                    <div class="sk-line title sk-shimmer"></div>
+                    <div class="sk-line title2 sk-shimmer"></div>
+                    <div class="sk-line desc sk-shimmer"></div>
+                    <div class="sk-line desc2 sk-shimmer"></div>
+                    <div class="sk-line date sk-shimmer"></div>
                 </div>
             </div>
-            <div class="news-card skeleton-news-card">
-                <div class="news-img-wrap skeleton-box"></div>
-                <div class="news-body">
-                    <span class="skeleton-line-text" style="width: 40%;"></span>
-                    <span class="skeleton-line-text"></span>
-                    <span class="skeleton-line-text" style="width: 80%;"></span>
+            <div class="sk-news-card">
+                <div class="sk-news-img sk-shimmer"></div>
+                <div class="sk-news-body">
+                    <div class="sk-line cat sk-shimmer"></div>
+                    <div class="sk-line title sk-shimmer"></div>
+                    <div class="sk-line title2 sk-shimmer"></div>
+                    <div class="sk-line desc sk-shimmer"></div>
+                    <div class="sk-line desc2 sk-shimmer"></div>
+                    <div class="sk-line date sk-shimmer"></div>
                 </div>
             </div>
-            <div class="news-card skeleton-news-card">
-                <div class="news-img-wrap skeleton-box"></div>
-                <div class="news-body">
-                    <span class="skeleton-line-text" style="width: 40%;"></span>
-                    <span class="skeleton-line-text"></span>
-                    <span class="skeleton-line-text" style="width: 80%;"></span>
+            <div class="sk-news-card">
+                <div class="sk-news-img sk-shimmer"></div>
+                <div class="sk-news-body">
+                    <div class="sk-line cat sk-shimmer"></div>
+                    <div class="sk-line title sk-shimmer"></div>
+                    <div class="sk-line title2 sk-shimmer"></div>
+                    <div class="sk-line desc sk-shimmer"></div>
+                    <div class="sk-line desc2 sk-shimmer"></div>
+                    <div class="sk-line date sk-shimmer"></div>
                 </div>
             </div>
         </div>
@@ -2060,12 +2484,43 @@ img { max-width: 100%; display: block; }
         <h2 class="section-title reveal reveal-scale">আমাদের গ্যালারি</h2>
         <p class="section-subtitle reveal reveal-scale">কলেজের স্মরণীয় মুহূর্তের ছবি</p>
         <div class="gallery-grid-home reveal-stagger" id="galleryGridHome">
-            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
-            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
-            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
-            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
-            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
-            <div class="gallery-card skeleton-box" style="aspect-ratio: 4/3;"></div>
+            <!-- Gallery Skeleton Cards -->
+            <div class="sk-gallery-card sk-shimmer">
+                <div class="sk-overlay">
+                    <div class="sk-line title"></div>
+                    <div class="sk-line desc"></div>
+                </div>
+            </div>
+            <div class="sk-gallery-card sk-shimmer">
+                <div class="sk-overlay">
+                    <div class="sk-line title"></div>
+                    <div class="sk-line desc"></div>
+                </div>
+            </div>
+            <div class="sk-gallery-card sk-shimmer">
+                <div class="sk-overlay">
+                    <div class="sk-line title"></div>
+                    <div class="sk-line desc"></div>
+                </div>
+            </div>
+            <div class="sk-gallery-card sk-shimmer">
+                <div class="sk-overlay">
+                    <div class="sk-line title"></div>
+                    <div class="sk-line desc"></div>
+                </div>
+            </div>
+            <div class="sk-gallery-card sk-shimmer">
+                <div class="sk-overlay">
+                    <div class="sk-line title"></div>
+                    <div class="sk-line desc"></div>
+                </div>
+            </div>
+            <div class="sk-gallery-card sk-shimmer">
+                <div class="sk-overlay">
+                    <div class="sk-line title"></div>
+                    <div class="sk-line desc"></div>
+                </div>
+            </div>
         </div>
         <div style="text-align:center;margin-top:40px;">
             <a href="public-pages/gallery.html" class="btn-navy">
@@ -2203,7 +2658,7 @@ img { max-width: 100%; display: block; }
             <div class="footer-visitors" title="Total Visitors">
                 <i class="fas fa-eye"></i>
                 <span class="visitor-label">Total Visitors</span>
-                <span class="visitor-count" id="totalVisitors">...</span>
+                <span class="visitor-count" id="totalVisitors">···</span>
             </div>
 
             <span class="footer-credit">
@@ -2310,11 +2765,10 @@ img { max-width: 100%; display: block; }
     }
 
     // =========================================================
-    // LOAD SETTINGS (with LocalStorage cache)
+    // LOAD SETTINGS
     // =========================================================
     async function loadSiteSettings() {
         try {
-            // 1. Try cache first (instant)
             try {
                 const cached = localStorage.getItem(SETTINGS_CACHE_KEY);
                 if (cached) {
@@ -2326,14 +2780,12 @@ img { max-width: 100%; display: block; }
             const supabase = window.FDC_SUPABASE;
             if (!supabase) throw new Error('Supabase not initialized');
 
-            // 2. Fetch fresh
             const { data, error } = await supabase.from('site_settings').select('key, value');
             if (error) throw error;
 
             const freshSettings = {};
             (data || []).forEach(function (item) { freshSettings[item.key] = item.value; });
 
-            // 3. Update if changed
             const changed = JSON.stringify(SITE_SETTINGS) !== JSON.stringify(freshSettings);
             if (changed) {
                 SITE_SETTINGS = freshSettings;
@@ -2364,7 +2816,6 @@ img { max-width: 100%; display: block; }
         document.querySelectorAll('[data-college-eiin]').forEach(function (el) { el.textContent = eiin; });
         document.title = name + ' | Fulbariya College';
 
-        // Meta description
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) {
             const desc = getSetting('college_meta_description');
@@ -2413,6 +2864,9 @@ img { max-width: 100%; display: block; }
             }
         }
 
+        // Remove skeleton class
+        slider.classList.remove('sk-loading');
+
         if (HERO_SLIDES.length === 0) {
             slider.innerHTML = '<div class="hero-slide active" style="position:relative;min-height:520px;background:linear-gradient(135deg,#0a1655,#1a237e);"><div class="hero-content" style="position:relative;padding:80px 20px;"><h2>ফুলবাড়ীয়া কলেজে স্বাগতম</h2><p>মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়</p></div></div>';
             return;
@@ -2443,6 +2897,7 @@ img { max-width: 100%; display: block; }
         }
 
         slider.innerHTML = html;
+        slider.classList.add('sk-fade-in');
         if (HERO_SLIDES.length > 1) startHeroAutoSlide();
     }
 
@@ -2471,7 +2926,7 @@ img { max-width: 100%; display: block; }
     }
 
     // =========================================================
-    // QUICK CARDS (8 cards: 6 original + 2 new)
+    // QUICK CARDS
     // =========================================================
     function buildQuickCards() {
         const grid = document.getElementById('quickCardsGrid');
@@ -2508,6 +2963,7 @@ img { max-width: 100%; display: block; }
             '</a>';
         }
         grid.innerHTML = html;
+        grid.classList.add('sk-fade-in');
         observeNewReveals(grid);
     }
 
@@ -2520,22 +2976,27 @@ img { max-width: 100%; display: block; }
         const image = getSetting('principal_image');
         const shortMsg = getSetting('principal_short_message', '');
 
-        const nameEl = document.getElementById('principalName');
-        const desEl = document.getElementById('principalDesignation');
-        const msgEl = document.getElementById('principalShortMessage');
+        // Hide skeleton, show real
+        const skeletonEl = document.querySelector('.sk-principal-content');
+        const imgSkeleton = document.getElementById('principalImgSkeleton');
+        const realContent = document.getElementById('principalRealContent');
+        const realImg = document.getElementById('principalImage');
 
-        nameEl.textContent = name;
-        nameEl.classList.remove('skeleton-text');
-        nameEl.classList.add('data-loaded');
-
-        desEl.textContent = designation;
-
-        if (shortMsg) {
-            msgEl.textContent = '"' + shortMsg + '"';
-            msgEl.classList.add('data-loaded');
+        if (skeletonEl) skeletonEl.style.display = 'none';
+        if (imgSkeleton) imgSkeleton.style.display = 'none';
+        if (realContent) {
+            realContent.style.display = 'block';
+            realContent.classList.add('sk-fade-in');
+        }
+        if (realImg) {
+            realImg.style.display = 'block';
+            realImg.classList.add('sk-fade-in');
         }
 
-        if (image) document.getElementById('principalImage').src = image;
+        document.getElementById('principalName').textContent = name;
+        document.getElementById('principalDesignation').textContent = designation;
+        document.getElementById('principalShortMessage').textContent = shortMsg ? '"' + shortMsg + '"' : '';
+        if (image && realImg) realImg.src = image;
     }
 
     window.openPrincipalModal = function () {
@@ -2581,7 +3042,7 @@ img { max-width: 100%; display: block; }
 
             const cardsHtml = data.map(buildCard).join('');
             slider.innerHTML = cardsHtml + cardsHtml;
-            slider.classList.add('data-loaded');
+            slider.classList.add('sk-fade-in');
             const duration = Math.max(data.length * 8, 30);
             slider.style.animationDuration = duration + 's';
 
@@ -2595,15 +3056,16 @@ img { max-width: 100%; display: block; }
     // WELCOME
     // =========================================================
     function loadWelcome() {
-        const titleEl = document.getElementById('welcomeTitle');
-        const textEl = document.getElementById('welcomeShortText');
+        const skeleton = document.getElementById('welcomeSkeleton');
+        const realContent = document.getElementById('welcomeRealContent');
+        if (skeleton) skeleton.style.display = 'none';
+        if (realContent) {
+            realContent.style.display = 'block';
+            realContent.classList.add('sk-fade-in');
+        }
 
-        titleEl.textContent = getSetting('welcome_title', 'স্বাগতম');
-        titleEl.classList.remove('skeleton-text');
-        titleEl.classList.add('data-loaded');
-
-        textEl.textContent = getSetting('welcome_short_text', 'ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।');
-        textEl.classList.add('data-loaded');
+        document.getElementById('welcomeTitle').textContent = getSetting('welcome_title', 'স্বাগতম');
+        document.getElementById('welcomeShortText').textContent = getSetting('welcome_short_text', 'ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।');
     }
 
     window.openWelcomeModal = function () {
@@ -2655,6 +3117,7 @@ img { max-width: 100%; display: block; }
         }
 
         wrap.innerHTML = html;
+        wrap.classList.add('sk-fade-in');
         COUNTER_TOTAL = total;
         COUNTER_INDEX = 0;
 
@@ -2665,7 +3128,6 @@ img { max-width: 100%; display: block; }
         const slides = document.querySelectorAll('.counter-slide');
         const prevIndex = COUNTER_INDEX;
 
-        // Clear all pending exit timers
         Object.keys(COUNTER_EXIT_TIMERS).forEach(function (key) {
             clearTimeout(COUNTER_EXIT_TIMERS[key]);
             delete COUNTER_EXIT_TIMERS[key];
@@ -2821,7 +3283,7 @@ img { max-width: 100%; display: block; }
                 '</a>';
             });
             list.innerHTML = html;
-            list.classList.add('data-loaded');
+            list.classList.add('sk-fade-in');
 
             setupNoticeAutoScroll(list);
 
@@ -2951,7 +3413,7 @@ img { max-width: 100%; display: block; }
                 '</a>';
             });
             grid.innerHTML = html;
-            grid.classList.add('data-loaded');
+            grid.classList.add('sk-fade-in');
             observeNewReveals(grid);
         } catch (err) {
             console.error('News error:', err);
@@ -2998,7 +3460,7 @@ img { max-width: 100%; display: block; }
                 '</a>';
             });
             grid.innerHTML = html;
-            grid.classList.add('data-loaded');
+            grid.classList.add('sk-fade-in');
             observeNewReveals(grid);
         } catch (err) {
             console.error('Gallery error:', err);
@@ -3089,7 +3551,7 @@ img { max-width: 100%; display: block; }
     });
 
     // =========================================================
-    // INIT (Priority loading)
+    // INIT
     // =========================================================
     async function initHomepage() {
         if (INIT_DONE) return;
@@ -3107,7 +3569,6 @@ img { max-width: 100%; display: block; }
 
         const ok = await loadSiteSettings();
         if (ok) {
-            // Above-the-fold (priority)
             applyCollegeInfo();
             applySocialLinks();
             buildHeroSlider();
@@ -3117,7 +3578,6 @@ img { max-width: 100%; display: block; }
             buildCounter();
         }
 
-        // Below-the-fold (parallel)
         await Promise.all([
             loadDepartmentHeads(),
             loadNoticeTicker(),
@@ -3129,7 +3589,6 @@ img { max-width: 100%; display: block; }
 
         observeNewReveals(document.body);
 
-        // Multi-retry force check
         setTimeout(forceCheckVisible, 400);
         setTimeout(forceCheckVisible, 1500);
         setTimeout(forceCheckVisible, 3000);
