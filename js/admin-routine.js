@@ -3,6 +3,7 @@
  * FULBARIYA COLLEGE — ADMIN CLASS ROUTINE MANAGEMENT
  * Location: js/admin-routine.js
  * Depends: config.js, supabase.js, auth.js, cloudinary.js, admin-popup.js
+ * Supports: HSC, BM, Honours (7 subjects), Degree (4 courses)
  * =========================================================
  */
 
@@ -17,6 +18,23 @@
     let editingId = null;
     let selectedImageFile = null;
     let existingImageUrl = '';
+
+    // =========================================================
+    // BRANCH-WISE CONFIG
+    // =========================================================
+    const HSC_GROUPS = ['Science', 'Humanities', 'Business', 'BM-General'];
+
+    const HONOURS_SUBJECTS = [
+        'Accounting',
+        'Management',
+        'Political Science',
+        'Bangla',
+        'Philosophy',
+        'Zoology',
+        'English'
+    ];
+
+    const DEGREE_COURSES = ['B.A.', 'B.S.S.', 'B.Sc.', 'B.B.S.'];
 
     // =========================================================
     // DOM HELPERS
@@ -368,14 +386,30 @@
         const isPublished = $('routinePublished').checked;
         const existing = $('existingImageUrl').value;
 
-        // Validation
+        // =========================================
+        // VALIDATION
+        // =========================================
         if (!title) return window.fdcWarning('Title দিতে হবে।');
         if (!session) return window.fdcWarning('Session দিতে হবে।');
         if (!branch) return window.fdcWarning('Branch সিলেক্ট করুন।');
         if (!className) return window.fdcWarning('Class সিলেক্ট করুন।');
+
+        // HSC-এর জন্য Group বাধ্যতামূলক
         if (branch === 'HSC' && !groupName) {
             return window.fdcWarning('HSC-এর জন্য Group সিলেক্ট করুন।');
         }
+
+        // অনার্সের জন্য বিষয় বাধ্যতামূলক
+        if (branch === 'Honours' && !groupName) {
+            return window.fdcWarning('অনার্সের জন্য বিষয় (Department) সিলেক্ট করুন।');
+        }
+
+        // ডিগ্রির জন্য কোর্স বাধ্যতামূলক
+        if (branch === 'Degree' && !groupName) {
+            return window.fdcWarning('ডিগ্রির জন্য কোর্স সিলেক্ট করুন।');
+        }
+
+        // ছবি বাধ্যতামূলক
         if (!selectedImageFile && !existing) {
             return window.fdcWarning('Routine image upload করুন।');
         }
@@ -389,7 +423,9 @@
             let imageUrl = existing;
             let cloudinaryId = $('existingCloudinaryId').value || null;
 
-            // Upload new image to Cloudinary
+            // ---------------------------------------------------
+            // UPLOAD IMAGE TO CLOUDINARY
+            // ---------------------------------------------------
             if (selectedImageFile) {
                 if (typeof window.FDCUploadImage !== 'function') {
                     throw new Error('Upload function not available');
@@ -401,11 +437,20 @@
                 cloudinaryId = result.public_id || null;
             }
 
+            // ---------------------------------------------------
+            // PREPARE PAYLOAD
+            // ---------------------------------------------------
+            // BM হলে group_name = 'BM-General', অন্যথায় যা select করা
+            let finalGroupName = groupName;
+            if (branch === 'BM') {
+                finalGroupName = 'BM-General';
+            }
+
             const payload = {
                 title: title,
                 class_name: className,
                 branch: branch,
-                group_name: branch === 'BM' ? 'BM-General' : groupName,
+                group_name: finalGroupName,
                 session: session,
                 image_url: imageUrl,
                 cloudinary_id: cloudinaryId,
@@ -413,6 +458,9 @@
                 is_published: isPublished
             };
 
+            // ---------------------------------------------------
+            // SAVE TO SUPABASE
+            // ---------------------------------------------------
             let result;
             if (editingId) {
                 result = await window.FDC_SUPABASE
@@ -529,10 +577,16 @@
         });
         $('filterSession').addEventListener('input', applyFilters);
 
-        // Branch change → auto set group
+        // ---------------------------------------------------
+        // BRANCH CHANGE → RESET / AUTO-SET GROUP
+        // ---------------------------------------------------
         $('routineBranch').addEventListener('change', function () {
-            if (this.value === 'BM') {
+            const branch = this.value;
+
+            if (branch === 'BM') {
                 $('routineGroup').value = 'BM-General';
+            } else if (branch === 'HSC' || branch === 'Honours' || branch === 'Degree') {
+                $('routineGroup').value = '';
             }
         });
 

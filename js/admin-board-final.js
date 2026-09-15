@@ -3,6 +3,7 @@
  * FULBARIYA COLLEGE — BOARD FINAL RESULT MANAGEMENT
  * Location: js/admin-board-final.js
  * Depends: config.js, supabase.js, auth.js, admin-guard.js, admin-popup.js
+ * Supports: HSC (4 groups), Degree (4 courses), Honours (7 subjects)
  * =========================================================
  */
 
@@ -22,22 +23,13 @@
         HSC: ['Science', 'Humanities', 'Business Studies', 'BM'],
         Degree: ['B.A (Pass)', 'B.S.S (Pass)', 'B.B.S (Pass)', 'B.Sc (Pass)'],
         Honours: [
-            // Humanities & Social Science
-            'Bangla',
-            'English',
-            'History',
-            'Islamic History & Culture',
-            'Political Science',
-            'Economics',
-            'Social Work',
-
-            // Business Studies
             'Accounting',
             'Management',
-
-            // Science
+            'Political Science',
+            'Bangla',
+            'Philosophy',
             'Zoology',
-            'Botany'
+            'English'
         ]
     };
 
@@ -86,7 +78,6 @@
         const box = $('formValidation');
         const sum = passed + failed + absentee;
 
-        // Sum > Total → Error
         if (sum > total) {
             box.style.display = 'block';
             box.style.background = '#fef2f2';
@@ -98,13 +89,11 @@
             return false;
         }
 
-        // Both zero → hide
         if (total === 0 && sum === 0) {
             box.style.display = 'none';
             return true;
         }
 
-        // Sum < Total → Warning
         if (sum < total) {
             const missing = total - sum;
             box.style.display = 'block';
@@ -118,7 +107,6 @@
             return true;
         }
 
-        // Sum === Total → Perfect
         box.style.display = 'block';
         box.style.background = '#f0fdf4';
         box.style.color = '#166534';
@@ -218,7 +206,6 @@
         const tbody = $('tableBody');
         $('totalRecords').textContent = allRecords.length;
 
-        // Empty state
         if (allRecords.length === 0) {
             tbody.innerHTML = `
                 <tr>
@@ -234,7 +221,6 @@
             return;
         }
 
-        // Render rows
         tbody.innerHTML = allRecords.map(r => {
             const passRate = calcPassRate(r.passed, r.total_student);
             const rateColor = passRate >= 75 ? '#059669' : passRate >= 50 ? '#d97706' : '#dc2626';
@@ -291,8 +277,6 @@
         $('cancelEditBtn').style.display = 'inline-flex';
 
         validateNumbers();
-
-        // Scroll to form
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -382,7 +366,6 @@
             };
 
             if (currentEditId) {
-                // ============ UPDATE ============
                 const { error } = await window.FDC_SUPABASE
                     .from('board_final_result')
                     .update(payload)
@@ -391,7 +374,6 @@
                 if (error) throw error;
                 window.fdcSuccess('সফলভাবে আপডেট হয়েছে!');
             } else {
-                // ============ UPSERT (Insert or Update) ============
                 const { error } = await window.FDC_SUPABASE
                     .from('board_final_result')
                     .upsert(payload, {
@@ -449,26 +431,20 @@
         console.log('🚀 Board Final Result initializing...');
 
         waitForSupabase(async function () {
-            // Attach event listeners
             $('examName').addEventListener('change', updateGroupDropdown);
             $('boardForm').addEventListener('submit', handleSubmit);
             $('cancelEditBtn').addEventListener('click', resetForm);
 
-            // Live validation on number inputs
             ['totalStudent', 'passed', 'failed', 'absentee'].forEach(id => {
                 $(id).addEventListener('input', validateNumbers);
             });
 
-            // Load records from Supabase
             await loadRecords();
 
             console.log('✅ Board Final Result ready');
         });
     }
 
-    // =========================================================
-    // BOOT
-    // =========================================================
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {

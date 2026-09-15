@@ -1,4 +1,4 @@
- /**
+/**
  * =========================================================
  * FULBARIYA COLLEGE — PUBLIC RESULT OVERVIEW
  * Location: js/result-overview.js
@@ -9,6 +9,7 @@
  *   • Degree Board (year filter, course pies)
  *   • Honours Board (year filter, dept pies — scrollable)
  *   • Scroll-triggered animation: charts fill 0 → actual
+ *   • Enhanced animations: pulse, glow, fade-slide
  * =========================================================
  */
 
@@ -26,7 +27,7 @@
     };
     let currentInternalExam = '1st Terminal';
     const charts = {};
-    const animatedCharts = new Set(); // track animated charts
+    const animatedCharts = new Set();
 
     // =========================================================
     // CONSTANTS
@@ -38,7 +39,6 @@
         navy: '#0a1655'
     };
 
-    // HSC groups
     const HSC_GROUPS = [
         { key: 'Science',    label: 'বিজ্ঞান',       icon: 'fas fa-flask',     cssClass: 'science' },
         { key: 'Humanities', label: 'মানবিক',         icon: 'fas fa-book',      cssClass: 'humanities' },
@@ -46,27 +46,22 @@
         { key: 'BM-General', label: 'বিএম',           icon: 'fas fa-industry',  cssClass: 'bm' }
     ];
 
-    // Degree courses
     const DEGREE_COURSES = [
-        { key: 'B.A (Pass)',   label: 'বি.এ (পাস)',    icon: 'fas fa-book',           cssClass: 'humanities' },
-        { key: 'B.S.S (Pass)', label: 'বি.এস.এস (পাস)', icon: 'fas fa-users',          cssClass: 'science' },
-        { key: 'B.B.S (Pass)', label: 'বি.বি.এস (পাস)', icon: 'fas fa-briefcase',      cssClass: 'business' },
-        { key: 'B.Sc (Pass)',  label: 'বি.এস.সি (পাস)', icon: 'fas fa-flask',          cssClass: 'science' }
+        { key: 'B.A (Pass)',   label: 'বি.এ (পাস)',    icon: 'fas fa-book',      cssClass: 'humanities' },
+        { key: 'B.S.S (Pass)', label: 'বি.এস.এস (পাস)', icon: 'fas fa-users',     cssClass: 'science' },
+        { key: 'B.B.S (Pass)', label: 'বি.বি.এস (পাস)', icon: 'fas fa-briefcase', cssClass: 'business' },
+        { key: 'B.Sc (Pass)',  label: 'বি.এস.সি (পাস)', icon: 'fas fa-flask',     cssClass: 'science' }
     ];
 
-    // Honours departments (11)
+    // Honours — 7 subjects (Fulbariya College)
     const HONOURS_DEPTS = [
-        { key: 'Bangla',                    label: 'বাংলা',                  icon: 'fas fa-language',     cssClass: 'humanities' },
-        { key: 'English',                   label: 'ইংরেজি',                 icon: 'fas fa-book-open',    cssClass: 'humanities' },
-        { key: 'History',                   label: 'ইতিহাস',                 icon: 'fas fa-landmark',     cssClass: 'humanities' },
-        { key: 'Islamic History & Culture', label: 'ইসলামের ইতিহাস',         icon: 'fas fa-mosque',       cssClass: 'humanities' },
-        { key: 'Political Science',         label: 'রাষ্ট্রবিজ্ঞান',          icon: 'fas fa-gavel',        cssClass: 'humanities' },
-        { key: 'Economics',                 label: 'অর্থনীতি',                icon: 'fas fa-chart-line',   cssClass: 'business' },
-        { key: 'Social Work',               label: 'সমাজকর্ম',               icon: 'fas fa-hands-helping', cssClass: 'humanities' },
-        { key: 'Accounting',                label: 'হিসাববিজ্ঞান',           icon: 'fas fa-calculator',   cssClass: 'business' },
-        { key: 'Management',                label: 'ব্যবস্থাপনা',             icon: 'fas fa-user-tie',     cssClass: 'business' },
-        { key: 'Zoology',                   label: 'প্রাণিবিদ্যা',            icon: 'fas fa-paw',          cssClass: 'science' },
-        { key: 'Botany',                    label: 'উদ্ভিদবিজ্ঞান',          icon: 'fas fa-leaf',         cssClass: 'science' }
+        { key: 'Accounting',        label: 'হিসাববিজ্ঞান',   icon: 'fas fa-calculator', cssClass: 'business' },
+        { key: 'Management',        label: 'ব্যবস্থাপনা',     icon: 'fas fa-user-tie',   cssClass: 'business' },
+        { key: 'Political Science', label: 'রাষ্ট্রবিজ্ঞান',  icon: 'fas fa-gavel',      cssClass: 'humanities' },
+        { key: 'Bangla',            label: 'বাংলা',          icon: 'fas fa-language',   cssClass: 'humanities' },
+        { key: 'Philosophy',        label: 'দর্শন',           icon: 'fas fa-brain',      cssClass: 'humanities' },
+        { key: 'Zoology',           label: 'প্রাণিবিদ্যা',    icon: 'fas fa-paw',        cssClass: 'science' },
+        { key: 'English',           label: 'ইংরেজি',         icon: 'fas fa-book-open',  cssClass: 'humanities' }
     ];
 
     const DB_GROUP_KEYS = {
@@ -107,7 +102,7 @@
     }
 
     // =========================================================
-    // CHART.JS DEFAULTS
+    // ENHANCED CHART.JS DEFAULTS
     // =========================================================
     function setChartDefaults() {
         if (typeof Chart === 'undefined') return;
@@ -124,8 +119,20 @@
         Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(10, 22, 85, 0.95)';
         Chart.defaults.plugins.tooltip.padding = 12;
         Chart.defaults.plugins.tooltip.cornerRadius = 10;
+        Chart.defaults.plugins.tooltip.titleFont = {
+            family: "'Hind Siliguri', sans-serif", size: 13, weight: '700'
+        };
+        Chart.defaults.plugins.tooltip.bodyFont = {
+            family: "'Hind Siliguri', sans-serif", size: 12, weight: '600'
+        };
         Chart.defaults.responsive = true;
         Chart.defaults.maintainAspectRatio = false;
+
+        // Enhanced animations
+        Chart.defaults.animation.duration = 1400;
+        Chart.defaults.animation.easing = 'easeOutQuart';
+        Chart.defaults.animations.colors.duration = 1000;
+        Chart.defaults.animations.numbers.duration = 1400;
     }
 
     // =========================================================
@@ -153,7 +160,6 @@
     // =========================================================
     function setupChartScrollAnimation() {
         if (!('IntersectionObserver' in window)) {
-            // Fallback: animate all immediately
             Object.keys(charts).forEach(key => animateChart(key));
             return;
         }
@@ -169,9 +175,8 @@
                     }
                 }
             });
-        }, { threshold: 0.3 });
+        }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
 
-        // Observe all chart canvases
         document.querySelectorAll('canvas[data-chart-key]').forEach(canvas => {
             observer.observe(canvas);
         });
@@ -186,19 +191,27 @@
 
         animatedCharts.add(key);
 
+        // Pulse animation on canvas parent
+        const canvas = document.getElementById(key);
+        if (canvas && canvas.parentElement) {
+            canvas.parentElement.classList.add('chart-pulse');
+            setTimeout(() => {
+                canvas.parentElement.classList.remove('chart-pulse');
+            }, 1500);
+        }
+
         // Start from 0 and animate to target
         chart.data.datasets[0].data = targetData.map(() => 0);
         chart.update('none');
 
-        // Small delay then animate to actual
         setTimeout(() => {
             chart.data.datasets[0].data = targetData;
             chart.update();
-        }, 100);
+        }, 150);
     }
 
     // =========================================================
-    // DRAW: Pie Chart with animation
+    // DRAW: Pie Chart with enhanced animation
     // =========================================================
     function drawPie(canvasId, stats, options) {
         options = options || {};
@@ -207,7 +220,6 @@
 
         destroyChart(canvasId);
 
-        // Hide zero-value segments
         const hasFail = stats.failed > 0;
         const hasAbsent = stats.absent > 0;
 
@@ -220,9 +232,8 @@
 
         const passRate = calcPassRate(stats.passed, stats.total);
         const isLarge = options.isLarge || false;
-        const centerFontSize = isLarge ? 36 : 22;
+        const centerFontSize = isLarge ? 38 : 22;
 
-        // Register for scroll animation
         canvas.dataset.chartKey = canvasId;
 
         charts[canvasId] = new Chart(canvas, {
@@ -230,13 +241,13 @@
             data: {
                 labels,
                 datasets: [{
-                    data: values.map(() => 0), // start at 0
+                    data: values.map(() => 0),
                     backgroundColor: colors,
                     borderColor: '#fff',
-                    borderWidth: isLarge ? 5 : 3,
+                    borderWidth: isLarge ? 6 : 3,
                     hoverBorderColor: '#fff',
-                    hoverOffset: isLarge ? 14 : 8,
-                    spacing: 2
+                    hoverOffset: isLarge ? 18 : 10,
+                    spacing: 3
                 }]
             },
             options: {
@@ -246,14 +257,20 @@
                 animation: {
                     animateRotate: true,
                     animateScale: true,
-                    duration: 1400,
+                    duration: 1600,
                     easing: 'easeOutQuart'
+                },
+                transitions: {
+                    active: {
+                        animation: {
+                            duration: 400
+                        }
+                    }
                 },
                 plugins: {
                     legend: {
-                        display: isLarge ? false : false,
-                        position: 'bottom',
-                        labels: { padding: 12, font: { size: 11, weight: '600' } }
+                        display: false,
+                        position: 'bottom'
                     },
                     tooltip: {
                         callbacks: {
@@ -264,7 +281,6 @@
                             }
                         }
                     },
-                    // Custom option to store target data
                     fdc: { targetData: values }
                 }
             },
@@ -278,13 +294,22 @@
                     ctx.save();
                     ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
+
+                    // Glowing effect for large chart
+                    if (isLarge) {
+                        ctx.shadowColor = 'rgba(10, 22, 85, 0.15)';
+                        ctx.shadowBlur = 8;
+                    }
+
                     ctx.font = `700 ${centerFontSize}px 'Playfair Display', serif`;
                     ctx.fillStyle = COLORS.navy;
-                    ctx.fillText(passRate + '%', cx, cy - (isLarge ? 4 : 0));
+                    ctx.fillText(passRate + '%', cx, cy - (isLarge ? 6 : 0));
+
                     if (isLarge) {
-                        ctx.font = "700 10px 'Hind Siliguri', sans-serif";
+                        ctx.shadowBlur = 0;
+                        ctx.font = "700 11px 'Hind Siliguri', sans-serif";
                         ctx.fillStyle = '#6b7280';
-                        ctx.fillText('PASS RATE', cx, cy + 22);
+                        ctx.fillText('PASS RATE', cx, cy + 24);
                     }
                     ctx.restore();
                 }
@@ -293,7 +318,7 @@
     }
 
     // =========================================================
-    // RENDER: Group Charts Grid (4 pie)
+    // RENDER: Group Charts Grid (with stagger animation)
     // =========================================================
     function renderGroupCharts(containerId, entities, groupsData, dbKeysMap, prefix) {
         const container = $(containerId);
@@ -301,7 +326,6 @@
         container.innerHTML = '';
 
         entities.forEach((entity, idx) => {
-            // Aggregate stats
             let stats = { total: 0, passed: 0, failed: 0, absent: 0 };
             const keys = (dbKeysMap && dbKeysMap[entity.key]) || [entity.key];
 
@@ -317,6 +341,7 @@
             const hasData = stats.total > 0;
             const item = document.createElement('div');
             item.className = 'group-pie-item' + (hasData ? '' : ' empty');
+            item.style.animationDelay = (idx * 80) + 'ms';
 
             if (!hasData) {
                 item.innerHTML = `
@@ -349,13 +374,12 @@
     }
 
     // =========================================================
-    // RENDER: Bar Compare
+    // RENDER: Bar Compare (with enhanced animation)
     // =========================================================
     function renderBarCompare(containerId, entities, groupsData, dbKeysMap) {
         const container = $(containerId);
         if (!container) return;
 
-        // Aggregate + find max
         const items = entities.map(entity => {
             const keys = (dbKeysMap && dbKeysMap[entity.key]) || [entity.key];
             let stats = { total: 0, passed: 0, failed: 0, absent: 0 };
@@ -377,11 +401,11 @@
 
         const maxVal = Math.max(...items.map(i => i.stats.total));
 
-        container.innerHTML = items.map(({ entity, stats }) => {
+        container.innerHTML = items.map(({ entity, stats }, idx) => {
             const pct = maxVal > 0 ? Math.round((stats.total / maxVal) * 100) : 0;
             const passRate = calcPassRate(stats.passed, stats.total);
             return `
-                <div class="bar-compare-item">
+                <div class="bar-compare-item" style="animation-delay:${idx * 100}ms;">
                     <div class="bc-label">
                         <i class="${entity.icon} ${entity.cssClass}"></i> ${entity.label}
                     </div>
@@ -396,7 +420,6 @@
             `;
         }).join('');
 
-        // Animate bars on scroll
         const barObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -404,12 +427,12 @@
                         const w = el.dataset.width;
                         setTimeout(() => {
                             el.style.width = w + '%';
-                        }, i * 100);
+                        }, i * 120);
                     });
                     barObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.15 });
 
         barObserver.observe(container);
     }
@@ -561,21 +584,14 @@
         $('internalEmpty').style.display = 'none';
         $('internalContent').style.display = 'block';
 
-        // Overall pie
         requestAnimationFrame(() => {
             drawPie('internalOverallChart', data.overall, { isLarge: true });
         });
 
-        // Stats
         renderInternalStats(data.overall);
-
-        // Group pies
         renderGroupCharts('internalGroupCharts', HSC_GROUPS, data.groups, DB_GROUP_KEYS, 'internalGroup');
-
-        // Table
         renderTable('internalTableBody', HSC_GROUPS, data.groups, DB_GROUP_KEYS);
 
-        // Setup scroll animation after charts created
         setTimeout(setupChartScrollAnimation, 100);
     }
 
@@ -604,18 +620,17 @@
             `;
         }).join('');
 
-        // Animate stat bars on scroll
         const statObserver = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     list.querySelectorAll('.stat-bar-fill').forEach((el, i) => {
                         const w = el.dataset.width;
-                        setTimeout(() => { el.style.width = w + '%'; }, i * 80);
+                        setTimeout(() => { el.style.width = w + '%'; }, i * 100);
                     });
                     statObserver.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.2 });
+        }, { threshold: 0.15 });
 
         statObserver.observe(list);
     }
@@ -689,7 +704,6 @@
                 return;
             }
 
-            // Aggregate by group
             const byGroup = {};
             data.forEach(r => {
                 byGroup[r.group_or_dept] = {
@@ -702,12 +716,10 @@
 
             $(contentId).style.display = 'block';
 
-            // Render charts
             renderGroupCharts(chartsId, entities, byGroup, dbKeysMap, prefix + 'Group');
             renderBarCompare(barId, entities, byGroup, dbKeysMap);
             renderTable(tableId, entities, byGroup, dbKeysMap);
 
-            // Setup scroll animation
             setTimeout(setupChartScrollAnimation, 100);
 
         } catch (e) {
@@ -725,7 +737,6 @@
             tab.addEventListener('click', function () {
                 const exam = this.dataset.exam;
                 if (exam === currentInternalExam) return;
-                // Clear animated charts for internal section
                 Object.keys(charts).forEach(k => {
                     if (k.startsWith('internalGroup') || k === 'internalOverallChart') {
                         animatedCharts.delete(k);
@@ -740,11 +751,9 @@
     }
 
     function setupBoardListeners() {
-        // HSC Board
         const hscSel = $('hscBoardYear');
         if (hscSel) {
             hscSel.addEventListener('change', function () {
-                // Reset animated charts for this section
                 Object.keys(charts).forEach(k => {
                     if (k.startsWith('hscBoard')) animatedCharts.delete(k);
                 });
@@ -752,7 +761,6 @@
             });
         }
 
-        // Degree Board
         const degSel = $('degreeBoardYear');
         if (degSel) {
             degSel.addEventListener('change', function () {
@@ -763,7 +771,6 @@
             });
         }
 
-        // Honours Board
         const honSel = $('honoursBoardYear');
         if (honSel) {
             honSel.addEventListener('change', function () {
@@ -787,18 +794,14 @@
         setupBoardListeners();
 
         waitForSupabase(async function () {
-            // Section 1: Internal
             await loadInternalData();
 
-            // Section 2: HSC Board
             const hscYear = await loadBoardYears('HSC', 'hscBoardYear', 'hscBoardEmpty');
             if (hscYear) await loadBoardData('HSC', hscYear, HSC_GROUPS, DB_GROUP_KEYS, 'hscBoard');
 
-            // Section 3: Degree Board
             const degYear = await loadBoardYears('Degree', 'degreeBoardYear', 'degreeBoardEmpty');
             if (degYear) await loadBoardData('Degree', degYear, DEGREE_COURSES, null, 'degreeBoard');
 
-            // Section 4: Honours Board
             const honYear = await loadBoardYears('Honours', 'honoursBoardYear', 'honoursBoardEmpty');
             if (honYear) await loadBoardData('Honours', honYear, HONOURS_DEPTS, null, 'honoursBoard');
 
