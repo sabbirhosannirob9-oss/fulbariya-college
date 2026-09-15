@@ -889,6 +889,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     <option value="">All Branches</option>
                     <option value="HSC">HSC</option>
                     <option value="BM">BM</option>
+                    <option value="Honours">অনার্স</option>
+                    <option value="Degree">ডিগ্রি</option>
                 </select>
             </div>
             <div>
@@ -897,16 +899,37 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     <option value="">All Classes</option>
                     <option value="11">Class 11</option>
                     <option value="12">Class 12</option>
+                    <option value="1st Year">১ম বর্ষ</option>
+                    <option value="2nd Year">২য় বর্ষ</option>
+                    <option value="3rd Year">৩য় বর্ষ</option>
+                    <option value="4th Year">৪র্থ বর্ষ</option>
                 </select>
             </div>
             <div>
-                <label>Group</label>
+                <label>Group/Department</label>
                 <select id="rtFilterGroup">
-                    <option value="">All Groups</option>
-                    <option value="Science">Science</option>
-                    <option value="Humanities">Humanities</option>
-                    <option value="Business">Business</option>
-                    <option value="BM-General">BM-General</option>
+                    <option value="">All</option>
+                    <optgroup label="HSC">
+                        <option value="Science">Science</option>
+                        <option value="Humanities">Humanities</option>
+                        <option value="Business">Business</option>
+                        <option value="BM-General">BM-General</option>
+                    </optgroup>
+                    <optgroup label="অনার্স">
+                        <option value="Accounting">হিসাববিজ্ঞান</option>
+                        <option value="Management">ব্যবস্থাপনা</option>
+                        <option value="Political Science">রাষ্ট্রবিজ্ঞান</option>
+                        <option value="Bangla">বাংলা</option>
+                        <option value="Philosophy">দর্শন</option>
+                        <option value="Zoology">প্রাণিবিদ্যা</option>
+                        <option value="English">ইংরেজি</option>
+                    </optgroup>
+                    <optgroup label="ডিগ্রি">
+                        <option value="B.A.">বি.এ. (পাস)</option>
+                        <option value="B.S.S.">বি.এস.এস. (পাস)</option>
+                        <option value="B.Sc.">বি.এসসি. (পাস)</option>
+                        <option value="B.B.S.">বি.বি.এস. (পাস)</option>
+                    </optgroup>
                 </select>
             </div>
         </div>
