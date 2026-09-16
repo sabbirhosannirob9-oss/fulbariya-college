@@ -1739,7 +1739,118 @@ button{
         height:300px;
     }
 }
+/* =========================================================
+   BNCC ABOUT LINK CARD
+========================================================= */
+.about-link-card {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 22px;
+    padding: 26px 30px;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    overflow: hidden;
+    transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+    border: none;
+}
+.about-link-card::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.about-link-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-2), var(--gold));
+}
+.about-link-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 30px 80px rgba(10,22,85,0.3);
+    color: #fff;
+}
 
+.about-link-card .alc-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    flex-shrink: 0;
+    box-shadow: 0 10px 30px rgba(242,210,123,0.4);
+    position: relative;
+    z-index: 1;
+}
+
+.about-link-card .alc-content {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+}
+.about-link-card .alc-content h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 6px;
+    line-height: 1.35;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+.about-link-card .alc-content h3 span { color: var(--gold); }
+.about-link-card .alc-content p {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.75);
+    margin: 0;
+    line-height: 1.6;
+}
+
+.about-link-card .alc-arrow {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    border: 1px solid rgba(242,210,123,0.3);
+    transition: 0.3s;
+    position: relative;
+    z-index: 1;
+}
+.about-link-card:hover .alc-arrow {
+    background: var(--gold);
+    color: var(--navy);
+    transform: translateX(6px);
+}
+
+@media (max-width: 640px) {
+    .about-link-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 28px 22px;
+        gap: 16px;
+    }
+    .about-link-card .alc-icon { width: 62px; height: 62px; font-size: 24px; }
+    .about-link-card .alc-content h3 { font-size: 16px; }
+    .about-link-card .alc-content p { font-size: 12.5px; }
+    .about-link-card .alc-arrow { width: 42px; height: 42px; font-size: 16px; }
+}
 @media(prefers-reduced-motion:reduce){
 
     *,
@@ -2098,8 +2209,29 @@ button{
     </div>
 
 </div>
+    
+
+    <!-- ================================================== -->
+    <!-- BNCC ABOUT CARD -->
+    <!-- ================================================== -->
+    <div class="container-custom" style="margin-top: 20px; margin-bottom: 50px;">
+        <a href="bncc-about.html" class="about-link-card reveal reveal-scale">
+            <div class="alc-icon">
+                <i class="fas fa-book-open-reader"></i>
+            </div>
+            <div class="alc-content">
+                <h3>BNCC সম্পর্কে বিস্তারিত জানতে ক্লিক করুন</h3>
+                <p>ইতিহাস, উদ্দেশ্য, কাজ, সুবিধা ও যোগদানের যোগ্যতা — সব এক জায়গায়</p>
+            </div>
+            <div class="alc-arrow">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </a>
+    </div>
 
 
+
+ 
 <!-- =========================================================
      FOOTER
 ========================================================= -->

@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BNCC সম্পর্কে বিস্তারিত | ফুলবাড়ীয়া কলেজ</title>
+<meta name="description" content="বাংলাদেশ ন্যাশনাল ক্যাডেট কোর (BNCC) সম্পর্কে বিস্তারিত - ইতিহাস, উদ্দেশ্য, কাজ, সুবিধা ও যোগদানের যোগ্যতা">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --grey-light: #9ca3af;
+    --dark: #1f2937;
+    --border: rgba(0,0,0,0.08);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 2px 10px rgba(10,22,85,0.06);
+    --shadow-md: 0 8px 30px rgba(10,22,85,0.10);
+    --shadow-lg: 0 20px 60px rgba(10,22,85,0.15);
+    --shadow-xl: 0 30px 80px rgba(10,22,85,0.20);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--off-white);
+    color: var(--dark);
+    line-height: 1.85;
+    min-height: 100vh;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+
+.container-custom { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+/* Bengali premium text */
+.bn-text {
+    font-family: 'Tiro Bangla', 'Hind Siliguri', serif;
+    font-size: 16.5px;
+    line-height: 2;
+    color: #374151;
+    letter-spacing: 0.15px;
+}
+
+/* =========================================================
+   REVEAL
+========================================================= */
+.reveal {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================================================
+   HEADER
+========================================================= */
+.main-header {
+    background: #fff;
+    padding: 12px 0;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    border-bottom: 1px solid var(--border-light);
+}
+.main-header .container-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+.logo-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+.logo-box img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: var(--off-white);
+    padding: 3px;
+    flex-shrink: 0;
+}
+.logo-box .logo-text h1 {
+    font-size: 18px;
+    color: var(--navy);
+    margin: 0;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+.logo-box .logo-text p {
+    font-size: 10px;
+    color: var(--grey-light);
+    margin: 2px 0 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+
+.header-nav {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+    flex-shrink: 0;
+}
+.header-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 13px;
+    transition: 0.25s;
+}
+.header-nav a.nav-back {
+    color: var(--navy);
+    background: var(--off-white);
+    border: 1px solid var(--border);
+}
+.header-nav a.nav-back:hover {
+    background: #eef1f8;
+    transform: translateY(-1px);
+}
+.header-nav a i { font-size: 12px; }
+
+/* =========================================================
+   PAGE HERO
+========================================================= */
+.page-hero {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 60px 0 100px;
+    position: relative;
+    overflow: hidden;
+}
+.page-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(242,210,123,0.12), transparent 65%);
+    border-radius: 50%;
+}
+.page-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.page-hero .container-custom {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+.hero-logo-wrap {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    border: 4px solid var(--gold);
+    box-shadow: 0 15px 40px rgba(242, 210, 123, 0.4),
+                0 0 0 8px rgba(242, 210, 123, 0.12);
+    overflow: hidden;
+    padding: 8px;
+}
+.hero-logo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+.page-hero .hero-badge {
+    display: inline-block;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    border: 1px solid rgba(242,210,123,0.3);
+    margin-bottom: 16px;
+}
+.page-hero h1 {
+    font-size: clamp(26px, 5vw, 38px);
+    font-weight: 700;
+    margin-bottom: 14px;
+    line-height: 1.25;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+}
+.page-hero h1 span { color: var(--gold); }
+.page-hero p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.75;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+.main-content {
+    padding: 0 0 80px;
+    margin-top: -60px;
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================================
+   STEP NUMBER BADGE
+========================================================= */
+.step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 50px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 12px rgba(10,22,85,0.15);
+}
+.step-badge .step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--navy);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    font-family: 'Playfair Display', serif;
+}
+
+/* =========================================================
+   CONTENT CARD
+========================================================= */
+.content-card {
+    background: #fff;
+    border-radius: 24px;
+    padding: 36px 40px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+    margin-bottom: 26px;
+    position: relative;
+    overflow: hidden;
+    transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.content-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+.content-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 5px;
+    background: linear-gradient(180deg, var(--navy), var(--gold));
+    border-radius: 24px 0 0 24px;
+}
+
+.section-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 18px;
+    box-shadow: 0 10px 28px rgba(10,22,85,0.2);
+}
+.section-icon.gold {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+}
+.section-icon.green {
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: #fff;
+}
+.section-icon.purple {
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+    color: #fff;
+}
+.section-icon.rose {
+    background: linear-gradient(135deg, #e11d48, #f43f5e);
+    color: #fff;
+}
+.section-icon.blue {
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff;
+}
+
+.content-card h2 {
+    font-size: 26px;
+    color: var(--navy);
+    font-weight: 700;
+    margin-bottom: 8px;
+    font-family: 'Playfair Display', serif;
+    line-height: 1.3;
+}
+.content-card .h2-divider {
+    width: 70px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--navy), var(--gold));
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.content-card p {
+    font-family: 'Tiro Bangla', 'Hind Siliguri', serif;
+    font-size: 16.5px;
+    color: #374151;
+    line-height: 2;
+    margin-bottom: 14px;
+    letter-spacing: 0.15px;
+}
+.content-card p:last-child { margin-bottom: 0; }
+
+/* Lists */
+.fdc-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.fdc-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 18px;
+    background: var(--off-white);
+    border-radius: 14px;
+    border-left: 4px solid var(--navy);
+    font-family: 'Tiro Bangla', 'Hind Siliguri', serif;
+    font-size: 16px;
+    line-height: 1.95;
+    transition: 0.3s;
+    color: #374151;
+}
+.fdc-list li:hover {
+    background: #f0f4ff;
+    transform: translateX(6px);
+    box-shadow: 0 4px 16px rgba(10,22,85,0.06);
+}
+.fdc-list li .list-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    flex-shrink: 0;
+    margin-top: 4px;
+    font-family: 'Playfair Display', serif;
+}
+.fdc-list.green li { border-left-color: #10b981; }
+.fdc-list.green li .list-num {
+    background: linear-gradient(135deg, #059669, #10b981);
+    color: #fff;
+}
+.fdc-list.purple li { border-left-color: #8b5cf6; }
+.fdc-list.purple li .list-num {
+    background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+    color: #fff;
+}
+.fdc-list.rose li { border-left-color: #f43f5e; }
+.fdc-list.rose li .list-num {
+    background: linear-gradient(135deg, #e11d48, #f43f5e);
+    color: #fff;
+}
+
+/* Sub-heading inside list */
+.list-subhead {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-top: 18px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+.list-subhead::before {
+    content: '';
+    width: 5px;
+    height: 20px;
+    background: var(--gold-dark);
+    border-radius: 4px;
+}
+
+/* Highlight box */
+.highlight-box {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-left: 5px solid #3b82f6;
+    padding: 18px 22px;
+    border-radius: 14px;
+    margin-top: 18px;
+}
+.highlight-box p {
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 15px;
+    color: #1e40af;
+    margin: 0;
+    line-height: 1.8;
+    font-weight: 500;
+}
+
+/* =========================================================
+   CONTACT CARD
+========================================================= */
+.contact-card {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 24px;
+    padding: 44px 36px;
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+.contact-card::before {
+    content: '';
+    position: absolute;
+    top: -40%; right: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.contact-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-2), var(--gold));
+}
+.contact-card .cc-inner {
+    position: relative;
+    z-index: 1;
+}
+.contact-card .cc-avatar {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    border: 4px solid rgba(255,255,255,0.15);
+    box-shadow: 0 15px 40px rgba(242,210,123,0.35);
+    font-family: 'Playfair Display', serif;
+}
+.contact-card h3 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+    font-family: 'Playfair Display', serif;
+}
+.contact-card .cc-designation {
+    display: inline-block;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 50px;
+    margin-bottom: 24px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.contact-card .cc-phone {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 24px;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 1px;
+}
+.contact-card .cc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    padding: 15px 34px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 15px;
+    transition: 0.3s;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    box-shadow: 0 8px 24px rgba(242,210,123,0.3);
+}
+.contact-card .cc-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(242,210,123,0.5);
+    color: var(--navy);
+}
+.contact-card .cc-note {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.75);
+    margin-top: 22px;
+    line-height: 1.8;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+/* =========================================================
+   BACK BUTTON
+========================================================= */
+.back-btn-wrap {
+    text-align: center;
+    margin-top: 34px;
+    margin-bottom: 20px;
+}
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #fff;
+    color: var(--navy);
+    padding: 13px 28px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    border: 1.5px solid var(--border);
+    transition: 0.3s;
+    box-shadow: var(--shadow-sm);
+}
+.back-btn:hover {
+    border-color: var(--navy);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    color: var(--navy);
+}
+.back-btn i { color: var(--gold-dark); }
+
+/* =========================================================
+   FOOTER
+========================================================= */
+.page-footer {
+    background: linear-gradient(135deg, #061040, var(--navy));
+    color: rgba(255,255,255,0.85);
+    padding: 40px 0 20px;
+    margin-top: 40px;
+}
+.page-footer .footer-content {
+    text-align: center;
+    padding-bottom: 24px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.page-footer .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.page-footer .footer-brand img {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    padding: 4px;
+}
+.page-footer h3 {
+    font-size: 20px;
+    color: #fff;
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+}
+.page-footer h3 span { color: var(--gold); }
+.page-footer .footer-tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+}
+.page-footer .footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+}
+.page-footer .footer-bottom strong { color: var(--gold); }
+
+/* =========================================================
+   SCROLL TOP
+========================================================= */
+.scroll-top {
+    position: fixed;
+    bottom: 30px; right: 30px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff; border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    box-shadow: 0 8px 24px rgba(10,22,85,0.3);
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    z-index: 900;
+}
+.scroll-top.show { opacity: 1; visibility: visible; }
+.scroll-top:hover {
+    background: var(--gold);
+    color: var(--navy);
+    transform: translateY(-4px);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 768px) {
+    .container-custom { padding: 0 14px; }
+    .logo-box img { width: 42px; height: 42px; }
+    .logo-box .logo-text h1 { font-size: 15px; }
+    .logo-box .logo-text p { font-size: 9px; }
+    .header-nav a { padding: 8px 12px; font-size: 12px; }
+    .header-nav a span { display: none; }
+
+    .page-hero { padding: 40px 0 80px; }
+    .hero-logo-wrap { width: 100px; height: 100px; }
+    .page-hero h1 { font-size: 24px; }
+    .page-hero p { font-size: 13px; }
+
+    .main-content { margin-top: -50px; padding-bottom: 60px; }
+
+    .content-card {
+        padding: 26px 22px;
+        border-radius: 20px;
+        margin-bottom: 20px;
+    }
+    .content-card h2 { font-size: 21px; }
+    .section-icon { width: 54px; height: 54px; font-size: 22px; border-radius: 15px; }
+    .content-card p, .bn-text { font-size: 15.5px; }
+    .fdc-list li { font-size: 15px; padding: 12px 14px; }
+    .list-subhead { font-size: 15px; }
+
+    .contact-card { padding: 34px 24px; }
+    .contact-card .cc-avatar { width: 90px; height: 90px; font-size: 36px; }
+    .contact-card h3 { font-size: 22px; }
+    .contact-card .cc-phone { font-size: 20px; }
+
+    .scroll-top { bottom: 20px; right: 20px; width: 44px; height: 44px; }
+}
+
+@media (max-width: 480px) {
+    .content-card { padding: 22px 18px; }
+    .content-card h2 { font-size: 19px; }
+    .content-card p, .bn-text { font-size: 15px; }
+    .fdc-list li { font-size: 14.5px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="main-header">
+    <div class="container-custom">
+        <a href="../index.html" class="logo-box">
+            <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
+            <div class="logo-text">
+                <h1 data-college-name>ফুলবাড়ীয়া কলেজ</h1>
+                <p>Fulbariya College</p>
+            </div>
+        </a>
+        <nav class="header-nav">
+            <a href="bncc.html" class="nav-back">
+                <i class="fas fa-arrow-left"></i> <span>BNCC পেজে ফিরুন</span>
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+    <div class="container-custom">
+        <div class="hero-logo-wrap">
+            <img src="../assets/images/bncc.jpg" alt="BNCC Logo">
+        </div>
+        <div class="hero-badge">Bangladesh National Cadet Corps</div>
+        <h1>বিএনসিসি সম্পর্কে <span>বিস্তারিত</span></h1>
+        <p>ইতিহাস, উদ্দেশ্য, কাজ, সুবিধা ও যোগদানের সম্পূর্ণ তথ্য — এক জায়গায়</p>
+    </div>
+</section>
+
+<!-- MAIN -->
+<div class="main-content">
+    <div class="container-custom">
+
+        <!-- ================================================== -->
+        <!-- ধাপ ১: BNCC কী? -->
+        <!-- ================================================== -->
+        <div class="content-card reveal">
+            <span class="step-badge">
+                <span class="step-num">১</span> পরিচিতি
+            </span>
+            <div class="section-icon"><i class="fas fa-shield-halved"></i></div>
+            <h2>BNCC কী?</h2>
+            <div class="h2-divider"></div>
+            <p>
+                বাংলাদেশ ন্যাশনাল ক্যাডেট কোর (BNCC) হলো বাংলাদেশ সেনাবাহিনীর অধীনে পরিচালিত একটি যুব সংগঠন। এটি দেশের কলেজ ও বিশ্ববিদ্যালয়ের শিক্ষার্থীদের সামরিক প্রশিক্ষণ, শৃঙ্খলা ও দেশপ্রেমের চেতনায় উদ্বুদ্ধ করে তোলে।
+            </p>
+            <p>
+                BNCC-র মূল লক্ষ্য হলো শিক্ষার্থীদের মধ্যে নেতৃত্বের গুণাবলী তৈরি করা এবং তাদের দেশপ্রেম ও জাতীয় দায়িত্ববোধে উদ্বুদ্ধ করা। শিক্ষার্থীরা এখানে সামরিক ও বেসামরিক—উভয় ধরনের প্রশিক্ষণ পায়।
+            </p>
+        </div>
+
+        <!-- ================================================== -->
+        <!-- ধাপ ২: উদ্দেশ্য -->
+        <!-- ================================================== -->
+        <div class="content-card reveal">
+            <span class="step-badge">
+                <span class="step-num">২</span> লক্ষ্য
+            </span>
+            <div class="section-icon gold"><i class="fas fa-bullseye"></i></div>
+            <h2>BNCC-র উদ্দেশ্য</h2>
+            <div class="h2-divider"></div>
+            <ul class="fdc-list">
+                <li><span class="list-num">১</span> শিক্ষার্থীদের মধ্যে শৃঙ্খলা ও নেতৃত্বের গুণাবলী তৈরি করা</li>
+                <li><span class="list-num">২</span> দেশপ্রেম ও জাতীয় চেতনা জাগানো</li>
+                <li><span class="list-num">৩</span> সামরিক বাহিনী সম্পর্কে প্রাথমিক ধারণা দেওয়া</li>
+                <li><span class="list-num">৪</span> দুর্যোগ ও জাতীয় সংকটে স্বেচ্ছাসেবী হিসেবে কাজ করার মানসিকতা তৈরি করা</li>
+                <li><span class="list-num">৫</span> শারীরিক ও মানসিক বিকাশ নিশ্চিত করা</li>
+            </ul>
+        </div>
+
+        <!-- ================================================== -->
+        <!-- ধাপ ৩: ইতিহাস -->
+        <!-- ================================================== -->
+        <div class="content-card reveal">
+            <span class="step-badge">
+                <span class="step-num">৩</span> ঐতিহ্য
+            </span>
+            <div class="section-icon purple"><i class="fas fa-book-open"></i></div>
+            <h2>BNCC-র ইতিহাস</h2>
+            <div class="h2-divider"></div>
+            <p>
+                ১৯৭৯ সালে বাংলাদেশ সেনাবাহিনীর উদ্যোগে BNCC প্রতিষ্ঠিত হয়। প্রতিষ্ঠার পর থেকে এটি দেশের শিক্ষা প্রতিষ্ঠানগুলোতে সামরিক প্রশিক্ষণ ও দেশপ্রেমের চেতনা ছড়িয়ে দিতে গুরুত্বপূর্ণ ভূমিকা পালন করে আসছে।
+            </p>
+            <p>
+                বর্তমানে সেনা, নৌ ও বিমান—তিনটি উইংয়ে BNCC পরিচালিত হয়। দেশের শতাধিক শিক্ষা প্রতিষ্ঠানে BNCC-র প্লাটুন রয়েছে, যেখানে হাজারো শিক্ষার্থী প্রশিক্ষণ নিচ্ছে।
+            </p>
+        </div>
+
+        <!-- ================================================== -->
+        <!-- ধাপ ৪: কাজ কী কী -->
+        <!-- ================================================== -->
+        <div class="content-card reveal">
+            <span class="step-badge">
+                <span class="step-num">৪</span> কার্যক্রম
+            </span>
+            <div class="section-icon blue"><i class="fas fa-list-check"></i></div>
+            <h2>BNCC-র প্রধান কাজ</h2>
+            <div class="h2-divider"></div>
+            <ul class="fdc-list green">
+                <li><span class="list-num">১</span> সামরিক প্রশিক্ষণ — ড্রিল, ফায়ারিং, ম্যাপ রিডিং</li>
+                <li><span class="list-num">২</span> শারীরিক প্রশিক্ষণ ও খেলাধুলা</li>
+                <li><span class="list-num">৩</span> জাতীয় দিবসের প্যারেড ও কুচকাওয়াজে অংশগ্রহণ</li>
+                <li><span class="list-num">৪</span> দুর্যোগে ত্রাণ বিতরণ ও উদ্ধার কাজ</li>
+                <li><span class="list-num">৫</span> রক্তদান ও বৃক্ষরোপণ কর্মসূচি</li>
+                <li><span class="list-num">৬</span> সমাজসেবামূলক কার্যক্রম</li>
+                <li><span class="list-num">৭</span> বার্ষিক প্রশিক্ষণ ক্যাম্প</li>
+            </ul>
+        </div>
+
+        <!-- ================================================== -->
+        <!-- ধাপ ৫: বর্তমান কার্যক্রম -->
+        <!-- ================================================== -->
+        <div class="content-card reveal">
+            <span class="step-badge">
+                <span class="step-num">৫</span> বর্তমান
+            </span>
+            <div class="section-icon"><i class="fas fa-clock"></i></div>
+            <h2>বর্তমান কার্যক্রম</h2>
+            <div class="h2-divider"></div>
+            <ul class="fdc-list">
+                <li><span class="list-num">১</span> বার্ষিক প্রশিক্ষণ ক্যাম্প (সেনানিবাসে)</li>
+                <li><span class="list-num">২</span> জাতীয় প্যারেড ও কুচকাওয়াজে অংশগ্রহণ</li>
+                <li><span class="list-num">৩</span> স্বেচ্ছাসেবী কার্যক্রম</li>
+                <li><span class="list-num">৪</span> জাতীয় ও রাষ্ট্রীয় অনুষ্ঠানে অংশগ্রহণ</li>
+                <li><span class="list-num">৫</span> দুর্যোগে সহায়তা ও ত্রাণ বিতরণ</li>
+            </ul>
+        </div>
+
+        <!-- ================================================== -->
+        <!-- ধাপ ৬: অংশ নিলে সুবিধা -->
+        <!-- ================================================== -->
+        <div class="content-card reveal">
+            <span class="step-badge">
+                <span class="step-num">৬</span> সুবিধা
+            </span>
+            <div class="section-icon gold"><i class="fas fa-award"></i></div>
+            <h2>অংশ নিলে যা যা সুবিধা</h2>
+            <div class="h2-divider"></div>
+            <ul class="fdc-list purple">
+                <li><span class="list-num">১</span> বাংলাদেশ সেনাবাহিনীতে যোগদানে অগ্রাধিকার</li>
+                <li><span class="list-num">২</span> পুলিশ, বিজিবি, কোস্টগার্ড, ফায়ার সার্ভিসে অগ্রাধিকার</li>
+                <li><span class="list-num">৩</span> সরকারি চাকরিতে অগ্রাধিকার</li>
+                <li><span class="list-num">৪</span> শারীরিক ও মানসিক বিকাশ</li>
+                <li><span class="list-num">৫</span> নেতৃত্বের গুণাবলী তৈরি</li>
+                <li><span class="list-num">৬</span> জাতীয় পর্যায়ে যোগাযোগ ও অভিজ্ঞতা</li>
+                <li><span class="list-num">৭</span> প্রশিক্ষণে ভ্রমণ ও ক্যাম্পে থাকার সুযোগ</li>
+                <li><span class="list-num">৮</span> দেশপ্রেমের চেতনা ও আত্মবিশ্বাস বৃদ্ধি</li>
+            </ul>
+        </div>
+
+        <!-- ================================================== -->
+<!-- ধাপ ৭: যোগদানের যোগ্যতা -->
+<!-- ================================================== -->
+<div class="content-card reveal">
+    <span class="step-badge">
+        <span class="step-num">৭</span> যোগ্যতা
+    </span>
+    <div class="section-icon rose"><i class="fas fa-clipboard-check"></i></div>
+    <h2>যোগদানের যোগ্যতা</h2>
+    <div class="h2-divider"></div>
+    <ul class="fdc-list rose">
+        <li><span class="list-num">১</span> ফুলবাড়ীয়া ডিগ্রি কলেজে ভর্তিকৃত শিক্ষার্থী হতে হবে</li>
+        <li><span class="list-num">২</span> SSC/সমমান পরীক্ষায় ন্যূনতম GPA ৩.০০ থাকতে হবে</li>
+        <li><span class="list-num">৩</span> ছেলেদের ক্ষেত্রে ন্যূনতম উচ্চতা ৫ ফুট হতে হবে</li>
+        <li><span class="list-num">৪</span> মেয়েদের ক্ষেত্রে ন্যূনতম উচ্চতা ৫ ফুট হতে হবে</li>
+        <li><span class="list-num">৫</span> প্রিলিমিনারি মেডিকেল পরীক্ষায় উত্তীর্ণ হতে হবে</li>
+        <li><span class="list-num">৬</span> SSC প্রশংসাপত্র, জন্মনিবন্ধন সনদ ও কলেজের মূল রিসিট নিয়ে আসা বাধ্যতামূলক</li>
+        <li><span class="list-num">৭</span> নির্ধারিত তারিখের মধ্যে ভর্তি ফরম সংগ্রহ করে ২ কপি পাসপোর্ট সাইজের ছবি সহ জমা দিতে হবে</li>
+        <li><span class="list-num">৮</span> ফরম সংগ্রহের সময়: সকাল ১০:০০টা থেকে দুপুর ৩:০০টা পর্যন্ত</li>
+        <li><span class="list-num">৯</span> কোনো ধরনের সুপারিশ BNCC ভর্তিতে অযোগ্যতা বলে গণ্য হবে</li>
+    </ul>
+
+    <!-- বিশেষ যোগ্যতা -->
+    <div class="list-subhead">বিশেষ যোগ্যতা</div>
+    <div class="highlight-box">
+        <p>
+            <i class="fas fa-star" style="color: var(--gold-dark); margin-right: 8px;"></i>
+            SSC-তে <strong>GPA ৫.০০</strong> প্রাপ্ত, <strong>নৃতা</strong>, <strong>গান</strong>, <strong>আবৃত্তি</strong>, <strong>খেলাধুলা (ভলিবল)</strong> ও <strong>ইংরেজিতে কথা বলা</strong> — এই বিষয়গুলোতে দক্ষ শিক্ষার্থীদের বিশেষ বিবেচনায় নেওয়া হবে।
+        </p>
+    </div>
+</div>
+<!-- ================================================== -->
+<!-- ধাপ ৮: যোগাযোগ -->
+<!-- ================================================== -->
+<div class="contact-card reveal">
+    <div class="cc-inner">
+        <span class="step-badge" style="background: rgba(242,210,123,0.2); color: var(--gold);">
+            <span class="step-num">৮</span> যোগাযোগ
+        </span>
+        <div class="cc-avatar">র</div>
+        <h3>রোকনুজ্জামান খান</h3>
+        <span class="cc-designation">ক্যাডেট সার্জেন্ট (প্লাটুন ইনচার্জ)</span>
+        <div class="cc-phone">📞 01747225900</div>
+        <a href="tel:01747225900" class="cc-btn">
+            <i class="fas fa-phone"></i> কল করুন
+        </a>
+        <p class="cc-note">
+            BNCC-তে যোগদান বা যেকোনো তথ্যের জন্য সরাসরি যোগাযোগ করুন।
+        </p>
+    </div>
+</div>
+        <!-- BACK BUTTON -->
+        <div class="back-btn-wrap">
+            <a href="bncc.html" class="back-btn">
+                <i class="fas fa-arrow-left"></i> BNCC পেজে ফিরে যান
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+    <div class="container-custom">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
+                <h3><span data-college-name>ফুলবাড়ীয়া কলেজ</span></h3>
+            </div>
+            <p class="footer-tagline">শিক্ষা, নৈতিকতা ও আধুনিকতার সমন্বয়ে একটি আদর্শ শিক্ষা প্রতিষ্ঠান</p>
+        </div>
+        <div class="footer-bottom">
+            © <span id="year"></span> <strong data-college-name>ফুলবাড়ীয়া কলেজ</strong>। সর্বস্বত্ব সংরক্ষিত।
+        </div>
+    </div>
+</footer>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop">
+    <i class="fas fa-arrow-up"></i>
+</button>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    // =========================================================
+    // SCROLL REVEAL
+    // =========================================================
+    function setupReveal() {
+        if (!('IntersectionObserver' in window)) {
+            document.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'));
+            return;
+        }
+        const obs = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    obs.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+    }
+
+    // =========================================================
+    // SCROLL TOP
+    // =========================================================
+    function setupScrollTop() {
+        const btn = document.getElementById('scrollTop');
+        window.addEventListener('scroll', () => {
+            btn.classList.toggle('show', window.scrollY > 400);
+        }, { passive: true });
+        btn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+    // =========================================================
+    // COLLEGE NAME
+    // =========================================================
+    async function loadCollegeName() {
+        try {
+            if (!window.FDC_SUPABASE) {
+                await new Promise(r => {
+                    const t = setTimeout(r, 3000);
+                    document.addEventListener('fdc:supabase-ready', () => {
+                        clearTimeout(t); r();
+                    }, { once: true });
+                });
+            }
+            if (!window.FDC_SUPABASE) return;
+
+            const { data } = await window.FDC_SUPABASE
+                .from('site_settings')
+                .select('key, value')
+                .eq('key', 'college_name')
+                .maybeSingle();
+
+            if (data && data.value) {
+                document.querySelectorAll('[data-college-name]').forEach(el => {
+                    el.textContent = data.value;
+                });
+                document.title = 'BNCC সম্পর্কে | ' + data.value;
+            }
+        } catch (e) {
+            console.warn('College name error:', e);
+        }
+    }
+
+    // =========================================================
+    // INIT
+    // =========================================================
+    function init() {
+        document.getElementById('year').textContent = new Date().getFullYear();
+        setupReveal();
+        setupScrollTop();
+        loadCollegeName();
+        console.log('✅ BNCC About page ready');
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+})();
+</script>
+
+</body>
+</html>
