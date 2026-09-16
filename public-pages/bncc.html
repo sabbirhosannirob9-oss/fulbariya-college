@@ -203,25 +203,34 @@ button { font-family: inherit; cursor: pointer; }
     z-index: 1;
     text-align: center;
 }
-.hero-icon {
-    width: 80px;
-    height: 80px;
-    border-radius: 22px;
-    background: rgba(242,210,123,0.15);
-    color: var(--gold);
+
+/* =========================================================
+   LOGO (ROUND + FIXED)
+========================================================= */
+.hero-logo-wrap {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    background: #fff;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 34px;
-    margin-bottom: 20px;
-    border: 1px solid rgba(242,210,123,0.3);
-    box-shadow: 0 8px 30px rgba(242,210,123,0.15);
-    animation: iconFloat 3s ease-in-out infinite;
+    margin-bottom: 22px;
+    border: 4px solid var(--gold);
+    box-shadow: 0 15px 40px rgba(242, 210, 123, 0.4),
+                0 0 0 8px rgba(242, 210, 123, 0.12);
+    overflow: hidden;
+    padding: 8px;
+    position: relative;
 }
-@keyframes iconFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
+.hero-logo-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+    display: block;
 }
+
 .page-hero .hero-badge {
     display: inline-block;
     background: rgba(242,210,123,0.2);
@@ -996,7 +1005,7 @@ button { font-family: inherit; cursor: pointer; }
     .header-nav a span { display: none; }
 
     .page-hero { padding: 40px 0 80px; }
-    .hero-icon { width: 64px; height: 64px; font-size: 26px; margin-bottom: 14px; }
+    .hero-logo-wrap { width: 100px; height: 100px; border: 3px solid var(--gold); margin-bottom: 16px; }
     .page-hero h1 { font-size: 24px; }
     .page-hero p { font-size: 13px; }
 
@@ -1041,7 +1050,6 @@ button { font-family: inherit; cursor: pointer; }
 
     .page-footer .footer-bottom { font-size: 11px; }
 
-    /* Mobile: reduce reveal distance */
     .reveal.reveal-left { transform: translateX(-40px); }
     .reveal.reveal-right { transform: translateX(40px); }
 }
@@ -1078,8 +1086,8 @@ button { font-family: inherit; cursor: pointer; }
 <!-- PAGE HERO -->
 <section class="page-hero">
     <div class="container-custom">
-        <div class="hero-icon">
-            <i class="fas fa-flag"></i>
+        <div class="hero-logo-wrap">
+            <img src="../assets/images/bncc.jpg" alt="BNCC Logo">
         </div>
         <div class="hero-badge">Bangladesh National Cadet Corps</div>
         <h1>বাংলাদেশ <span>ন্যাশনাল ক্যাডেট কোর</span></h1>
@@ -1104,7 +1112,7 @@ button { font-family: inherit; cursor: pointer; }
                 <div class="si-icon gold"><i class="fas fa-user-tie"></i></div>
                 <div class="si-info">
                     <div class="si-value" id="statOfficer">0</div>
-                    <div class="si-label">PI Officer</div>
+                    <div class="si-label">প্লাটুন আন্ডার অফিসার</div>
                 </div>
             </div>
         </div>
@@ -1113,7 +1121,7 @@ button { font-family: inherit; cursor: pointer; }
         <section class="pi-officer-section">
             <div class="section-head reveal reveal-scale">
                 <span class="sh-badge">Leadership</span>
-                <h2>প্লাটুন <span>ইনচার্জ অফিসার</span></h2>
+                <h2>প্লাটুন <span>আন্ডার অফিসার</span></h2>
                 <div class="sh-line"></div>
             </div>
 
@@ -1363,7 +1371,6 @@ button { font-family: inherit; cursor: pointer; }
                 document.title = 'BNCC | ' + settings.college_name;
             }
 
-            // Social links
             document.querySelectorAll('[data-social]').forEach(function (el) {
                 const key = 'social_' + el.dataset.social;
                 if (settings[key]) {
@@ -1442,7 +1449,7 @@ button { font-family: inherit; cursor: pointer; }
             piContainer.innerHTML =
                 '<div class="pi-empty">' +
                     '<i class="fas fa-user-tie"></i>' +
-                    '<h3>PI Officer তথ্য পাওয়া যায়নি</h3>' +
+                    '<h3>প্লাটুন আন্ডার অফিসার তথ্য পাওয়া যায়নি</h3>' +
                     '<p>শীঘ্রই যোগ করা হবে</p>' +
                 '</div>';
             return;
@@ -1464,7 +1471,7 @@ button { font-family: inherit; cursor: pointer; }
                 '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(officer.name) + '" onerror="this.src=\'' + placeholderImg(240) + '\'">' +
             '</div>' +
             '<div class="pi-info">' +
-                '<span class="pi-role-badge"><i class="fas fa-star"></i> PI Officer</span>' +
+                '<span class="pi-role-badge"><i class="fas fa-star"></i> প্লাটুন আন্ডার অফিসার</span>' +
                 '<h3>' + escapeHtml(officer.name) + '</h3>' +
                 (officer.name_en ? '<div class="pi-name-en">' + escapeHtml(officer.name_en) + '</div>' : '') +
                 (officer.designation ? '<span class="pi-designation">' + escapeHtml(officer.designation) + '</span>' : '') +
@@ -1478,7 +1485,6 @@ button { font-family: inherit; cursor: pointer; }
     // RENDER MEMBERS
     // =========================================================
     function renderMembers() {
-        // Exclude officer from grid
         FILTERED_MEMBERS = ALL_MEMBERS.filter(function (m) {
             if (m.member_type === 'officer') return false;
             if (currentFilter === 'active' && !m.is_active) return false;
@@ -1593,7 +1599,6 @@ button { font-family: inherit; cursor: pointer; }
             renderMembers();
         });
 
-        // Scroll top
         const scrollBtn = document.getElementById('scrollTop');
         window.addEventListener('scroll', function () {
             scrollBtn.classList.toggle('show', window.scrollY > 400);
@@ -1617,7 +1622,6 @@ button { font-family: inherit; cursor: pointer; }
         await loadCollegeInfo();
         await loadMembers();
 
-        // Force check visible reveals after content load
         setTimeout(function () {
             forceCheckVisible();
         }, 400);
@@ -1631,7 +1635,6 @@ button { font-family: inherit; cursor: pointer; }
         init();
     }
 
-    // Fallback on scroll
     let scrollTimer = null;
     window.addEventListener('scroll', function () {
         if (scrollTimer) return;
