@@ -1,21 +1,134 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+ <?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+    <!-- ============================================ -->
+    <!-- HOMEPAGE -->
+    <!-- ============================================ -->
     <url>
         <loc>https://fulbariya-college.pages.dev/</loc>
-        <lastmod>2026-09-14</lastmod>
-        <changefreq>weekly</changefreq>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>1.0</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/index.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
 
+    <!-- ============================================ -->
+    <!-- PUBLIC PAGES — Main Sections -->
+    <!-- ============================================ -->
     <url>
-        <loc>https://fulbariya-college.pages.dev/index.html</loc>
-        <lastmod>2026-09-14</lastmod>
+        <loc>https://fulbariya-college.pages.dev/public-pages/about.html</loc>
+        <lastmod>2026-09-16</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/academics.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/admission.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/contact.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- ============================================ -->
+    <!-- PUBLIC PAGES — Notices & News -->
+    <!-- ============================================ -->
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/notices.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/notice-details.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/news.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/news-details.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <!-- ============================================ -->
+    <!-- PUBLIC PAGES — Results -->
+    <!-- ============================================ -->
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/results.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/result-details.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/result-overview.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- ============================================ -->
+    <!-- PUBLIC PAGES — Academic Hub -->
+    <!-- ============================================ -->
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/academic-hub.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <!-- ============================================ -->
+    <!-- PUBLIC PAGES — Gallery -->
+    <!-- ============================================ -->
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/gallery.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <!-- ============================================ -->
+    <!-- PUBLIC PAGES — BNCC & Scouts -->
+    <!-- ============================================ -->
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/bncc.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
+        <loc>https://fulbariya-college.pages.dev/public-pages/scouts.html</loc>
+        <lastmod>2026-09-16</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
     </url>
 
 </urlset>
