@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class Routine Management - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --danger: #ef4444;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --purple: #8b5cf6;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* HEADER */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.admin-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; }
+.admin-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+.admin-header .user-box { display: flex; align-items: center; gap: 8px; }
+.avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    border: 2px solid rgba(242,210,123,0.4);
+    overflow: hidden;
+}
+.avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+
+/* MAIN */
+.main-wrap { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-title .badge-total {
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.06));
+    color: var(--navy);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    border: 1px solid rgba(10,22,85,0.1);
+}
+.page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
+
+/* TOOLBAR */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.btn-primary-grad {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-primary-grad:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,85,0.35); color: #fff; }
+.btn-primary-grad i { color: var(--gold); }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid #e5e7eb;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
+
+/* FILTER */
+.filter-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+}
+.filter-card label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+    margin-bottom: 4px;
+}
+.filter-card select,
+.filter-card input {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13px;
+    outline: none;
+    transition: 0.25s;
+    font-family: inherit;
+}
+.filter-card select:focus,
+.filter-card input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+    background: #fff;
+}
+
+/* ROUTINE GRID */
+.routine-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+}
+
+.routine-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    transition: 0.35s;
+    position: relative;
+}
+.routine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(10,22,85,0.12);
+}
+
+.routine-card .rc-img-wrap {
+    width: 100%;
+    height: 220px;
+    background: linear-gradient(135deg, #f0f4ff, #e0e7ff);
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+.routine-card .rc-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+}
+.routine-card:hover .rc-img-wrap img { transform: scale(1.05); }
+
+.routine-card .rc-status {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    z-index: 2;
+}
+.routine-card .rc-status.published { background: #10b981; color: #fff; box-shadow: 0 2px 8px rgba(16,185,129,0.4); }
+.routine-card .rc-status.draft { background: #6b7280; color: #fff; }
+
+.routine-card .rc-branch {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    z-index: 2;
+}
+
+.routine-card .rc-body {
+    padding: 14px 16px 16px;
+}
+.routine-card .rc-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 6px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.routine-card .rc-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+.routine-card .rc-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 10.5px;
+    font-weight: 700;
+    background: #f3f4f6;
+    color: var(--dark);
+}
+.routine-card .rc-tag.class { background: #dbeafe; color: #1e40af; }
+.routine-card .rc-tag.group { background: #fef3c7; color: #92400e; }
+.routine-card .rc-tag.session { background: #dcfce7; color: #166534; }
+
+.routine-card .rc-actions {
+    display: flex;
+    gap: 6px;
+    border-top: 1px solid var(--border-light);
+    padding-top: 12px;
+}
+.routine-card .rc-actions button {
+    flex: 1;
+    padding: 8px 6px;
+    border-radius: 8px;
+    border: none;
+    font-size: 11.5px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-family: inherit;
+}
+.routine-card .rc-actions .btn-edit { background: #e3f2fd; color: #1565c0; }
+.routine-card .rc-actions .btn-edit:hover { background: #bbdefb; }
+.routine-card .rc-actions .btn-toggle { background: #fef3c7; color: #d97706; }
+.routine-card .rc-actions .btn-toggle:hover { background: #fde68a; }
+.routine-card .rc-actions .btn-delete { background: #fef2f2; color: var(--danger); }
+.routine-card .rc-actions .btn-delete:hover { background: #fecaca; }
+
+/* EMPTY STATE */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+}
+.empty-state .icon-wrap {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.empty-state i { font-size: 36px; color: var(--navy); opacity: 0.35; }
+.empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
+
+/* LOADING */
+.loading-card {
+    grid-column: 1 / -1;
+    background: #fff;
+    border-radius: 16px;
+    padding: 60px 20px;
+    text-align: center;
+    border: 1px solid var(--border-light);
+}
+.loading-spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 14px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-card p { color: var(--grey); font-size: 13.5px; margin: 0; }
+
+/* MODAL */
+.fdc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.7);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.25s ease;
+}
+.fdc-modal-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.fdc-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.fdc-modal.wide { max-width: 900px; }
+
+.fdc-modal-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    padding: 22px 24px;
+    border-radius: 20px 20px 0 0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+.fdc-modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.fdc-modal-header .mh-left { display: flex; align-items: center; gap: 12px; }
+.fdc-modal-header .mh-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.fdc-modal-header h5 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
+.fdc-modal-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.fdc-modal-close {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.fdc-modal-close:hover { background: var(--danger); transform: rotate(90deg); }
+
+.fdc-modal-body { padding: 22px 24px; }
+
+.fdc-form-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #4b5563;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+}
+.fdc-form-label .req { color: var(--danger); }
+.fdc-form-label .opt { color: var(--grey); font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 10.5px; }
+
+.fdc-input, .fdc-select, .fdc-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13.5px;
+    transition: 0.25s;
+    outline: none;
+    font-family: inherit;
+}
+.fdc-input:focus, .fdc-select:focus, .fdc-textarea:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+    background: #fff;
+}
+.fdc-textarea { min-height: 80px; resize: vertical; }
+
+/* UPLOAD ZONE */
+.upload-zone {
+    border: 2px dashed #c8cdda;
+    border-radius: 14px;
+    padding: 26px 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    background: #fafbff;
+}
+.upload-zone:hover {
+    border-color: var(--navy);
+    background: #f5f7ff;
+}
+.upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+.upload-zone .upload-icon {
+    font-size: 40px;
+    color: var(--navy);
+    opacity: 0.35;
+    pointer-events: none;
+}
+.upload-zone .upload-text {
+    font-size: 13px;
+    color: #666;
+    margin-top: 8px;
+    pointer-events: none;
+}
+.upload-zone .upload-text strong { color: var(--navy); }
+.upload-zone .file-types {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+    pointer-events: none;
+}
+
+.image-preview {
+    display: none;
+    margin-top: 14px;
+    padding: 12px;
+    background: #f8f9ff;
+    border-radius: 12px;
+    border: 1.5px solid var(--border-light);
+    position: relative;
+    text-align: center;
+}
+.image-preview.show { display: block; }
+.image-preview img {
+    max-width: 100%;
+    max-height: 320px;
+    border-radius: 10px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+.image-preview .remove-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--danger);
+    color: #fff;
+    border: 2px solid #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(239,68,68,0.4);
+    transition: 0.25s;
+    z-index: 15;
+}
+.image-preview .remove-btn:hover { transform: scale(1.1) rotate(90deg); }
+
+.switch-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #fafbff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+}
+.switch-row input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--navy);
+    cursor: pointer;
+}
+.switch-row label {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--dark);
+    cursor: pointer;
+    margin: 0;
+}
+
+.fdc-modal-footer {
+    padding: 16px 24px 22px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border-light);
+    background: #fafbff;
+    position: sticky;
+    bottom: 0;
+}
+
+/* PREVIEW MODAL */
+.preview-modal .fdc-modal-body {
+    padding: 12px;
+    text-align: center;
+    background: #f0f4f8;
+}
+.preview-modal img {
+    max-width: 100%;
+    max-height: 80vh;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .admin-header { padding: 10px 14px; }
+    .admin-header h4 { font-size: 14px; }
+    .main-wrap { padding: 14px 12px 50px; }
+    .page-title { font-size: 17px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .filter-card { grid-template-columns: 1fr 1fr; }
+    .routine-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+    .filter-card { grid-template-columns: 1fr; }
+    .btn-header span { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-calendar-week"></i></div>
+        <div>
+            <h4>Class Routine Management</h4>
+            <small>ক্লাস রুটিন পরিচালনা</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="avatar-circle" data-admin-avatar>A</div>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+        </a>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div>
+            <h4 class="page-title">
+                <i class="fas fa-calendar-week"></i> Class Routines
+                <span class="badge-total" id="totalRoutines">0</span>
+            </h4>
+            <p class="page-sub">শাখা ও শ্রেণি অনুযায়ী রুটিনের ছবি পরিচালনা করুন</p>
+        </div>
+        <button class="btn-primary-grad" id="btnAddRoutine">
+            <i class="fas fa-plus-circle"></i> Add Routine
+        </button>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-card">
+        <div>
+            <label>Branch</label>
+            <select id="filterBranch">
+                <option value="">All Branches</option>
+                <option value="HSC">HSC</option>
+                <option value="BM">BM</option>
+                <option value="Honours">অনার্স (সম্মান)</option>
+                <option value="Degree">ডিগ্রি (পাস)</option>
+            </select>
+        </div>
+        <div>
+            <label>Class</label>
+            <select id="filterClass">
+                <option value="">All Classes</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+                <option value="1st Year">১ম বর্ষ</option>
+                <option value="2nd Year">২য় বর্ষ</option>
+                <option value="3rd Year">৩য় বর্ষ</option>
+                <option value="4th Year">৪র্থ বর্ষ</option>
+            </select>
+        </div>
+        <div>
+            <label>Group/Department</label>
+            <select id="filterGroup">
+                <option value="">All</option>
+                <optgroup label="HSC">
+                    <option value="Science">Science</option>
+                    <option value="Humanities">Humanities</option>
+                    <option value="Business">Business</option>
+                    <option value="BM-General">BM-General</option>
+                </optgroup>
+                <optgroup label="অনার্স">
+                    <option value="Accounting">হিসাববিজ্ঞান</option>
+                    <option value="Management">ব্যবস্থাপনা</option>
+                    <option value="Political Science">রাষ্ট্রবিজ্ঞান</option>
+                    <option value="Bangla">বাংলা</option>
+                    <option value="Philosophy">দর্শন</option>
+                    <option value="Zoology">প্রাণিবিদ্যা</option>
+                    <option value="English">ইংরেজি</option>
+                </optgroup>
+                <optgroup label="ডিগ্রি">
+                    <option value="B.A.">বি.এ. (পাস)</option>
+                    <option value="B.S.S.">বি.এস.এস. (পাস)</option>
+                    <option value="B.Sc.">বি.এসসি. (পাস)</option>
+                    <option value="B.B.S.">বি.বি.এস. (পাস)</option>
+                </optgroup>
+            </select>
+        </div>
+        <div>
+            <label>Session</label>
+            <input type="text" id="filterSession" placeholder="2024-2025">
+        </div>
+    </div>
+
+    <!-- Routine Grid -->
+    <div class="routine-grid" id="routineGrid">
+        <div class="loading-card">
+            <div class="loading-spinner"></div>
+            <p>লোড হচ্ছে...</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: Add/Edit Routine -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="routineModal">
+    <div class="fdc-modal wide">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-calendar-plus" id="routineModalIcon"></i></div>
+                <div>
+                    <h5 id="routineModalTitle">Add New Routine</h5>
+                    <small id="routineModalSub">রুটিনের তথ্য পূরণ করুন</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeRoutineModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="fdc-modal-body">
+            <input type="hidden" id="editRoutineId" value="">
+            <input type="hidden" id="existingImageUrl" value="">
+            <input type="hidden" id="existingCloudinaryId" value="">
+
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="fdc-form-label">Title <span class="req">*</span></label>
+                    <input type="text" class="fdc-input" id="routineTitle" placeholder="যেমন: Science Group Class Routine">
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Session <span class="req">*</span></label>
+                    <input type="text" class="fdc-input" id="routineSession" placeholder="2024-2025">
+                </div>
+
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Branch <span class="req">*</span></label>
+                    <select class="fdc-select" id="routineBranch">
+                        <option value="">Select Branch</option>
+                        <option value="HSC">HSC</option>
+                        <option value="BM">BM</option>
+                        <option value="Honours">অনার্স (সম্মান)</option>
+                        <option value="Degree">ডিগ্রি (পাস)</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Class <span class="req">*</span></label>
+                    <select class="fdc-select" id="routineClass">
+                        <option value="">Select Class</option>
+                        <option value="11">Class 11</option>
+                        <option value="12">Class 12</option>
+                        <option value="1st Year">১ম বর্ষ</option>
+                        <option value="2nd Year">২য় বর্ষ</option>
+                        <option value="3rd Year">৩য় বর্ষ</option>
+                        <option value="4th Year">৪র্থ বর্ষ</option>
+                    </select>
+                </div>
+                <div class="col-md-4" id="routineGroupWrap">
+                    <label class="fdc-form-label">Group/Department <span class="opt">(প্রযোজ্য হলে)</span></label>
+                    <select class="fdc-select" id="routineGroup">
+                        <option value="">— None —</option>
+                        <optgroup label="HSC Groups">
+                            <option value="Science">Science</option>
+                            <option value="Humanities">Humanities</option>
+                            <option value="Business">Business</option>
+                            <option value="BM-General">BM-General</option>
+                        </optgroup>
+                        <optgroup label="অনার্সের বিষয়">
+                            <option value="Accounting">হিসাববিজ্ঞান</option>
+                            <option value="Management">ব্যবস্থাপনা</option>
+                            <option value="Political Science">রাষ্ট্রবিজ্ঞান</option>
+                            <option value="Bangla">বাংলা</option>
+                            <option value="Philosophy">দর্শন</option>
+                            <option value="Zoology">প্রাণিবিদ্যা</option>
+                            <option value="English">ইংরেজি</option>
+                        </optgroup>
+                        <optgroup label="ডিগ্রি কোর্স">
+                            <option value="B.A.">বি.এ. (পাস)</option>
+                            <option value="B.S.S.">বি.এস.এস. (পাস)</option>
+                            <option value="B.Sc.">বি.এসসি. (পাস)</option>
+                            <option value="B.B.S.">বি.বি.এস. (পাস)</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="col-12">
+                    <label class="fdc-form-label">
+                        <i class="fas fa-image"></i> Routine Image <span class="req">*</span>
+                        <span class="opt">(Max 5MB)</span>
+                    </label>
+                    <div class="upload-zone" id="imageDropArea">
+                        <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="upload-text"><strong>Click to upload</strong> বা drag & drop</div>
+                        <div class="file-types">JPG, PNG, WEBP</div>
+                        <input type="file" id="imageInput" accept="image/*">
+                    </div>
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImg" src="" alt="Preview">
+                        <button type="button" class="remove-btn" id="removeImage">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <label class="fdc-form-label">Description <span class="opt">(Optional)</span></label>
+                    <textarea class="fdc-textarea" id="routineDescription" placeholder="সংক্ষিপ্ত বর্ণনা..."></textarea>
+                </div>
+
+                <div class="col-12">
+                    <div class="switch-row">
+                        <input type="checkbox" id="routinePublished" checked>
+                        <label for="routinePublished">Published (Public page-এ দেখাবে)</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="cancelRoutineBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-primary-grad" id="saveRoutineBtn">
+                <i class="fas fa-save"></i> Save Routine
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: Preview Image -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay preview-modal" id="previewModal">
+    <div class="fdc-modal wide">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-image"></i></div>
+                <div>
+                    <h5 id="previewTitle">Routine Preview</h5>
+                    <small id="previewSub">Click outside to close</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closePreviewModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="fdc-modal-body">
+            <img id="previewModalImg" src="" alt="Preview">
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/cloudinary.js"></script>
+<script src="../js/admin-popup.js"></script>
+<script src="../js/admin-routine.js"></script>
+
+</body>
+</html>
