@@ -416,6 +416,18 @@
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         @keyframes slideOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
 
+        /* QUICK CARDS ACTIONS */
+        .quick-action-btn {
+            transition: all 0.2s ease;
+        }
+        .quick-action-btn:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+        }
+        .quick-action-btn:disabled {
+            opacity: 0.5;
+        }
+
         /* RESPONSIVE */
         @media (max-width: 992px) {
             .settings-tabs { top: 60px; }
@@ -705,238 +717,41 @@
     </div>
 
     <!-- =========================================================
-         TAB 2: QUICK CARDS (8 cards)
+         TAB 2: QUICK CARDS (অসীম / Dynamic)
     =========================================================== -->
     <div class="tab-panel" id="tab-quick">
         <div class="settings-card">
-            <div class="card-title"><i class="fas fa-bolt"></i> Quick Cards (৮টি)</div>
+            <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;">
+                <span><i class="fas fa-bolt"></i> Quick Cards</span>
+                <span style="font-size:12px;color:#6b7280;font-weight:600;">
+                    Total: <span id="quickCardCount">0</span>
+                </span>
+            </div>
             <p class="text-muted" style="font-size:12px; margin-bottom:16px;">
-                হোমপেজের "আমাদের সেবাসমূহ" কার্ডগুলো। উপরে-নিচে scroll করে প্রতিটি কার্ড edit করুন।
+                হোমপেজের "আমাদের সেবাসমূহ" কার্ডগুলো। যত ইচ্ছে কার্ড যোগ, সম্পাদনা বা মুছে ফেলুন। পরিবর্তন অটো-সেভ হবে।
             </p>
 
-            <form id="quickForm">
-                <!-- Card 1 -->
-                <div class="hero-slider-item">
-                    <div class="slider-header"><span class="slider-number">📌 Card 01</span></div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="form-label">Icon (FontAwesome)</label>
-                            <input type="text" class="form-control quick-icon-input" id="quickIcon1" placeholder="fas fa-award" data-preview="quickPreview1">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control quick-title-input" id="quickTitle1" placeholder="ফলাফল">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="quickDesc1" placeholder="অনলাইনে পরীক্ষার ফলাফল দেখুন">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Link</label>
-                            <input type="text" class="form-control" id="quickLink1" placeholder="public-pages/results.html">
-                        </div>
-                    </div>
-                    <div class="quick-card-preview" id="quickPreview1">
-                        <i class="fas fa-award" id="quickPreviewIcon1"></i>
-                        <span id="quickPreviewTitle1">Title</span>
-                    </div>
-                </div>
-
-                <!-- Card 2 -->
-                <div class="hero-slider-item">
-                    <div class="slider-header"><span class="slider-number">📌 Card 02</span></div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="form-label">Icon</label>
-                            <input type="text" class="form-control quick-icon-input" id="quickIcon2" placeholder="fas fa-user-plus" data-preview="quickPreview2">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control quick-title-input" id="quickTitle2" placeholder="ভর্তি">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="quickDesc2" placeholder="ভর্তি সংক্রান্ত তথ্য">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Link</label>
-                            <input type="text" class="form-control" id="quickLink2" placeholder="public-pages/admission.html">
-                        </div>
-                    </div>
-                    <div class="quick-card-preview" id="quickPreview2">
-                        <i class="fas fa-user-plus" id="quickPreviewIcon2"></i>
-                        <span id="quickPreviewTitle2">Title</span>
-                    </div>
-                </div>
-
-                <!-- Card 3 -->
-                <div class="hero-slider-item">
-                    <div class="slider-header"><span class="slider-number">📌 Card 03</span></div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="form-label">Icon</label>
-                            <input type="text" class="form-control quick-icon-input" id="quickIcon3" placeholder="fas fa-phone" data-preview="quickPreview3">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control quick-title-input" id="quickTitle3" placeholder="যোগাযোগ">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="quickDesc3" placeholder="আমাদের সাথে যোগাযোগ করুন">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Link</label>
-                            <input type="text" class="form-control" id="quickLink3" placeholder="public-pages/contact.html">
-                        </div>
-                    </div>
-                    <div class="quick-card-preview" id="quickPreview3">
-                        <i class="fas fa-phone" id="quickPreviewIcon3"></i>
-                        <span id="quickPreviewTitle3">Title</span>
-                    </div>
-                </div>
-
-                <!-- Card 4 -->
-                <div class="hero-slider-item">
-                    <div class="slider-header"><span class="slider-number">📌 Card 04</span></div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="form-label">Icon</label>
-                            <input type="text" class="form-control quick-icon-input" id="quickIcon4" placeholder="fas fa-chart-pie" data-preview="quickPreview4">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control quick-title-input" id="quickTitle4" placeholder="রেজাল্ট ওভারভিউ">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="quickDesc4" placeholder="পরীক্ষার ফলাফলের সামগ্রিক চিত্র">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Link</label>
-                            <input type="text" class="form-control" id="quickLink4" placeholder="public-pages/result-overview.html">
-                        </div>
-                    </div>
-                    <div class="quick-card-preview" id="quickPreview4">
-                        <i class="fas fa-chart-pie" id="quickPreviewIcon4"></i>
-                        <span id="quickPreviewTitle4">Title</span>
-                    </div>
-                </div>
-
-                <!-- Card 5 -->
-                <div class="hero-slider-item">
-                    <div class="slider-header"><span class="slider-number">📌 Card 05</span></div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="form-label">Icon</label>
-                            <input type="text" class="form-control quick-icon-input" id="quickIcon5" placeholder="fas fa-info-circle" data-preview="quickPreview5">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control quick-title-input" id="quickTitle5" placeholder="আমাদের সম্পর্কে">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="quickDesc5" placeholder="কলেজের ইতিহাস, লক্ষ্য ও উদ্দেশ্য">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Link</label>
-                            <input type="text" class="form-control" id="quickLink5" placeholder="public-pages/about.html">
-                        </div>
-                    </div>
-                    <div class="quick-card-preview" id="quickPreview5">
-                        <i class="fas fa-info-circle" id="quickPreviewIcon5"></i>
-                        <span id="quickPreviewTitle5">Title</span>
-                    </div>
-                </div>
-
-                <!-- Card 6 -->
-                <div class="hero-slider-item">
-                    <div class="slider-header"><span class="slider-number">📌 Card 06</span></div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="form-label">Icon</label>
-                            <input type="text" class="form-control quick-icon-input" id="quickIcon6" placeholder="fas fa-flag" data-preview="quickPreview6">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control quick-title-input" id="quickTitle6" placeholder="বিএনসিসি">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="quickDesc6" placeholder="বাংলাদেশ ন্যাশনাল ক্যাডেট কোর">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Link</label>
-                            <input type="text" class="form-control" id="quickLink6" placeholder="public-pages/bncc.html">
-                        </div>
-                    </div>
-                    <div class="quick-card-preview" id="quickPreview6">
-                        <i class="fas fa-flag" id="quickPreviewIcon6"></i>
-                        <span id="quickPreviewTitle6">Title</span>
-                    </div>
-                </div>
-
-                <!-- Card 7 -->
-                <div class="hero-slider-item">
-                    <div class="slider-header"><span class="slider-number">📌 Card 07</span></div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="form-label">Icon</label>
-                            <input type="text" class="form-control quick-icon-input" id="quickIcon7" placeholder="fas fa-campground" data-preview="quickPreview7">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control quick-title-input" id="quickTitle7" placeholder="স্কাউটস">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="quickDesc7" placeholder="বাংলাদেশ স্কাউটস কার্যক্রম">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Link</label>
-                            <input type="text" class="form-control" id="quickLink7" placeholder="public-pages/scouts.html">
-                        </div>
-                    </div>
-                    <div class="quick-card-preview" id="quickPreview7">
-                        <i class="fas fa-campground" id="quickPreviewIcon7"></i>
-                        <span id="quickPreviewTitle7">Title</span>
-                    </div>
-                </div>
-
-                <!-- Card 8 -->
-                <div class="hero-slider-item">
-                    <div class="slider-header"><span class="slider-number">📌 Card 08</span></div>
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <label class="form-label">Icon</label>
-                            <input type="text" class="form-control quick-icon-input" id="quickIcon8" placeholder="fas fa-graduation-cap" data-preview="quickPreview8">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Title</label>
-                            <input type="text" class="form-control quick-title-input" id="quickTitle8" placeholder="একাডেমিক হাব">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Description</label>
-                            <input type="text" class="form-control" id="quickDesc8" placeholder="ক্যালেন্ডার ও ক্লাস রুটিন">
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Link</label>
-                            <input type="text" class="form-control" id="quickLink8" placeholder="public-pages/academic-hub.html">
-                        </div>
-                    </div>
-                    <div class="quick-card-preview" id="quickPreview8">
-                        <i class="fas fa-graduation-cap" id="quickPreviewIcon8"></i>
-                        <span id="quickPreviewTitle8">Title</span>
-                    </div>
-                </div>
-
-                <div class="alert-box" id="quickAlert"></div>
-
-                <button type="submit" class="btn-save" id="quickSaveBtn">
-                    <i class="fas fa-save"></i> Update Quick Cards
+            <!-- Toolbar -->
+            <div style="display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;">
+                <button type="button" class="btn-save" id="addQuickCardBtn"
+                        style="width:auto;padding:11px 22px;">
+                    <i class="fas fa-plus-circle"></i> নতুন কার্ড যোগ করুন
                 </button>
-            </form>
+                <button type="button" class="btn-save" id="reloadQuickCardsBtn"
+                        style="width:auto;padding:11px 22px;background:linear-gradient(135deg,#6b7280,#4b5563);">
+                    <i class="fas fa-sync-alt"></i> রিলোড
+                </button>
+            </div>
+
+            <!-- Container -->
+            <div id="quickCardsContainer">
+                <div style="text-align:center;padding:40px;color:#6b7280;">
+                    <i class="fas fa-spinner fa-spin" style="font-size:28px;"></i>
+                    <p style="margin-top:12px;font-size:13px;">কার্ড লোড হচ্ছে...</p>
+                </div>
+            </div>
+
+            <div class="alert-box" id="quickAlert"></div>
         </div>
     </div>
 
@@ -1547,7 +1362,6 @@
             </p>
 
             <form id="headingsForm">
-                <!-- Notice Board -->
                 <div class="hero-slider-item">
                     <div class="slider-header"><span class="slider-number">📋 Notice Board</span></div>
                     <div class="row g-2">
@@ -1562,7 +1376,6 @@
                     </div>
                 </div>
 
-                <!-- Recent Notice -->
                 <div class="hero-slider-item">
                     <div class="slider-header"><span class="slider-number">📌 Recent Notice</span></div>
                     <div class="row g-2">
@@ -1573,7 +1386,6 @@
                     </div>
                 </div>
 
-                <!-- News Section -->
                 <div class="hero-slider-item">
                     <div class="slider-header"><span class="slider-number">📰 Latest News</span></div>
                     <div class="row g-2">
