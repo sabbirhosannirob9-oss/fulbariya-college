@@ -3,7 +3,7 @@
  * FULBARIYA COLLEGE — ADMIN SETTINGS
  * Location: js/admin-settings.js
  * Depends: config.js, supabase.js, auth.js, cloudinary.js
- * Version: 3.1 (Full — 13 Tabs, 8 Quick Cards)
+ * Version: 4.0 (Full — 13 Tabs, Unlimited Quick Cards)
  * =========================================================
  */
 
@@ -19,6 +19,10 @@
     let heroImageFiles = {};
     let campusImageFiles = {};
     let counterBgFile = null;
+
+    // Quick Cards (Dynamic)
+    let QUICK_CARDS = [];
+    let quickSaveTimer = null;
 
     // =========================================================
     // WAIT FOR SUPABASE
@@ -156,6 +160,16 @@
     }
 
     // =========================================================
+    // ESCAPE HELPER
+    // =========================================================
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    // =========================================================
     // ADMIN INFO
     // =========================================================
     async function loadAdminInfo() {
@@ -209,7 +223,6 @@
             });
         });
 
-        // Restore
         try {
             const saved = localStorage.getItem('admin_settings_active_tab');
             if (saved) {
@@ -234,7 +247,6 @@
             console.log('✅ Settings loaded:', Object.keys(settings).length);
 
             loadHeroSettings();
-            loadQuickSettings();
             loadAboutSettings();
             loadExploreSettings();
             loadCampusSettings();
@@ -246,6 +258,9 @@
             loadPrincipalSettings();
             loadCollegeSettings();
             loadSocialSettings();
+
+            // Quick Cards — independent
+            await loadQuickSettings();
 
         } catch (err) {
             console.error('❌ Load error:', err);
@@ -283,26 +298,304 @@
     }
 
     // =========================================================
-    // QUICK (8 cards)
+    // QUICK CARDS — DYNAMIC (Unlimited)
     // =========================================================
-    function loadQuickSettings() {
-        for (let i = 1; i <= 8; i++) {
-            setVal(`quickIcon${i}`, settings[`quick_card_${i}_icon`]);
-            setVal(`quickTitle${i}`, settings[`quick_card_${i}_title`]);
-            setVal(`quickDesc${i}`, settings[`quick_card_${i}_desc`]);
-            setVal(`quickLink${i}`, settings[`quick_card_${i}_link`]);
-            updateQuickPreview(i);
+    async function loadQuickSettings() {
+        const container = document.getElementById('quickCardsContainer');
+        if (!container) return;
+
+        container.innerHTML = `
+            <div style="text-align:center;padding:40px;color:#6b7280;">
+                <i class="fas fa-spinner fa-spin" style="font-size:28px;"></i>
+                <p style="margin-top:12px;font-size:13px;">কার্ড লোড হচ্ছে...</p>
+            </div>
+        `;
+
+        try {
+            const { data, error } = await window.FDC_SUPABASE
+                .from('quick_cards')
+                .select('*')
+                .order('display_order', { ascending: true });
+
+            if (error) throw error;
+            QUICK_CARDS = data || [];
+            renderQuickCards();
+        } catch (e) {
+            console.error('Quick cards load error:', e);
+            container.innerHTML = `
+                <div style="text-align:center;padding:40px;color:#ef4444;">
+                    <i class="fas fa-exclamation-triangle" style="font-size:28px;"></i>
+                    <p style="margin-top:12px;font-size:13px;">লোড করা যায়নি: ${escapeHtml(e.message)}</p>
+                </div>
+            `;
         }
     }
 
-    function updateQuickPreview(n) {
-        const iconEl = document.getElementById(`quickIcon${n}`);
-        const titleEl = document.getElementById(`quickTitle${n}`);
-        const previewIcon = document.getElementById(`quickPreviewIcon${n}`);
-        const previewTitle = document.getElementById(`quickPreviewTitle${n}`);
+    function renderQuickCards() {
+        const container = document.getElementById('quickCardsContainer');
+        const countEl = document.getElementById('quickCardCount');
+        if (!container) return;
 
-        if (previewIcon && iconEl) previewIcon.className = iconEl.value || 'fas fa-star';
-        if (previewTitle && titleEl) previewTitle.textContent = titleEl.value || 'Title';
+        if (countEl) countEl.textContent = QUICK_CARDS.length;
+
+        if (QUICK_CARDS.length === 0) {
+            container.innerHTML = `
+                <div style="text-align:center;padding:40px;color:#6b7280;background:#f8f9fa;border-radius:12px;">
+                    <i class="fas fa-inbox" style="font-size:32px;opacity:0.4;"></i>
+                    <p style="margin-top:12px;font-size:13px;">কোনো কার্ড নেই। "নতুন কার্ড যোগ করুন" ক্লিক করুন।</p>
+                </div>
+            `;
+            return;
+        }
+
+        let html = '';
+        QUICK_CARDS.forEach((card, idx) => {
+            const isFirst = idx === 0;
+            const isLast = idx === QUICK_CARDS.length - 1;
+
+            html += `
+                <div class="hero-slider-item quick-card-row" data-id="${card.id}">
+                    <div class="slider-header">
+                        <span class="slider-number">📌 Card ${String(idx + 1).padStart(2, '0')}</span>
+                        <div style="display:flex;gap:6px;">
+                            <button type="button" class="quick-action-btn quick-up" data-id="${card.id}" title="উপরে"
+                                    ${isFirst ? 'disabled' : ''}
+                                    style="background:${isFirst ? '#e5e7eb' : '#e0e7ff'};color:${isFirst ? '#9ca3af' : '#3730a3'};border:none;padding:6px 10px;border-radius:6px;cursor:${isFirst ? 'not-allowed' : 'pointer'};font-size:12px;">
+                                <i class="fas fa-arrow-up"></i>
+                            </button>
+                            <button type="button" class="quick-action-btn quick-down" data-id="${card.id}" title="নিচে"
+                                    ${isLast ? 'disabled' : ''}
+                                    style="background:${isLast ? '#e5e7eb' : '#e0e7ff'};color:${isLast ? '#9ca3af' : '#3730a3'};border:none;padding:6px 10px;border-radius:6px;cursor:${isLast ? 'not-allowed' : 'pointer'};font-size:12px;">
+                                <i class="fas fa-arrow-down"></i>
+                            </button>
+                            <button type="button" class="quick-action-btn quick-toggle" data-id="${card.id}" title="${card.is_active ? 'নিষ্ক্রিয় করুন' : 'সক্রিয় করুন'}"
+                                    style="background:${card.is_active ? '#dcfce7' : '#fee2e2'};color:${card.is_active ? '#166534' : '#991b1b'};border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
+                                <i class="fas fa-${card.is_active ? 'eye' : 'eye-slash'}"></i>
+                            </button>
+                            <button type="button" class="quick-action-btn quick-delete" data-id="${card.id}" title="মুছুন"
+                                    style="background:#fef2f2;color:#dc2626;border:none;padding:6px 10px;border-radius:6px;cursor:pointer;font-size:12px;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="form-label">Icon (FontAwesome)</label>
+                            <input type="text" class="form-control quick-input-icon"
+                                   data-id="${card.id}"
+                                   value="${escapeHtml(card.icon || '')}"
+                                   placeholder="fas fa-star">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Title</label>
+                            <input type="text" class="form-control quick-input-title"
+                                   data-id="${card.id}"
+                                   value="${escapeHtml(card.title || '')}"
+                                   placeholder="Title">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Description</label>
+                            <input type="text" class="form-control quick-input-desc"
+                                   data-id="${card.id}"
+                                   value="${escapeHtml(card.description || '')}"
+                                   placeholder="Description">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Link</label>
+                            <input type="text" class="form-control quick-input-link"
+                                   data-id="${card.id}"
+                                   value="${escapeHtml(card.link || '')}"
+                                   placeholder="public-pages/...">
+                        </div>
+                    </div>
+
+                    <div class="quick-card-preview">
+                        <i class="${escapeHtml(card.icon || 'fas fa-star')}" id="prev-icon-${card.id}"></i>
+                        <span id="prev-title-${card.id}">${escapeHtml(card.title || 'Title')}</span>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+
+        // Live preview — Icon
+        container.querySelectorAll('.quick-input-icon').forEach(input => {
+            input.addEventListener('input', function () {
+                const id = this.dataset.id;
+                const iconEl = document.getElementById('prev-icon-' + id);
+                if (iconEl) iconEl.className = this.value || 'fas fa-star';
+            });
+        });
+
+        // Live preview — Title
+        container.querySelectorAll('.quick-input-title').forEach(input => {
+            input.addEventListener('input', function () {
+                const id = this.dataset.id;
+                const titleEl = document.getElementById('prev-title-' + id);
+                if (titleEl) titleEl.textContent = this.value || 'Title';
+            });
+        });
+
+        // Auto-save on blur
+        container.querySelectorAll('.quick-input-icon, .quick-input-title, .quick-input-desc, .quick-input-link').forEach(input => {
+            input.addEventListener('blur', function () {
+                autoSaveQuickCard(this.dataset.id);
+            });
+        });
+
+        // Action buttons
+        container.querySelectorAll('.quick-up').forEach(btn => {
+            btn.addEventListener('click', function () { moveQuickCard(this.dataset.id, -1); });
+        });
+        container.querySelectorAll('.quick-down').forEach(btn => {
+            btn.addEventListener('click', function () { moveQuickCard(this.dataset.id, 1); });
+        });
+        container.querySelectorAll('.quick-delete').forEach(btn => {
+            btn.addEventListener('click', function () { deleteQuickCard(this.dataset.id); });
+        });
+        container.querySelectorAll('.quick-toggle').forEach(btn => {
+            btn.addEventListener('click', function () { toggleQuickCard(this.dataset.id); });
+        });
+    }
+
+    // Auto-save
+    function autoSaveQuickCard(id) {
+        if (quickSaveTimer) clearTimeout(quickSaveTimer);
+        quickSaveTimer = setTimeout(async () => {
+            const row = document.querySelector(`.quick-card-row[data-id="${id}"]`);
+            if (!row) return;
+
+            const icon = row.querySelector('.quick-input-icon').value.trim();
+            const title = row.querySelector('.quick-input-title').value.trim();
+            const desc = row.querySelector('.quick-input-desc').value.trim();
+            const link = row.querySelector('.quick-input-link').value.trim();
+
+            try {
+                const { error } = await window.FDC_SUPABASE
+                    .from('quick_cards')
+                    .update({
+                        icon: icon,
+                        title: title,
+                        description: desc,
+                        link: link
+                    })
+                    .eq('id', id);
+
+                if (error) throw error;
+                showToast('✅ সংরক্ষিত', 'success');
+            } catch (e) {
+                showToast('❌ ' + e.message, 'error');
+            }
+        }, 800);
+    }
+
+    // Move up/down
+    async function moveQuickCard(id, direction) {
+        const idx = QUICK_CARDS.findIndex(c => c.id === id);
+        if (idx === -1) return;
+
+        const newIdx = idx + direction;
+        if (newIdx < 0 || newIdx >= QUICK_CARDS.length) return;
+
+        const currentOrder = QUICK_CARDS[idx].display_order;
+        const targetOrder = QUICK_CARDS[newIdx].display_order;
+
+        try {
+            await window.FDC_SUPABASE.from('quick_cards').update({ display_order: targetOrder }).eq('id', QUICK_CARDS[idx].id);
+            await window.FDC_SUPABASE.from('quick_cards').update({ display_order: currentOrder }).eq('id', QUICK_CARDS[newIdx].id);
+
+            [QUICK_CARDS[idx], QUICK_CARDS[newIdx]] = [QUICK_CARDS[newIdx], QUICK_CARDS[idx]];
+            renderQuickCards();
+            showToast('✅ ক্রম পরিবর্তন হয়েছে', 'success');
+        } catch (e) {
+            showToast('❌ ' + e.message, 'error');
+        }
+    }
+
+    // Delete
+    async function deleteQuickCard(id) {
+        const card = QUICK_CARDS.find(c => c.id === id);
+        if (!card) return;
+
+        const ok = await showConfirm({
+            title: 'কার্ড মুছুন',
+            message: `"${card.title}" কার্ডটি মুছে ফেলতে চান?`,
+            icon: 'danger',
+            confirmText: 'হ্যাঁ, মুছুন',
+            cancelText: 'বাতিল',
+            confirmColor: 'danger'
+        });
+        if (!ok) return;
+
+        try {
+            const { error } = await window.FDC_SUPABASE.from('quick_cards').delete().eq('id', id);
+            if (error) throw error;
+            QUICK_CARDS = QUICK_CARDS.filter(c => c.id !== id);
+            renderQuickCards();
+            showToast('✅ মুছে ফেলা হয়েছে', 'success');
+        } catch (e) {
+            showToast('❌ ' + e.message, 'error');
+        }
+    }
+
+    // Toggle Active
+    async function toggleQuickCard(id) {
+        const card = QUICK_CARDS.find(c => c.id === id);
+        if (!card) return;
+
+        try {
+            const { error } = await window.FDC_SUPABASE
+                .from('quick_cards')
+                .update({ is_active: !card.is_active })
+                .eq('id', id);
+
+            if (error) throw error;
+            card.is_active = !card.is_active;
+            renderQuickCards();
+            showToast(card.is_active ? '✅ সক্রিয়' : '⚠️ নিষ্ক্রিয়', 'success');
+        } catch (e) {
+            showToast('❌ ' + e.message, 'error');
+        }
+    }
+
+    // Add New Card
+    async function addNewQuickCard() {
+        const nextOrder = QUICK_CARDS.length > 0
+            ? Math.max(...QUICK_CARDS.map(c => c.display_order || 0)) + 1
+            : 1;
+
+        try {
+            const { data, error } = await window.FDC_SUPABASE
+                .from('quick_cards')
+                .insert([{
+                    icon: 'fas fa-star',
+                    title: 'নতুন কার্ড',
+                    description: 'বিবরণ লিখুন',
+                    link: 'public-pages/',
+                    display_order: nextOrder,
+                    is_active: true
+                }])
+                .select()
+                .single();
+
+            if (error) throw error;
+            QUICK_CARDS.push(data);
+            renderQuickCards();
+
+            setTimeout(() => {
+                const newRow = document.querySelector(`.quick-card-row[data-id="${data.id}"]`);
+                if (newRow) {
+                    newRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    newRow.style.background = '#fef3c7';
+                    setTimeout(() => { newRow.style.background = ''; }, 1500);
+                }
+            }, 200);
+
+            showToast('✅ নতুন কার্ড যোগ হয়েছে', 'success');
+        } catch (e) {
+            showToast('❌ ' + e.message, 'error');
+        }
     }
 
     // =========================================================
@@ -336,7 +629,7 @@
     }
 
     // =========================================================
-    // EXPLORE (Dynamic generation)
+    // EXPLORE
     // =========================================================
     function loadExploreSettings() {
         const container = document.getElementById('exploreContainer');
@@ -551,7 +844,7 @@
         } else {
             const { error } = await supabase
                 .from('site_settings')
-                .insert([{ key: key, value: value, category: 'quick_cards' }]);
+                .insert([{ key: key, value: value, category: 'general' }]);
             if (error) throw error;
         }
     }
@@ -748,7 +1041,7 @@
     }
 
     // =========================================================
-    // SINGLE UPLOADS (About, Principal, Counter BG)
+    // SINGLE UPLOADS
     // =========================================================
     function setupSingleUpload(dropId, inputId, previewId, nameId, sizeId, removeId, type) {
         const drop = document.getElementById(dropId);
@@ -845,34 +1138,17 @@
             });
         }
 
-        // ========== QUICK (8 cards) ==========
-        const quickForm = document.getElementById('quickForm');
-        if (quickForm) {
-            quickForm.addEventListener('submit', async function (e) {
-                e.preventDefault();
-                const btn = document.getElementById('quickSaveBtn');
-                if (btn) {
-                    btn.disabled = true;
-                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
-                }
+        // ========== QUICK CARDS (Dynamic) ==========
+        const addQuickBtn = document.getElementById('addQuickCardBtn');
+        if (addQuickBtn) {
+            addQuickBtn.addEventListener('click', addNewQuickCard);
+        }
 
-                try {
-                    const data = {};
-                    for (let i = 1; i <= 8; i++) {
-                        data[`quick_card_${i}_icon`] = (document.getElementById(`quickIcon${i}`) || {}).value || '';
-                        data[`quick_card_${i}_title`] = (document.getElementById(`quickTitle${i}`) || {}).value || '';
-                        data[`quick_card_${i}_desc`] = (document.getElementById(`quickDesc${i}`) || {}).value || '';
-                        data[`quick_card_${i}_link`] = (document.getElementById(`quickLink${i}`) || {}).value || '';
-                    }
-                    await saveMany(data, 'quickAlert', 'Quick cards updated!');
-                } catch (err) {
-                    showToast('❌ ' + err.message, 'error');
-                } finally {
-                    if (btn) {
-                        btn.disabled = false;
-                        btn.innerHTML = '<i class="fas fa-save"></i> Update Quick Cards';
-                    }
-                }
+        const reloadQuickBtn = document.getElementById('reloadQuickCardsBtn');
+        if (reloadQuickBtn) {
+            reloadQuickBtn.addEventListener('click', function () {
+                showToast('🔄 রিলোড হচ্ছে...', 'info');
+                loadQuickSettings();
             });
         }
 
@@ -1112,21 +1388,7 @@
             });
         }
 
-        // ========== Live Previews ==========
-        document.querySelectorAll('.quick-icon-input').forEach(function (input) {
-            input.addEventListener('input', function () {
-                const n = this.id.replace('quickIcon', '');
-                updateQuickPreview(n);
-            });
-        });
-
-        document.querySelectorAll('.quick-title-input').forEach(function (input) {
-            input.addEventListener('input', function () {
-                const n = this.id.replace('quickTitle', '');
-                updateQuickPreview(n);
-            });
-        });
-
+        // ========== Live Preview — Counter ==========
         document.querySelectorAll('.counter-icon-input, .counter-label-input, .counter-value-input').forEach(function (input) {
             input.addEventListener('input', function () {
                 const n = this.dataset.preview;
@@ -1139,7 +1401,7 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Settings v3.1 initialized');
+        console.log('🚀 Admin Settings v4.0 initialized');
 
         setupTabs();
         setupHeroUploads();
