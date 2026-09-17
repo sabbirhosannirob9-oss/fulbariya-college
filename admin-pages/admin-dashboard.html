@@ -386,6 +386,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .stat-card.rose .stat-number { color: #e11d48; }
 .stat-card.rose .stat-icon { color: #e11d48; }
 
+.stat-card.pink::before { background: linear-gradient(180deg, #ec4899, #db2777); }
+.stat-card.pink .stat-number { color: #db2777; }
+.stat-card.pink .stat-icon { color: #db2777; }
+
 /* FEATURED CARD */
 .featured-card {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
@@ -703,7 +707,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         <div class="brand-icon"><i class="fas fa-shield-alt"></i></div>
         <div>
             <h4>Fulbariya College</h4>
-            <small>Admin Panel v2.3</small>
+            <small>Admin Panel v2.4</small>
         </div>
     </div>
     <div class="user-info">
@@ -887,7 +891,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     <!-- FOOTER -->
     <div class="footer">
         <div class="footer-line"></div>
-        <p><i class="fas fa-shield-alt"></i> Fulbariya College · Admin Panel v2.3</p>
+        <p><i class="fas fa-shield-alt"></i> Fulbariya College · Admin Panel v2.4</p>
         <p style="font-size: 11px; margin-top: 6px;">&copy; 2026 All rights reserved</p>
     </div>
 
@@ -943,11 +947,9 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                 admin.email
             );
 
-            // Facebook-style: show skeleton for a moment, then render real content
             setTimeout(function () {
                 hideLoader();
                 renderRealContent();
-                // Load stats after content rendered
                 setTimeout(loadAllStats, 150);
             }, 700);
 
@@ -1090,6 +1092,15 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                         <div class="stat-icon"><i class="fas fa-user-tie"></i></div>
                     </div>
                 </div>
+                <div class="stat-card pink">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="stat-number" id="statGreeting">0</div>
+                            <div class="stat-label"><i class="fas fa-envelope-open-text"></i> Greetings</div>
+                        </div>
+                        <div class="stat-icon"><i class="fas fa-envelope-open-text"></i></div>
+                    </div>
+                </div>
             `;
             statGrid.classList.add('content-fade-in');
         }
@@ -1201,10 +1212,18 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                         <span class="badge-count" id="badgeExam">0</span>
                     </div>
                 </a>
+                <a href="admin-greeting.html" class="management-card">
+                    <div class="card-icon pink"><i class="fas fa-envelope-open-text"></i></div>
+                    <div class="card-content">
+                        <h6>14. Greeting Cards</h6>
+                        <p>উৎসব, শোক, সচেতনতা — অধ্যক্ষের বার্তা</p>
+                        <span class="badge-count" id="badgeGreeting">0</span>
+                    </div>
+                </a>
                 <a href="admin-settings.html" class="management-card">
                     <div class="card-icon navy"><i class="fas fa-cog"></i></div>
                     <div class="card-content">
-                        <h6>14. Settings</h6>
+                        <h6>15. Settings</h6>
                         <p>Manage website and system settings</p>
                         <span class="badge-count">⚙️</span>
                     </div>
@@ -1253,7 +1272,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
             const [
                 notices, news, results, students, gallery, heads,
                 bncc, scouts, calendarEvents, routines,
-                examCountdown, examRoutine, examNotice
+                examCountdown, examRoutine, examNotice,
+                greetingCards
             ] = await Promise.all([
                 getCount('notices'),
                 getCount('news'),
@@ -1267,7 +1287,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                 getCount('class_routines'),
                 getCount('exam_countdown'),
                 getCount('exam_routine'),
-                getCount('exam_notice')
+                getCount('exam_notice'),
+                getCount('greeting_cards')
             ]);
 
             animateCount(document.getElementById('statNotices'), notices);
@@ -1278,6 +1299,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
             animateCount(document.getElementById('statRoutine'), routines);
             animateCount(document.getElementById('statGallery'), gallery);
             animateCount(document.getElementById('statHeads'), heads);
+            animateCount(document.getElementById('statGreeting'), greetingCards);
 
             const setBadge = (id, val) => {
                 const el = document.getElementById(id);
@@ -1295,6 +1317,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
             setBadge('badgeHeads', heads);
             setBadge('badgeBoardFinal', 0);
             setBadge('badgeExam', examCountdown + examRoutine + examNotice);
+            setBadge('badgeGreeting', greetingCards);
 
         } catch (error) {
             console.error('Stats load error:', error);
@@ -1329,7 +1352,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     };
 
     function init() {
-        console.log('🚀 Admin Dashboard v2.3 initialized');
+        console.log('🚀 Admin Dashboard v2.4 initialized');
         waitForSupabase(checkSession);
     }
 

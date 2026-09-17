@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Greeting Cards - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --white: #ffffff;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* ============ HEADER ============ */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.admin-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.admin-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+    flex-shrink: 0;
+}
+.admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.admin-header .user-box { display: flex; align-items: center; gap: 8px; }
+.avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    border: 2px solid rgba(242,210,123,0.4);
+    flex-shrink: 0;
+}
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover {
+    background: rgba(255,255,255,0.25);
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+/* ============ MAIN ============ */
+.main-wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px 16px 60px;
+}
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-title .badge-total {
+    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.06));
+    color: var(--navy);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+    border: 1px solid rgba(10,22,85,0.1);
+}
+.page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
+
+/* ============ TOOLBAR ============ */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+
+.btn-add {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 11px 22px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-add:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(10,22,85,0.35);
+    color: #fff;
+}
+.btn-add i { color: var(--gold); }
+
+/* ============ STATS ============ */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.stat-pill {
+    background: #fff;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
+.stat-pill .sp-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+.stat-pill .sp-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
+.stat-pill .sp-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.stat-pill .sp-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.stat-pill .sp-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
+.stat-pill .sp-icon.orange { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
+.stat-pill .sp-info { min-width: 0; }
+.stat-pill .sp-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.stat-pill .sp-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 3px;
+}
+
+/* ============ MOOD PREVIEW BANNER ============ */
+.mood-banner {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 20px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+}
+.mood-banner::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -20%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.mood-banner::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-2), var(--gold));
+}
+.mood-banner .mb-icon {
+    font-size: 48px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+.mood-banner .mb-info {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    z-index: 1;
+}
+.mood-banner .mb-info h5 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 700;
+}
+.mood-banner .mb-info p {
+    margin: 0;
+    font-size: 12.5px;
+    opacity: 0.85;
+}
+
+/* ============ FORM CARD ============ */
+.form-card {
+    background: #fff;
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 20px;
+    display: none;
+    border: 1px solid var(--border);
+    animation: slideDown 0.4s ease;
+}
+.form-card.show { display: block; }
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.form-title {
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 18px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+}
+.form-title i { color: var(--gold-dark); }
+
+.form-label {
+    font-weight: 600;
+    font-size: 12px;
+    color: #4b5563;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+}
+.form-label .req { color: var(--danger); }
+
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    transition: 0.25s;
+    background: #fafbff;
+    width: 100%;
+}
+.form-control:focus, .form-select:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+    background: #fff;
+    outline: none;
+}
+textarea.form-control { min-height: 100px; resize: vertical; }
+
+/* ============ MOOD SELECTOR ============ */
+.mood-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    margin-top: 8px;
+}
+.mood-option {
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+}
+.mood-option:hover {
+    border-color: var(--navy);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(10,22,85,0.08);
+}
+.mood-option.active {
+    border-color: var(--navy);
+    background: linear-gradient(135deg, rgba(10,22,85,0.05), rgba(13,71,161,0.03));
+    box-shadow: 0 4px 16px rgba(10,22,85,0.15);
+}
+.mood-option.active::after {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.mood-option .mo-icon {
+    font-size: 28px;
+    margin-bottom: 6px;
+    line-height: 1;
+}
+.mood-option .mo-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--dark);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* ============ UPLOAD ============ */
+.upload-zone {
+    border: 2px dashed #c8cdda;
+    border-radius: 14px;
+    padding: 22px 18px;
+    text-align: center;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    background: #fafbff;
+}
+.upload-zone:hover {
+    border-color: var(--navy);
+    background: #f5f7ff;
+}
+.upload-zone input[type="file"] {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 10;
+}
+.upload-zone .upload-icon {
+    font-size: 36px;
+    color: var(--navy);
+    opacity: 0.3;
+    pointer-events: none;
+}
+.upload-zone .upload-text {
+    font-size: 13px;
+    color: #666;
+    margin-top: 8px;
+    pointer-events: none;
+}
+.upload-zone .upload-text strong { color: var(--navy); }
+.upload-zone .file-types {
+    font-size: 11px;
+    color: #999;
+    margin-top: 4px;
+    pointer-events: none;
+}
+
+.image-preview {
+    display: none;
+    margin-top: 14px;
+    padding: 12px;
+    background: #f8f9ff;
+    border-radius: 12px;
+    border: 1.5px solid var(--border-light);
+    position: relative;
+    text-align: center;
+}
+.image-preview.show { display: block; }
+.image-preview img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin: 0 auto;
+    border: 3px solid var(--navy);
+    background: #eee;
+}
+.image-preview .remove-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--danger);
+    color: #fff;
+    border: 2px solid #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    box-shadow: 0 4px 12px rgba(239,68,68,0.4);
+    transition: 0.25s;
+}
+.image-preview .remove-btn:hover {
+    transform: scale(1.1) rotate(90deg);
+}
+
+/* ============ SWITCH ============ */
+.form-check-input {
+    width: 42px;
+    height: 22px;
+    cursor: pointer;
+    accent-color: var(--navy);
+    margin-top: 0;
+}
+.form-check-label {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--dark);
+    cursor: pointer;
+}
+
+/* ============ BUTTONS ============ */
+.btn-primary-grad {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 11px 26px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.2);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-primary-grad:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(10,22,85,0.3);
+    color: #fff;
+}
+.btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-secondary-grad {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1.5px solid var(--border);
+    padding: 11px 22px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+.btn-secondary-grad:hover { background: #e5e7eb; }
+
+/* ============ FILTER ============ */
+.filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.filter-scroll {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    flex: 1;
+    min-width: 200px;
+    scrollbar-width: none;
+}
+.filter-scroll::-webkit-scrollbar { display: none; }
+.filter-chip {
+    padding: 7px 14px;
+    border-radius: 50px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    color: var(--grey);
+    font-weight: 600;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.filter-chip:hover { border-color: var(--navy); color: var(--navy); }
+.filter-chip.active {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 12px rgba(10,22,85,0.2);
+}
+.filter-chip i { font-size: 10px; }
+
+.search-wrap {
+    position: relative;
+    min-width: 220px;
+}
+.search-wrap i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    font-size: 13px;
+}
+.search-input {
+    width: 100%;
+    padding: 10px 14px 10px 38px;
+    border-radius: 50px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    font-size: 12.5px;
+    outline: none;
+    transition: 0.25s;
+}
+.search-input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+}
+
+/* ============ CARDS GRID ============ */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+}
+
+.greeting-card-item {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
+    border: 1px solid var(--border-light);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+.greeting-card-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(10,22,85,0.12);
+}
+
+.gci-header {
+    padding: 16px 18px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    border-bottom: 1px solid var(--border-light);
+}
+.gci-header h4 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0;
+    flex: 1;
+    min-width: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: 0.3px;
+}
+.status-badge.badge-active { background: #d1fae5; color: #059669; }
+.status-badge.badge-inactive { background: #e5e7eb; color: #6b7280; }
+.status-badge.badge-upcoming { background: #fef3c7; color: #d97706; }
+.status-badge.badge-expired { background: #fee2e2; color: #dc2626; }
+
+.gci-mood-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    z-index: 3;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(242,210,123,0.5);
+}
+
+.gci-img-wrap {
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.gci-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.gci-img-wrap::after {
+    content: '🎊';
+    font-size: 60px;
+    opacity: 0.2;
+}
+
+.gci-message {
+    padding: 14px 18px;
+    font-size: 13px;
+    color: #4b5563;
+    line-height: 1.6;
+    margin: 0;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.gci-meta {
+    padding: 10px 18px;
+    background: #fafbff;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-size: 11.5px;
+    color: var(--grey);
+}
+.gci-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.gci-meta i { color: var(--gold-dark); width: 12px; }
+
+.gci-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 10px 14px;
+    border-top: 1px solid var(--border-light);
+    background: #fff;
+}
+.gci-actions .btn-action {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.gci-actions .btn-edit { background: #e3f2fd; color: #1565c0; }
+.gci-actions .btn-edit:hover { background: #bbdefb; transform: scale(1.08); }
+.gci-actions .btn-delete { background: #fef2f2; color: var(--danger); }
+.gci-actions .btn-delete:hover { background: #fecaca; transform: scale(1.08); }
+.gci-actions .btn-toggle { background: #fef3c7; color: #d97706; }
+.gci-actions .btn-toggle:hover { background: #fde68a; transform: scale(1.08); }
+
+/* ============ EMPTY ============ */
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 50px 20px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+}
+.empty-state .icon-wrap {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+.empty-state i { font-size: 30px; color: var(--navy); opacity: 0.4; }
+.empty-state h6 { color: #374151; font-weight: 700; font-size: 15px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; margin: 0; color: var(--grey); }
+
+/* ============ SKELETON ============ */
+.skeleton-card {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border-light);
+}
+.skeleton-thumb {
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+}
+.skeleton-body { padding: 14px 16px; }
+.skeleton-line {
+    height: 12px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    margin-bottom: 10px;
+}
+@keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ============ TOAST ============ */
+#toastContainer {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 340px;
+}
+.toast-msg {
+    padding: 13px 20px;
+    border-radius: 12px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 13px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    min-width: 220px;
+    animation: slideIn 0.35s ease;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.toast-success { background: linear-gradient(135deg, #10b981, #059669); }
+.toast-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+.toast-info { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+@keyframes slideOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(100%); opacity: 0; }
+}
+
+/* ============ SMART MODAL ============ */
+.smart-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 10, 40, 0.65);
+    backdrop-filter: blur(6px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeIn 0.25s ease;
+}
+.smart-modal-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.smart-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 420px;
+    width: 100%;
+    padding: 30px 26px 24px;
+    text-align: center;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+    animation: modalPop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+.smart-modal::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+@keyframes modalPop {
+    from { opacity: 0; transform: scale(0.85) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.smart-modal .modal-icon {
+    width: 70px; height: 70px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 16px;
+}
+.smart-modal .modal-icon.warn {
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    color: var(--danger);
+}
+.smart-modal h5 {
+    font-weight: 700;
+    color: #1f2937;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+.smart-modal p {
+    color: var(--grey);
+    font-size: 13.5px;
+    margin-bottom: 22px;
+    line-height: 1.6;
+}
+.smart-modal .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+.smart-modal .modal-btn {
+    padding: 11px 26px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    border: none;
+    transition: 0.25s;
+    min-width: 110px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+}
+.smart-modal .modal-btn.cancel { background: #f3f4f6; color: #374151; }
+.smart-modal .modal-btn.cancel:hover { background: #e5e7eb; }
+.smart-modal .modal-btn.danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(239,68,68,0.3);
+}
+.smart-modal .modal-btn.danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(239,68,68,0.4);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+    .admin-header { padding: 10px 14px; }
+    .admin-header h4 { font-size: 14px; }
+    .admin-header .brand-icon { width: 38px; height: 38px; font-size: 16px; }
+    .main-wrap { padding: 14px 12px 50px; }
+    .page-title { font-size: 17px; }
+
+    .form-card { padding: 18px; border-radius: 14px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .btn-add { justify-content: center; }
+
+    .stats-row { gap: 8px; grid-template-columns: repeat(2, 1fr); }
+    .stat-pill { padding: 11px 12px; }
+    .stat-pill .sp-icon { width: 34px; height: 34px; font-size: 13px; }
+    .stat-pill .sp-value { font-size: 17px; }
+
+    .search-wrap { min-width: unset; width: 100%; }
+    .filter-bar { flex-direction: column; align-items: stretch; }
+
+    .mood-grid { grid-template-columns: repeat(3, 1fr); }
+    .mood-option { padding: 10px 6px; }
+    .mood-option .mo-icon { font-size: 22px; }
+    .mood-option .mo-label { font-size: 9.5px; }
+
+    .cards-grid { grid-template-columns: 1fr; gap: 12px; }
+
+    .smart-modal { padding: 24px 20px 20px; }
+    .smart-modal h5 { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+    .admin-header .user-box .btn-header span { display: none; }
+    .mood-grid { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-envelope-open-text"></i></div>
+        <div>
+            <h4>Greeting Cards</h4>
+            <small>অধ্যক্ষের বার্তা ও গ্রিটিং কার্ড</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="avatar-circle" data-admin-avatar>A</div>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+        </a>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <div>
+            <h4 class="page-title">
+                <i class="fas fa-envelope-open-text"></i> Greeting Cards
+                <span class="badge-total" id="totalCards">0</span>
+            </h4>
+            <p class="page-sub">উৎসব, শোক, সচেতনতা — সব ধরনের অধ্যক্ষের বার্তা পরিচালনা করুন</p>
+        </div>
+        <button class="btn-add" id="btnAddCard">
+            <i class="fas fa-plus-circle"></i> নতুন গ্রিটিং কার্ড
+        </button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+        <div class="stat-pill">
+            <div class="sp-icon navy"><i class="fas fa-envelope"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statTotal">0</div>
+                <div class="sp-label">Total</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon green"><i class="fas fa-check-circle"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statActive">0</div>
+                <div class="sp-label">Active</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon gold"><i class="fas fa-clock"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statUpcoming">0</div>
+                <div class="sp-label">Upcoming</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon orange"><i class="fas fa-hourglass-end"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statExpired">0</div>
+                <div class="sp-label">Expired</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mood Banner (Info) -->
+    <div class="mood-banner">
+        <div class="mb-icon">🎭</div>
+        <div class="mb-info">
+            <h5>১০টি Mood সাপোর্টেড</h5>
+            <p>🎊 Celebration · 🕯️ Mourning · 🤲 Respect · 🎗️ Awareness · 🌸 Blessing · 🎓 Congratulation · 🇧🇩 National · 🕌 Religious · ⚠️ Warning · 📩 Invitation</p>
+        </div>
+    </div>
+
+    <!-- Add/Edit Form -->
+    <div class="form-card" id="formCard">
+        <div class="form-title">
+            <i class="fas fa-plus-circle"></i> <span id="formTitle">নতুন গ্রিটিং কার্ড</span>
+        </div>
+
+        <form id="greetingForm">
+            <input type="hidden" id="cardId" value="">
+            <input type="hidden" id="existingImageUrl" value="">
+            <input type="hidden" id="moodValue" value="celebration">
+
+            <div class="row g-3">
+                <!-- MOOD SELECTOR -->
+                <div class="col-12">
+                    <label class="form-label">
+                        <i class="fas fa-palette"></i> Mood নির্বাচন করুন <span class="req">*</span>
+                    </label>
+                    <div class="mood-grid" id="moodGrid">
+                        <div class="mood-option active" data-mood="celebration">
+                            <div class="mo-icon">🎊</div>
+                            <div class="mo-label">Celebration</div>
+                        </div>
+                        <div class="mood-option" data-mood="mourning">
+                            <div class="mo-icon">🕯️</div>
+                            <div class="mo-label">Mourning</div>
+                        </div>
+                        <div class="mood-option" data-mood="respect">
+                            <div class="mo-icon">🤲</div>
+                            <div class="mo-label">Respect</div>
+                        </div>
+                        <div class="mood-option" data-mood="awareness">
+                            <div class="mo-icon">🎗️</div>
+                            <div class="mo-label">Awareness</div>
+                        </div>
+                        <div class="mood-option" data-mood="blessing">
+                            <div class="mo-icon">🌸</div>
+                            <div class="mo-label">Blessing</div>
+                        </div>
+                        <div class="mood-option" data-mood="congratulation">
+                            <div class="mo-icon">🎓</div>
+                            <div class="mo-label">Congratulation</div>
+                        </div>
+                        <div class="mood-option" data-mood="national">
+                            <div class="mo-icon">🇧🇩</div>
+                            <div class="mo-label">National</div>
+                        </div>
+                        <div class="mood-option" data-mood="religious">
+                            <div class="mo-icon">🕌</div>
+                            <div class="mo-label">Religious</div>
+                        </div>
+                        <div class="mood-option" data-mood="warning">
+                            <div class="mo-icon">⚠️</div>
+                            <div class="mo-label">Warning</div>
+                        </div>
+                        <div class="mood-option" data-mood="invitation">
+                            <div class="mo-icon">📩</div>
+                            <div class="mo-label">Invitation</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-8">
+                    <label class="form-label">শিরোনাম <span class="req">*</span></label>
+                    <input type="text" class="form-control" id="title" placeholder="যেমন: ঈদ মোবারক / শোক সংবাদ" required>
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label">থিম কালার (ঐচ্ছিক)</label>
+                    <input type="color" class="form-control" id="themeColor" value="#0a1655" style="height:44px;padding:4px;">
+                    <small style="color:#999;font-size:10.5px;">খালি রাখলে mood অনুযায়ী হবে</small>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">অধ্যক্ষের বার্তা <span class="req">*</span></label>
+                    <textarea class="form-control" id="message" rows="5" placeholder="প্রিয় শিক্ষার্থী ও অভিভাবকবৃন্দ..." required></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">অধ্যক্ষের নাম</label>
+                    <input type="text" class="form-control" id="principalName" placeholder="জনাব মোহাম্মদ ...">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">পদবি</label>
+                    <input type="text" class="form-control" id="principalTitle" value="অধ্যক্ষ, ফুলবাড়ীয়া কলেজ">
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">শুরুর তারিখ <span class="req">*</span></label>
+                    <input type="date" class="form-control" id="startDate" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">শেষ তারিখ <span class="req">*</span></label>
+                    <input type="date" class="form-control" id="endDate" required>
+                </div>
+
+                <div class="col-12">
+                    <label class="form-label">
+                        <i class="fas fa-image"></i> অধ্যক্ষের ছবি
+                        <span style="color:#999;font-weight:400;">(Max 3MB)</span>
+                    </label>
+                    <div class="upload-zone" id="imageDropArea">
+                        <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
+                        <div class="upload-text"><strong>Click to upload</strong> বা drag & drop</div>
+                        <div class="file-types">JPG, PNG, WEBP</div>
+                        <input type="file" id="imageInput" accept="image/*">
+                    </div>
+                    <div class="image-preview" id="imagePreview">
+                        <img id="previewImg" src="" alt="Preview">
+                        <button type="button" class="remove-btn" id="removeImage">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Status</label>
+                    <div class="form-check form-switch mt-1">
+                        <input class="form-check-input" type="checkbox" id="isActive" checked>
+                        <label class="form-check-label" for="isActive">Active (ওয়েবসাইটে দেখাবে)</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Show Frequency</label>
+                    <div class="form-check form-switch mt-1">
+                        <input class="form-check-input" type="checkbox" id="showOnce" checked>
+                        <label class="form-check-label" for="showOnce">দিনে একবার দেখাবে</label>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-3 d-flex gap-2 flex-wrap">
+                    <button type="submit" class="btn-primary-grad" id="submitBtn">
+                        <i class="fas fa-save"></i> <span id="submitBtnText">সেভ করুন</span>
+                    </button>
+                    <button type="button" class="btn-secondary-grad" id="cancelForm">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Filters -->
+    <div class="filter-bar">
+        <div class="filter-scroll">
+            <button class="filter-chip active" data-filter="all">
+                <i class="fas fa-list"></i> All
+            </button>
+            <button class="filter-chip" data-filter="active">
+                <i class="fas fa-check-circle"></i> Active
+            </button>
+            <button class="filter-chip" data-filter="upcoming">
+                <i class="fas fa-clock"></i> Upcoming
+            </button>
+            <button class="filter-chip" data-filter="expired">
+                <i class="fas fa-hourglass-end"></i> Expired
+            </button>
+        </div>
+        <div class="search-wrap">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search by title...">
+        </div>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="cards-grid" id="cardsList">
+        <div class="skeleton-card">
+            <div class="skeleton-thumb"></div>
+            <div class="skeleton-body">
+                <div class="skeleton-line" style="width:80%;"></div>
+                <div class="skeleton-line" style="width:60%;"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-thumb"></div>
+            <div class="skeleton-body">
+                <div class="skeleton-line" style="width:75%;"></div>
+                <div class="skeleton-line" style="width:55%;"></div>
+            </div>
+        </div>
+        <div class="skeleton-card">
+            <div class="skeleton-thumb"></div>
+            <div class="skeleton-body">
+                <div class="skeleton-line" style="width:70%;"></div>
+                <div class="skeleton-line" style="width:50%;"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Toast -->
+<div id="toastContainer"></div>
+
+<!-- Smart Modal -->
+<div class="smart-modal-overlay" id="smartModal">
+    <div class="smart-modal">
+        <div class="modal-icon warn"><i class="fas fa-trash-alt"></i></div>
+        <h5 id="smartModalTitle">Delete Card?</h5>
+        <p id="smartModalText">This action cannot be undone.</p>
+        <div class="modal-actions">
+            <button class="modal-btn cancel" id="smartModalCancel">Cancel</button>
+            <button class="modal-btn danger" id="smartModalConfirm">Delete</button>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/cloudinary.js"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    // =========================================================
+    // STATE
+    // =========================================================
+    let allCards = [];
+    let editingId = null;
+    let selectedImageFile = null;
+    let currentFilter = 'all';
+    let searchQuery = '';
+    let selectedMood = 'celebration';
+
+    const MOOD_LABELS = {
+        celebration: { icon: '🎊', label: 'Celebration' },
+        mourning: { icon: '🕯️', label: 'Mourning' },
+        respect: { icon: '🤲', label: 'Respect' },
+        awareness: { icon: '🎗️', label: 'Awareness' },
+        blessing: { icon: '🌸', label: 'Blessing' },
+        congratulation: { icon: '🎓', label: 'Congratulation' },
+        national: { icon: '🇧🇩', label: 'National' },
+        religious: { icon: '🕌', label: 'Religious' },
+        warning: { icon: '⚠️', label: 'Warning' },
+        invitation: { icon: '📩', label: 'Invitation' }
+    };
+
+    const cardsList = document.getElementById('cardsList');
+
+    // =========================================================
+    // HELPERS
+    // =========================================================
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function getTodayStr() {
+        const d = new Date();
+        const y = d.getFullYear();
+        const m = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return y + '-' + m + '-' + day;
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('bn-BD', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function showToast(msg, type) {
+        type = type || 'success';
+        let c = document.getElementById('toastContainer');
+        if (!c) {
+            c = document.createElement('div');
+            c.id = 'toastContainer';
+            document.body.appendChild(c);
+        }
+        const icons = { success: 'fa-check-circle', error: 'fa-exclamation-circle', info: 'fa-info-circle' };
+        const t = document.createElement('div');
+        t.className = 'toast-msg toast-' + type;
+        t.innerHTML = '<i class="fas ' + (icons[type] || icons.info) + '"></i> <span>' + msg + '</span>';
+        c.appendChild(t);
+        setTimeout(function () {
+            t.style.animation = 'slideOut 0.35s ease';
+            setTimeout(function () { t.remove(); }, 350);
+        }, 3500);
+    }
+
+    // =========================================================
+    // SMART MODAL
+    // =========================================================
+    let modalResolver = null;
+    function showConfirm(title, message) {
+        return new Promise(function (resolve) {
+            modalResolver = resolve;
+            document.getElementById('smartModalTitle').textContent = title;
+            document.getElementById('smartModalText').textContent = message;
+            document.getElementById('smartModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        });
+    }
+    function closeConfirm(result) {
+        document.getElementById('smartModal').classList.remove('show');
+        document.body.style.overflow = '';
+        if (modalResolver) { modalResolver(result); modalResolver = null; }
+    }
+    document.getElementById('smartModalConfirm').addEventListener('click', function () { closeConfirm(true); });
+    document.getElementById('smartModalCancel').addEventListener('click', function () { closeConfirm(false); });
+    document.getElementById('smartModal').addEventListener('click', function (e) {
+        if (e.target.id === 'smartModal') closeConfirm(false);
+    });
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && document.getElementById('smartModal').classList.contains('show')) {
+            closeConfirm(false);
+        }
+    });
+
+    // =========================================================
+    // ADMIN INFO
+    // =========================================================
+    async function loadAdminInfo() {
+        try {
+            const result = await window.FDCAuth.getCurrentAdmin();
+            if (result && result.admin) {
+                const avatar = document.querySelector('[data-admin-avatar]');
+                if (avatar) {
+                    avatar.textContent = (result.admin.name || 'A').charAt(0).toUpperCase();
+                }
+            }
+        } catch (e) { console.warn('Admin info error:', e); }
+    }
+
+    window.handleLogout = async function () {
+        const ok = await showConfirm('Logout', 'আপনি কি লগআউট করতে চান?');
+        if (!ok) return;
+        try {
+            await window.FDCAuth.logout();
+            window.location.replace('admin-login.html');
+        } catch (e) { console.error(e); }
+    };
+
+    // =========================================================
+    // WAIT FOR SUPABASE
+    // =========================================================
+    function waitForSupabase(cb) {
+        if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) return cb();
+        window.addEventListener('fdc:supabase-ready', cb);
+        let n = 0;
+        const i = setInterval(function () {
+            if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) {
+                clearInterval(i); cb();
+            }
+            if (++n > 20) { clearInterval(i); showToast('Connection timeout', 'error'); }
+        }, 500);
+    }
+
+    // =========================================================
+    // MOOD SELECTOR
+    // =========================================================
+    function setupMoodSelector() {
+        document.querySelectorAll('.mood-option').forEach(function (opt) {
+            opt.addEventListener('click', function () {
+                document.querySelectorAll('.mood-option').forEach(function (o) { o.classList.remove('active'); });
+                this.classList.add('active');
+                selectedMood = this.dataset.mood;
+                document.getElementById('moodValue').value = selectedMood;
+            });
+        });
+    }
+
+    function setMoodSelection(mood) {
+        selectedMood = mood || 'celebration';
+        document.getElementById('moodValue').value = selectedMood;
+        document.querySelectorAll('.mood-option').forEach(function (o) {
+            o.classList.toggle('active', o.dataset.mood === selectedMood);
+        });
+    }
+
+    // =========================================================
+    // IMAGE UPLOAD
+    // =========================================================
+    function setupImageUpload() {
+        const dropArea = document.getElementById('imageDropArea');
+        const fileInput = document.getElementById('imageInput');
+        const preview = document.getElementById('imagePreview');
+        const removeBtn = document.getElementById('removeImage');
+
+        if (!dropArea || !fileInput) return;
+
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files.length > 0) handleImageSelect(this.files[0]);
+        });
+
+        dropArea.addEventListener('dragover', function (e) {
+            e.preventDefault();
+            this.style.borderColor = '#1a237e';
+            this.style.background = '#f5f7ff';
+        });
+        dropArea.addEventListener('dragleave', function (e) {
+            e.preventDefault();
+            this.style.borderColor = '#c8cdda';
+            this.style.background = '#fafbff';
+        });
+        dropArea.addEventListener('drop', function (e) {
+            e.preventDefault();
+            this.style.borderColor = '#c8cdda';
+            this.style.background = '#fafbff';
+            if (e.dataTransfer.files.length > 0) {
+                handleImageSelect(e.dataTransfer.files[0]);
+                const dt = new DataTransfer();
+                dt.items.add(e.dataTransfer.files[0]);
+                fileInput.files = dt.files;
+            }
+        });
+
+        if (removeBtn) {
+            removeBtn.addEventListener('click', function () {
+                selectedImageFile = null;
+                fileInput.value = '';
+                preview.classList.remove('show');
+                document.getElementById('existingImageUrl').value = '';
+                showToast('Image removed', 'info');
+            });
+        }
+    }
+
+    function handleImageSelect(file) {
+        if (!file) return;
+        if (file.size > 3 * 1024 * 1024) {
+            showToast('Image too large! Max 3MB', 'error');
+            document.getElementById('imageInput').value = '';
+            return;
+        }
+        if (!file.type.startsWith('image/')) {
+            showToast('Only images allowed', 'error');
+            return;
+        }
+        selectedImageFile = file;
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById('previewImg').src = e.target.result;
+            document.getElementById('imagePreview').classList.add('show');
+        };
+        reader.readAsDataURL(file);
+        showToast('Image selected', 'success');
+    }
+
+    // =========================================================
+    // LOAD ALL CARDS
+    // =========================================================
+    async function loadAllCards() {
+        try {
+            if (!window.FDC_SUPABASE_READY) {
+                await new Promise(function (r) {
+                    if (window.FDC_SUPABASE_READY) return r();
+                    document.addEventListener('fdc:supabase-ready', r, { once: true });
+                    setTimeout(r, 10000);
+                });
+            }
+
+            const { data, error } = await window.FDC_SUPABASE
+                .from('greeting_cards')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            allCards = data || [];
+            console.log('✅ Loaded cards:', allCards.length);
+
+            updateStats();
+            renderCards();
+
+        } catch (err) {
+            console.error('❌ Load error:', err);
+            cardsList.innerHTML = '<div class="empty-state"><div class="icon-wrap"><i class="fas fa-exclamation-circle"></i></div><h6>Failed to load</h6><p>' + escapeHtml(err.message) + '</p></div>';
+        }
+    }
+
+    // =========================================================
+    // UPDATE STATS
+    // =========================================================
+    function updateStats() {
+        const today = getTodayStr();
+        const active = allCards.filter(function (c) {
+            return c.is_active && c.start_date <= today && c.end_date >= today;
+        }).length;
+        const upcoming = allCards.filter(function (c) { return c.start_date > today; }).length;
+        const expired = allCards.filter(function (c) { return c.end_date < today; }).length;
+
+        document.getElementById('totalCards').textContent = allCards.length;
+        document.getElementById('statTotal').textContent = allCards.length;
+        document.getElementById('statActive').textContent = active;
+        document.getElementById('statUpcoming').textContent = upcoming;
+        document.getElementById('statExpired').textContent = expired;
+    }
+
+    // =========================================================
+    // RENDER CARDS
+    // =========================================================
+    function renderCards() {
+        const today = getTodayStr();
+
+        let filtered = allCards.filter(function (c) {
+            let isActiveNow = c.is_active && c.start_date <= today && c.end_date >= today;
+            let isUpcoming = c.start_date > today;
+            let isExpired = c.end_date < today;
+
+            if (currentFilter === 'active' && !isActiveNow) return false;
+            if (currentFilter === 'upcoming' && !isUpcoming) return false;
+            if (currentFilter === 'expired' && !isExpired) return false;
+
+            if (searchQuery) {
+                const text = (c.title + ' ' + (c.message || '')).toLowerCase();
+                if (!text.includes(searchQuery)) return false;
+            }
+            return true;
+        });
+
+        if (filtered.length === 0) {
+            cardsList.innerHTML = '<div class="empty-state">' +
+                '<div class="icon-wrap"><i class="fas fa-envelope-open-text"></i></div>' +
+                '<h6>কোনো গ্রিটিং কার্ড নেই</h6>' +
+                '<p>"নতুন গ্রিটিং কার্ড" ক্লিক করে প্রথম কার্ড তৈরি করুন</p>' +
+            '</div>';
+            return;
+        }
+
+        let html = '';
+        filtered.forEach(function (c) {
+            let statusText = '', statusClass = '';
+            if (!c.is_active) { statusText = '⛔ বন্ধ'; statusClass = 'badge-inactive'; }
+            else if (c.end_date < today) { statusText = '⌛ শেষ'; statusClass = 'badge-expired'; }
+            else if (c.start_date > today) { statusText = '🕐 অপেক্ষমাণ'; statusClass = 'badge-upcoming'; }
+            else { statusText = '✅ সক্রিয়'; statusClass = 'badge-active'; }
+
+            const mood = c.mood || 'celebration';
+            const moodInfo = MOOD_LABELS[mood] || MOOD_LABELS.celebration;
+
+            const imgHtml = c.image_url
+                ? '<img src="' + escapeHtml(c.image_url) + '" alt="' + escapeHtml(c.title) + '" onerror="this.style.display=\'none\'">'
+                : '';
+
+            html += '<div class="greeting-card-item">' +
+                '<span class="gci-mood-badge">' + moodInfo.icon + ' ' + moodInfo.label + '</span>' +
+                '<div class="gci-header">' +
+                    '<h4>' + escapeHtml(c.title) + '</h4>' +
+                    '<span class="status-badge ' + statusClass + '">' + statusText + '</span>' +
+                '</div>' +
+                (imgHtml ? '<div class="gci-img-wrap">' + imgHtml + '</div>' : '') +
+                '<p class="gci-message">' + escapeHtml(c.message) + '</p>' +
+                '<div class="gci-meta">' +
+                    '<span><i class="fas fa-user"></i> ' + escapeHtml(c.principal_name || 'অধ্যক্ষ') + '</span>' +
+                    '<span><i class="fas fa-calendar"></i> ' + formatDate(c.start_date) + ' → ' + formatDate(c.end_date) + '</span>' +
+                '</div>' +
+                '<div class="gci-actions">' +
+                    '<button class="btn-action btn-toggle" onclick="window.toggleActive(\'' + c.id + '\')" title="Toggle">' +
+                        '<i class="fas fa-' + (c.is_active ? 'eye-slash' : 'eye') + '"></i>' +
+                    '</button>' +
+                    '<button class="btn-action btn-edit" onclick="window.editCard(\'' + c.id + '\')" title="Edit">' +
+                        '<i class="fas fa-edit"></i>' +
+                    '</button>' +
+                    '<button class="btn-action btn-delete" onclick="window.deleteCard(\'' + c.id + '\')" title="Delete">' +
+                        '<i class="fas fa-trash"></i>' +
+                    '</button>' +
+                '</div>' +
+            '</div>';
+        });
+        cardsList.innerHTML = html;
+    }
+
+    // =========================================================
+    // SHOW ADD FORM
+    // =========================================================
+    function showAddForm() {
+        editingId = null;
+        selectedImageFile = null;
+
+        document.getElementById('cardId').value = '';
+        document.getElementById('formTitle').textContent = 'নতুন গ্রিটিং কার্ড';
+        document.getElementById('submitBtnText').textContent = 'সেভ করুন';
+        document.getElementById('greetingForm').reset();
+        document.getElementById('existingImageUrl').value = '';
+        document.getElementById('imagePreview').classList.remove('show');
+        document.getElementById('imageInput').value = '';
+        document.getElementById('isActive').checked = true;
+        document.getElementById('showOnce').checked = true;
+        document.getElementById('principalTitle').value = 'অধ্যক্ষ, ফুলবাড়ীয়া কলেজ';
+        document.getElementById('themeColor').value = '#0a1655';
+        document.getElementById('startDate').value = getTodayStr();
+        setMoodSelection('celebration');
+
+        const card = document.getElementById('formCard');
+        card.classList.add('show');
+        setTimeout(function () {
+            card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    }
+
+    // =========================================================
+    // EDIT CARD
+    // =========================================================
+    window.editCard = async function (id) {
+        try {
+            const { data, error } = await window.FDC_SUPABASE
+                .from('greeting_cards').select('*').eq('id', id).single();
+            if (error) throw error;
+
+            editingId = id;
+            selectedImageFile = null;
+
+            document.getElementById('cardId').value = data.id;
+            document.getElementById('title').value = data.title || '';
+            document.getElementById('message').value = data.message || '';
+            document.getElementById('principalName').value = data.principal_name || '';
+            document.getElementById('principalTitle').value = data.principal_title || '';
+            document.getElementById('startDate').value = data.start_date || '';
+            document.getElementById('endDate').value = data.end_date || '';
+            document.getElementById('themeColor').value = data.theme_color || '#0a1655';
+            document.getElementById('isActive').checked = !!data.is_active;
+            document.getElementById('showOnce').checked = !!data.show_once_per_day;
+            document.getElementById('existingImageUrl').value = data.image_url || '';
+            setMoodSelection(data.mood || 'celebration');
+
+            if (data.image_url) {
+                document.getElementById('previewImg').src = data.image_url;
+                document.getElementById('imagePreview').classList.add('show');
+            } else {
+                document.getElementById('imagePreview').classList.remove('show');
+            }
+
+            document.getElementById('imageInput').value = '';
+            document.getElementById('formTitle').textContent = 'গ্রিটিং কার্ড এডিট';
+            document.getElementById('submitBtnText').textContent = 'আপডেট করুন';
+
+            const card = document.getElementById('formCard');
+            card.classList.add('show');
+            setTimeout(function () {
+                card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 100);
+
+        } catch (e) {
+            console.error('Edit error:', e);
+            showToast('Failed to load: ' + e.message, 'error');
+        }
+    };
+
+    // =========================================================
+    // DELETE CARD
+    // =========================================================
+    window.deleteCard = async function (id) {
+        const item = allCards.find(function (c) { return c.id === id; });
+        if (!item) return;
+
+        const ok = await showConfirm('Delete Card?', '"' + item.title + '" কে স্থায়ীভাবে মুছে ফেলা হবে।');
+        if (!ok) return;
+
+        try {
+            const { error } = await window.FDC_SUPABASE.from('greeting_cards').delete().eq('id', id);
+            if (error) throw error;
+            showToast('Card deleted!', 'success');
+            await loadAllCards();
+        } catch (e) {
+            showToast('Failed: ' + e.message, 'error');
+        }
+    };
+
+    // =========================================================
+    // TOGGLE ACTIVE
+    // =========================================================
+    window.toggleActive = async function (id) {
+        const item = allCards.find(function (c) { return c.id === id; });
+        if (!item) return;
+
+        const newState = !item.is_active;
+        try {
+            const { error } = await window.FDC_SUPABASE
+                .from('greeting_cards')
+                .update({ is_active: newState, updated_at: new Date().toISOString() })
+                .eq('id', id);
+            if (error) throw error;
+            item.is_active = newState;
+            showToast(newState ? '✅ Active করা হয়েছে' : '⚠️ Deactivate করা হয়েছে', 'success');
+            updateStats();
+            renderCards();
+        } catch (e) {
+            showToast('Failed: ' + e.message, 'error');
+        }
+    };
+
+    // =========================================================
+    // FORM SUBMIT
+    // =========================================================
+    document.getElementById('greetingForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        const id = document.getElementById('cardId').value;
+        const title = document.getElementById('title').value.trim();
+        const message = document.getElementById('message').value.trim();
+        const start_date = document.getElementById('startDate').value;
+        const end_date = document.getElementById('endDate').value;
+        const mood = document.getElementById('moodValue').value || 'celebration';
+
+        if (!title) { showToast('শিরোনাম দিন', 'error'); return; }
+        if (!message) { showToast('বার্তা লিখুন', 'error'); return; }
+        if (!start_date || !end_date) { showToast('তারিখ নির্বাচন করুন', 'error'); return; }
+        if (end_date < start_date) { showToast('শেষ তারিখ শুরুর তারিখের পরে হতে হবে', 'error'); return; }
+
+        const submitBtn = document.getElementById('submitBtn');
+        const submitBtnText = document.getElementById('submitBtnText');
+        const originalText = submitBtnText.textContent;
+        submitBtn.disabled = true;
+        submitBtnText.textContent = 'সেভ হচ্ছে...';
+
+        try {
+            let image_url = document.getElementById('existingImageUrl').value;
+
+            if (selectedImageFile) {
+                if (typeof window.FDCUploadImage !== 'function') {
+                    throw new Error('Upload function not available');
+                }
+                submitBtnText.textContent = 'ছবি আপলোড হচ্ছে...';
+                const result = await window.FDCUploadImage(selectedImageFile);
+                image_url = result.url || result.secure_url;
+                showToast('Image uploaded', 'success');
+            }
+
+            const payload = {
+                title: title,
+                message: message,
+                principal_name: document.getElementById('principalName').value.trim() || 'অধ্যক্ষ',
+                principal_title: document.getElementById('principalTitle').value.trim() || 'অধ্যক্ষ',
+                image_url: image_url || null,
+                start_date: start_date,
+                end_date: end_date,
+                theme_color: document.getElementById('themeColor').value || '#0a1655',
+                mood: mood,
+                is_active: document.getElementById('isActive').checked,
+                show_once_per_day: document.getElementById('showOnce').checked,
+                updated_at: new Date().toISOString()
+            };
+
+            let result;
+            if (id) {
+                result = await window.FDC_SUPABASE.from('greeting_cards').update(payload).eq('id', id).select();
+                showToast('Card updated!', 'success');
+            } else {
+                result = await window.FDC_SUPABASE.from('greeting_cards').insert([payload]).select();
+                showToast('Card created!', 'success');
+            }
+
+            if (result.error) throw result.error;
+
+            document.getElementById('formCard').classList.remove('show');
+            document.getElementById('greetingForm').reset();
+            document.getElementById('imagePreview').classList.remove('show');
+            selectedImageFile = null;
+            await loadAllCards();
+
+        } catch (err) {
+            console.error('Save error:', err);
+            showToast('Failed: ' + err.message, 'error');
+        } finally {
+            submitBtn.disabled = false;
+            submitBtnText.textContent = originalText;
+        }
+    });
+
+    // =========================================================
+    // CANCEL FORM
+    // =========================================================
+    document.getElementById('cancelForm').addEventListener('click', function () {
+        document.getElementById('formCard').classList.remove('show');
+        document.getElementById('greetingForm').reset();
+        document.getElementById('imagePreview').classList.remove('show');
+        selectedImageFile = null;
+    });
+
+    document.getElementById('btnAddCard').addEventListener('click', showAddForm);
+
+    // =========================================================
+    // FILTER + SEARCH
+    // =========================================================
+    document.querySelectorAll('.filter-chip').forEach(function (chip) {
+        chip.addEventListener('click', function () {
+            document.querySelectorAll('.filter-chip').forEach(function (c) { c.classList.remove('active'); });
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            renderCards();
+        });
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function () {
+        searchQuery = this.value.toLowerCase().trim();
+        renderCards();
+    });
+
+    // =========================================================
+    // INIT
+    // =========================================================
+    function init() {
+        console.log('🚀 Admin Greeting initialized');
+        setupMoodSelector();
+        setupImageUpload();
+
+        waitForSupabase(async function () {
+            const admin = await window.FDCAuth.requireAdmin();
+            if (!admin) return;
+            await loadAdminInfo();
+            await loadAllCards();
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    console.log('✅ admin-greeting initialized');
+
+})();
+</script>
+
+</body>
+</html>
