@@ -1,0 +1,63 @@
+{
+  "name": "Fulbariya College",
+  "short_name": "Fulbariya",
+  "description": "ফুলবাড়ীয়া কলেজ - মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়",
+  "lang": "bn",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#0a1655",
+  "categories": ["education", "college"],
+  "icons": [
+    {
+      "src": "/assets/images/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/images/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/assets/images/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "নোটিশ দেখুন",
+      "short_name": "নোটিশ",
+      "description": "সর্বশেষ নোটিশ",
+      "url": "/public-pages/notices.html",
+      "icons": [{ "src": "/assets/images/web-app-manifest-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "রেজাল্ট দেখুন",
+      "short_name": "রেজাল্ট",
+      "description": "পরীক্ষার ফলাফল",
+      "url": "/public-pages/results.html",
+      "icons": [{ "src": "/assets/images/web-app-manifest-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "গ্যালারি দেখুন",
+      "short_name": "গ্যালারি",
+      "description": "কলেজের ছবি",
+      "url": "/public-pages/gallery.html",
+      "icons": [{ "src": "/assets/images/web-app-manifest-192x192.png", "sizes": "192x192" }]
+    }
+  ]
+}
