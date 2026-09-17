@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>পরীক্ষার কাউন্টডাউন ও রুটিন | ফুলবাড়ীয়া কলেজ</title>
+<meta name="description" content="HSC, Honours ও Degree পরীক্ষার কাউন্টডাউন, রুটিন, নোটিশ ও প্রস্তুতির টিপস">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&family=Tiro+Bangla:ital@0;1&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --grey-light: #9ca3af;
+    --dark: #1f2937;
+    --danger: #ef4444;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --purple: #8b5cf6;
+    --blue: #2563eb;
+    --rose: #e11d48;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 2px 10px rgba(10,22,85,0.06);
+    --shadow-md: 0 8px 30px rgba(10,22,85,0.10);
+    --shadow-lg: 0 20px 60px rgba(10,22,85,0.15);
+    --shadow-xl: 0 30px 80px rgba(10,22,85,0.20);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html { scroll-behavior: smooth; }
+body {
+    font-family: 'Hind Siliguri', sans-serif;
+    background: var(--off-white);
+    color: var(--dark);
+    line-height: 1.7;
+    min-height: 100vh;
+}
+a { text-decoration: none; color: inherit; }
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; }
+
+.container-custom { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+
+/* =========================================================
+   HEADER
+========================================================= */
+.pub-header {
+    background: #fff;
+    padding: 12px 0;
+    box-shadow: var(--shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    border-bottom: 1px solid var(--border-light);
+}
+.pub-header .container-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+}
+.logo-box {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+.logo-box img {
+    width: 48px; height: 48px;
+    object-fit: contain;
+    border-radius: 10px;
+    background: var(--off-white);
+    padding: 3px;
+    flex-shrink: 0;
+}
+.logo-box .logo-text h1 {
+    font-size: 17px;
+    color: var(--navy);
+    margin: 0;
+    font-weight: 700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+.logo-box .logo-text p {
+    font-size: 10px;
+    color: var(--grey-light);
+    margin: 2px 0 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+}
+.header-nav {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+.header-nav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 13px;
+    transition: 0.25s;
+    color: var(--navy);
+    background: var(--off-white);
+    border: 1px solid var(--border);
+}
+.header-nav a:hover {
+    background: #eef1f8;
+    transform: translateY(-1px);
+}
+.header-nav a i { font-size: 12px; }
+
+/* =========================================================
+   HERO
+========================================================= */
+.page-hero {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 60px 0 100px;
+    position: relative;
+    overflow: hidden;
+}
+.page-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(242,210,123,0.12), transparent 65%);
+    border-radius: 50%;
+}
+.page-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.page-hero .container-custom {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+}
+.hero-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 24px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    margin-bottom: 20px;
+    border: 2px solid rgba(242,210,123,0.3);
+    box-shadow: 0 12px 40px rgba(242,210,123,0.25);
+}
+.page-hero .hero-badge {
+    display: inline-block;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 6px 18px;
+    border-radius: 50px;
+    border: 1px solid rgba(242,210,123,0.3);
+    margin-bottom: 16px;
+}
+.page-hero h1 {
+    font-size: clamp(26px, 5vw, 40px);
+    font-weight: 700;
+    margin-bottom: 12px;
+    line-height: 1.25;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+}
+.page-hero h1 span { color: var(--gold); }
+.page-hero p {
+    font-size: 15px;
+    opacity: 0.9;
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.75;
+}
+
+/* =========================================================
+   MAIN
+========================================================= */
+.main-wrap {
+    max-width: 1100px;
+    margin: -70px auto 0;
+    padding: 0 20px 60px;
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================================
+   SECTION CARD
+========================================================= */
+.section-card {
+    background: #fff;
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    padding: 32px 30px;
+    margin-bottom: 26px;
+    position: relative;
+    overflow: hidden;
+}
+.section-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
+}
+
+.section-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+.section-head .sh-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 15px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+    box-shadow: 0 8px 24px rgba(10,22,85,0.2);
+}
+.section-head .sh-icon.blue { background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff; }
+.section-head .sh-icon.green { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+.section-head .sh-icon.purple { background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: #fff; }
+.section-head .sh-icon.rose { background: linear-gradient(135deg, #e11d48, #f43f5e); color: #fff; }
+.section-head .sh-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+
+.section-head h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1.2;
+    font-family: 'Playfair Display', serif;
+}
+.section-head small {
+    display: block;
+    color: var(--grey);
+    font-size: 12.5px;
+    margin-top: 3px;
+    font-weight: 500;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+
+/* =========================================================
+   SKELETON LOADER (Facebook Style)
+========================================================= */
+.skeleton {
+    background: linear-gradient(90deg, #f0f2f5 0%, #e4e6eb 20%, #f0f2f5 40%, #f0f2f5 100%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.4s ease-in-out infinite;
+    border-radius: 8px;
+}
+@keyframes skeletonShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.skeleton-text { height: 14px; margin-bottom: 10px; }
+.skeleton-text-lg { height: 28px; }
+.skeleton-text-sm { height: 11px; }
+.skeleton-text-xs { height: 9px; }
+
+/* Countdown Skeleton */
+.skeleton-countdown {
+    background: #fff;
+    border-radius: 18px;
+    padding: 22px;
+    border: 1px solid var(--border-light);
+    margin-bottom: 14px;
+}
+.skeleton-countdown .sc-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.skeleton-countdown .sc-bar {
+    height: 12px;
+    background: linear-gradient(90deg, #f0f2f5 0%, #e4e6eb 20%, #f0f2f5 40%, #f0f2f5 100%);
+    background-size: 200% 100%;
+    animation: skeletonShimmer 1.4s ease-in-out infinite;
+    border-radius: 8px;
+    margin-top: 12px;
+}
+
+/* =========================================================
+   COUNTDOWN CARDS
+========================================================= */
+.countdown-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.countdown-item {
+    background: #fff;
+    border-radius: 20px;
+    padding: 24px;
+    border: 1.5px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+    animation: contentFadeIn 0.6s ease both;
+}
+.countdown-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 5px;
+    background: linear-gradient(180deg, #2563eb, #3b82f6);
+}
+.countdown-item.exam-hsc::before { background: linear-gradient(180deg, #2563eb, #3b82f6); }
+.countdown-item.exam-honours::before { background: linear-gradient(180deg, #7c3aed, #8b5cf6); }
+.countdown-item.exam-degree::before { background: linear-gradient(180deg, #059669, #10b981); }
+
+.countdown-item:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(10,22,85,0.15);
+}
+
+.countdown-item .ci-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+.countdown-item .ci-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+.countdown-item .ci-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    box-shadow: 0 6px 18px rgba(37,99,235,0.3);
+}
+.countdown-item.exam-hsc .ci-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); }
+.countdown-item.exam-honours .ci-icon { background: linear-gradient(135deg, #7c3aed, #8b5cf6); box-shadow: 0 6px 18px rgba(124,58,237,0.3); }
+.countdown-item.exam-degree .ci-icon { background: linear-gradient(135deg, #059669, #10b981); box-shadow: 0 6px 18px rgba(5,150,105,0.3); }
+
+.countdown-item .ci-info h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 4px;
+    line-height: 1.3;
+}
+.countdown-item .ci-info .ci-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.countdown-item.exam-hsc .ci-badge { background: #dbeafe; color: #1e40af; }
+.countdown-item.exam-honours .ci-badge { background: #f3e8ff; color: #6b21a8; }
+.countdown-item.exam-degree .ci-badge { background: #dcfce7; color: #166534; }
+
+.countdown-item .ci-days {
+    text-align: right;
+    flex-shrink: 0;
+}
+.countdown-item .ci-days .num {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+}
+.countdown-item .ci-days .unit {
+    font-size: 11px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+/* Battery Bar */
+.battery-wrap {
+    margin-bottom: 14px;
+}
+.battery-bar {
+    height: 14px;
+    background: #f0f2f5;
+    border-radius: 8px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.08);
+}
+.battery-fill {
+    height: 100%;
+    border-radius: 8px;
+    transition: width 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 0;
+    position: relative;
+    overflow: hidden;
+}
+.battery-fill.high { background: linear-gradient(90deg, #10b981, #059669); }
+.battery-fill.medium { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.battery-fill.low { background: linear-gradient(90deg, #ef4444, #dc2626); animation: batteryPulse 1.5s infinite; }
+.battery-fill.critical { background: linear-gradient(90deg, #dc2626, #991b1b); animation: batteryPulse 0.8s infinite; }
+
+@keyframes batteryPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.battery-fill::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    animation: batteryShine 2s infinite;
+}
+@keyframes batteryShine {
+    0% { left: -100%; }
+    100% { left: 200%; }
+}
+
+.battery-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--grey);
+    font-weight: 600;
+}
+.battery-info .bi-percent {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+}
+.battery-info .bi-date {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.battery-info .bi-date i { color: var(--gold-dark); }
+
+/* =========================================================
+   REMINDER BANNER
+========================================================= */
+.reminder-banner {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-left: 6px solid #f59e0b;
+    padding: 20px 24px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.reminder-banner i {
+    font-size: 32px;
+    color: #d97706;
+    flex-shrink: 0;
+}
+.reminder-banner .rb-text {
+    flex: 1;
+    min-width: 0;
+}
+.reminder-banner h4 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #92400e;
+    margin: 0 0 4px;
+}
+.reminder-banner p {
+    font-size: 13px;
+    color: #78350f;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   ROUTINE SECTION
+========================================================= */
+.routine-dropdown {
+    width: 100%;
+    padding: 14px 20px;
+    border-radius: 14px;
+    border: 2px solid #e5e7eb;
+    background: #fff;
+    font-size: 15px;
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--navy);
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-bottom: 20px;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a1655' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 18px center;
+    background-size: 18px;
+    padding-right: 50px;
+}
+.routine-dropdown:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+}
+
+.routine-preview {
+    background: #f8f9ff;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1.5px solid var(--border-light);
+    text-align: center;
+    animation: contentFadeIn 0.5s ease both;
+}
+.routine-preview img {
+    max-width: 100%;
+    max-height: 600px;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    margin: 0 auto;
+}
+.routine-preview .routine-actions {
+    margin-top: 16px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn-download {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 26px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+    box-shadow: 0 6px 20px rgba(10,22,85,0.25);
+}
+.btn-download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(10,22,85,0.35);
+    color: #fff;
+}
+.btn-download i { color: var(--gold); }
+
+.btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: var(--navy);
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    border: 1.5px solid #e5e7eb;
+    cursor: pointer;
+    transition: 0.3s;
+    text-decoration: none;
+}
+.btn-outline:hover {
+    border-color: var(--navy);
+    background: #f5f7ff;
+    color: var(--navy);
+}
+
+/* =========================================================
+   NOTICE SECTION
+========================================================= */
+.notice-filters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+}
+.notice-filters::-webkit-scrollbar { display: none; }
+.filter-chip {
+    padding: 9px 20px;
+    border-radius: 50px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    color: var(--grey);
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.25s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+}
+.filter-chip:hover { border-color: var(--navy); color: var(--navy); }
+.filter-chip.active {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(10,22,85,0.25);
+}
+.filter-chip.active i { color: var(--gold); }
+.filter-chip i { font-size: 11px; }
+
+.notice-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.notice-item {
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px 22px;
+    border: 1.5px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    transition: 0.3s;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    position: relative;
+    overflow: hidden;
+    animation: contentFadeIn 0.5s ease both;
+}
+.notice-item::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #2563eb, #3b82f6);
+}
+.notice-item.notice-hsc::before { background: linear-gradient(180deg, #2563eb, #3b82f6); }
+.notice-item.notice-honours::before { background: linear-gradient(180deg, #7c3aed, #8b5cf6); }
+.notice-item.notice-degree::before { background: linear-gradient(180deg, #059669, #10b981); }
+
+.notice-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(10,22,85,0.12);
+}
+
+.notice-item .ni-icon {
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.notice-item.notice-hsc .ni-icon { background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff; }
+.notice-item.notice-honours .ni-icon { background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: #fff; }
+.notice-item.notice-degree .ni-icon { background: linear-gradient(135deg, #059669, #10b981); color: #fff; }
+
+.notice-item .ni-body {
+    flex: 1;
+    min-width: 0;
+}
+.notice-item .ni-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 6px;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.notice-item .ni-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+.notice-item.notice-hsc .ni-badge { background: #dbeafe; color: #1e40af; }
+.notice-item.notice-honours .ni-badge { background: #f3e8ff; color: #6b21a8; }
+.notice-item.notice-degree .ni-badge { background: #dcfce7; color: #166534; }
+
+.notice-item .ni-desc {
+    font-size: 13.5px;
+    color: var(--grey);
+    margin: 0 0 10px;
+    line-height: 1.7;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.notice-item .ni-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--grey);
+}
+.notice-item .ni-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+.notice-item .ni-meta i { color: var(--gold-dark); font-size: 11px; }
+
+.notice-item .ni-actions {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.btn-mini {
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: 0.25s;
+    text-decoration: none;
+    font-family: inherit;
+}
+.btn-mini.view {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+.btn-mini.view:hover { background: #bbdefb; }
+.btn-mini.download {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+}
+.btn-mini.download:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(10,22,85,0.3); }
+.btn-mini.download i { color: var(--gold); }
+
+/* =========================================================
+   TIPS SECTION
+========================================================= */
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+}
+.tip-card {
+    background: #f8f9ff;
+    border-radius: 16px;
+    padding: 20px;
+    border: 1.5px solid var(--border-light);
+    transition: 0.3s;
+    animation: contentFadeIn 0.6s ease both;
+}
+.tip-card:hover {
+    transform: translateY(-4px);
+    background: #f0f4ff;
+    box-shadow: var(--shadow-md);
+}
+.tip-card .tc-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+.tip-card .tc-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 6px;
+}
+.tip-card .tc-desc {
+    font-size: 13px;
+    color: var(--grey);
+    margin: 0;
+    line-height: 1.7;
+}
+
+/* =========================================================
+   CONTACT SECTION
+========================================================= */
+.contact-card {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-radius: 24px;
+    padding: 40px 32px;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: var(--shadow-xl);
+}
+.contact-card::before {
+    content: '';
+    position: absolute;
+    top: -40%; right: -10%;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.contact-card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-2), var(--gold));
+}
+.contact-card .cc-inner { position: relative; z-index: 1; }
+.contact-card .cc-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    border: 4px solid rgba(255,255,255,0.15);
+    box-shadow: 0 12px 36px rgba(242,210,123,0.35);
+    font-family: 'Playfair Display', serif;
+}
+.contact-card h3 {
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+    margin: 0 0 6px;
+    font-family: 'Playfair Display', serif;
+}
+.contact-card .cc-designation {
+    display: inline-block;
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 50px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.contact-card .cc-phone {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 20px;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 1px;
+}
+.contact-card .cc-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    padding: 14px 32px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    transition: 0.3s;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(242,210,123,0.3);
+}
+.contact-card .cc-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 36px rgba(242,210,123,0.5);
+    color: var(--navy);
+}
+
+/* =========================================================
+   FOOTER
+========================================================= */
+.page-footer {
+    background: linear-gradient(135deg, #061040, var(--navy));
+    color: rgba(255,255,255,0.85);
+    padding: 40px 0 20px;
+    margin-top: 40px;
+}
+.page-footer .footer-content {
+    text-align: center;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.page-footer .footer-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+.page-footer .footer-brand img {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.08);
+    padding: 4px;
+}
+.page-footer h3 {
+    font-size: 20px;
+    color: #fff;
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+}
+.page-footer h3 span { color: var(--gold); }
+.page-footer .footer-tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+}
+.page-footer .footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.55);
+}
+.page-footer .footer-bottom strong { color: var(--gold); }
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+@keyframes contentFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+@media (max-width: 768px) {
+    .container-custom { padding: 0 14px; }
+    .logo-box img { width: 42px; height: 42px; }
+    .logo-box .logo-text h1 { font-size: 14px; }
+    .header-nav a { padding: 8px 12px; font-size: 12px; }
+    .header-nav a span { display: none; }
+
+    .page-hero { padding: 40px 0 80px; }
+    .hero-icon { width: 72px; height: 72px; font-size: 32px; }
+    .page-hero h1 { font-size: 22px; }
+    .page-hero p { font-size: 13px; }
+
+    .main-wrap { padding: 0 12px 40px; margin-top: -55px; }
+    .section-card { padding: 24px 20px; border-radius: 20px; margin-bottom: 20px; }
+    .section-head h2 { font-size: 18px; }
+    .section-head .sh-icon { width: 44px; height: 44px; font-size: 18px; border-radius: 12px; }
+
+    .countdown-item { padding: 20px; }
+    .countdown-item .ci-icon { width: 42px; height: 42px; font-size: 17px; }
+    .countdown-item .ci-info h3 { font-size: 15px; }
+    .countdown-item .ci-days .num { font-size: 26px; }
+
+    .reminder-banner { padding: 16px 18px; gap: 12px; }
+    .reminder-banner i { font-size: 26px; }
+    .reminder-banner h4 { font-size: 14.5px; }
+    .reminder-banner p { font-size: 12px; }
+
+    .notice-item { padding: 16px 18px; flex-wrap: wrap; }
+    .notice-item .ni-icon { width: 40px; height: 40px; font-size: 16px; }
+    .notice-item .ni-actions { flex-direction: row; width: 100%; margin-top: 8px; }
+    .notice-item .ni-actions .btn-mini { flex: 1; justify-content: center; }
+
+    .contact-card { padding: 32px 22px; }
+    .contact-card .cc-avatar { width: 76px; height: 76px; font-size: 30px; }
+    .contact-card h3 { font-size: 19px; }
+
+    .routine-preview img { max-height: 500px; }
+}
+
+@media (max-width: 480px) {
+    .page-hero h1 { font-size: 20px; }
+    .section-head { gap: 10px; }
+    .section-head h2 { font-size: 16.5px; }
+    .section-head small { font-size: 11.5px; }
+    .countdown-item .ci-head { flex-direction: column; gap: 10px; }
+    .countdown-item .ci-days { text-align: left; }
+    .tips-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="pub-header">
+    <div class="container-custom">
+        <a href="../index.html" class="logo-box">
+            <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
+            <div class="logo-text">
+                <h1>ফুলবাড়ীয়া কলেজ</h1>
+                <p>Fulbariya College</p>
+            </div>
+        </a>
+        <nav class="header-nav">
+            <a href="../index.html">
+                <i class="fas fa-home"></i> <span>হোম</span>
+            </a>
+        </nav>
+    </div>
+</header>
+
+<!-- HERO -->
+<section class="page-hero">
+    <div class="container-custom">
+        <div class="hero-icon"><i class="fas fa-hourglass-half"></i></div>
+        <div class="hero-badge">Exam Countdown & Routine</div>
+        <h1>পরীক্ষার <span>কাউন্টডাউন</span></h1>
+        <p>HSC, Honours ও Degree পরীক্ষার তারিখ, রুটিন, নোটিশ এবং প্রস্তুতির তথ্য</p>
+    </div>
+</section>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- ================================================== -->
+    <!-- SECTION 1: COUNTDOWN -->
+    <!-- ================================================== -->
+    <div class="section-card">
+        <div class="section-head">
+            <div class="sh-icon"><i class="fas fa-hourglass-half"></i></div>
+            <div>
+                <h2>পরীক্ষার কাউন্টডাউন</h2>
+                <small>প্রতিটি পরীক্ষার বাকি সময়</small>
+            </div>
+        </div>
+
+        <div class="countdown-list" id="countdownList">
+            <!-- Skeleton -->
+            <div class="skeleton-countdown">
+                <div class="sc-row">
+                    <div style="flex:1;">
+                        <div class="skeleton skeleton-text-lg" style="width:50%;margin-bottom:10px;"></div>
+                        <div class="skeleton skeleton-text-sm" style="width:30%;"></div>
+                    </div>
+                    <div class="skeleton skeleton-text-lg" style="width:60px;"></div>
+                </div>
+                <div class="sc-bar"></div>
+            </div>
+            <div class="skeleton-countdown">
+                <div class="sc-row">
+                    <div style="flex:1;">
+                        <div class="skeleton skeleton-text-lg" style="width:50%;margin-bottom:10px;"></div>
+                        <div class="skeleton skeleton-text-sm" style="width:30%;"></div>
+                    </div>
+                    <div class="skeleton skeleton-text-lg" style="width:60px;"></div>
+                </div>
+                <div class="sc-bar"></div>
+            </div>
+            <div class="skeleton-countdown">
+                <div class="sc-row">
+                    <div style="flex:1;">
+                        <div class="skeleton skeleton-text-lg" style="width:50%;margin-bottom:10px;"></div>
+                        <div class="skeleton skeleton-text-sm" style="width:30%;"></div>
+                    </div>
+                    <div class="skeleton skeleton-text-lg" style="width:60px;"></div>
+                </div>
+                <div class="sc-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- SECTION 2: REMINDER -->
+    <!-- ================================================== -->
+    <div class="section-card">
+        <div class="section-head">
+            <div class="sh-icon gold"><i class="fas fa-bell"></i></div>
+            <div>
+                <h2>রিমাইন্ডার</h2>
+                <small>গুরুত্বপূর্ণ সতর্কতা</small>
+            </div>
+        </div>
+        <div class="reminder-banner" id="reminderBanner">
+            <i class="fas fa-exclamation-circle"></i>
+            <div class="rb-text">
+                <h4>লোড হচ্ছে...</h4>
+                <p>অনুগ্রহ করে অপেক্ষা করুন</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- SECTION 3: ROUTINE -->
+    <!-- ================================================== -->
+    <div class="section-card">
+        <div class="section-head">
+            <div class="sh-icon blue"><i class="fas fa-calendar-alt"></i></div>
+            <div>
+                <h2>পরীক্ষার রুটিন</h2>
+                <small>পরীক্ষা সিলেক্ট করে রুটিন দেখুন</small>
+            </div>
+        </div>
+
+        <select class="routine-dropdown" id="routineDropdown">
+            <option value="">-- পরীক্ষা নির্বাচন করুন --</option>
+        </select>
+
+        <div id="routineContainer">
+            <div class="routine-preview" style="background:#fff;border:2px dashed #e5e7eb;padding:60px 20px;">
+                <i class="fas fa-calendar-alt" style="font-size:44px;color:#9ca3af;margin-bottom:12px;display:block;"></i>
+                <p style="color:#6b7280;font-size:14px;margin:0;">উপরে পরীক্ষা সিলেক্ট করুন</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- SECTION 4: NOTICE -->
+    <!-- ================================================== -->
+    <div class="section-card">
+        <div class="section-head">
+            <div class="sh-icon rose"><i class="fas fa-bullhorn"></i></div>
+            <div>
+                <h2>পরীক্ষা কেন্দ্রিক নোটিশ</h2>
+                <small>সর্বশেষ ঘোষণা ও তথ্য</small>
+            </div>
+        </div>
+
+        <div class="notice-filters" id="noticeFilters">
+            <button class="filter-chip active" data-filter="all">
+                <i class="fas fa-list"></i> সব
+            </button>
+            <button class="filter-chip" data-filter="HSC">
+                <i class="fas fa-graduation-cap"></i> HSC
+            </button>
+            <button class="filter-chip" data-filter="Honours">
+                <i class="fas fa-award"></i> Honours
+            </button>
+            <button class="filter-chip" data-filter="Degree">
+                <i class="fas fa-user-graduate"></i> Degree
+            </button>
+        </div>
+
+        <div class="notice-list" id="noticeList">
+            <div class="skeleton-countdown">
+                <div class="sc-row">
+                    <div class="skeleton" style="width:46px;height:46px;border-radius:12px;"></div>
+                    <div style="flex:1;margin-left:16px;">
+                        <div class="skeleton skeleton-text" style="width:70%;margin-bottom:8px;"></div>
+                        <div class="skeleton skeleton-text-sm" style="width:50%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="skeleton-countdown">
+                <div class="sc-row">
+                    <div class="skeleton" style="width:46px;height:46px;border-radius:12px;"></div>
+                    <div style="flex:1;margin-left:16px;">
+                        <div class="skeleton skeleton-text" style="width:70%;margin-bottom:8px;"></div>
+                        <div class="skeleton skeleton-text-sm" style="width:50%;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- SECTION 5: TIPS -->
+    <!-- ================================================== -->
+    <div class="section-card">
+        <div class="section-head">
+            <div class="sh-icon green"><i class="fas fa-lightbulb"></i></div>
+            <div>
+                <h2>প্রস্তুতির টিপস</h2>
+                <small>পরীক্ষার আগে কী করবেন</small>
+            </div>
+        </div>
+
+        <div class="tips-grid">
+            <div class="tip-card">
+                <div class="tc-icon"><i class="fas fa-clock"></i></div>
+                <div class="tc-title">সময় ব্যবস্থাপনা</div>
+                <p class="tc-desc">প্রতিদিন ৬-৮ ঘণ্টা পড়ার রুটিন করুন এবং তা মেনে চলুন</p>
+            </div>
+            <div class="tip-card">
+                <div class="tc-icon"><i class="fas fa-book"></i></div>
+                <div class="tc-title">সিলেবাস শেষ করুন</div>
+                <p class="tc-desc">পরীক্ষার আগে পুরো সিলেবাস শেষ করে রিভিশন দিন</p>
+            </div>
+            <div class="tip-card">
+                <div class="tc-icon"><i class="fas fa-bed"></i></div>
+                <div class="tc-title">পর্যাপ্ত ঘুম</div>
+                <p class="tc-desc">প্রতিদিন কমপক্ষে ৭-৮ ঘণ্টা ঘুমান, মনে রাখবেন</p>
+            </div>
+            <div class="tip-card">
+                <div class="tc-icon"><i class="fas fa-brain"></i></div>
+                <div class="tc-title">দুশ্চিন্তা কমান</div>
+                <p class="tc-desc">মেডিটেশন ও শ্বাস-প্রশ্বাসের ব্যায়াম করুন, ঠান্ডা থাকুন</p>
+            </div>
+            <div class="tip-card">
+                <div class="tc-icon"><i class="fas fa-apple-alt"></i></div>
+                <div class="tc-title">স্বাস্থ্যকর খাবার</div>
+                <p class="tc-desc">পুষ্টিকর খাবার খান, বেশি করে পানি পান করুন</p>
+            </div>
+            <div class="tip-card">
+                <div class="tc-icon"><i class="fas fa-running"></i></div>
+                <div class="tc-title">শারীরিক ব্যায়াম</div>
+                <p class="tc-desc">প্রতিদিন ২০-৩০ মিনিট হাঁটুন বা ব্যায়াম করুন</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================== -->
+    <!-- SECTION 6: CONTACT -->
+    <!-- ================================================== -->
+    <div class="contact-card">
+        <div class="cc-inner">
+            <div class="cc-avatar">📞</div>
+            <h3>যোগাযোগ করুন</h3>
+            <span class="cc-designation">পরীক্ষা নিয়ন্ত্রণ কমিটি</span>
+            <div class="cc-phone">📞 ০১৭XX-XXXXXX</div>
+            <a href="tel:+88017XXXXXXXX" class="cc-btn">
+                <i class="fas fa-phone"></i> কল করুন
+            </a>
+        </div>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer class="page-footer">
+    <div class="container-custom">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
+                <h3><span>ফুলবাড়ীয়া কলেজ</span></h3>
+            </div>
+            <p class="footer-tagline">শিক্ষা, নৈতিকতা ও আধুনিকতার সমন্বয়ে একটি আদর্শ শিক্ষা প্রতিষ্ঠান</p>
+        </div>
+        <div class="footer-bottom">
+            © <span id="year"></span> <strong>ফুলবাড়ীয়া কলেজ</strong>। সর্বস্বত্ব সংরক্ষিত।
+        </div>
+    </div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+
+<script>
+(function () {
+    "use strict";
+
+    let countdownData = [];
+    let routineData = [];
+    let noticeData = [];
+    let currentNoticeFilter = 'all';
+
+    const $ = (id) => document.getElementById(id);
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function formatDate(dateStr) {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        const months = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
+        return d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+    }
+
+    function daysBetween(dateStr) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const target = new Date(dateStr);
+        target.setHours(0, 0, 0, 0);
+        return Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+    }
+
+    function waitForSupabase(cb) {
+        if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) return cb();
+        window.addEventListener('fdc:supabase-ready', cb);
+        let n = 0;
+        const i = setInterval(() => {
+            if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) {
+                clearInterval(i); cb();
+            }
+            if (++n > 40) clearInterval(i);
+        }, 500);
+    }
+
+    // =========================================================
+    // COUNTDOWN
+    // =========================================================
+    async function loadCountdowns() {
+        try {
+            const { data, error } = await window.FDC_SUPABASE
+                .from('exam_countdown')
+                .select('*')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true });
+
+            if (error) throw error;
+            countdownData = data || [];
+            renderCountdowns();
+            updateReminder();
+        } catch (e) {
+            console.error('Countdown error:', e);
+            $('countdownList').innerHTML = `<div class="routine-preview" style="padding:40px 20px;"><i class="fas fa-exclamation-triangle" style="font-size:32px;color:#ef4444;margin-bottom:12px;display:block;"></i><p style="color:#6b7280;margin:0;">লোড করা যায়নি</p></div>`;
+        }
+    }
+
+    function renderCountdowns() {
+        const list = $('countdownList');
+        if (countdownData.length === 0) {
+            list.innerHTML = `<div class="routine-preview" style="padding:40px 20px;"><i class="fas fa-hourglass-half" style="font-size:32px;color:#9ca3af;margin-bottom:12px;display:block;"></i><p style="color:#6b7280;margin:0;">কোনো কাউন্টডাউন নেই</p></div>`;
+            return;
+        }
+
+        const MAX_DAYS = 365; // 100% = 365 days ahead
+
+        let html = '';
+        countdownData.forEach((item, idx) => {
+            const days = daysBetween(item.exam_date);
+            const cls = item.exam_name === 'HSC' ? 'exam-hsc' : item.exam_name === 'Honours' ? 'exam-honours' : 'exam-degree';
+            const icon = item.exam_name === 'HSC' ? 'fa-graduation-cap' : item.exam_name === 'Honours' ? 'fa-award' : 'fa-user-graduate';
+
+            // Calculate battery percent
+            let percent = Math.round((days / MAX_DAYS) * 100);
+            if (percent > 100) percent = 100;
+            if (percent < 0) percent = 0;
+
+            // Determine battery class
+            let battClass = 'high';
+            if (percent < 75 && percent >= 50) battClass = 'medium';
+            else if (percent < 50 && percent >= 25) battClass = 'low';
+            else if (percent < 25) battClass = 'critical';
+
+            let dayText = '';
+            if (days > 0) dayText = days + ' দিন বাকি';
+            else if (days === 0) dayText = 'আজ পরীক্ষা!';
+            else dayText = Math.abs(days) + ' দিন আগে শেষ';
+
+            html += `
+                <div class="countdown-item ${cls}" style="animation-delay:${idx * 100}ms;">
+                    <div class="ci-head">
+                        <div class="ci-title">
+                            <div class="ci-icon"><i class="fas ${icon}"></i></div>
+                            <div class="ci-info">
+                                <h3>${escapeHtml(item.exam_title)}</h3>
+                                <span class="ci-badge">${escapeHtml(item.exam_name)}</span>
+                            </div>
+                        </div>
+                        <div class="ci-days">
+                            <div class="num">${days >= 0 ? days : '✓'}</div>
+                            <div class="unit">${days > 0 ? 'দিন বাকি' : days === 0 ? 'আজ' : 'সম্পন্ন'}</div>
+                        </div>
+                    </div>
+
+                    <div class="battery-wrap">
+                        <div class="battery-bar">
+                            <div class="battery-fill ${battClass}" data-width="${percent}"></div>
+                        </div>
+                        <div class="battery-info">
+                            <span class="bi-percent">🔋 ${percent}%</span>
+                            <span class="bi-date"><i class="fas fa-calendar"></i> ${formatDate(item.exam_date)}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        list.innerHTML = html;
+
+        // Animate battery bars
+        setTimeout(() => {
+            list.querySelectorAll('.battery-fill').forEach((el, i) => {
+                setTimeout(() => {
+                    el.style.width = el.dataset.width + '%';
+                }, i * 120);
+            });
+        }, 100);
+    }
+
+    function updateReminder() {
+        if (countdownData.length === 0) {
+            $('reminderBanner').innerHTML = `<i class="fas fa-info-circle"></i><div class="rb-text"><h4>কোনো পরীক্ষার তথ্য নেই</h4><p>পরীক্ষার তারিখ আপডেট করা হয়নি</p></div>`;
+            return;
+        }
+
+        // Find nearest exam
+        let nearest = null;
+        let minDays = Infinity;
+        countdownData.forEach(c => {
+            const d = daysBetween(c.exam_date);
+            if (d >= 0 && d < minDays) {
+                minDays = d;
+                nearest = c;
+            }
+        });
+
+        if (!nearest) {
+            $('reminderBanner').innerHTML = `<i class="fas fa-check-circle"></i><div class="rb-text"><h4>সব পরীক্ষা সম্পন্ন</h4><p>সব পরীক্ষার তারিখ পার হয়েছে</p></div>`;
+            return;
+        }
+
+        let icon = 'fa-exclamation-circle';
+        let cls = '';
+        if (minDays <= 7) {
+            icon = 'fa-fire';
+            cls = 'urgent';
+        } else if (minDays <= 30) {
+            icon = 'fa-exclamation-triangle';
+        }
+
+        $('reminderBanner').innerHTML = `
+            <i class="fas ${icon}"></i>
+            <div class="rb-text">
+                <h4>⏰ ${escapeHtml(nearest.exam_title)} — মাত্র ${minDays} দিন বাকি!</h4>
+                <p>${formatDate(nearest.exam_date)} • প্রস্তুতি নিন এবং সময় ব্যবস্থাপনা করুন</p>
+            </div>
+        `;
+    }
+
+    // =========================================================
+    // ROUTINE
+    // =========================================================
+    async function loadRoutines() {
+        try {
+            const { data, error } = await window.FDC_SUPABASE
+                .from('exam_routine')
+                .select('*')
+                .eq('is_active', true)
+                .order('display_order', { ascending: true });
+
+            if (error) throw error;
+            routineData = data || [];
+
+            // Populate dropdown
+            const dropdown = $('routineDropdown');
+            routineData.forEach(r => {
+                const opt = document.createElement('option');
+                opt.value = r.id;
+                opt.textContent = r.exam_name;
+                dropdown.appendChild(opt);
+            });
+
+        } catch (e) {
+            console.error('Routine error:', e);
+        }
+    }
+
+    $('routineDropdown').addEventListener('change', function () {
+        const id = this.value;
+        const container = $('routineContainer');
+
+        if (!id) {
+            container.innerHTML = `<div class="routine-preview" style="background:#fff;border:2px dashed #e5e7eb;padding:60px 20px;"><i class="fas fa-calendar-alt" style="font-size:44px;color:#9ca3af;margin-bottom:12px;display:block;"></i><p style="color:#6b7280;font-size:14px;margin:0;">উপরে পরীক্ষা সিলেক্ট করুন</p></div>`;
+            return;
+        }
+
+        const routine = routineData.find(r => String(r.id) === String(id));
+        if (!routine) return;
+
+        container.innerHTML = `
+            <div class="routine-preview">
+                <img src="${escapeHtml(routine.routine_image)}" alt="${escapeHtml(routine.exam_name)}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22500%22 height=%22300%22%3E%3Crect fill=%22%23f0f4ff%22 width=%22500%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%230a1655%22 font-size=%2224%22 text-anchor=%22middle%22 dy=%22.3em%22%3E📋 রুটিন%3C/text%3E%3C/svg%3E'">
+                <div class="routine-actions">
+                    <a href="${escapeHtml(routine.routine_image)}" target="_blank" class="btn-outline">
+                        <i class="fas fa-eye"></i> বিস্তারিত দেখুন
+                    </a>
+                    <a href="${escapeHtml(routine.routine_image)}" download="${escapeHtml(routine.exam_name)}.jpg" target="_blank" class="btn-download">
+                        <i class="fas fa-download"></i> ডাউনলোড
+                    </a>
+                </div>
+            </div>
+        `;
+    });
+
+    // =========================================================
+    // NOTICE
+    // =========================================================
+    async function loadNotices() {
+        try {
+            const { data, error } = await window.FDC_SUPABASE
+                .from('exam_notice')
+                .select('*')
+                .eq('is_published', true)
+                .order('notice_date', { ascending: false });
+
+            if (error) throw error;
+            noticeData = data || [];
+            renderNotices();
+        } catch (e) {
+            console.error('Notice error:', e);
+            $('noticeList').innerHTML = `<div class="routine-preview" style="padding:40px 20px;"><i class="fas fa-exclamation-triangle" style="font-size:32px;color:#ef4444;margin-bottom:12px;display:block;"></i><p style="color:#6b7280;margin:0;">লোড করা যায়নি</p></div>`;
+        }
+    }
+
+    function renderNotices() {
+        const list = $('noticeList');
+        let items = noticeData;
+        if (currentNoticeFilter !== 'all') {
+            items = items.filter(n => n.exam_category === currentNoticeFilter);
+        }
+
+        if (items.length === 0) {
+            list.innerHTML = `<div class="routine-preview" style="padding:40px 20px;"><i class="fas fa-bullhorn" style="font-size:32px;color:#9ca3af;margin-bottom:12px;display:block;"></i><p style="color:#6b7280;margin:0;">কোনো নোটিশ নেই</p></div>`;
+            return;
+        }
+
+        let html = '';
+        items.forEach((n, idx) => {
+            const cls = n.exam_category === 'HSC' ? 'notice-hsc' : n.exam_category === 'Honours' ? 'notice-honours' : 'notice-degree';
+            html += `
+                <div class="notice-item ${cls}" style="animation-delay:${idx * 80}ms;">
+                    <div class="ni-icon"><i class="fas fa-bullhorn"></i></div>
+                    <div class="ni-body">
+                        <h4 class="ni-title">
+                            ${escapeHtml(n.title)}
+                            <span class="ni-badge">${escapeHtml(n.exam_category)}</span>
+                        </h4>
+                        ${n.description ? `<p class="ni-desc">${escapeHtml(n.description)}</p>` : ''}
+                        <div class="ni-meta">
+                            <span><i class="fas fa-calendar"></i> ${formatDate(n.notice_date)}</span>
+                            ${n.file_url ? '<span><i class="fas fa-file"></i> ফাইল সংযুক্ত</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="ni-actions">
+                        ${n.file_url ? `
+                            <a href="${escapeHtml(n.file_url)}" target="_blank" class="btn-mini view">
+                                <i class="fas fa-eye"></i> দেখুন
+                            </a>
+                            <a href="${escapeHtml(n.file_url)}" download target="_blank" class="btn-mini download">
+                                <i class="fas fa-download"></i> ডাউনলোড
+                            </a>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        });
+
+        list.innerHTML = html;
+    }
+
+    // Notice filters
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.addEventListener('click', function () {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            this.classList.add('active');
+            currentNoticeFilter = this.dataset.filter;
+            renderNotices();
+        });
+    });
+
+    // =========================================================
+    // INIT
+    // =========================================================
+    function init() {
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        waitForSupabase(async function () {
+            await Promise.all([
+                loadCountdowns(),
+                loadRoutines(),
+                loadNotices()
+            ]);
+            console.log('✅ Exam page ready');
+        });
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+})();
+</script>
+
+</body>
+</html>
