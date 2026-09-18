@@ -1042,8 +1042,6 @@
 <script src="../js/supabase.js"></script>
 <script src="../js/admin-guard.js"></script>
 <script src="../js/cloudinary.js"></script>
-<script src="../js/notification-helper.js"></script>
-<script src="../js/notification-ui.js"></script>
 <script src="../js/notification-sender.js"></script>
 
 <script>
@@ -1486,7 +1484,7 @@
     };
 
     // =========================================================
-    // FORM SUBMIT  ← এখানে notification trigger যোগ করা হয়েছে
+    // FORM SUBMIT — with AUTO NOTIFICATION
     // =========================================================
     document.getElementById('noticeForm').addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -1543,30 +1541,51 @@
 
             const supabase = window.FDC_SUPABASE;
             let result;
-            const isNewNotice = !id; // ← নতুন কি না চেক
+            const isNewNotice = !id;
 
             if (id) {
+                // UPDATE — existing notice
                 result = await supabase.from('notices').update(noticeData).eq('id', id).select();
                 showToast('Notice updated!', 'success');
             } else {
+                // INSERT — new notice
                 result = await supabase.from('notices').insert([noticeData]).select();
                 showToast('Notice created!', 'success');
             }
 
             if (result.error) throw result.error;
 
-            // ✅ Notification trigger — শুধু নতুন + Published হলে
+            // ✅ AUTO NOTIFICATION — শুধু নতুন + Published হলে
             if (isNewNotice && isPublished && window.sendNotificationToAll) {
                 try {
+                    // নতুন notice-এর ID নিন
+                    const newNoticeId = result.data && result.data[0] ? result.data[0].id : null;
+
+                    // Notification body তৈরি: title + description-এর প্রথম ৮০ অক্ষর
+                    let notifBody = title;
+                    if (description) {
+                        const descShort = description.length > 80
+                            ? description.substring(0, 80) + '...'
+                            : description;
+                        notifBody = title + '\n' + descShort;
+                    }
+
+                    // URL তৈরি — specific notice-এর details পেজ
+                    const notifUrl = newNoticeId
+                        ? '/public-pages/notice-details.html?id=' + newNoticeId
+                        : '/public-pages/notices.html';
+
                     await window.sendNotificationToAll({
                         title: '📢 নতুন নোটিশ',
-                        body: title,
-                        url: '/public-pages/notices.html'
+                        body: notifBody,
+                        url: notifUrl
                     });
-                    console.log('✅ Notification sent for new notice');
+
+                    console.log('✅ Notification sent for notice ID:', newNoticeId);
+
                 } catch (notifErr) {
                     console.warn('⚠️ Notification failed:', notifErr);
-                    // Notification fail হলেও notice save থাকবে — user-কে alarm দেব না
+                    // Notification fail হলেও notice save থাকবে
                 }
             }
 
