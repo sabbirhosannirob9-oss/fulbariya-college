@@ -2377,6 +2377,42 @@ img { max-width: 100%; display: block; }
     .fdc-install-text p { font-size: 11.5px; }
     .fdc-install-btn { font-size: 13px; padding: 10px 14px; }
 }
+  @media (max-width: 768px) {
+    #fdcNotifHeader {
+        margin-right: 4px;
+    }
+    #fdcNotifHeaderBtn {
+        padding: 5px 8px;
+        height: 34px;
+        gap: 4px;
+    }
+    #fdcNotifHeaderBell {
+        font-size: 13px;
+    }
+    #fdcNotifHeaderSwitch {
+        width: 30px;
+        height: 18px;
+    }
+    #fdcNotifHeaderKnob {
+        width: 14px;
+        height: 14px;
+    }
+    #fdcNotifHeaderBtn.on #fdcNotifHeaderKnob {
+        left: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    #fdcNotifHeaderBtn {
+        padding: 5px 6px;
+    }
+    #fdcNotifHeaderSwitch {
+        display: none; /* ছোট screen-এ শুধু Bell */
+    }
+    #fdcNotifHeaderBtn.on #fdcNotifHeaderBell {
+        animation: fdcBellShake 2s ease-in-out infinite;
+    }
+}
   </style>
  </head>
 <body>
@@ -2424,7 +2460,59 @@ img { max-width: 100%; display: block; }
                 <i class="fas fa-user-shield"></i> Admin
             </a>
         </nav>
+<!-- Header Notification Toggle -->
+<div id="fdcNotifHeader" style="
+    display: inline-flex;
+    align-items: center;
+    margin-right: 8px;
+    flex-shrink: 0;
+">
+    <button id="fdcNotifHeaderBtn" type="button" title="Notification চালু করুন" style="
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: linear-gradient(135deg, #0a1655, #1a237e);
+        border: 1.5px solid rgba(242,210,123,0.3);
+        padding: 6px 10px;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+        height: 38px;
+    ">
+        <span id="fdcNotifHeaderBell" style="
+            font-size: 15px;
+            line-height: 1;
+            filter: grayscale(1) brightness(1.5);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        ">🔔</span>
 
+        <span id="fdcNotifHeaderSwitch" style="
+            position: relative;
+            width: 34px;
+            height: 20px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            flex-shrink: 0;
+        ">
+            <span id="fdcNotifHeaderKnob" style="
+                position: absolute;
+                top: 2px;
+                left: 2px;
+                width: 16px;
+                height: 16px;
+                background: #fff;
+                border-radius: 50%;
+                box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            "></span>
+        </span>
+    </button>
+</div>
         <button class="nav-toggle" id="navToggle">
             <i class="fas fa-bars"></i>
         </button>
@@ -4478,280 +4566,9 @@ img { max-width: 100%; display: block; }
 
 })();
 </script>
-  <!-- ============================================================
-     SMART NOTIFICATION TOGGLE — Premium Floating Bell
+ <!-- ============================================================
+     HEADER NOTIFICATION TOGGLE LOGIC
      ============================================================ -->
-<style>
-#fdcSmartNotif {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 99997;
-    display: none;
-    font-family: 'Hind Siliguri', sans-serif;
-    animation: fdcNotifFloat 3s ease-in-out infinite;
-}
-@keyframes fdcNotifFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
-}
-#fdcNotifMainBtn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 0;
-    background: linear-gradient(135deg, #0a1655, #1a237e);
-    border: 2px solid rgba(242,210,123,0.3);
-    padding: 10px 12px;
-    border-radius: 50px;
-    cursor: pointer;
-    box-shadow: 0 10px 30px rgba(10,22,85,0.35), 0 0 0 0 rgba(242,210,123,0.4);
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    font-family: inherit;
-    overflow: hidden;
-}
-#fdcNotifMainBtn::before {
-    content: '';
-    position: absolute;
-    top: 0; left: -100%;
-    width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-    transition: left 0.6s ease;
-}
-#fdcNotifMainBtn:hover::before {
-    left: 100%;
-}
-#fdcNotifMainBtn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 14px 40px rgba(10,22,85,0.5), 0 0 0 4px rgba(242,210,123,0.2);
-}
-#fdcNotifMainBtn:active {
-    transform: scale(0.98);
-}
-#fdcNotifMainBtn:disabled {
-    opacity: 0.7;
-    cursor: wait;
-}
-.fdc-notif-bell-wrap {
-    position: relative;
-    width: 28px;
-    height: 28px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-#fdcNotifBell {
-    font-size: 20px;
-    line-height: 1;
-    transition: all 0.3s ease;
-    filter: grayscale(1) brightness(1.5);
-    opacity: 0.7;
-}
-#fdcNotifMainBtn.on #fdcNotifBell {
-    filter: grayscale(0);
-    opacity: 1;
-    animation: fdcBellShake 2s ease-in-out infinite;
-}
-@keyframes fdcBellShake {
-    0%, 85%, 100% { transform: rotate(0deg); }
-    88% { transform: rotate(-12deg); }
-    91% { transform: rotate(12deg); }
-    94% { transform: rotate(-8deg); }
-    97% { transform: rotate(8deg); }
-}
-.fdc-notif-badge {
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #ef4444;
-    border: 2px solid #fff;
-    display: none;
-    animation: fdcBadgePulse 2s ease-in-out infinite;
-}
-@keyframes fdcBadgePulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.7; }
-}
-#fdcNotifMainBtn.on .fdc-notif-badge {
-    display: none;
-}
-#fdcNotifMainBtn:not(.on) .fdc-notif-badge {
-    display: block;
-}
-#fdcNotifSwitch {
-    position: relative;
-    width: 44px;
-    height: 24px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 50px;
-    margin-left: 10px;
-    transition: all 0.3s ease;
-    flex-shrink: 0;
-    border: 1px solid rgba(255,255,255,0.1);
-}
-#fdcNotifKnob {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 18px;
-    height: 18px;
-    background: #fff;
-    border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-#fdcNotifMainBtn.on #fdcNotifSwitch {
-    background: linear-gradient(135deg, #10b981, #059669);
-    border-color: rgba(16,185,129,0.5);
-}
-#fdcNotifMainBtn.on #fdcNotifKnob {
-    left: 22px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3), 0 0 12px rgba(16,185,129,0.8);
-}
-#fdcNotifLoader {
-    display: none;
-    width: 20px;
-    height: 20px;
-    border: 2px solid rgba(242,210,123,0.3);
-    border-top-color: #f2d27b;
-    border-radius: 50%;
-    animation: fdcSpin 0.8s linear infinite;
-}
-@keyframes fdcSpin {
-    to { transform: rotate(360deg); }
-}
-#fdcNotifMainBtn.loading .fdc-notif-bell-wrap,
-#fdcNotifMainBtn.loading #fdcNotifSwitch {
-    display: none;
-}
-#fdcNotifMainBtn.loading #fdcNotifLoader {
-    display: block;
-    margin: 0 12px;
-}
-#fdcNotifTooltip {
-    position: absolute;
-    bottom: calc(100% + 12px);
-    right: 0;
-    background: linear-gradient(135deg, #0a1655, #1a237e);
-    color: #fff;
-    padding: 10px 16px;
-    border-radius: 12px;
-    font-size: 12.5px;
-    font-weight: 600;
-    white-space: nowrap;
-    box-shadow: 0 10px 30px rgba(10,22,85,0.4);
-    opacity: 0;
-    transform: translateY(8px);
-    pointer-events: none;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(242,210,123,0.3);
-}
-#fdcNotifTooltip::after {
-    content: '';
-    position: absolute;
-    top: 100%;
-    right: 20px;
-    width: 0;
-    height: 0;
-    border: 6px solid transparent;
-    border-top-color: #1a237e;
-}
-#fdcNotifMainBtn:hover #fdcNotifTooltip,
-#fdcSmartNotif.show-tooltip #fdcNotifTooltip {
-    opacity: 1;
-    transform: translateY(0);
-}
-#fdcNotifRipple {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(242,210,123,0.4);
-    transform: scale(0);
-    animation: fdcRipple 0.6s ease-out;
-    pointer-events: none;
-}
-@keyframes fdcRipple {
-    to { transform: scale(4); opacity: 0; }
-}
-#fdcNotifToast {
-    position: fixed;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-20px);
-    background: #fff;
-    color: #0a1655;
-    padding: 14px 24px;
-    border-radius: 50px;
-    font-size: 14px;
-    font-weight: 700;
-    font-family: 'Hind Siliguri', sans-serif;
-    box-shadow: 0 15px 40px rgba(10,22,85,0.25);
-    z-index: 99999;
-    opacity: 0;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    border: 2px solid rgba(242,210,123,0.4);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    max-width: 90%;
-}
-#fdcNotifToast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-#fdcNotifToast .toast-icon {
-    font-size: 18px;
-}
-@media (max-width: 560px) {
-    #fdcSmartNotif {
-        bottom: 20px;
-        right: 16px;
-    }
-    #fdcNotifMainBtn {
-        padding: 8px 10px;
-    }
-    #fdcNotifBell {
-        font-size: 18px;
-    }
-    #fdcNotifSwitch {
-        width: 40px;
-        height: 22px;
-    }
-    #fdcNotifKnob {
-        width: 16px;
-        height: 16px;
-    }
-    #fdcNotifMainBtn.on #fdcNotifKnob {
-        left: 20px;
-    }
-}
-</style>
-
-<div id="fdcSmartNotif">
-    <button id="fdcNotifMainBtn" type="button">
-        <span class="fdc-notif-bell-wrap">
-            <span id="fdcNotifBell">🔔</span>
-            <span class="fdc-notif-badge"></span>
-        </span>
-
-        <span id="fdcNotifSwitch">
-            <span id="fdcNotifKnob"></span>
-        </span>
-
-        <span id="fdcNotifLoader"></span>
-
-        <span id="fdcNotifTooltip">নোটিফিকেশন চালু করুন</span>
-    </button>
-</div>
-
-<div id="fdcNotifToast">
-    <span class="toast-icon">🔔</span>
-    <span id="fdcNotifToastText">Notification</span>
-</div>
-
 <script>
 (function () {
     "use strict";
@@ -4760,9 +4577,11 @@ img { max-width: 100%; display: block; }
     var SUPABASE_URL = 'https://dpbbsfppjmgvzsopmdww.supabase.co';
     var SUPABASE_KEY = 'sb_publishable_O0gApiitS1P9graqe1cjKA_f8KJRUD5';
 
-    var isSubscribed = false;
     var isProcessing = false;
 
+    // =========================================================
+    // HELPERS
+    // =========================================================
     function urlBase64ToUint8Array(base64String) {
         var padding = '='.repeat((4 - base64String.length % 4) % 4);
         var base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
@@ -4774,95 +4593,92 @@ img { max-width: 100%; display: block; }
         return outputArray;
     }
 
-    function getMainBtn() { return document.getElementById('fdcNotifMainBtn'); }
-    function getTooltip() { return document.getElementById('fdcNotifTooltip'); }
+    // =========================================================
+    // UI UPDATE
+    // =========================================================
+    function setUI(isOn) {
+        var btn = document.getElementById('fdcNotifHeaderBtn');
+        var bell = document.getElementById('fdcNotifHeaderBell');
+        var sw = document.getElementById('fdcNotifHeaderSwitch');
+        var knob = document.getElementById('fdcNotifHeaderKnob');
 
-    function setToggleUI(isOn) {
-        var btn = getMainBtn();
-        var tooltip = getTooltip();
+        if (!btn) return;
+
         if (isOn) {
+            btn.title = 'Notification বন্ধ করুন';
+            bell.style.filter = 'grayscale(0)';
+            bell.style.opacity = '1';
+            sw.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+            knob.style.left = '16px';
+            knob.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3), 0 0 8px rgba(16,185,129,0.8)';
             btn.classList.add('on');
-            tooltip.textContent = 'নোটিফিকেশন বন্ধ করতে ক্লিক করুন';
         } else {
+            btn.title = 'Notification চালু করুন';
+            bell.style.filter = 'grayscale(1) brightness(1.5)';
+            bell.style.opacity = '0.7';
+            sw.style.background = 'rgba(255,255,255,0.15)';
+            knob.style.left = '2px';
+            knob.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
             btn.classList.remove('on');
-            tooltip.textContent = 'নোটিফিকেশন চালু করুন';
         }
     }
 
-    function setLoading(loading) {
-        var btn = getMainBtn();
-        if (loading) {
-            btn.classList.add('loading');
-            btn.disabled = true;
-        } else {
-            btn.classList.remove('loading');
-            btn.disabled = false;
-        }
-    }
-
-    function showToast(message, type) {
-        var toast = document.getElementById('fdcNotifToast');
-        var text = document.getElementById('fdcNotifToastText');
-        var icon = toast.querySelector('.toast-icon');
-
-        text.textContent = message;
-
-        var icons = {
-            success: '✅',
-            error: '❌',
-            info: '🔔'
-        };
-        icon.textContent = icons[type] || '🔔';
-
+    // =========================================================
+    // TOAST
+    // =========================================================
+    function showMessage(msg, type) {
+        type = type || 'info';
         var colors = {
-            success: { bg: 'linear-gradient(135deg, #d1fae5, #a7f3d0)', color: '#059669', border: 'rgba(16,185,129,0.4)' },
-            error: { bg: 'linear-gradient(135deg, #fee2e2, #fecaca)', color: '#dc2626', border: 'rgba(239,68,68,0.4)' },
-            info: { bg: 'linear-gradient(135deg, #dbeafe, #bfdbfe)', color: '#2563eb', border: 'rgba(59,130,246,0.4)' }
+            success: 'linear-gradient(135deg,#10b981,#059669)',
+            error: 'linear-gradient(135deg,#ef4444,#dc2626)',
+            info: 'linear-gradient(135deg,#3b82f6,#2563eb)'
         };
-
-        var c = colors[type] || colors.info;
-        toast.style.background = c.bg;
-        toast.style.color = c.color;
-        toast.style.borderColor = c.border;
-
-        toast.classList.add('show');
+        var toast = document.createElement('div');
+        toast.style.cssText =
+            'position:fixed;top:80px;left:50%;transform:translateX(-50%);' +
+            'background:' + (colors[type] || colors.info) + ';color:#fff;' +
+            'padding:12px 24px;border-radius:50px;font-weight:700;font-size:13px;' +
+            'box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:99999;' +
+            'font-family:Hind Siliguri,sans-serif;max-width:90%;text-align:center;' +
+            'animation:fdcHdrToastIn 0.4s cubic-bezier(0.34,1.56,0.64,1);';
+        toast.textContent = msg;
+        document.body.appendChild(toast);
         setTimeout(function () {
-            toast.classList.remove('show');
+            toast.style.transition = 'opacity 0.4s';
+            toast.style.opacity = '0';
+            setTimeout(function () { toast.remove(); }, 400);
         }, 3500);
     }
 
-    function ripple(e) {
-        var btn = getMainBtn();
-        var rect = btn.getBoundingClientRect();
-        var rippleEl = document.createElement('span');
-        rippleEl.id = 'fdcNotifRipple';
-        var size = Math.max(rect.width, rect.height);
-        var x = (e.clientX || (rect.left + rect.width / 2)) - rect.left - size / 2;
-        var y = (e.clientY || (rect.top + rect.height / 2)) - rect.top - size / 2;
-        rippleEl.style.width = size + 'px';
-        rippleEl.style.height = size + 'px';
-        rippleEl.style.left = x + 'px';
-        rippleEl.style.top = y + 'px';
-        btn.appendChild(rippleEl);
-        setTimeout(function () { rippleEl.remove(); }, 600);
+    // Toast animation
+    if (!document.getElementById('fdcHdrToastStyle')) {
+        var st = document.createElement('style');
+        st.id = 'fdcHdrToastStyle';
+        st.textContent = '@keyframes fdcHdrToastIn{from{opacity:0;transform:translateX(-50%) translateY(-20px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}';
+        document.head.appendChild(st);
     }
 
-    async function checkSubscription() {
+    // =========================================================
+    // CHECK SUBSCRIPTION
+    // =========================================================
+    async function isSubscribed() {
         try {
             if (!('serviceWorker' in navigator)) return false;
             var reg = await navigator.serviceWorker.ready;
             var sub = await reg.pushManager.getSubscription();
             return !!sub;
         } catch (e) {
-            console.warn('Sub check error:', e);
             return false;
         }
     }
 
+    // =========================================================
+    // SUBSCRIBE
+    // =========================================================
     async function subscribe() {
         var permission = await Notification.requestPermission();
         if (permission !== 'granted') {
-            showToast('অনুমতি দেওয়া হয়নি', 'error');
+            showMessage('❌ অনুমতি দেওয়া হয়নি', 'error');
             return false;
         }
 
@@ -4896,7 +4712,7 @@ img { max-width: 100%; display: block; }
 
         if (!res.ok) throw new Error('Save failed');
 
-        showToast('নোটিফিকেশন চালু হয়েছে!', 'success');
+        showMessage('🎉 নোটিফিকেশন চালু হয়েছে!', 'success');
 
         setTimeout(function () {
             if (reg.active) {
@@ -4913,6 +4729,9 @@ img { max-width: 100%; display: block; }
         return true;
     }
 
+    // =========================================================
+    // UNSUBSCRIBE
+    // =========================================================
     async function unsubscribe() {
         var reg = await navigator.serviceWorker.ready;
         var sub = await reg.pushManager.getSubscription();
@@ -4926,70 +4745,81 @@ img { max-width: 100%; display: block; }
                     'Authorization': 'Bearer ' + SUPABASE_KEY
                 }
             });
-            showToast('নোটিফিকেশন বন্ধ হয়েছে', 'info');
+            showMessage('🔕 নোটিফিকেশন বন্ধ হয়েছে', 'info');
         }
     }
 
-    async function handleToggle(e) {
+    // =========================================================
+    // TOGGLE HANDLER
+    // =========================================================
+    async function handleToggle() {
         if (isProcessing) return;
         isProcessing = true;
 
-        ripple(e);
-        setLoading(true);
+        var btn = document.getElementById('fdcNotifHeaderBtn');
+        if (btn) btn.style.opacity = '0.6';
 
         try {
-            var currently = await checkSubscription();
+            var currently = await isSubscribed();
 
             if (currently) {
                 await unsubscribe();
-                isSubscribed = false;
-                setToggleUI(false);
+                setUI(false);
             } else {
                 var ok = await subscribe();
-                isSubscribed = ok;
-                setToggleUI(ok);
+                setUI(ok);
             }
         } catch (err) {
             console.error('Toggle error:', err);
-            showToast('সমস্যা হয়েছে: ' + err.message, 'error');
-            isSubscribed = await checkSubscription();
-            setToggleUI(isSubscribed);
+            showMessage('❌ সমস্যা: ' + err.message, 'error');
+            setUI(await isSubscribed());
         } finally {
-            setLoading(false);
+            if (btn) btn.style.opacity = '1';
             isProcessing = false;
         }
     }
 
+    // =========================================================
+    // INIT
+    // =========================================================
     async function init() {
+        console.log('🔔 Header Notification Toggle initializing...');
+
         if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
             console.log('❌ Notifications not supported');
             return;
         }
 
-        console.log('✅ Smart Notification Toggle initializing...');
+        var btn = document.getElementById('fdcNotifHeaderBtn');
+        if (!btn) {
+            console.warn('❌ Header button not found — check HTML');
+            return;
+        }
 
-        setTimeout(function () {
-            var wrap = document.getElementById('fdcSmartNotif');
-            if (wrap) {
-                wrap.style.display = 'block';
-                setTimeout(function () {
-                    wrap.classList.add('show-tooltip');
-                    setTimeout(function () {
-                        wrap.classList.remove('show-tooltip');
-                    }, 4000);
-                }, 800);
-            }
-        }, 1500);
+        // Check current state
+        var sub = await isSubscribed();
+        setUI(sub);
 
-        isSubscribed = await checkSubscription();
-        setToggleUI(isSubscribed);
+        // Bind click
+        btn.addEventListener('click', handleToggle);
 
-        getMainBtn().addEventListener('click', handleToggle);
+        // Hover effect
+        btn.addEventListener('mouseenter', function () {
+            this.style.transform = 'scale(1.05)';
+            this.style.boxShadow = '0 6px 20px rgba(10,22,85,0.4)';
+        });
+        btn.addEventListener('mouseleave', function () {
+            this.style.transform = 'scale(1)';
+            this.style.boxShadow = 'none';
+        });
 
-        console.log('✅ Smart Notification Toggle ready');
-        console.log('   Subscribed:', isSubscribed);
+        console.log('✅ Header Notification Toggle ready');
+        console.log('   Subscribed:', sub);
     }
 
+    // =========================================================
+    // START
+    // =========================================================
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
@@ -4997,6 +4827,6 @@ img { max-width: 100%; display: block; }
     }
 
 })();
-</script>
+</script>            
 </body>
 </html>
