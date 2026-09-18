@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
@@ -1044,6 +1044,8 @@
 <script src="../js/cloudinary.js"></script>
 <script src="../js/notification-helper.js"></script>
 <script src="../js/notification-ui.js"></script>
+<script src="../js/notification-sender.js"></script>
+
 <script>
     // =========================================================
     // STATE
@@ -1484,7 +1486,7 @@
     };
 
     // =========================================================
-    // FORM SUBMIT
+    // FORM SUBMIT  ← এখানে notification trigger যোগ করা হয়েছে
     // =========================================================
     document.getElementById('noticeForm').addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -1541,6 +1543,7 @@
 
             const supabase = window.FDC_SUPABASE;
             let result;
+            const isNewNotice = !id; // ← নতুন কি না চেক
 
             if (id) {
                 result = await supabase.from('notices').update(noticeData).eq('id', id).select();
@@ -1551,6 +1554,21 @@
             }
 
             if (result.error) throw result.error;
+
+            // ✅ Notification trigger — শুধু নতুন + Published হলে
+            if (isNewNotice && isPublished && window.sendNotificationToAll) {
+                try {
+                    await window.sendNotificationToAll({
+                        title: '📢 নতুন নোটিশ',
+                        body: title,
+                        url: '/public-pages/notices.html'
+                    });
+                    console.log('✅ Notification sent for new notice');
+                } catch (notifErr) {
+                    console.warn('⚠️ Notification failed:', notifErr);
+                    // Notification fail হলেও notice save থাকবে — user-কে alarm দেব না
+                }
+            }
 
             document.getElementById('noticeFormCard').classList.remove('show');
             document.getElementById('noticeForm').reset();
