@@ -2377,44 +2377,168 @@ img { max-width: 100%; display: block; }
     .fdc-install-text p { font-size: 11.5px; }
     .fdc-install-btn { font-size: 13px; padding: 10px 14px; }
 }
-  @media (max-width: 768px) {
-    #fdcNotifHeader {
-        margin-right: 4px;
-    }
-    #fdcNotifHeaderBtn {
-        padding: 5px 8px;
-        height: 34px;
-        gap: 4px;
-    }
-    #fdcNotifHeaderBell {
-        font-size: 13px;
-    }
-    #fdcNotifHeaderSwitch {
-        width: 30px;
-        height: 18px;
-    }
-    #fdcNotifHeaderKnob {
-        width: 14px;
-        height: 14px;
-    }
-    #fdcNotifHeaderBtn.on #fdcNotifHeaderKnob {
-        left: 14px;
-    }
+  /* Notification Banner CSS */
+.fdc-notif-banner {
+    position: fixed;
+    left: 50%;
+    top: 20px;
+    transform: translateX(-50%) translateY(-150%);
+    z-index: 99998;
+    max-width: 480px;
+    width: calc(100% - 32px);
+    background: linear-gradient(135deg, #ffffff, #f8f9fc);
+    border-radius: 20px;
+    box-shadow: 0 0 0 1px rgba(10,22,85,0.1), 0 20px 60px rgba(10,22,85,0.25);
+    padding: 20px;
+    font-family: 'Hind Siliguri', sans-serif;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    overflow: hidden;
 }
-
-@media (max-width: 480px) {
-    #fdcNotifHeaderBtn {
-        padding: 5px 6px;
-    }
-    #fdcNotifHeaderSwitch {
-        display: none; /* ছোট screen-এ শুধু Bell */
-    }
-    #fdcNotifHeaderBtn.on #fdcNotifHeaderBell {
-        animation: fdcBellShake 2s ease-in-out infinite;
-    }
+.fdc-notif-banner.show {
+    transform: translateX(-50%) translateY(0);
 }
-  </style>
- </head>
+.fdc-notif-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #f2d27b, #d4af37, #f2d27b);
+    background-size: 200% 100%;
+    animation: fdcNotifShine 3s linear infinite;
+}
+@keyframes fdcNotifShine {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+.fdc-notif-content {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    position: relative;
+}
+.fdc-notif-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, #0a1655, #1a237e);
+    color: #f2d27b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    box-shadow: 0 6px 20px rgba(10,22,85,0.3);
+    animation: fdcBellRing 2s ease-in-out infinite;
+}
+@keyframes fdcBellRing {
+    0%, 90%, 100% { transform: rotate(0deg); }
+    5%, 15%, 25% { transform: rotate(-15deg); }
+    10%, 20%, 30% { transform: rotate(15deg); }
+    35% { transform: rotate(0deg); }
+}
+.fdc-notif-text {
+    flex: 1;
+    min-width: 0;
+    padding-right: 24px;
+}
+.fdc-notif-text h4 {
+    margin: 0 0 4px;
+    font-size: 16px;
+    font-weight: 700;
+    color: #0a1655;
+    line-height: 1.3;
+}
+.fdc-notif-text p {
+    margin: 0;
+    font-size: 12.5px;
+    color: #6b7280;
+    line-height: 1.5;
+}
+.fdc-notif-close {
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    background: #f3f4f6;
+    border: none;
+    color: #6b7280;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: 0.25s;
+}
+.fdc-notif-close:hover {
+    background: #e5e7eb;
+    color: #ef4444;
+    transform: rotate(90deg);
+}
+.fdc-notif-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    position: relative;
+}
+.fdc-notif-btn {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 12px;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: none;
+}
+.fdc-notif-btn.primary {
+    background: linear-gradient(135deg, #0a1655, #1a237e);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(10,22,85,0.3);
+}
+.fdc-notif-btn.primary:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(10,22,85,0.5);
+    color: #f2d27b;
+}
+.fdc-notif-btn.primary:disabled {
+    opacity: 0.7;
+    cursor: wait;
+}
+.fdc-notif-btn.secondary {
+    background: #f3f4f6;
+    color: #6b7280;
+    flex: 0 0 auto;
+    padding: 11px 20px;
+}
+.fdc-notif-btn.secondary:hover {
+    background: #e5e7eb;
+}
+@media (max-width: 560px) {
+    .fdc-notif-banner {
+        top: 12px;
+        padding: 16px;
+        width: calc(100% - 24px);
+        border-radius: 16px;
+    }
+    .fdc-notif-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+        border-radius: 12px;
+    }
+    .fdc-notif-text h4 { font-size: 14.5px; }
+    .fdc-notif-text p { font-size: 11.5px; }
+    .fdc-notif-btn { font-size: 13px; padding: 10px 14px; }
+}
+</style>
+</head>
 <body>
 
 <!-- TOP BAR -->
@@ -2460,59 +2584,7 @@ img { max-width: 100%; display: block; }
                 <i class="fas fa-user-shield"></i> Admin
             </a>
         </nav>
-<!-- Header Notification Toggle -->
-<div id="fdcNotifHeader" style="
-    display: inline-flex;
-    align-items: center;
-    margin-right: 8px;
-    flex-shrink: 0;
-">
-    <button id="fdcNotifHeaderBtn" type="button" title="Notification চালু করুন" style="
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: linear-gradient(135deg, #0a1655, #1a237e);
-        border: 1.5px solid rgba(242,210,123,0.3);
-        padding: 6px 10px;
-        border-radius: 50px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        font-family: inherit;
-        height: 38px;
-    ">
-        <span id="fdcNotifHeaderBell" style="
-            font-size: 15px;
-            line-height: 1;
-            filter: grayscale(1) brightness(1.5);
-            opacity: 0.7;
-            transition: all 0.3s ease;
-        ">🔔</span>
 
-        <span id="fdcNotifHeaderSwitch" style="
-            position: relative;
-            width: 34px;
-            height: 20px;
-            background: rgba(255,255,255,0.15);
-            border-radius: 50px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            flex-shrink: 0;
-        ">
-            <span id="fdcNotifHeaderKnob" style="
-                position: absolute;
-                top: 2px;
-                left: 2px;
-                width: 16px;
-                height: 16px;
-                background: #fff;
-                border-radius: 50%;
-                box-shadow: 0 1px 4px rgba(0,0,0,0.3);
-                transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            "></span>
-        </span>
-    </button>
-</div>
         <button class="nav-toggle" id="navToggle">
             <i class="fas fa-bars"></i>
         </button>
@@ -4566,8 +4638,8 @@ img { max-width: 100%; display: block; }
 
 })();
 </script>
- <!-- ============================================================
-     HEADER NOTIFICATION TOGGLE LOGIC
+  <!-- ============================================================
+     PUSH NOTIFICATION PERMISSION (For Students)
      ============================================================ -->
 <script>
 (function () {
@@ -4576,12 +4648,9 @@ img { max-width: 100%; display: block; }
     var VAPID_PUBLIC_KEY = 'BJLtmD01qS8YK8UVXx6CreCDDsTd4HUtuhFZBsodmHTwDwIJUz358mOUNYAOdHGr18Ozea7-9Y5whyuRfbhYjvY';
     var SUPABASE_URL = 'https://dpbbsfppjmgvzsopmdww.supabase.co';
     var SUPABASE_KEY = 'sb_publishable_O0gApiitS1P9graqe1cjKA_f8KJRUD5';
+    var DISMISS_KEY = 'fdc_notif_dismissed';
+    var DISMISS_DAYS = 3;
 
-    var isProcessing = false;
-
-    // =========================================================
-    // HELPERS
-    // =========================================================
     function urlBase64ToUint8Array(base64String) {
         var padding = '='.repeat((4 - base64String.length % 4) % 4);
         var base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/');
@@ -4593,240 +4662,159 @@ img { max-width: 100%; display: block; }
         return outputArray;
     }
 
-    // =========================================================
-    // UI UPDATE
-    // =========================================================
-    function setUI(isOn) {
-        var btn = document.getElementById('fdcNotifHeaderBtn');
-        var bell = document.getElementById('fdcNotifHeaderBell');
-        var sw = document.getElementById('fdcNotifHeaderSwitch');
-        var knob = document.getElementById('fdcNotifHeaderKnob');
+    function isDismissed() {
+        try {
+            var dismissedAt = localStorage.getItem(DISMISS_KEY);
+            if (!dismissedAt) return false;
+            var daysSince = (Date.now() - parseInt(dismissedAt)) / (1000 * 60 * 60 * 24);
+            return daysSince < DISMISS_DAYS;
+        } catch (e) { return false; }
+    }
 
-        if (!btn) return;
+    function dismiss() {
+        try { localStorage.setItem(DISMISS_KEY, Date.now().toString()); } catch (e) {}
+    }
 
-        if (isOn) {
-            btn.title = 'Notification বন্ধ করুন';
-            bell.style.filter = 'grayscale(0)';
-            bell.style.opacity = '1';
-            sw.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-            knob.style.left = '16px';
-            knob.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3), 0 0 8px rgba(16,185,129,0.8)';
-            btn.classList.add('on');
-        } else {
-            btn.title = 'Notification চালু করুন';
-            bell.style.filter = 'grayscale(1) brightness(1.5)';
-            bell.style.opacity = '0.7';
-            sw.style.background = 'rgba(255,255,255,0.15)';
-            knob.style.left = '2px';
-            knob.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
-            btn.classList.remove('on');
+    function isSupported() {
+        return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window;
+    }
+
+    function isGranted() { return Notification.permission === 'granted'; }
+    function isDenied() { return Notification.permission === 'denied'; }
+
+    function createBanner() {
+        var banner = document.createElement('div');
+        banner.className = 'fdc-notif-banner';
+        banner.id = 'fdcNotifBanner';
+        banner.innerHTML =
+            '<button class="fdc-notif-close" id="fdcNotifClose" aria-label="Close">✕</button>' +
+            '<div class="fdc-notif-content">' +
+                '<div class="fdc-notif-icon">🔔</div>' +
+                '<div class="fdc-notif-text">' +
+                    '<h4>নোটিফিকেশন চালু করুন</h4>' +
+                    '<p>নতুন নোটিশ, ফলাফল ও ইভেন্টের আপডেট পেতে Allow করুন</p>' +
+                '</div>' +
+            '</div>' +
+            '<div class="fdc-notif-actions">' +
+                '<button class="fdc-notif-btn primary" id="fdcNotifEnable">🔔 চালু করুন</button>' +
+                '<button class="fdc-notif-btn secondary" id="fdcNotifLater">পরে</button>' +
+            '</div>';
+        return banner;
+    }
+
+    function showBanner() {
+        if (document.getElementById('fdcNotifBanner')) return;
+        if (isGranted() || isDenied() || isDismissed()) return;
+        var banner = createBanner();
+        document.body.appendChild(banner);
+        setTimeout(function () { banner.classList.add('show'); }, 500);
+
+        document.getElementById('fdcNotifClose').addEventListener('click', function () { hideBanner(); dismiss(); });
+        document.getElementById('fdcNotifLater').addEventListener('click', function () { hideBanner(); dismiss(); });
+        document.getElementById('fdcNotifEnable').addEventListener('click', enableNotifications);
+    }
+
+    function hideBanner() {
+        var banner = document.getElementById('fdcNotifBanner');
+        if (banner) {
+            banner.classList.remove('show');
+            setTimeout(function () { if (banner.parentNode) banner.parentNode.removeChild(banner); }, 400);
         }
     }
 
-    // =========================================================
-    // TOAST
-    // =========================================================
-    function showMessage(msg, type) {
-        type = type || 'info';
-        var colors = {
-            success: 'linear-gradient(135deg,#10b981,#059669)',
-            error: 'linear-gradient(135deg,#ef4444,#dc2626)',
-            info: 'linear-gradient(135deg,#3b82f6,#2563eb)'
-        };
+    async function enableNotifications() {
+        var btn = document.getElementById('fdcNotifEnable');
+        if (btn) { btn.disabled = true; btn.innerHTML = '⏳ অপেক্ষা...'; }
+
+        try {
+            var permission = await Notification.requestPermission();
+            if (permission !== 'granted') {
+                showToast('❌ নোটিফিকেশন অনুমতি দেওয়া হয়নি', 'error');
+                if (btn) { btn.disabled = false; btn.innerHTML = '🔔 চালু করুন'; }
+                return;
+            }
+
+            var registration = await navigator.serviceWorker.ready;
+            var subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+            });
+
+            var subData = subscription.toJSON();
+            var deviceType = /Android/.test(navigator.userAgent) ? 'android' :
+                             /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'ios' : 'desktop';
+
+            var res = await fetch(SUPABASE_URL + '/rest/v1/push_subscriptions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': 'Bearer ' + SUPABASE_KEY,
+                    'Prefer': 'resolution=merge-duplicates,return=minimal'
+                },
+                body: JSON.stringify({
+                    endpoint: subData.endpoint,
+                    p256dh: subData.keys.p256dh,
+                    auth: subData.keys.auth,
+                    user_agent: navigator.userAgent,
+                    device_type: deviceType,
+                    is_active: true
+                })
+            });
+
+            if (!res.ok) throw new Error('Database save failed');
+
+            hideBanner();
+            showToast('🎉 নোটিফিকেশন চালু হয়েছে!', 'success');
+
+            setTimeout(function () {
+                if (registration.active) {
+                    registration.showNotification('🎓 Fulbariya College', {
+                        body: 'নোটিফিকেশন সফলভাবে চালু হয়েছে! এখন থেকে নতুন নোটিশ পাবেন।',
+                        icon: '/assets/images/web-app-manifest-192x192.png',
+                        tag: 'welcome',
+                        vibrate: [200, 100, 200]
+                    });
+                }
+            }, 1500);
+
+        } catch (e) {
+            showToast('❌ ' + e.message, 'error');
+            if (btn) { btn.disabled = false; btn.innerHTML = '🔔 চালু করুন'; }
+        }
+    }
+
+    function showToast(msg, type) {
         var toast = document.createElement('div');
         toast.style.cssText =
             'position:fixed;top:80px;left:50%;transform:translateX(-50%);' +
-            'background:' + (colors[type] || colors.info) + ';color:#fff;' +
-            'padding:12px 24px;border-radius:50px;font-weight:700;font-size:13px;' +
+            'background:' + (type === 'success' ? 'linear-gradient(135deg,#10b981,#059669)' : 'linear-gradient(135deg,#ef4444,#dc2626)') + ';' +
+            'color:#fff;padding:14px 28px;border-radius:50px;font-weight:700;font-size:14px;' +
             'box-shadow:0 10px 30px rgba(0,0,0,0.3);z-index:99999;' +
-            'font-family:Hind Siliguri,sans-serif;max-width:90%;text-align:center;' +
-            'animation:fdcHdrToastIn 0.4s cubic-bezier(0.34,1.56,0.64,1);';
+            'font-family:Hind Siliguri,sans-serif;max-width:90%;text-align:center;';
         toast.textContent = msg;
         document.body.appendChild(toast);
         setTimeout(function () {
             toast.style.transition = 'opacity 0.4s';
             toast.style.opacity = '0';
             setTimeout(function () { toast.remove(); }, 400);
-        }, 3500);
+        }, 4000);
     }
 
-    // Toast animation
-    if (!document.getElementById('fdcHdrToastStyle')) {
-        var st = document.createElement('style');
-        st.id = 'fdcHdrToastStyle';
-        st.textContent = '@keyframes fdcHdrToastIn{from{opacity:0;transform:translateX(-50%) translateY(-20px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}';
-        document.head.appendChild(st);
+    function init() {
+        if (!isSupported()) return;
+        if (isGranted()) return;
+        setTimeout(showBanner, 5000);
     }
 
-    // =========================================================
-    // CHECK SUBSCRIPTION
-    // =========================================================
-    async function isSubscribed() {
-        try {
-            if (!('serviceWorker' in navigator)) return false;
-            var reg = await navigator.serviceWorker.ready;
-            var sub = await reg.pushManager.getSubscription();
-            return !!sub;
-        } catch (e) {
-            return false;
-        }
-    }
-
-    // =========================================================
-    // SUBSCRIBE
-    // =========================================================
-    async function subscribe() {
-        var permission = await Notification.requestPermission();
-        if (permission !== 'granted') {
-            showMessage('❌ অনুমতি দেওয়া হয়নি', 'error');
-            return false;
-        }
-
-        var reg = await navigator.serviceWorker.ready;
-        var sub = await reg.pushManager.subscribe({
-            userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
-        });
-
-        var subData = sub.toJSON();
-        var deviceType = /Android/.test(navigator.userAgent) ? 'android' :
-                         /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'ios' : 'desktop';
-
-        var res = await fetch(SUPABASE_URL + '/rest/v1/push_subscriptions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'apikey': SUPABASE_KEY,
-                'Authorization': 'Bearer ' + SUPABASE_KEY,
-                'Prefer': 'resolution=merge-duplicates,return=minimal'
-            },
-            body: JSON.stringify({
-                endpoint: subData.endpoint,
-                p256dh: subData.keys.p256dh,
-                auth: subData.keys.auth,
-                user_agent: navigator.userAgent,
-                device_type: deviceType,
-                is_active: true
-            })
-        });
-
-        if (!res.ok) throw new Error('Save failed');
-
-        showMessage('🎉 নোটিফিকেশন চালু হয়েছে!', 'success');
-
-        setTimeout(function () {
-            if (reg.active) {
-                reg.showNotification('🎓 Fulbariya College', {
-                    body: 'নোটিফিকেশন সফলভাবে চালু হয়েছে! এখন থেকে নতুন নোটিশ পাবেন।',
-                    icon: '/assets/images/web-app-manifest-192x192.png',
-                    badge: '/assets/images/web-app-manifest-192x192.png',
-                    tag: 'welcome',
-                    vibrate: [200, 100, 200]
-                });
-            }
-        }, 1200);
-
-        return true;
-    }
-
-    // =========================================================
-    // UNSUBSCRIBE
-    // =========================================================
-    async function unsubscribe() {
-        var reg = await navigator.serviceWorker.ready;
-        var sub = await reg.pushManager.getSubscription();
-        if (sub) {
-            var endpoint = sub.endpoint;
-            await sub.unsubscribe();
-            await fetch(SUPABASE_URL + '/rest/v1/push_subscriptions?endpoint=eq.' + encodeURIComponent(endpoint), {
-                method: 'DELETE',
-                headers: {
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': 'Bearer ' + SUPABASE_KEY
-                }
-            });
-            showMessage('🔕 নোটিফিকেশন বন্ধ হয়েছে', 'info');
-        }
-    }
-
-    // =========================================================
-    // TOGGLE HANDLER
-    // =========================================================
-    async function handleToggle() {
-        if (isProcessing) return;
-        isProcessing = true;
-
-        var btn = document.getElementById('fdcNotifHeaderBtn');
-        if (btn) btn.style.opacity = '0.6';
-
-        try {
-            var currently = await isSubscribed();
-
-            if (currently) {
-                await unsubscribe();
-                setUI(false);
-            } else {
-                var ok = await subscribe();
-                setUI(ok);
-            }
-        } catch (err) {
-            console.error('Toggle error:', err);
-            showMessage('❌ সমস্যা: ' + err.message, 'error');
-            setUI(await isSubscribed());
-        } finally {
-            if (btn) btn.style.opacity = '1';
-            isProcessing = false;
-        }
-    }
-
-    // =========================================================
-    // INIT
-    // =========================================================
-    async function init() {
-        console.log('🔔 Header Notification Toggle initializing...');
-
-        if (!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)) {
-            console.log('❌ Notifications not supported');
-            return;
-        }
-
-        var btn = document.getElementById('fdcNotifHeaderBtn');
-        if (!btn) {
-            console.warn('❌ Header button not found — check HTML');
-            return;
-        }
-
-        // Check current state
-        var sub = await isSubscribed();
-        setUI(sub);
-
-        // Bind click
-        btn.addEventListener('click', handleToggle);
-
-        // Hover effect
-        btn.addEventListener('mouseenter', function () {
-            this.style.transform = 'scale(1.05)';
-            this.style.boxShadow = '0 6px 20px rgba(10,22,85,0.4)';
-        });
-        btn.addEventListener('mouseleave', function () {
-            this.style.transform = 'scale(1)';
-            this.style.boxShadow = 'none';
-        });
-
-        console.log('✅ Header Notification Toggle ready');
-        console.log('   Subscribed:', sub);
-    }
-
-    // =========================================================
-    // START
-    // =========================================================
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
 
+    console.log('✅ Notification permission system loaded');
 })();
-</script>            
+</script>
 </body>
 </html>
