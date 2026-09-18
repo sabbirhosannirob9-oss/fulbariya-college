@@ -4703,8 +4703,13 @@ function isDismissed() {
             applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
         });
         var subData = sub.toJSON();
-        var deviceType = /Android/.test(navigator.userAgent) ? 'android' :
-                         /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'ios' : 'desktop';
+        var ua = navigator.userAgent || '';
+var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+var isSmall = Math.min(window.screen.width, window.screen.height) <= 768;
+var isStandalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+var deviceType = /iPhone|iPad|iPod/i.test(ua) ? 'ios' :
+                 /Android/i.test(ua) ? 'android' :
+                 (isTouch && isSmall) ? 'android' : 'desktop';
         var res = await fetch(SUPABASE_URL + '/rest/v1/push_subscriptions', {
             method: 'POST',
             headers: {
