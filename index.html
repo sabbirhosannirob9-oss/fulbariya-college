@@ -2377,6 +2377,53 @@ img { max-width: 100%; display: block; }
     .fdc-install-text p { font-size: 11.5px; }
     .fdc-install-btn { font-size: 13px; padding: 10px 14px; }
 }
+ #fdcNotifHeaderBtn.on #fdcNotifHeaderSwitch {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+
+#fdcNotifHeaderBtn.on #fdcNotifHeaderKnob {
+    left: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3), 0 0 8px rgba(16,185,129,0.8);
+}
+
+/* =========================================================
+   MOBILE — Fixed Position (সবসময় দেখা যাবে)
+========================================================= */
+@media (max-width: 768px) {
+    #fdcNotifHeader {
+        position: fixed;
+        top: 72px;
+        right: 12px;
+        margin-right: 0;
+        z-index: 9999;
+    }
+    
+    #fdcNotifHeaderBtn {
+        padding: 6px 10px;
+        height: 36px;
+        gap: 5px;
+        box-shadow: 0 4px 16px rgba(10,22,85,0.35);
+    }
+    
+    #fdcNotifHeaderBell {
+        font-size: 14px;
+    }
+    
+    #fdcNotifHeaderSwitch {
+        width: 32px;
+        height: 19px;
+    }
+    
+    #fdcNotifHeaderKnob {
+        width: 15px;
+        height: 15px;
+    }
+    
+    #fdcNotifHeaderBtn.on #fdcNotifHeaderKnob {
+        left: 15px;
+    }
+}
+
 /* =========================================================
    HEADER NOTIFICATION TOGGLE
 ========================================================= */
@@ -2386,7 +2433,6 @@ img { max-width: 100%; display: block; }
     margin-right: 8px;
     flex-shrink: 0;
 }
-
 #fdcNotifHeaderBtn {
     position: relative;
     display: inline-flex;
@@ -2401,12 +2447,10 @@ img { max-width: 100%; display: block; }
     font-family: inherit;
     height: 38px;
 }
-
 #fdcNotifHeaderBtn:hover {
     transform: scale(1.05);
     box-shadow: 0 6px 20px rgba(10,22,85,0.4);
 }
-
 #fdcNotifHeaderBell {
     font-size: 15px;
     line-height: 1;
@@ -2414,13 +2458,11 @@ img { max-width: 100%; display: block; }
     opacity: 0.7;
     transition: all 0.3s ease;
 }
-
 #fdcNotifHeaderBtn.on #fdcNotifHeaderBell {
     filter: grayscale(0);
     opacity: 1;
     animation: fdcBellShake 2s ease-in-out infinite;
 }
-
 @keyframes fdcBellShake {
     0%, 85%, 100% { transform: rotate(0deg); }
     88% { transform: rotate(-12deg); }
@@ -2428,7 +2470,6 @@ img { max-width: 100%; display: block; }
     94% { transform: rotate(-8deg); }
     97% { transform: rotate(8deg); }
 }
-
 #fdcNotifHeaderSwitch {
     position: relative;
     width: 34px;
@@ -2439,7 +2480,6 @@ img { max-width: 100%; display: block; }
     display: inline-block;
     flex-shrink: 0;
 }
-
 #fdcNotifHeaderKnob {
     position: absolute;
     top: 2px;
@@ -2451,26 +2491,35 @@ img { max-width: 100%; display: block; }
     box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 #fdcNotifHeaderBtn.on #fdcNotifHeaderSwitch {
     background: linear-gradient(135deg, #10b981, #059669);
 }
-
 #fdcNotifHeaderBtn.on #fdcNotifHeaderKnob {
     left: 16px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.3), 0 0 8px rgba(16,185,129,0.8);
 }
-
 @media (max-width: 768px) {
-    #fdcNotifHeader { margin-right: 4px; }
-    #fdcNotifHeaderBtn { padding: 5px 8px; height: 34px; gap: 4px; }
-    #fdcNotifHeaderBell { font-size: 13px; }
-    #fdcNotifHeaderSwitch { width: 30px; height: 18px; }
-    #fdcNotifHeaderKnob { width: 14px; height: 14px; }
-    #fdcNotifHeaderBtn.on #fdcNotifHeaderKnob { left: 14px; }
+    #fdcNotifHeader {
+        position: fixed;
+        top: 72px;
+        right: 12px;
+        margin-right: 0;
+        z-index: 9999;
+    }
+    #fdcNotifHeaderBtn {
+        padding: 6px 10px;
+        height: 36px;
+        gap: 5px;
+        box-shadow: 0 4px 16px rgba(10,22,85,0.35);
+    }
+    #fdcNotifHeaderBell { font-size: 14px; }
+    #fdcNotifHeaderSwitch { width: 32px; height: 19px; }
+    #fdcNotifHeaderKnob { width: 15px; height: 15px; }
+    #fdcNotifHeaderBtn.on #fdcNotifHeaderKnob { left: 15px; }
 }
 
-  </style>
+ 
+  \n/* =========================================================\n   PREMIUM UI REFINEMENT — SAFE VISUAL OVERRIDES\n   Existing Supabase / Cloudinary / JS structure preserved.\n========================================================= */\n\n/* Header notification: compact, premium and naturally placed */\n.main-header .container-custom {\n    display:flex;\n    align-items:center;\n}\n#fdcNotifHeader {\n    display:inline-flex !important;\n    align-items:center;\n    justify-content:center;\n    margin-left:12px;\n    margin-right:8px;\n    position:relative !important;\n    top:auto !important;\n    right:auto !important;\n    z-index:20;\n}\n#fdcNotifHeaderBtn {\n    min-width:76px;\n    height:40px;\n    padding:5px 7px 5px 9px;\n    border:1px solid rgba(242,210,123,.34);\n    border-radius:999px;\n    background:linear-gradient(145deg,#07113f,#111f69);\n    box-shadow:0 8px 22px rgba(10,22,85,.18), inset 0 1px 0 rgba(255,255,255,.08);\n}\n#fdcNotifHeaderBtn::after {\n    content:'নোটিফিকেশন';\n    font-size:10px;\n    font-weight:700;\n    color:rgba(255,255,255,.78);\n    white-space:nowrap;\n    letter-spacing:.1px;\n}\n#fdcNotifHeaderBell {\n    width:24px; height:24px;\n    display:inline-flex; align-items:center; justify-content:center;\n    font-size:14px;\n    border-radius:50%;\n    background:rgba(242,210,123,.10);\n}\n#fdcNotifHeaderSwitch {\n    width:34px !important; height:19px !important;\n    background:rgba(255,255,255,.16) !important;\n    border:1px solid rgba(255,255,255,.12);\n}\n#fdcNotifHeaderKnob {\n    width:15px !important; height:15px !important;\n    top:1px !important; left:1px !important;\n}\n#fdcNotifHeaderBtn.on {\n    border-color:rgba(16,185,129,.45);\n    box-shadow:0 8px 24px rgba(16,185,129,.16), inset 0 1px 0 rgba(255,255,255,.08);\n}\n#fdcNotifHeaderBtn.on::after { color:#d1fae5; }\n#fdcNotifHeaderBtn.on #fdcNotifHeaderKnob { left:17px !important; }\n\n/* Service/quick cards */\n.quick-cards-section {\n    background:linear-gradient(180deg,#fff 0%,#f8f9fc 100%);\n}\n.quick-cards-grid {\n    grid-template-columns:repeat(4,minmax(0,1fr));\n    gap:18px;\n}\n.quick-card {\n    min-height:235px;\n    padding:26px 23px 22px;\n    border-radius:22px;\n    border:1px solid rgba(10,22,85,.08);\n    box-shadow:0 10px 28px rgba(10,22,85,.08);\n    isolation:isolate;\n}\n.quick-card::after {\n    content:''; position:absolute; left:20px; right:20px; bottom:0; height:3px;\n    background:linear-gradient(90deg,transparent,var(--gold),transparent);\n    opacity:.7;\n}\n.quick-card-icon {\n    width:54px; height:54px; border-radius:16px;\n    margin-bottom:17px;\n}\n.quick-card h3 { font-size:18px; line-height:1.45; }\n.quick-card p { min-height:43px; }\n\n/* Principal: centered editorial card on every device */\n.principal-section {\n    padding:76px 0;\n    background:linear-gradient(180deg,#f7f8fb 0%,#eef1f7 100%);\n}\n.principal-grid {\n    display:flex !important;\n    flex-direction:column;\n    align-items:center;\n    justify-content:center;\n    gap:0;\n    max-width:860px;\n    margin:0 auto;\n    padding:0 18px;\n}\n.principal-image-wrap {\n    width:220px !important;\n    max-width:220px !important;\n    margin:0 auto -48px !important;\n    z-index:3;\n}\n.principal-image-wrap img {\n    width:220px !important; height:275px !important;\n    border-radius:28px;\n    border:7px solid #fff;\n    box-shadow:0 18px 48px rgba(10,22,85,.18);\n}\n.principal-image-wrap::after {\n    inset:8px -12px -12px 12px;\n    border-width:2px;\n    border-radius:28px;\n}\n.principal-content {\n    width:100%; max-width:760px;\n    background:rgba(255,255,255,.96);\n    border:1px solid rgba(10,22,85,.08);\n    border-radius:30px;\n    padding:72px 54px 42px;\n    text-align:center;\n    box-shadow:0 22px 60px rgba(10,22,85,.10);\n    position:relative;\n}\n.principal-content::before {\n    content:'অধ্যক্ষের বাণী';\n    position:absolute; top:20px; left:50%; transform:translateX(-50%);\n    padding:5px 14px; border-radius:999px;\n    background:rgba(10,22,85,.06); color:var(--gold-2);\n    font-size:11px; font-weight:700; letter-spacing:.5px;\n}\n.principal-content h2 { font-size:30px; margin-bottom:4px; }\n.principal-content .designation { margin-bottom:18px; }\n.principal-content .quote {\n    max-width:650px; margin:0 auto 24px;\n    padding:18px 24px;\n    border-left:0; border-top:1px solid rgba(242,210,123,.55); border-bottom:1px solid rgba(242,210,123,.55);\n    background:linear-gradient(90deg,rgba(242,210,123,.04),rgba(242,210,123,.12),rgba(242,210,123,.04));\n    border-radius:14px;\n    text-align:center;\n}\n.principal-content .principal-actions { justify-content:center; }\n\n/* Department heads: refined continuous showcase */\n.dept-heads-section {\n    padding:78px 0 70px;\n    background:#fff;\n}\n.dept-slider-viewport {\n    padding:28px 0 48px;\n    mask-image:linear-gradient(90deg,transparent 0%,#000 9%,#000 91%,transparent 100%);\n    -webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 9%,#000 91%,transparent 100%);\n}\n.dept-slider { gap:20px; }\n.dept-card {\n    flex-basis:270px;\n    border-radius:24px;\n    border:1px solid rgba(10,22,85,.09);\n    box-shadow:0 12px 32px rgba(10,22,85,.09);\n    background:linear-gradient(180deg,#fff,#fbfcfe);\n}\n.dept-card::before { height:4px; opacity:1; }\n.dept-card .dept-img {\n    height:285px;\n    object-fit:contain;\n    object-position:center bottom;\n    background:linear-gradient(180deg,#f6f8fc,#fff);\n    padding:10px 10px 0;\n    box-sizing:border-box;\n}\n.dept-card .dept-info { padding:18px 17px 21px; }\n.dept-card .dept-info h4 { font-size:17px; }\n.dept-card .dept-info .dept-designation {\n    display:inline-block; padding:4px 9px; border-radius:999px;\n    background:rgba(242,210,123,.13);\n}\n.dept-card .dept-info .dept-department { font-size:13px; font-weight:600; }\n\n/* Common card polish for notice/news/gallery areas without changing their data */\n.notice-item, .news-card, .gallery-item, .important-link, .counter-glass {\n    border-color:rgba(10,22,85,.09);\n}\n.notice-item, .news-card, .gallery-item {\n    box-shadow:0 10px 28px rgba(10,22,85,.07);\n}\n.news-card, .gallery-item { border-radius:20px; overflow:hidden; }\n\n/* Responsive */\n@media (max-width:1100px) {\n    .quick-cards-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }\n    #fdcNotifHeaderBtn::after { display:none; }\n    #fdcNotifHeaderBtn { min-width:44px; width:44px; padding:5px; justify-content:center; }\n}\n@media (max-width:768px) {\n    #fdcNotifHeader { margin-left:5px; margin-right:4px; }\n    #fdcNotifHeaderBtn { width:43px; min-width:43px; height:38px; }\n    #fdcNotifHeaderSwitch { display:none !important; }\n    #fdcNotifHeaderBtn.on #fdcNotifHeaderBell { background:rgba(16,185,129,.18); }\n    .quick-cards-grid { grid-template-columns:1fr; gap:14px; }\n    .quick-card { min-height:auto; padding:23px 21px; }\n    .principal-section { padding:58px 0; }\n    .principal-grid { padding:0 12px; }\n    .principal-image-wrap { width:190px !important; max-width:190px !important; margin-bottom:-40px !important; }\n    .principal-image-wrap img { width:190px !important; height:238px !important; border-width:6px; }\n    .principal-content { padding:62px 20px 28px; border-radius:24px; }\n    .principal-content h2 { font-size:24px; }\n    .principal-content .quote { font-size:14px; padding:16px 14px; }\n    .principal-content .principal-actions { gap:9px; }\n    .btn-navy, .btn-outline-navy { padding:10px 17px; font-size:13px; }\n    .dept-heads-section { padding:58px 0 50px; }\n    .dept-card { flex-basis:245px; }\n    .dept-card .dept-img { height:260px; }\n}\n@media (max-width:480px) {\n    #fdcNotifHeader { margin-left:2px; }\n    #fdcNotifHeaderBtn { width:40px; min-width:40px; height:36px; }\n    #fdcNotifHeaderBell { width:22px; height:22px; font-size:13px; }\n    .principal-grid { padding:0 10px; }\n    .principal-image-wrap { width:170px !important; max-width:170px !important; }\n    .principal-image-wrap img { width:170px !important; height:215px !important; }\n    .principal-content { padding:57px 15px 24px; }\n    .principal-content h2 { font-size:22px; }\n    .principal-content .principal-actions { flex-direction:column; align-items:center; }\n    .principal-content .principal-actions > * { width:100%; justify-content:center; box-sizing:border-box; }\n    .dept-card { flex-basis:230px; }\n    .dept-card .dept-img { height:245px; }\n}\n</style>
  </head>
 <body>
 
@@ -2517,7 +2566,7 @@ img { max-width: 100%; display: block; }
                 <i class="fas fa-user-shield"></i> Admin
             </a>
         </nav>
- <!-- Notification Toggle in Header -->
+  <!-- Notification Toggle -->
 <div id="fdcNotifHeader">
     <button id="fdcNotifHeaderBtn" type="button" title="Notification চালু করুন">
         <span id="fdcNotifHeaderBell">🔔</span>
@@ -4394,31 +4443,27 @@ img { max-width: 100%; display: block; }
     "use strict";
 
     var deferredPrompt = null;
-    var bannerShown = false;
-    var DISMISS_KEY = 'fdc_install_dismissed';
-    var DISMISS_DAYS = 7;
+var bannerShown = false;
+var DISMISS_KEY = 'fdc_install_dismissed_session';
+// DISMISS_DAYS আর লাগবে না
 
     function isStandalone() {
         return window.matchMedia('(display-mode: standalone)').matches ||
                window.navigator.standalone === true;
     }
 
-    function isDismissed() {
-        try {
-            var dismissedAt = localStorage.getItem(DISMISS_KEY);
-            if (!dismissedAt) return false;
-            var daysSince = (Date.now() - parseInt(dismissedAt)) / (1000 * 60 * 60 * 24);
-            return daysSince < DISMISS_DAYS;
-        } catch (e) {
-            return false;
-        }
+function isDismissed() {
+    try {
+        return sessionStorage.getItem(DISMISS_KEY) === '1';
+    } catch (e) {
+        return false;
     }
-
+}
     function dismissBanner() {
-        try {
-            localStorage.setItem(DISMISS_KEY, Date.now().toString());
-        } catch (e) {}
-    }
+    try {
+        sessionStorage.setItem(DISMISS_KEY, '1');
+    } catch (e) {}
+}
 
     function createBanner() {
         var banner = document.createElement('div');
@@ -4590,7 +4635,6 @@ img { max-width: 100%; display: block; }
     var VAPID_PUBLIC_KEY = 'BJLtmD01qS8YK8UVXx6CreCDDsTd4HUtuhFZBsodmHTwDwIJUz358mOUNYAOdHGr18Ozea7-9Y5whyuRfbhYjvY';
     var SUPABASE_URL = 'https://dpbbsfppjmgvzsopmdww.supabase.co';
     var SUPABASE_KEY = 'sb_publishable_O0gApiitS1P9graqe1cjKA_f8KJRUD5';
-
     var isProcessing = false;
 
     function urlBase64ToUint8Array(base64String) {
@@ -4606,16 +4650,13 @@ img { max-width: 100%; display: block; }
 
     function setUI(isOn) {
         var btn = document.getElementById('fdcNotifHeaderBtn');
-        var bell = document.getElementById('fdcNotifHeaderBell');
-        var sw = document.getElementById('fdcNotifHeaderSwitch');
-        var knob = document.getElementById('fdcNotifHeaderKnob');
         if (!btn) return;
         if (isOn) {
-            btn.title = 'Notification বন্ধ করুন';
             btn.classList.add('on');
+            btn.title = 'Notification বন্ধ করুন';
         } else {
-            btn.title = 'Notification চালু করুন';
             btn.classList.remove('on');
+            btn.title = 'Notification চালু করুন';
         }
     }
 
@@ -4657,17 +4698,14 @@ img { max-width: 100%; display: block; }
             showMessage('❌ অনুমতি দেওয়া হয়নি', 'error');
             return false;
         }
-
         var reg = await navigator.serviceWorker.ready;
         var sub = await reg.pushManager.subscribe({
             userVisibleOnly: true,
             applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
         });
-
         var subData = sub.toJSON();
         var deviceType = /Android/.test(navigator.userAgent) ? 'android' :
                          /iPhone|iPad|iPod/.test(navigator.userAgent) ? 'ios' : 'desktop';
-
         var res = await fetch(SUPABASE_URL + '/rest/v1/push_subscriptions', {
             method: 'POST',
             headers: {
@@ -4685,11 +4723,8 @@ img { max-width: 100%; display: block; }
                 is_active: true
             })
         });
-
         if (!res.ok) throw new Error('Save failed');
-
         showMessage('🎉 নোটিফিকেশন চালু হয়েছে!', 'success');
-
         setTimeout(function () {
             if (reg.active) {
                 reg.showNotification('🎓 Fulbariya College', {
@@ -4700,7 +4735,6 @@ img { max-width: 100%; display: block; }
                 });
             }
         }, 1200);
-
         return true;
     }
 
@@ -4768,7 +4802,6 @@ img { max-width: 100%; display: block; }
     }
 
 })();
-</script>                
-        
+</script>
 </body>
 </html>
