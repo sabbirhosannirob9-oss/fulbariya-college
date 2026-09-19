@@ -2,16 +2,106 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN STUDENTS MANAGEMENT
  * Location: js/admin-students.js
- * Version: v9 — Smart Bulk Import + Session Copy Fix
+ * Version: v10 — Correct Subject Handling
  * Depends: config.js, supabase.js, auth.js, admin-popup.js
  * 
  * ⚠️ SESSION POLICY (Bangladesh HSC):
- *    Session = ভর্তির বছর (Admission Year) — কখনো বদলায় না।
+ *    Session = ভর্তির বছর — কখনো বদলায় না।
+ * 
+ * ✅ SUBJECT STRUCTURE:
+ *    HSC Compulsory (সব): বাংলা, English, ICT
+ *    Science: পদার্থ+রসায়ন fixed, 3rd choice (জীব/গণিত), 4th = বাকি
+ *    Business: 3 select from 8, 4th = বাকি
+ *    Humanities: 3 select from 7, 4th = বাকি
+ *    BMT: 8 fixed compulsory
  * =========================================================
  */
 
 (function () {
     "use strict";
+
+    // =========================================================
+    // SUBJECT STRUCTURE — Bangladesh HSC Standard
+    // =========================================================
+    const SUBJECT_STRUCTURE = {
+        HSC: {
+            // সব HSC group-এ same compulsory
+            globalCompulsory: ['বাংলা', 'English', 'ICT'],
+
+            Science: {
+                type: 'fixed_choice',  // Fixed 2 + Choice 1
+                fixedMain: ['পদার্থবিজ্ঞান', 'রসায়ন'],
+                choiceMain: ['জীববিজ্ঞান', 'উচ্চতর গণিত'],
+                mainCount: 3,
+                fourthPool: [
+                    'জীববিজ্ঞান', 'উচ্চতর গণিত', 'কৃষিশিক্ষা',
+                    'পরিসংখ্যান', 'প্রকৌশল অঙ্কন ও ওয়ার্কশপ প্র্যাকটিস',
+                    'ভূগোল', 'মনোবিজ্ঞান'
+                ],
+                hasFourth: true
+            },
+
+            Business: {
+                type: 'select_3',  // 3 select from pool
+                mainPool: [
+                    'হিসাববিজ্ঞান',
+                    'ব্যবসায় সংগঠন ও ব্যবস্থাপনা',
+                    'উৎপাদন ব্যবস্থাপনা ও বিপণন',
+                    'অর্থনীতি',
+                    'ফিন্যান্স, ব্যাংকিং ও বিমা',
+                    'পরিসংখ্যান',
+                    'কৃষিশিক্ষা',
+                    'ভূগোল'
+                ],
+                mainCount: 3,
+                fourthPool: [
+                    'অর্থনীতি', 'কৃষিশিক্ষা', 'পরিসংখ্যান',
+                    'ফিন্যান্স, ব্যাংকিং ও বিমা', 'ভূগোল',
+                    'হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা',
+                    'উৎপাদন ব্যবস্থাপনা ও বিপণন'
+                ],
+                hasFourth: true
+            },
+
+            Humanities: {
+                type: 'select_3',
+                mainPool: [
+                    'পৌরনীতি ও সুশাসন',
+                    'অর্থনীতি',
+                    'যুক্তিবিদ্যা',
+                    'ইসলামের ইতিহাস ও সংস্কৃতি',
+                    'ইসলাম শিক্ষা',
+                    'ইতিহাস',
+                    'সমাজবিজ্ঞান',
+                    'সমাজকর্ম'
+                ],
+                mainCount: 3,
+                fourthPool: [
+                    'পৌরনীতি ও সুশাসন', 'অর্থনীতি', 'যুক্তিবিদ্যা',
+                    'ইসলামের ইতিহাস ও সংস্কৃতি', 'ইসলাম শিক্ষা', 'ইতিহাস',
+                    'সমাজবিজ্ঞান', 'সমাজকর্ম', 'কৃষিশিক্ষা',
+                    'পরিসংখ্যান', 'ভূগোল'
+                ],
+                hasFourth: true
+            }
+        },
+
+        BM: {
+            'BM-General': {
+                type: 'all_fixed',
+                mainFixed: [
+                    'বাংলা-১', 'ইংরেজি-১', 'কম্পিউটার অফিস অ্যাপ্লিকেশন-১',
+                    'বিজনেস ম্যাথমেটিক্স অ্যান্ড স্ট্যাটিস্টিকস',
+                    'হিসাববিজ্ঞান নীতি ও প্রয়োগ-১',
+                    'অর্থনীতি ও বাণিজ্যিক ভূগোল',
+                    'ব্যবসায় সংগঠন ও ব্যবস্থাপনা-১',
+                    'মার্কেটিং নীতি ও প্রয়োগ-১'
+                ],
+                mainCount: 8,
+                hasFourth: false
+            }
+        }
+    };
 
     // =========================================================
     // STATE
@@ -22,12 +112,6 @@
     const PAGE_SIZE = 20;
 
     let editingStudentId = null;
-    let selectedGroupSubjects = [];
-    let selectedOptionalSubject = null;
-
-    let currentGroupSubjects = [];
-    let currentOptionalSubjects = [];
-    let currentCompulsorySubjects = [];
 
     // Bulk import state
     let bulkState = {
@@ -37,69 +121,15 @@
             session: '',
             branch: '',
             group: '',
-            compulsory: [],
-            mainChoices: [],
-            fourthSubject: ''
+            mainSelected: [],       // Main subject names
+            fourthSubject: ''       // Default 4th
         },
-        students: [],
+        allSubjects: [],            // All subjects from DB for this class/branch/group
+        compulsorySubjects: [],     // Compulsory subjects (বাংলা, English, ICT)
+        mainSubjects: [],           // Main subjects available
+        fourthSubjects: [],         // 4th subject options
+        students: [],               // Parsed students
         previewValid: false
-    };
-
-    // =========================================================
-    // SUBJECT MAP — Group-wise rules
-    // =========================================================
-    const BULK_SUBJECT_MAP = {
-        HSC: {
-            Science: {
-                compulsory: ['পদার্থবিজ্ঞান', 'রসায়ন'],
-                choices: [
-                    'জীববিজ্ঞান',
-                    'উচ্চতর গণিত',
-                    'কৃষিশিক্ষা',
-                    'পরিসংখ্যান',
-                    'প্রকৌশল অঙ্কন ও ওয়ার্কশপ প্র্যাকটিস',
-                    'ভূগোল',
-                    'মনোবিজ্ঞান'
-                ],
-                rules: { mainCount: 3, optionalCount: 1, minCompulsory: 2, choiceType: 'radio' }
-            },
-            Business: {
-                compulsory: ['হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা', 'উৎপাদন ব্যবস্থাপনা ও বিপণন'],
-                choices: ['ফিন্যান্স, ব্যাংকিং ও বিমা', 'অর্থনীতি', 'কৃষিশিক্ষা', 'পরিসংখ্যান', 'ভূগোল'],
-                rules: { mainCount: 3, optionalCount: 1, minCompulsory: 3, choiceType: 'none' }
-            },
-            Humanities: {
-                compulsory: [],
-                choices: [
-                    'পৌরনীতি ও সুশাসন',
-                    'অর্থনীতি',
-                    'যুক্তিবিদ্যা',
-                    'ইসলামের ইতিহাস ও সংস্কৃতি',
-                    'ইসলাম শিক্ষা',
-                    'ইতিহাস',
-                    'সমাজবিজ্ঞান',
-                    'সমাজকর্ম',
-                    'ভূগোল',
-                    'কৃষিশিক্ষা',
-                    'পরিসংখ্যান'
-                ],
-                rules: { mainCount: 3, optionalCount: 1, minCompulsory: 0, choiceType: 'checkbox' }
-            }
-        },
-        BM: {
-            'BM-General': {
-                compulsory: [
-                    'বাংলা-১', 'ইংরেজি-১', 'কম্পিউটার অফিস অ্যাপ্লিকেশন-১',
-                    'বিজনেস ম্যাথমেটিক্স অ্যান্ড স্ট্যাটিস্টিকস',
-                    'হিসাববিজ্ঞান নীতি ও প্রয়োগ-১',
-                    'অর্থনীতি ও বাণিজ্যিক ভূগোল',
-                    'ব্যবসায় সংগঠন ও ব্যবস্থাপনা-১',
-                    'মার্কেটিং নীতি ও প্রয়োগ-১'
-                ],
-                choices: [],
-                rules: { mainCount: 8, optionalCount: 0, minCompulsory: 8, choiceType: 'none' }
-            }
-        }
     };
 
     // =========================================================
@@ -186,21 +216,18 @@
         const years = [];
         for (let i = -2; i <= 2; i++) years.push(currentYear + i);
 
-        ['filterYear', 'studentYear', 'bulkYear', 'copyFromYear', 'copyToYear'].forEach(id => {
+        ['filterYear', 'studentYear', 'bulkYear'].forEach(id => {
             const el = $(id);
-            if (el) {
-                el.innerHTML = '';
-                if (id === 'filterYear') {
-                    el.insertAdjacentHTML('beforeend', '<option value="">All Years</option>');
-                } else if (id === 'studentYear' || id === 'bulkYear') {
-                    // No default option
-                } else {
-                    el.insertAdjacentHTML('beforeend', '<option value="">Select</option>');
-                }
-                years.forEach(y => {
-                    el.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
-                });
+            if (!el) return;
+            el.innerHTML = '';
+            if (id === 'filterYear') {
+                el.insertAdjacentHTML('beforeend', '<option value="">All Years</option>');
+            } else {
+                el.insertAdjacentHTML('beforeend', '<option value="">Select Year</option>');
             }
+            years.forEach(y => {
+                el.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
+            });
         });
     }
 
@@ -357,14 +384,10 @@
     // PAGINATION
     // =========================================================
     function renderPagination(totalPages, start, end) {
-        $('paginationInfo').textContent =
-            `Showing ${start + 1}–${end} of ${filteredStudents.length}`;
-
+        $('paginationInfo').textContent = `Showing ${start + 1}–${end} of ${filteredStudents.length}`;
         const btns = $('paginationBtns');
         let html = '';
-        html += `<button class="page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}>
-            <i class="fas fa-chevron-left"></i>
-        </button>`;
+        html += `<button class="page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
 
         const maxBtns = 5;
         let startPage = Math.max(1, currentPage - 2);
@@ -375,20 +398,14 @@
             html += `<button class="page-btn" data-page="1">1</button>`;
             if (startPage > 2) html += `<button class="page-btn" disabled>...</button>`;
         }
-
         for (let i = startPage; i <= endPage; i++) {
             html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
         }
-
         if (endPage < totalPages) {
             if (endPage < totalPages - 1) html += `<button class="page-btn" disabled>...</button>`;
             html += `<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`;
         }
-
-        html += `<button class="page-btn" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}>
-            <i class="fas fa-chevron-right"></i>
-        </button>`;
-
+        html += `<button class="page-btn" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
         btns.innerHTML = html;
     }
 
@@ -408,13 +425,10 @@
     }
 
     // =========================================================
-    // SINGLE STUDENT ADD/EDIT — (Simplified for brevity, uses same as before)
+    // SINGLE STUDENT ADD
     // =========================================================
     function openAddStudentModal() {
         editingStudentId = null;
-        selectedGroupSubjects = [];
-        selectedOptionalSubject = null;
-
         $('editStudentId').value = '';
         $('studentModalTitle').textContent = 'Add New Student';
         $('studentModalSub').textContent = 'ছাত্র-ছাত্রীর তথ্য পূরণ করুন';
@@ -429,26 +443,20 @@
         $('studentBranch').value = '';
         $('studentGroup').innerHTML = '<option value="">Select Group</option>';
         $('groupFieldWrap').style.display = 'none';
-        $('subjectsSection').style.display = 'none';
 
         openModal('studentModal');
     }
 
-    // Edit student - keep existing logic
+    // =========================================================
+    // EDIT STUDENT
+    // =========================================================
     window.openEditStudentModal = async function (id) {
         try {
             const { data: student, error } = await window.FDC_SUPABASE
                 .from('students').select('*').eq('id', id).single();
             if (error) throw error;
 
-            const { data: selectedSubs } = await window.FDC_SUPABASE
-                .from('student_subjects')
-                .select('subject_id, subject_type')
-                .eq('student_id', id)
-                .eq('is_active', true);
-
             editingStudentId = id;
-
             $('editStudentId').value = id;
             $('studentModalTitle').textContent = 'Edit Student';
             $('studentModalSub').textContent = student.name;
@@ -470,8 +478,6 @@
                 $('groupFieldWrap').style.display = 'none';
             }
 
-            $('subjectsSection').style.display = 'none'; // Disable subject editing from here
-
             openModal('studentModal');
         } catch (e) {
             console.error('Edit student error:', e);
@@ -480,7 +486,7 @@
     };
 
     // =========================================================
-    // SAVE STUDENT — (Session fix applied)
+    // SAVE STUDENT
     // =========================================================
     async function saveStudent() {
         const name = $('studentName').value.trim();
@@ -542,7 +548,7 @@
     }
 
     // =========================================================
-    // TOGGLE / DELETE / VIEW — (Keep existing)
+    // TOGGLE / DELETE / VIEW
     // =========================================================
     window.toggleStudent = async function (id) {
         const s = allStudents.find(x => String(x.id) === String(id));
@@ -608,7 +614,7 @@
                     </div>
                 </div>
                 <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-light);">
-                    <div style="font-size:11px;color:var(--grey);text-transform:uppercase;font-weight:700;margin-bottom:8px;">Subjects</div>
+                    <div style="font-size:11px;color:var(--grey);text-transform:uppercase;font-weight:700;margin-bottom:8px;">Subjects (${(subs || []).length})</div>
                     <div style="margin-bottom:12px;"><div style="font-size:12px;color:var(--navy);font-weight:700;margin-bottom:4px;">📌 আবশ্যিক</div>${renderList(compSubs)}</div>
                     <div style="margin-bottom:12px;"><div style="font-size:12px;color:var(--navy);font-weight:700;margin-bottom:4px;">📚 গ্রুপের</div>${renderList(grpSubs)}</div>
                     <div><div style="font-size:12px;color:var(--navy);font-weight:700;margin-bottom:4px;">🎯 ঐচ্ছিক</div>${renderList(optSubs)}</div>
@@ -620,16 +626,21 @@
     };
 
     // =========================================================
-    // ★★★ BULK IMPORT SYSTEM ★★★
+    // =========================================================
+    // ★★★ BULK IMPORT — SMART SYSTEM ★★★
+    // =========================================================
     // =========================================================
 
-    // Reset Modal
     function resetBulkModal() {
         bulkState = {
             config: {
                 class_name: '', year: '', session: '', branch: '', group: '',
-                compulsory: [], mainChoices: [], fourthSubject: ''
+                mainSelected: [], fourthSubject: ''
             },
+            allSubjects: [],
+            compulsorySubjects: [],
+            mainSubjects: [],
+            fourthSubjects: [],
             students: [],
             previewValid: false
         };
@@ -644,30 +655,28 @@
         $('bulkRangeStart').value = '';
         $('bulkRangeEnd').value = '';
 
-        $('bulkMainSubjectsStep').style.display = 'none';
-        $('bulk4thSubjectStep').style.display = 'none';
+        $('bulkCompulsoryStep').style.display = 'none';
+        $('bulkMainStep').style.display = 'none';
+        $('bulkFourthStep').style.display = 'none';
         $('bulkStudentsStep').style.display = 'none';
         $('bulkSummary').style.display = 'none';
         $('bulkPreview').style.display = 'none';
         $('saveBulkBtn').disabled = true;
     }
 
-    // Year change
     function onBulkYearChange() {
         const year = $('bulkYear').value;
-        $('bulkSession').value = getSessionFromYear(year);
         bulkState.config.year = year;
         bulkState.config.session = getSessionFromYear(year);
+        $('bulkSession').value = bulkState.config.session;
         updateBulkSummary();
     }
 
-    // Class change
     function onBulkClassChange() {
         bulkState.config.class_name = $('bulkClass').value;
         updateBulkSummary();
     }
 
-    // Branch change
     async function onBulkBranchChange() {
         const branch = $('bulkBranch').value;
         bulkState.config.branch = branch;
@@ -704,172 +713,364 @@
         } catch (e) { console.error('Load groups error:', e); }
     }
 
-    // Group change — Render subjects
+    // =========================================================
+    // ON GROUP CHANGE — Render Subject UI
+    // =========================================================
     async function onBulkGroupChange() {
         const branch = $('bulkBranch').value;
         const group = $('bulkGroup').value;
+        const className = $('bulkClass').value;
+
         bulkState.config.group = group;
 
-        if (!branch || !group) {
+        if (!branch || !group || !className) {
             resetBulkSubjectsUI();
             return;
         }
 
-        const config = BULK_SUBJECT_MAP[branch]?.[group];
-        if (!config) {
-            alert('এই group-এর config পাওয়া যায়নি।');
-            return;
+        // Load ALL subjects for this class+branch+group
+        try {
+            const { data: subjects, error } = await window.FDC_SUPABASE
+                .from('subjects')
+                .select('*')
+                .eq('branch', branch)
+                .eq('class_name', className)
+                .eq('is_active', true)
+                .order('subject_name')
+                .order('paper_number');
+
+            if (error) throw error;
+
+            bulkState.allSubjects = subjects || [];
+
+            // Categorize
+            categorizeSubjects(branch, group);
+
+            // Render UI
+            renderBulkCompulsory();
+            renderBulkMainSelection(branch, group);
+            renderBulkFourthSubject(branch, group);
+
+            // Show steps
+            $('bulkCompulsoryStep').style.display = 'block';
+            $('bulkMainStep').style.display = 'block';
+            if (bulkState.config.hasFourth !== false) {
+                $('bulkFourthStep').style.display = 'block';
+            }
+            $('bulkStudentsStep').style.display = 'block';
+
+            updateBulkSummary();
+        } catch (e) {
+            console.error('Load subjects error:', e);
+            alert('Subject load failed: ' + e.message);
         }
-
-        bulkState.config.compulsory = [...config.compulsory];
-        bulkState.config.mainChoices = [];
-
-        renderBulkCompulsory(config.compulsory);
-        renderBulkMainChoices(config, group);
-
-        $('bulkMainSubjectsStep').style.display = 'block';
-        $('bulkStudentsStep').style.display = 'block';
-
-        updateBulkSummary();
     }
 
     function resetBulkSubjectsUI() {
-        $('bulkMainSubjectsStep').style.display = 'none';
-        $('bulk4thSubjectStep').style.display = 'none';
+        $('bulkCompulsoryStep').style.display = 'none';
+        $('bulkMainStep').style.display = 'none';
+        $('bulkFourthStep').style.display = 'none';
+        $('bulkStudentsStep').style.display = 'none';
         $('bulkSummary').style.display = 'none';
         $('bulkPreview').style.display = 'none';
         $('saveBulkBtn').disabled = true;
-        bulkState.config.compulsory = [];
-        bulkState.config.mainChoices = [];
+
+        bulkState.config.mainSelected = [];
         bulkState.config.fourthSubject = '';
+        bulkState.compulsorySubjects = [];
+        bulkState.mainSubjects = [];
+        bulkState.fourthSubjects = [];
     }
 
-    function renderBulkCompulsory(compulsory) {
-        const el = $('bulkCompulsoryChips');
-        if (compulsory.length === 0) {
-            el.innerHTML = '<div style="color:var(--grey);font-size:12px;">কোনো compulsory subject নেই — নিজে select করুন।</div>';
-            return;
-        }
-        el.innerHTML = compulsory.map(s =>
-            `<span class="chip"><i class="fas fa-check-circle"></i> ${escapeHtml(s)}</span>`
-        ).join('');
-    }
+    // =========================================================
+    // CATEGORIZE SUBJECTS (by book name)
+    // =========================================================
+    function categorizeSubjects(branch, group) {
+        const all = bulkState.allSubjects;
+        const structure = SUBJECT_STRUCTURE[branch]?.[group];
 
-    function renderBulkMainChoices(config, group) {
-        const container = $('bulkMainChoiceList');
-        const title = $('bulkMainChoiceTitle');
-        const remaining = config.rules.mainCount - config.compulsory.length;
-
-        if (group === 'Humanities') {
-            title.innerHTML = `<i class="fas fa-layer-group"></i> Main Subjects (৩টি select করুন)`;
-        } else if (group === 'Science') {
-            title.innerHTML = `<i class="fas fa-layer-group"></i> 3rd Main Subject (১টি select করুন)`;
-        } else if (group === 'Business') {
-            title.innerHTML = `<i class="fas fa-layer-group"></i> সব compulsory — কিছু করতে হবে না`;
-        }
-
-        if (remaining <= 0) {
-            container.innerHTML = '';
-            $('bulkMainChoiceSection').style.display = 'none';
-            prepareBulk4thSubject(config, group);
+        if (!structure) {
+            console.warn('No structure for:', branch, group);
             return;
         }
 
-        $('bulkMainChoiceSection').style.display = 'block';
-
-        const inputType = (group === 'Humanities') ? 'checkbox' : 'radio';
-        const inputName = (group === 'Humanities') ? 'bulkMainCheck' : 'bulkMainRadio';
-
-        container.innerHTML = config.choices.map(s => `
-            <label class="bulk-subject-item" data-subject="${escapeHtml(s)}">
-                <input type="${inputType}" name="${inputName}" value="${escapeHtml(s)}">
-                <span class="bsi-name">${escapeHtml(s)}</span>
-            </label>
-        `).join('');
-
-        container.querySelectorAll('input').forEach(input => {
-            input.addEventListener('change', onBulkMainChoiceChange);
-        });
-    }
-
-    function onBulkMainChoiceChange(e) {
-        const config = BULK_SUBJECT_MAP[bulkState.config.branch][bulkState.config.group];
-        const group = bulkState.config.group;
-        const remaining = config.rules.mainCount - config.compulsory.length;
-
-        if (group === 'Humanities') {
-            const checked = Array.from(document.querySelectorAll('input[name="bulkMainCheck"]:checked')).map(i => i.value);
-            if (checked.length > remaining) {
-                e.target.checked = false;
-                alert(`সর্বোচ্চ ${remaining}টি select করা যাবে।`);
-                return;
+        // Group by book name
+        const bookMap = new Map();
+        all.forEach(s => {
+            if (!bookMap.has(s.subject_name)) {
+                bookMap.set(s.subject_name, {
+                    subject_name: s.subject_name,
+                    subject_code: s.subject_code,
+                    subject_type: s.subject_type,
+                    group_name: s.group_name,
+                    papers: []
+                });
             }
-            bulkState.config.mainChoices = checked;
-        } else {
-            bulkState.config.mainChoices = [e.target.value];
-        }
-
-        document.querySelectorAll('#bulkMainChoiceList .bulk-subject-item').forEach(item => {
-            const inp = item.querySelector('input');
-            item.classList.toggle('checked', inp.checked);
+            bookMap.get(s.subject_name).papers.push(s);
         });
 
-        if (bulkState.config.mainChoices.length === remaining) {
-            prepareBulk4thSubject(config, group);
-        } else {
-            $('bulk4thSubjectStep').style.display = 'none';
+        const books = Array.from(bookMap.values());
+
+        // Compulsory (বাংলা, English, ICT) — type=compulsory & group_name=null
+        bulkState.compulsorySubjects = books.filter(b =>
+            b.subject_type === 'compulsory' && !b.group_name
+        );
+
+        // For BMT — সব compulsory
+        if (branch === 'BM') {
+            bulkState.mainSubjects = books.filter(b => b.subject_type === 'compulsory');
+            bulkState.fourthSubjects = [];
+            bulkState.config.hasFourth = false;
+            return;
         }
 
-        updateBulkSummary();
+        // HSC — Compulsory = বাংলা, English, ICT
+        // Main subjects = structure অনুযায়ী
+
+        if (branch === 'HSC' && group === 'Science') {
+            // Science: fixed 2 + choice 1
+            const fixedNames = structure.fixedMain;
+            const choiceNames = structure.choiceMain;
+
+            bulkState.mainSubjects = books.filter(b =>
+                fixedNames.includes(b.subject_name) || choiceNames.includes(b.subject_name)
+            );
+
+            // 4th pool — main-এ যা নেই
+            bulkState.fourthSubjects = books.filter(b =>
+                structure.fourthPool.includes(b.subject_name) &&
+                !fixedNames.includes(b.subject_name)  // Fixed 2 always main
+            );
+
+            bulkState.config.hasFourth = true;
+        } else if (branch === 'HSC' && (group === 'Business' || group === 'Humanities')) {
+            // Business/Humanities: 3 select from pool
+            bulkState.mainSubjects = books.filter(b =>
+                structure.mainPool.includes(b.subject_name)
+            );
+
+            bulkState.fourthSubjects = books.filter(b =>
+                structure.fourthPool.includes(b.subject_name)
+            );
+
+            bulkState.config.hasFourth = true;
+        }
     }
 
-    function prepareBulk4thSubject(config, group) {
-        if (config.rules.optionalCount === 0) {
-            $('bulk4thSubjectStep').style.display = 'none';
+    // =========================================================
+    // RENDER BULK COMPULSORY
+    // =========================================================
+    function renderBulkCompulsory() {
+        const list = $('bulkCompulsoryList');
+        const books = bulkState.compulsorySubjects;
+
+        if (books.length === 0) {
+            list.innerHTML = '<div style="color:var(--grey);font-size:12px;">কোনো compulsory subject নেই।</div>';
+            return;
+        }
+
+        list.innerHTML = books.map(b => {
+            const paperInfo = b.papers.length > 1
+                ? `${b.papers.length} papers`
+                : '1 paper';
+            return `<div class="bcb-item">
+                <i class="fas fa-check-circle"></i>
+                <span>${escapeHtml(b.subject_name)} <small style="opacity:0.7;">(${paperInfo})</small></span>
+            </div>`;
+        }).join('');
+    }
+
+    // =========================================================
+    // RENDER BULK MAIN SELECTION
+    // =========================================================
+    function renderBulkMainSelection(branch, group) {
+        const structure = SUBJECT_STRUCTURE[branch][group];
+        const list = $('bulkMainList');
+        const title = $('bulkMainTitle');
+        const counter = $('bulkMainCounter');
+
+        bulkState.config.mainSelected = [];
+
+        if (structure.type === 'fixed_choice') {
+            // Science: Fixed 2 + Choice 1
+            title.textContent = 'Main Subjects (পদার্থ + রসায়ন fixed, ৩য়টি select করুন)';
+
+            let html = '';
+
+            // Fixed main
+            structure.fixedMain.forEach(name => {
+                html += `<div class="bulk-subject-item fixed checked" data-subject="${escapeHtml(name)}">
+                    <input type="checkbox" checked disabled>
+                    <span class="bsi-name">${escapeHtml(name)}</span>
+                    <span class="bsi-badge fixed">Fixed</span>
+                </div>`;
+            });
+
+            // Choice main (radio)
+            structure.choiceMain.forEach((name, idx) => {
+                html += `<label class="bulk-subject-item" data-subject="${escapeHtml(name)}">
+                    <input type="radio" name="bulkMainRadio" value="${escapeHtml(name)}">
+                    <span class="bsi-name">${escapeHtml(name)}</span>
+                    <span class="bsi-badge choice">Choice</span>
+                </label>`;
+            });
+
+            list.innerHTML = html;
+
+            // Attach events
+            list.querySelectorAll('input[name="bulkMainRadio"]').forEach(radio => {
+                radio.addEventListener('change', function () {
+                    bulkState.config.mainSelected = [...structure.fixedMain, this.value];
+
+                    // Visual
+                    list.querySelectorAll('.bulk-subject-item').forEach(item => {
+                        if (item.classList.contains('fixed')) return;
+                        const inp = item.querySelector('input');
+                        item.classList.toggle('checked', inp.checked);
+                    });
+
+                    // Re-render 4th subject
+                    renderBulkFourthSubject(branch, group);
+                    updateBulkMainCounter(structure.mainCount);
+                    updateBulkSummary();
+                });
+            });
+
+            updateBulkMainCounter(structure.mainCount);
+
+        } else if (structure.type === 'select_3') {
+            // Business/Humanities: 3 select
+            title.textContent = `Main Subjects (৩টি select করুন)`;
+
+            list.innerHTML = structure.mainPool.map(name => {
+                const book = bulkState.mainSubjects.find(b => b.subject_name === name);
+                if (!book) return '';
+                return `<label class="bulk-subject-item" data-subject="${escapeHtml(name)}">
+                    <input type="checkbox" name="bulkMainCheck" value="${escapeHtml(name)}">
+                    <span class="bsi-name">${escapeHtml(name)}</span>
+                </label>`;
+            }).join('');
+
+            list.querySelectorAll('input[name="bulkMainCheck"]').forEach(cb => {
+                cb.addEventListener('change', function () {
+                    const checked = Array.from(list.querySelectorAll('input[name="bulkMainCheck"]:checked'));
+
+                    if (checked.length > structure.mainCount) {
+                        this.checked = false;
+                        alert(`সর্বোচ্চ ${structure.mainCount}টি select করা যাবে।`);
+                        return;
+                    }
+
+                    bulkState.config.mainSelected = checked.map(c => c.value);
+
+                    // Visual
+                    list.querySelectorAll('.bulk-subject-item').forEach(item => {
+                        const inp = item.querySelector('input');
+                        item.classList.toggle('checked', inp.checked);
+                    });
+
+                    // Re-render 4th subject
+                    renderBulkFourthSubject(branch, group);
+                    updateBulkMainCounter(structure.mainCount);
+                    updateBulkSummary();
+                });
+            });
+
+            updateBulkMainCounter(structure.mainCount);
+
+        } else if (structure.type === 'all_fixed') {
+            // BMT: সব fixed
+            title.textContent = 'Main Subjects (সব fixed compulsory)';
+
+            list.innerHTML = structure.mainFixed.map(name => {
+                return `<div class="bulk-subject-item fixed checked" data-subject="${escapeHtml(name)}">
+                    <input type="checkbox" checked disabled>
+                    <span class="bsi-name">${escapeHtml(name)}</span>
+                    <span class="bsi-badge fixed">Fixed</span>
+                </div>`;
+            }).join('');
+
+            bulkState.config.mainSelected = [...structure.mainFixed];
+            updateBulkMainCounter(structure.mainCount);
+        }
+    }
+
+    function updateBulkMainCounter(required) {
+        const counter = $('bulkMainCounter');
+        const current = bulkState.config.mainSelected.length;
+
+        counter.textContent = `${current} / ${required}`;
+        counter.classList.toggle('complete', current === required);
+    }
+
+    // =========================================================
+    // RENDER 4TH SUBJECT DROPDOWN
+    // =========================================================
+    function renderBulkFourthSubject(branch, group) {
+        const select = $('bulkFourthSubject');
+        const structure = SUBJECT_STRUCTURE[branch][group];
+
+        if (!structure.hasFourth || structure.type === 'all_fixed') {
+            $('bulkFourthStep').style.display = 'none';
             bulkState.config.fourthSubject = '';
             return;
         }
 
-        const used = [...config.compulsory, ...bulkState.config.mainChoices];
-        const available = config.choices.filter(s => !used.includes(s));
+        // Main-এ যেগুলো select হয়েছে, সেগুলো বাদ
+        const mainSelected = bulkState.config.mainSelected;
+        const fixedMain = structure.fixedMain || [];
 
-        const select = $('bulk4thSubject');
+        const available = bulkState.fourthSubjects.filter(b =>
+            !mainSelected.includes(b.subject_name)
+        );
+
         select.innerHTML = '<option value="">Select 4th Subject</option>';
-        available.forEach(s => {
-            select.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`);
+        available.forEach(b => {
+            select.insertAdjacentHTML('beforeend',
+                `<option value="${escapeHtml(b.subject_name)}">${escapeHtml(b.subject_name)}</option>`);
         });
 
-        bulkState.config.fourthSubject = '';
-        $('bulk4thSubjectStep').style.display = 'block';
+        // Clear selection if previously selected was removed
+        const current = select.value;
+        if (current && !available.find(b => b.subject_name === current)) {
+            select.value = '';
+            bulkState.config.fourthSubject = '';
+        }
+
+        $('bulkFourthStep').style.display = 'block';
     }
 
-    function onBulk4thSubjectChange() {
-        bulkState.config.fourthSubject = $('bulk4thSubject').value;
+    function onBulkFourthChange() {
+        bulkState.config.fourthSubject = $('bulkFourthSubject').value;
         updateBulkSummary();
     }
 
+    // =========================================================
+    // SUMMARY
+    // =========================================================
     function updateBulkSummary() {
         const cfg = bulkState.config;
 
-        if (!cfg.group) {
+        if (!cfg.group || !cfg.branch) {
             $('bulkSummary').style.display = 'none';
-            $('saveBulkBtn').disabled = true;
             return;
         }
 
-        const rules = BULK_SUBJECT_MAP[cfg.branch]?.[cfg.group]?.rules;
-        if (!rules) return;
+        const structure = SUBJECT_STRUCTURE[cfg.branch]?.[cfg.group];
+        if (!structure) return;
 
-        const mainTotal = cfg.compulsory.length + cfg.mainChoices.length;
-        const isComplete = mainTotal === rules.mainCount &&
-                          (rules.optionalCount === 0 || cfg.fourthSubject);
+        const mainTotal = cfg.mainSelected.length;
+        const needsFourth = structure.hasFourth !== false;
+
+        const isComplete = mainTotal === structure.mainCount &&
+                          (!needsFourth || cfg.fourthSubject);
 
         let html = `
             <div><strong>Class:</strong> ${escapeHtml(cfg.class_name || '—')} / <strong>Year:</strong> ${escapeHtml(cfg.year || '—')} / <strong>Session:</strong> ${escapeHtml(cfg.session || '—')}</div>
             <div><strong>Branch:</strong> ${escapeHtml(cfg.branch || '—')} / <strong>Group:</strong> ${escapeHtml(cfg.group || '—')}</div>
-            <div><strong>Compulsory:</strong> ${cfg.compulsory.length > 0 ? cfg.compulsory.map(escapeHtml).join(', ') : '—'}</div>
-            <div><strong>Main Choices:</strong> ${cfg.mainChoices.length > 0 ? cfg.mainChoices.map(escapeHtml).join(', ') : '—'}</div>
-            <div><strong>4th Subject:</strong> ${escapeHtml(cfg.fourthSubject || '—')}</div>
+            <div><strong>📌 Compulsory:</strong> ${bulkState.compulsorySubjects.map(b => escapeHtml(b.subject_name)).join(', ') || '—'}</div>
+            <div><strong>📚 Main Subjects (${mainTotal}):</strong> ${cfg.mainSelected.map(escapeHtml).join(', ') || '—'}</div>
+            ${needsFourth ? `<div><strong>🎯 4th Subject:</strong> ${escapeHtml(cfg.fourthSubject || '—')}</div>` : ''}
         `;
 
         if (!isComplete) {
@@ -882,6 +1083,9 @@
         $('bulkSummary').style.display = 'block';
     }
 
+    // =========================================================
+    // ROLL RANGE GENERATE
+    // =========================================================
     function generateBulkRange() {
         const start = parseInt($('bulkRangeStart').value);
         const end = parseInt($('bulkRangeEnd').value);
@@ -897,6 +1101,9 @@
         alert(`${end - start + 1}টি roll generate হয়েছে।`);
     }
 
+    // =========================================================
+    // PARSE STUDENTS
+    // =========================================================
     function parseBulkStudents() {
         const raw = $('bulkData').value.trim();
         if (!raw) return [];
@@ -920,20 +1127,22 @@
         return rows;
     }
 
+    // =========================================================
+    // PREVIEW
+    // =========================================================
     async function previewBulkImport() {
         const cfg = bulkState.config;
+        const structure = SUBJECT_STRUCTURE[cfg.branch]?.[cfg.group];
 
         if (!cfg.class_name || !cfg.year || !cfg.branch || !cfg.group) {
             return alert('Common settings পূরণ করুন।');
         }
+        if (!structure) return alert('Subject structure পাওয়া যায়নি।');
 
-        const rules = BULK_SUBJECT_MAP[cfg.branch]?.[cfg.group]?.rules;
-        const mainTotal = cfg.compulsory.length + cfg.mainChoices.length;
-
-        if (mainTotal !== rules.mainCount) {
-            return alert(`Main-এ ${rules.mainCount}টি subject থাকতে হবে। এখন ${mainTotal}টি।`);
+        if (cfg.mainSelected.length !== structure.mainCount) {
+            return alert(`Main-এ ${structure.mainCount}টি subject select করুন। এখন ${cfg.mainSelected.length}টি।`);
         }
-        if (rules.optionalCount > 0 && !cfg.fourthSubject) {
+        if (structure.hasFourth && !cfg.fourthSubject) {
             return alert('৪র্থ Subject select করুন।');
         }
 
@@ -974,12 +1183,11 @@
             });
         }
 
-        // Validate 4th subject override
-        if (rules.optionalCount > 0) {
-            const usedMain = [...cfg.compulsory, ...cfg.mainChoices];
+        // Validate 4th override
+        if (structure.hasFourth) {
             students.forEach(s => {
                 if (s.fourth_override) {
-                    if (usedMain.includes(s.fourth_override)) {
+                    if (cfg.mainSelected.includes(s.fourth_override)) {
                         s.row_status = 'error';
                         s.error_msg = `4th subject main-এ আছে`;
                     }
@@ -1032,14 +1240,15 @@
         $('bulkPreview').style.display = 'block';
     }
 
+    // =========================================================
+    // SAVE BULK IMPORT
+    // =========================================================
     async function saveBulkImport() {
         const cfg = bulkState.config;
+        const structure = SUBJECT_STRUCTURE[cfg.branch][cfg.group];
         const students = bulkState.students.filter(s => s.row_status !== 'error' && s.row_status !== 'warn');
 
-        if (students.length === 0) {
-            return alert('কোনো valid student নেই।');
-        }
-
+        if (students.length === 0) return alert('কোনো valid student নেই।');
         if (!confirm(`${students.length} জন student যোগ করা হবে। নিশ্চিত?`)) return;
 
         const btn = $('saveBulkBtn');
@@ -1048,9 +1257,9 @@
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
         try {
-            // 1. Insert students
-            const records = students.map(s => ({
-                name: s.name,
+            // Prepare student records
+            const studentRecords = students.map(s => ({
+                name: s.name || 'Student ' + s.roll,
                 roll: s.roll,
                 class_name: cfg.class_name,
                 year: cfg.year,
@@ -1062,63 +1271,28 @@
 
             const { data: inserted, error: insErr } = await window.FDC_SUPABASE
                 .from('students')
-                .insert(records)
+                .insert(studentRecords)
                 .select();
 
             if (insErr) throw insErr;
 
-            // 2. Assign subjects to each student
-            const allSubjects = await loadAllSubjectsForBulk(cfg);
-
+            // Assign subjects to each student
             for (const stu of (inserted || [])) {
                 const matched = students.find(s => s.roll === stu.roll);
                 if (!matched) continue;
 
-                const subjectRecords = [];
-                const used = new Set();
-
-                // Compulsory
-                allSubjects.compulsory.forEach(sub => {
-                    if (!used.has(sub.id)) {
-                        used.add(sub.id);
-                        subjectRecords.push({
-                            student_id: stu.id,
-                            subject_id: sub.id,
-                            subject_type: 'compulsory'
-                        });
-                    }
-                });
-
-                // Main choices (group subjects)
-                allSubjects.group.forEach(sub => {
-                    if (cfg.mainChoices.includes(sub.subject_name) && !used.has(sub.id)) {
-                        used.add(sub.id);
-                        subjectRecords.push({
-                            student_id: stu.id,
-                            subject_id: sub.id,
-                            subject_type: 'group'
-                        });
-                    }
-                });
-
-                // 4th subject
-                const fourthName = matched.fourth_override || cfg.fourthSubject;
-                if (fourthName) {
-                    const fourthSubjects = allSubjects.optional.filter(s => s.subject_name === fourthName);
-                    fourthSubjects.forEach(sub => {
-                        if (!used.has(sub.id)) {
-                            used.add(sub.id);
-                            subjectRecords.push({
-                                student_id: stu.id,
-                                subject_id: sub.id,
-                                subject_type: 'optional'
-                            });
-                        }
-                    });
-                }
+                const subjectRecords = buildSubjectRecords(
+                    stu.id,
+                    cfg,
+                    structure,
+                    matched.fourth_override || cfg.fourthSubject
+                );
 
                 if (subjectRecords.length > 0) {
-                    await window.FDC_SUPABASE.from('student_subjects').insert(subjectRecords);
+                    const { error: subErr } = await window.FDC_SUPABASE
+                        .from('student_subjects')
+                        .insert(subjectRecords);
+                    if (subErr) console.error('Subject insert error:', subErr);
                 }
             }
 
@@ -1135,241 +1309,54 @@
         }
     }
 
-    async function loadAllSubjectsForBulk(cfg) {
-        const { data, error } = await window.FDC_SUPABASE
-            .from('subjects')
-            .select('*')
-            .eq('branch', cfg.branch)
-            .eq('class_name', cfg.class_name)
-            .eq('is_active', true);
-
-        if (error) throw error;
-
-        const subjects = data || [];
-        const isHSC = cfg.branch === 'HSC';
-
-        return {
-            compulsory: subjects.filter(s => {
-                if (s.subject_type !== 'compulsory') return false;
-                if (isHSC) return !s.group_name;
-                return true;
-            }),
-            group: subjects.filter(s => s.subject_type === 'group' && s.group_name === cfg.group),
-            optional: subjects.filter(s => s.subject_type === 'optional' && s.group_name === cfg.group)
-        };
-    }
-
     // =========================================================
-    // COPY / MOVE YEAR
+    // BUILD SUBJECT RECORDS FOR A STUDENT
     // =========================================================
-    function getCopyMode() {
-        const radios = document.querySelectorAll('input[name="copyMode"]');
-        for (const r of radios) if (r.checked) return r.value;
-        return 'copy';
-    }
+    function buildSubjectRecords(studentId, cfg, structure, fourthSubject) {
+        const records = [];
+        const addedIds = new Set();
 
-    function updateCopyModeUI(mode) {
-        const copyLabel = $('modeCopyLabel');
-        const moveLabel = $('modeMoveLabel');
-        const replaceLabel = $('modeReplaceLabel');
-        const moveWarning = $('moveWarning');
-        const replaceWarning = $('replaceWarning');
-        const replaceBox = $('replaceConfirmBox');
-        const btnText = $('applyCopyBtnText');
-        const btnIcon = $('applyCopyIcon');
-        const btn = $('applyCopyBtn');
-        const modalIcon = $('copyModalIcon');
-        const modalTitle = $('copyModalTitle');
-        const modalSub = $('copyModalSub');
-
-        [copyLabel, moveLabel, replaceLabel].forEach(l => {
-            if (l) l.classList.remove('selected', 'move', 'replace');
-        });
-        if (moveWarning) moveWarning.classList.remove('show');
-        if (replaceWarning) replaceWarning.classList.remove('show');
-        if (replaceBox) replaceBox.style.display = 'none';
-
-        if (mode === 'replace') {
-            if (replaceLabel) replaceLabel.classList.add('selected', 'replace');
-            if (replaceWarning) replaceWarning.classList.add('show');
-            if (replaceBox) replaceBox.style.display = 'block';
-            if (btnText) btnText.textContent = 'Move & Replace';
-            if (btnIcon) btnIcon.className = 'fas fa-sync-alt';
-            if (modalTitle) modalTitle.textContent = 'Move & Replace';
-            if (modalSub) modalSub.textContent = 'Target-এর পুরোনো সব delete হবে';
-        } else if (mode === 'move') {
-            if (moveLabel) moveLabel.classList.add('selected', 'move');
-            if (moveWarning) moveWarning.classList.add('show');
-            if (btnText) btnText.textContent = 'Move Students';
-            if (btnIcon) btnIcon.className = 'fas fa-exchange-alt';
-            if (modalTitle) modalTitle.textContent = 'Move Year';
-            if (modalSub) modalSub.textContent = 'Source থেকে delete হবে';
-        } else {
-            if (copyLabel) copyLabel.classList.add('selected');
-            if (btnText) btnText.textContent = 'Copy Students';
-            if (btnIcon) btnIcon.className = 'fas fa-copy';
-            if (modalTitle) modalTitle.textContent = 'Copy Year';
-            if (modalSub) modalSub.textContent = 'Source-এ থাকবে, target-এ যোগ';
-        }
-    }
-
-    async function copyCheck() {
-        const fromCls = $('copyFromClass').value;
-        const fromYear = $('copyFromYear').value;
-        const toCls = $('copyToClass').value;
-        const toYear = $('copyToYear').value;
-        const branch = $('copyFromBranch').value;
-        const mode = getCopyMode();
-
-        updateCopyModeUI(mode);
-
-        if (!fromCls || !fromYear || !toCls || !toYear) {
-            $('copyInfo').style.display = 'none';
-            $('applyCopyBtn').disabled = true;
-            return;
-        }
-
-        let query = window.FDC_SUPABASE.from('students').select('*')
-            .eq('class_name', fromCls).eq('year', fromYear).eq('is_active', true);
-        if (branch) query = query.eq('branch', branch);
-
-        const { data: sourceStudents } = await query;
-        const sourceCount = (sourceStudents || []).length;
-
-        let targetCount = 0;
-        if (mode === 'replace') {
-            let tq = window.FDC_SUPABASE.from('students').select('id', { count: 'exact', head: true })
-                .eq('class_name', toCls).eq('year', toYear).eq('is_active', true);
-            if (branch) tq = tq.eq('branch', branch);
-            const { count } = await tq;
-            targetCount = count || 0;
-        }
-
-        if (sourceCount === 0) {
-            $('copyInfoText').innerHTML = `⚠️ Source-এ কোনো student নেই।`;
-            $('copyInfo').className = 'fdc-alert danger';
-            $('copyInfo').style.display = 'flex';
-            $('applyCopyBtn').disabled = true;
-        } else {
-            const sampleSession = sourceStudents?.[0] ? getStudentSession(sourceStudents[0]) : getSessionFromYear(fromYear);
-            let infoHtml = `<strong>${sourceCount} জন</strong> student`;
-            infoHtml += `<br><span style="color:var(--navy);font-weight:700;">🎓 Session থাকবে: ${escapeHtml(sampleSession)}</span>`;
-            if (mode === 'replace' && targetCount > 0) {
-                infoHtml += `<br><span style="color:#7f1d1d;font-weight:700;">⚠️ Target-এ ${targetCount} জন delete হবে।</span>`;
-            }
-            $('copyInfoText').innerHTML = infoHtml;
-            $('copyInfo').className = 'fdc-alert warn';
-            $('copyInfo').style.display = 'flex';
-            $('applyCopyBtn').disabled = false;
-        }
-
-        const sourceSessionDisplay = sourceStudents?.[0] ? getStudentSession(sourceStudents[0]) : getSessionFromYear(fromYear);
-        $('copyToSession').value = sourceSessionDisplay;
-
-        if (mode === 'replace') {
-            const confirmText = 'DELETE ' + toYear;
-            $('replaceConfirmText').textContent = confirmText;
-            $('replaceConfirmInput').value = '';
-            $('replaceConfirmInput').placeholder = 'টাইপ করুন: ' + confirmText;
-        }
-
-        window._copyData = {
-            fromCls, fromYear, toCls, toYear, branch,
-            students: sourceStudents || [],
-            mode, targetCount
-        };
-    }
-
-    async function assignSubjectsToNewStudent(newStudent, oldStudent, targetClass) {
-        try {
-            const { data: oldSubs } = await window.FDC_SUPABASE
-                .from('student_subjects')
-                .select('subject_id, subject_type')
-                .eq('student_id', oldStudent.id);
-
-            if (!oldSubs || oldSubs.length === 0) return;
-
-            const records = [];
-            for (const os of oldSubs) {
+        function addPapers(book, type) {
+            book.papers.forEach(p => {
+                if (addedIds.has(p.id)) return;
+                addedIds.add(p.id);
                 records.push({
-                    student_id: newStudent.id,
-                    subject_id: os.subject_id,
-                    subject_type: os.subject_type
+                    student_id: studentId,
+                    subject_id: p.id,
+                    subject_type: type
                 });
-            }
-
-            if (records.length > 0) {
-                await window.FDC_SUPABASE.from('student_subjects').insert(records);
-            }
-        } catch (e) { console.error('Assign subjects error:', e); }
-    }
-
-    async function copyApply() {
-        if (!window._copyData || window._copyData.students.length === 0) return;
-
-        const { toCls, toYear, students, mode, branch } = window._copyData;
-        const isMove = (mode === 'move');
-        const isReplace = (mode === 'replace');
-
-        if (isReplace) {
-            const confirmText = 'DELETE ' + toYear;
-            const typed = $('replaceConfirmInput').value.trim().toUpperCase();
-            if (typed !== confirmText) return alert(`"${confirmText}" টাইপ করুন।`);
+            });
         }
 
-        const confirmed = confirm(`${students.length} জন ${mode === 'copy' ? 'COPY' : 'MOVE'} হবে। নিশ্চিত?`);
-        if (!confirmed) return;
+        // 1. Compulsory (বাংলা, English, ICT)
+        bulkState.compulsorySubjects.forEach(book => {
+            addPapers(book, 'compulsory');
+        });
 
-        try {
-            if (isReplace) {
-                let tq = window.FDC_SUPABASE.from('students').select('id')
-                    .eq('class_name', toCls).eq('year', toYear).eq('is_active', true);
-                if (branch) tq = tq.eq('branch', branch);
-                const { data: targetStudents } = await tq;
-
-                if (targetStudents && targetStudents.length > 0) {
-                    const targetIds = targetStudents.map(s => s.id);
-                    await window.FDC_SUPABASE.from('student_subjects').delete().in('student_id', targetIds);
-                    await window.FDC_SUPABASE.from('students').delete().in('id', targetIds);
-                }
+        // 2. Main subjects
+        bulkState.mainSubjects.forEach(book => {
+            if (cfg.mainSelected.includes(book.subject_name)) {
+                const type = (cfg.branch === 'BM') ? 'compulsory' : 'group';
+                addPapers(book, type);
             }
+        });
 
-            const records = students.map(s => ({
-                name: s.name, roll: s.roll,
-                class_name: toCls, year: toYear,
-                session: getStudentSession(s),
-                branch: s.branch, group_name: s.group_name
-            }));
-
-            const { data: inserted, error: insErr } = await window.FDC_SUPABASE
-                .from('students').insert(records).select();
-
-            if (insErr) throw insErr;
-
-            const insertedList = inserted || [];
-            for (let i = 0; i < insertedList.length; i++) {
-                if (students[i]) await assignSubjectsToNewStudent(insertedList[i], students[i], toCls);
+        // 3. 4th subject
+        if (fourthSubject && structure.hasFourth) {
+            const fourthBook = bulkState.fourthSubjects.find(b => b.subject_name === fourthSubject);
+            if (fourthBook) {
+                addPapers(fourthBook, 'optional');
             }
-
-            if (isMove || isReplace) {
-                const sourceIds = students.map(s => s.id);
-                await window.FDC_SUPABASE.from('student_subjects').delete().in('student_id', sourceIds);
-                await window.FDC_SUPABASE.from('students').delete().in('id', sourceIds);
-            }
-
-            alert(`✅ ${insertedList.length} জন ${mode === 'copy' ? 'copy' : 'move'} হয়েছে!`);
-            closeModal('copyYearModal');
-            await loadAllStudents();
-        } catch (e) {
-            console.error('Copy/Move error:', e);
-            alert('❌ Failed: ' + e.message);
         }
+
+        return records;
     }
 
     // =========================================================
     // EVENT LISTENERS
     // =========================================================
     function attachEvents() {
+        // Student CRUD
         $('btnAddStudent').addEventListener('click', openAddStudentModal);
         $('closeStudentModal').addEventListener('click', () => closeModal('studentModal'));
         $('cancelStudentBtn').addEventListener('click', () => closeModal('studentModal'));
@@ -1385,11 +1372,19 @@
             }
         });
 
+        $('studentYear').addEventListener('change', function () {
+            if (!editingStudentId) {
+                $('studentSession').value = getSessionFromYear(this.value);
+            }
+        });
+
+        // Filters
         ['filterClass', 'filterYear', 'filterBranch', 'filterGroup'].forEach(id => {
             $(id).addEventListener('change', applyFilters);
         });
         $('searchInput').addEventListener('input', applyFilters);
 
+        // Table actions
         $('studentTableBody').addEventListener('click', function (e) {
             const btn = e.target.closest('[data-action]');
             if (!btn) return;
@@ -1398,10 +1393,12 @@
 
             if (action === 'view') window.viewStudent(id);
             else if (action === 'edit') window.openEditStudentModal(id);
+            else if (action === 'subject') window.openEditStudentModal(id);
             else if (action === 'toggle') window.toggleStudent(id);
             else if (action === 'delete') window.deleteStudent(id);
         });
 
+        // Pagination
         $('paginationBtns').addEventListener('click', function (e) {
             const btn = e.target.closest('[data-page]');
             if (!btn || btn.disabled) return;
@@ -1414,7 +1411,9 @@
             document.querySelectorAll('.row-select').forEach(cb => cb.checked = this.checked);
         });
 
-        // ★ BULK IMPORT EVENTS ★
+        // =========================================================
+        // BULK IMPORT EVENTS
+        // =========================================================
         $('btnBulkImport').addEventListener('click', () => {
             resetBulkModal();
             openModal('bulkImportModal');
@@ -1427,39 +1426,17 @@
         $('bulkYear').addEventListener('change', onBulkYearChange);
         $('bulkBranch').addEventListener('change', onBulkBranchChange);
         $('bulkGroup').addEventListener('change', onBulkGroupChange);
-        $('bulk4thSubject').addEventListener('change', onBulk4thSubjectChange);
+        $('bulkFourthSubject').addEventListener('change', onBulkFourthChange);
 
         $('btnGenerateRange').addEventListener('click', generateBulkRange);
         $('previewBulkBtn').addEventListener('click', previewBulkImport);
         $('saveBulkBtn').addEventListener('click', saveBulkImport);
 
-        // COPY / MOVE
-        $('btnCopyYear').addEventListener('click', () => {
-            openModal('copyYearModal');
-            const copyRadio = document.querySelector('input[name="copyMode"][value="copy"]');
-            if (copyRadio) copyRadio.checked = true;
-            updateCopyModeUI('copy');
-            copyCheck();
-        });
-        $('closeCopyModal').addEventListener('click', () => closeModal('copyYearModal'));
-        $('cancelCopyBtn').addEventListener('click', () => closeModal('copyYearModal'));
-
-        ['copyFromClass', 'copyFromYear', 'copyToClass', 'copyToYear', 'copyFromBranch'].forEach(id => {
-            $(id).addEventListener('change', copyCheck);
-        });
-
-        document.querySelectorAll('input[name="copyMode"]').forEach(radio => {
-            radio.addEventListener('change', function () {
-                updateCopyModeUI(this.value);
-                if (window._copyData) copyCheck();
-            });
-        });
-
-        $('applyCopyBtn').addEventListener('click', copyApply);
-
+        // View modal
         $('closeViewModal').addEventListener('click', () => closeModal('viewStudentModal'));
         $('closeViewBtn').addEventListener('click', () => closeModal('viewStudentModal'));
 
+        // Modal backdrop
         document.querySelectorAll('.fdc-modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function (e) {
                 if (e.target === this) {
@@ -1474,7 +1451,7 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Students v9 initializing...');
+        console.log('🚀 Admin Students v10 initializing...');
 
         loadYearOptions();
         attachEvents();
@@ -1486,7 +1463,7 @@
             await loadAdminInfo();
             await loadAllStudents();
 
-            console.log('✅ Admin Students v9 ready');
+            console.log('✅ Admin Students v10 ready');
         });
     }
 
