@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promotion Settings - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* HEADER */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.admin-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; }
+.admin-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+    flex-shrink: 0;
+}
+.admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+.admin-header .user-box { display: flex; align-items: center; gap: 8px; }
+.avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    border: 2px solid rgba(242,210,123,0.4);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+
+/* MAIN */
+.main-wrap { max-width: 900px; margin: 0 auto; padding: 20px 16px 60px; }
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-sub { color: var(--grey); font-size: 13px; margin-bottom: 20px; }
+
+/* SETTINGS CARD */
+.settings-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+.settings-head {
+    padding: 18px 22px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.03), rgba(13,71,161,0.02));
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.settings-head .sh-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+.settings-head h5 {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+}
+.settings-head small {
+    display: block;
+    color: var(--grey);
+    font-size: 11.5px;
+    margin-top: 2px;
+}
+
+.settings-body {
+    padding: 20px 22px;
+}
+
+/* RULE ITEM */
+.rule-item {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border-light);
+}
+.rule-item:last-child { border-bottom: none; padding-bottom: 0; }
+.rule-item:first-child { padding-top: 0; }
+
+.rule-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+.rule-info {
+    flex: 1;
+    min-width: 200px;
+}
+.rule-info .ri-label {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.rule-info .ri-label i { color: var(--gold-dark); font-size: 14px; }
+.rule-info .ri-desc {
+    font-size: 12px;
+    color: var(--grey);
+    line-height: 1.5;
+}
+
+.rule-input {
+    flex-shrink: 0;
+}
+
+/* Number input */
+.num-input {
+    width: 100px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    text-align: center;
+    outline: none;
+    transition: 0.25s;
+    font-family: 'Playfair Display', serif;
+}
+.num-input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+    background: #fff;
+}
+
+/* Toggle */
+.toggle-wrap {
+    position: relative;
+    display: inline-block;
+    width: 52px;
+    height: 28px;
+    flex-shrink: 0;
+}
+.toggle-wrap input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #cbd5e1;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.toggle-slider::before {
+    content: '';
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    left: 3px;
+    top: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+}
+.toggle-wrap input:checked + .toggle-slider {
+    background: linear-gradient(135deg, var(--success), #059669);
+}
+.toggle-wrap input:checked + .toggle-slider::before {
+    transform: translateX(24px);
+}
+
+/* Select */
+.rule-select {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--navy);
+    outline: none;
+    transition: 0.25s;
+    font-family: inherit;
+    min-width: 180px;
+    cursor: pointer;
+}
+.rule-select:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+    background: #fff;
+}
+
+/* Save button */
+.save-bar {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    border-top: 1px solid var(--border-light);
+    padding: 16px 20px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    box-shadow: 0 -4px 20px rgba(10,22,85,0.05);
+    z-index: 100;
+    margin: 0 -16px -60px;
+}
+
+.btn-primary-grad {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 13px 32px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+}
+.btn-primary-grad:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,85,0.35); color: #fff; }
+.btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary-grad i { color: var(--gold); }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid #e5e7eb;
+    padding: 13px 24px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 13.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
+
+/* Loading */
+.loading-wrap {
+    padding: 60px 20px;
+    text-align: center;
+}
+.spinner-fdc {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 18px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-wrap p { color: var(--grey); font-size: 13px; margin: 0; }
+
+/* Alert box */
+.alert-info {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-left: 4px solid #3b82f6;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 12.5px;
+    color: #1e40af;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.6;
+}
+.alert-info i { font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+
+/* Responsive */
+@media (max-width: 640px) {
+    .admin-header { padding: 10px 14px; }
+    .admin-header h4 { font-size: 14px; }
+    .main-wrap { padding: 14px 12px 50px; }
+    .page-title { font-size: 18px; }
+    .settings-head { padding: 16px; }
+    .settings-body { padding: 16px; }
+    .rule-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .rule-input { width: 100%; }
+    .num-input, .rule-select { width: 100%; }
+}
+@media (max-width: 480px) {
+    .btn-header span { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-cog"></i></div>
+        <div>
+            <h4>Promotion Settings</h4>
+            <small>Pass/Fail Rules Configure করুন</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="avatar-circle" data-admin-avatar>A</div>
+        <a href="admin-promote.html" class="btn-header">
+            <i class="fas fa-graduation-cap"></i> <span>Promote</span>
+        </a>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+        </a>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <h4 class="page-title">
+        <i class="fas fa-cog"></i> Promotion Settings
+    </h4>
+    <p class="page-sub">Pass/Fail detect করার rule configure করুন</p>
+
+    <div class="alert-info">
+        <i class="fas fa-info-circle"></i>
+        <div>
+            <strong>এই Rules Apply হয়:</strong> Promote করার সময় final result-এর ভিত্তিতে কে Pass, কে Fail সেটা এই rules দিয়ে decide করা হয়। Rules পরিবর্তন করলে পরবর্তী Promote-এ apply হবে।
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div class="loading-wrap" id="loadingWrap">
+        <div class="spinner-fdc"></div>
+        <p>Settings লোড হচ্ছে...</p>
+    </div>
+
+    <!-- Settings -->
+    <div id="settingsWrap" style="display:none;">
+
+        <!-- Rule: Min GPA -->
+        <div class="settings-card">
+            <div class="settings-head">
+                <div class="sh-icon"><i class="fas fa-chart-line"></i></div>
+                <div>
+                    <h5>Pass/Fail Criteria</h5>
+                    <small>কোন ছাত্র Pass, কে Fail — সেই rules</small>
+                </div>
+            </div>
+            <div class="settings-body">
+
+                <div class="rule-item">
+                    <div class="rule-row">
+                        <div class="rule-info">
+                            <div class="ri-label">
+                                <i class="fas fa-star"></i> সর্বনিম্ন GPA
+                            </div>
+                            <div class="ri-desc">
+                                এই GPA-এর কম হলে ছাত্র Fail হিসেবে গণ্য হবে।
+                                বাংলাদেশে সাধারণত <strong>2.00</strong>।
+                            </div>
+                        </div>
+                        <div class="rule-input">
+                            <input type="number" class="num-input" id="ruleMinGPA" step="0.01" min="0" max="5" value="2.00">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <div class="rule-row">
+                        <div class="rule-info">
+                            <div class="ri-label">
+                                <i class="fas fa-exclamation-triangle"></i> কোনো subject-এ Fail থাকলে
+                            </div>
+                            <div class="ri-desc">
+                                একটি subject-এ fail থাকলেও ছাত্রকে Fail হিসেবে গণ্য করা হবে কি না।
+                            </div>
+                        </div>
+                        <div class="rule-input">
+                            <label class="toggle-wrap">
+                                <input type="checkbox" id="ruleNoFailSubjects" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="rule-item">
+                    <div class="rule-row">
+                        <div class="rule-info">
+                            <div class="ri-label">
+                                <i class="fas fa-user-slash"></i> কোনো subject-এ Absent থাকলে
+                            </div>
+                            <div class="ri-desc">
+                                একটি subject-এ absent থাকলে ছাত্রকে Fail হিসেবে গণ্য করা হবে কি না।
+                            </div>
+                        </div>
+                        <div class="rule-input">
+                            <label class="toggle-wrap">
+                                <input type="checkbox" id="ruleAbsentIsFail" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Rule: No Result -->
+        <div class="settings-card">
+            <div class="settings-head">
+                <div class="sh-icon"><i class="fas fa-question-circle"></i></div>
+                <div>
+                    <h5>No Result Handling</h5>
+                    <small>যাদের result entry হয়নি তাদের কী হবে</small>
+                </div>
+            </div>
+            <div class="settings-body">
+
+                <div class="rule-item">
+                    <div class="rule-row">
+                        <div class="rule-info">
+                            <div class="ri-label">
+                                <i class="fas fa-file-alt"></i> Result না থাকলে
+                            </div>
+                            <div class="ri-desc">
+                                যেসব ছাত্রের Final result entry করা হয়নি তাদের promote-এ কী করবেন।
+                            </div>
+                        </div>
+                        <div class="rule-input">
+                            <select class="rule-select" id="ruleNoResultAction">
+                                <option value="skip">⏭️ Skip — Promote হবে না</option>
+                                <option value="manual">👤 Manual — Admin Decide করবে</option>
+                                <option value="promote">✅ Promote — সবাই Promote হবে</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Info -->
+        <div class="settings-card">
+            <div class="settings-head">
+                <div class="sh-icon" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff;">
+                    <i class="fas fa-info"></i>
+                </div>
+                <div>
+                    <h5>Rules Summary</h5>
+                    <small>বর্তমান Pass/Fail Logic</small>
+                </div>
+            </div>
+            <div class="settings-body">
+                <div id="rulesSummary" style="font-size:13px;line-height:2;color:var(--dark);">
+                    <!-- Dynamically generated -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- SAVE BAR -->
+<div class="save-bar" id="saveBar" style="display:none;">
+    <button class="btn-secondary" id="btnReset">
+        <i class="fas fa-undo"></i> Reset
+    </button>
+    <button class="btn-primary-grad" id="btnSave">
+        <i class="fas fa-save"></i> Save Settings
+    </button>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin-popup.js"></script>
+<script src="../js/promote-utils.js"></script>
+<script src="../js/promote-rules.js"></script>
+<script src="../js/admin-promote-settings.js"></script>
+
+</body>
+</html>

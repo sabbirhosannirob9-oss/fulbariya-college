@@ -179,9 +179,33 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    text-decoration: none;
 }
 .btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
 .btn-secondary i { color: var(--navy); }
+
+.btn-promote {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    text-decoration: none;
+}
+.btn-promote:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(16,185,129,0.5);
+    color: #fff;
+}
+.btn-promote i { color: #fff; }
 
 .btn-gold {
     background: linear-gradient(135deg, var(--gold), var(--gold-2));
@@ -279,6 +303,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     font-size: 13px;
     outline: none;
     transition: 0.25s;
+    font-family: inherit;
 }
 .filter-card select:focus,
 .filter-card input:focus {
@@ -419,7 +444,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .action-btn.toggle.off { background: #fef2f2; color: #dc2626; }
 .action-btn.toggle.off:hover { background: #fecaca; }
 
-/* Checkbox */
 .row-checkbox {
     width: 16px; height: 16px;
     cursor: pointer;
@@ -456,7 +480,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .page-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
 .page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 
-/* Empty state */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -474,7 +497,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
 .empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
 
-/* Skeleton */
 .skeleton-row {
     display: grid;
     grid-template-columns: 40px 1fr 1fr 1fr 1fr 180px;
@@ -561,6 +583,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     font-size: 18px;
     flex-shrink: 0;
     border: 1px solid rgba(242,210,123,0.3);
+    transition: 0.3s;
 }
 .fdc-modal-header h5 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
 .fdc-modal-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
@@ -734,9 +757,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     background: #fff;
     position: relative;
 }
-.subject-item.checked .si-radio {
-    border-color: var(--navy);
-}
+.subject-item.checked .si-radio { border-color: var(--navy); }
 .subject-item.checked .si-radio::after {
     content: '';
     width: 8px; height: 8px;
@@ -767,7 +788,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     margin-right: 4px;
 }
 
-/* Alert message inside modal */
 .fdc-alert {
     padding: 12px 16px;
     border-radius: 10px;
@@ -780,7 +800,110 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .fdc-alert.info { background: #eff6ff; color: #1e40af; border-left: 3px solid #3b82f6; }
 .fdc-alert.warn { background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; }
-.fdc-alert i { margin-top: 2px; }
+.fdc-alert.danger { background: #fef2f2; color: #991b1b; border-left: 3px solid #dc2626; }
+.fdc-alert i { margin-top: 2px; flex-shrink: 0; }
+
+/* ============ COPY MODE SELECTION ============ */
+.copy-mode-section {
+    background: #f8f9fc;
+    border: 1.5px solid var(--border-light);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+.copy-mode-title {
+    font-size: 11px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.copy-mode-title i { color: var(--gold-dark); }
+
+.copy-mode-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.copy-mode-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 2px solid #e5e7eb;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.25s;
+    position: relative;
+}
+.copy-mode-option:hover { border-color: var(--navy); }
+.copy-mode-option.selected {
+    border-color: var(--navy);
+    background: linear-gradient(135deg, rgba(10,22,85,0.03), rgba(13,71,161,0.02));
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+}
+.copy-mode-option.selected.move {
+    border-color: var(--danger);
+    background: linear-gradient(135deg, rgba(239,68,68,0.04), rgba(220,38,38,0.02));
+    box-shadow: 0 0 0 4px rgba(239,68,68,0.08);
+}
+.copy-mode-option.selected.replace {
+    border-color: #7f1d1d;
+    background: linear-gradient(135deg, rgba(127,29,29,0.05), rgba(153,27,27,0.03));
+    box-shadow: 0 0 0 4px rgba(127,29,29,0.1);
+}
+
+.copy-mode-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--navy);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.copy-mode-option.selected.move input[type="radio"] {
+    accent-color: var(--danger);
+}
+.copy-mode-option.selected.replace input[type="radio"] {
+    accent-color: #7f1d1d;
+}
+
+.copy-mode-option .cmo-content { flex: 1; min-width: 0; }
+.copy-mode-option .cmo-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 3px;
+}
+.copy-mode-option.selected.move .cmo-title { color: var(--danger); }
+.copy-mode-option.selected.replace .cmo-title { color: #7f1d1d; }
+.copy-mode-option .cmo-desc {
+    font-size: 11.5px;
+    color: var(--grey);
+    line-height: 1.4;
+}
+
+.move-warning {
+    margin-top: 12px;
+    padding: 12px 14px;
+    background: #fef2f2;
+    border-left: 3px solid var(--danger);
+    border-radius: 8px;
+    font-size: 12.5px;
+    color: #991b1b;
+    line-height: 1.5;
+    display: none;
+}
+.move-warning.show { display: block; }
+.move-warning strong { color: #7f1d1d; }
 
 /* Bulk import textarea */
 .bulk-textarea {
@@ -878,11 +1001,14 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
             <p class="page-sub">সব শাখার ছাত্র-ছাত্রীদের তথ্য পরিচালনা করুন</p>
         </div>
         <div class="toolbar-actions">
+            <a href="admin-promote.html" class="btn-promote">
+                <i class="fas fa-graduation-cap"></i> Promote
+            </a>
             <button class="btn-secondary" id="btnBulkImport">
                 <i class="fas fa-file-import"></i> Bulk Import
             </button>
             <button class="btn-secondary" id="btnCopyYear">
-                <i class="fas fa-copy"></i> Copy Year
+                <i class="fas fa-exchange-alt"></i> Copy / Move Year
             </button>
             <button class="btn-primary-grad" id="btnAddStudent">
                 <i class="fas fa-plus-circle"></i> Add Student
@@ -1062,9 +1188,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                 </div>
             </div>
 
-            <!-- Subjects Section (only shown when group selected) -->
             <div class="subjects-section" id="subjectsSection" style="display:none;">
-
                 <div class="subjects-section-title">
                     <i class="fas fa-book"></i> Subject Selection
                     <span class="badge" id="subjectBadge">0 / 3</span>
@@ -1072,7 +1196,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
                 <div class="fdc-alert info" id="subjectInfo" style="display:none;"></div>
 
-                <!-- Compulsory -->
                 <div class="subject-group-box locked" id="compulsoryBox" style="display:none;">
                     <div class="sgb-header">
                         <i class="fas fa-lock"></i> আবশ্যিক বিষয়
@@ -1081,7 +1204,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     <div class="subject-list" id="compulsoryList"></div>
                 </div>
 
-                <!-- Group subjects -->
                 <div class="subject-group-box" id="groupBox" style="display:none;">
                     <div class="sgb-header">
                         <i class="fas fa-layer-group"></i> গ্রুপের বিষয়
@@ -1090,7 +1212,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     <div class="subject-list" id="groupList"></div>
                 </div>
 
-                <!-- Optional subject -->
                 <div class="subject-group-box" id="optionalBox" style="display:none;">
                     <div class="sgb-header">
                         <i class="fas fa-star"></i> ঐচ্ছিক বিষয় (৪র্থ)
@@ -1099,7 +1220,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     <div class="subject-list" id="optionalList"></div>
                 </div>
 
-                <!-- BM Trade -->
                 <div class="subject-group-box" id="tradeBox" style="display:none;">
                     <div class="sgb-header">
                         <i class="fas fa-tools"></i> Trade Subject
@@ -1107,7 +1227,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     </div>
                     <div class="subject-list" id="tradeList"></div>
                 </div>
-
             </div>
         </div>
 
@@ -1205,104 +1324,16 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 </div>
 
 <!-- ================================================== -->
-<!-- MODAL: Bulk Subject Assignment -->
-<!-- ================================================== -->
-<div class="fdc-modal-overlay" id="bulkSubjectModal">
-    <div class="fdc-modal">
-        <div class="fdc-modal-header">
-            <div class="mh-left">
-                <div class="mh-icon"><i class="fas fa-book-reader"></i></div>
-                <div>
-                    <h5>Bulk Subject Assignment</h5>
-                    <small>এক group-এর সব student-কে subject assign করুন</small>
-                </div>
-            </div>
-            <button class="fdc-modal-close" id="closeBulkSubjectModal">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
-        <div class="fdc-modal-body">
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <label class="fdc-form-label">Class</label>
-                    <select class="fdc-select" id="bsClass">
-                        <option value="">Select</option>
-                        <option value="11">Class 11</option>
-                        <option value="12">Class 12</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="fdc-form-label">Branch</label>
-                    <select class="fdc-select" id="bsBranch">
-                        <option value="">Select</option>
-                        <option value="HSC">HSC</option>
-                        <option value="BM">BM</option>
-                    </select>
-                </div>
-                <div class="col-md-4">
-                    <label class="fdc-form-label">Group</label>
-                    <select class="fdc-select" id="bsGroup">
-                        <option value="">Select</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="fdc-alert warn" id="bsInfo" style="display:none;">
-                <i class="fas fa-users"></i>
-                <span id="bsInfoText"></span>
-            </div>
-
-            <div id="bsSubjectsArea" style="display:none;">
-
-                <div class="subject-group-box locked">
-                    <div class="sgb-header">
-                        <i class="fas fa-lock"></i> আবশ্যিক বিষয় (সবাইকে)
-                    </div>
-                    <div class="subject-list" id="bsCompulsoryList"></div>
-                </div>
-
-                <div class="subject-group-box">
-                    <div class="sgb-header">
-                        <i class="fas fa-layer-group"></i> গ্রুপের বিষয়
-                        <span class="hint" id="bsGroupHint">৩টি সিলেক্ট করুন</span>
-                    </div>
-                    <div class="subject-list" id="bsGroupList"></div>
-                </div>
-
-                <div class="subject-group-box">
-                    <div class="sgb-header">
-                        <i class="fas fa-star"></i> ঐচ্ছিক বিষয়
-                        <span class="hint" id="bsOptionalHint">১টি সিলেক্ট করুন</span>
-                    </div>
-                    <div class="subject-list" id="bsOptionalList"></div>
-                </div>
-
-            </div>
-        </div>
-
-        <div class="fdc-modal-footer">
-            <button class="btn-secondary" id="cancelBsBtn">
-                <i class="fas fa-times"></i> Cancel
-            </button>
-            <button class="btn-primary-grad" id="applyBsBtn" disabled>
-                <i class="fas fa-check-circle"></i> Apply to All
-            </button>
-        </div>
-    </div>
-</div>
-
-<!-- ================================================== -->
-<!-- MODAL: Copy from Previous Year -->
+<!-- MODAL: Copy / Move Year (v5 — 3 Modes) -->
 <!-- ================================================== -->
 <div class="fdc-modal-overlay" id="copyYearModal">
     <div class="fdc-modal">
         <div class="fdc-modal-header">
             <div class="mh-left">
-                <div class="mh-icon"><i class="fas fa-copy"></i></div>
+                <div class="mh-icon"><i class="fas fa-copy" id="copyModalIcon"></i></div>
                 <div>
-                    <h5>Copy from Previous Year</h5>
-                    <small>গত বছরের student list নতুন বছরে নিয়ে যান</small>
+                    <h5 id="copyModalTitle">Copy Year</h5>
+                    <small id="copyModalSub">Source-এ থাকবে, target-এ যোগ হবে</small>
                 </div>
             </div>
             <button class="fdc-modal-close" id="closeCopyModal">
@@ -1311,17 +1342,74 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
 
         <div class="fdc-modal-body">
-            <div class="fdc-alert info">
-                <i class="fas fa-info-circle"></i>
-                <div>
-                    Source class থেকে সব student নতুন class/year/session-এ copy হবে।<br>
-                    <small>নাম, রোল, group, subject — সব একই থাকবে।</small>
+
+            <!-- Mode Selection -->
+            <div class="copy-mode-section">
+                <div class="copy-mode-title">
+                    <i class="fas fa-cog"></i> কী করতে চান?
+                </div>
+                <div class="copy-mode-options">
+                    <label class="copy-mode-option selected" id="modeCopyLabel" data-mode="copy">
+                        <input type="radio" name="copyMode" value="copy" checked>
+                        <div class="cmo-content">
+                            <div class="cmo-title">
+                                <i class="fas fa-copy"></i> Copy Only
+                            </div>
+                            <div class="cmo-desc">
+                                Source-এ থাকবে, target-এ duplicate হবে
+                            </div>
+                        </div>
+                    </label>
+                    <label class="copy-mode-option" id="modeMoveLabel" data-mode="move">
+                        <input type="radio" name="copyMode" value="move">
+                        <div class="cmo-content">
+                            <div class="cmo-title">
+                                <i class="fas fa-exchange-alt"></i> Move
+                            </div>
+                            <div class="cmo-desc">
+                                Source থেকে delete হবে, target-এ যাবে
+                            </div>
+                        </div>
+                    </label>
+                    <label class="copy-mode-option" id="modeReplaceLabel" data-mode="replace">
+                        <input type="radio" name="copyMode" value="replace">
+                        <div class="cmo-content">
+                            <div class="cmo-title">
+                                <i class="fas fa-sync-alt"></i> Move & Replace
+                            </div>
+                            <div class="cmo-desc">
+                                Target-এর পুরোনো সব delete হবে, তারপর new move
+                            </div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="move-warning" id="moveWarning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>সতর্কতা:</strong> Source থেকে student-রা <strong>permanently delete</strong> হবে।
+                </div>
+
+                <div class="move-warning" id="replaceWarning" style="background:#fef2f2;border-left-color:#7f1d1d;">
+                    <i class="fas fa-exclamation-triangle" style="color:#7f1d1d;"></i>
+                    <strong style="color:#7f1d1d;">সতর্কতা:</strong> Target class-এর <strong>পুরোনো সব student delete</strong> হবে + Source থেকে <strong>সব move</strong> হবে। এটি undo করা যাবে না।
                 </div>
             </div>
 
+            <!-- Info -->
+            <div class="fdc-alert info">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>HSC:</strong> Subjects একই থাকে → as-is copy হবে।<br>
+                    <strong>BM:</strong> Subjects পরিবর্তন হয় → auto-swap হবে।
+                </div>
+            </div>
+
+            <!-- Source -->
             <div class="row g-3">
                 <div class="col-12">
-                    <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">Source (যেখান থেকে)</label>
+                    <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">
+                        <i class="fas fa-sign-out-alt"></i> Source (যেখান থেকে)
+                    </label>
                 </div>
                 <div class="col-md-4">
                     <label class="fdc-form-label">Class</label>
@@ -1344,8 +1432,11 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     </select>
                 </div>
 
+                <!-- Target -->
                 <div class="col-12" style="margin-top:14px;">
-                    <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">Target (যেখানে যাবে)</label>
+                    <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">
+                        <i class="fas fa-sign-in-alt"></i> Target (যেখানে যাবে)
+                    </label>
                 </div>
                 <div class="col-md-4">
                     <label class="fdc-form-label">Class</label>
@@ -1365,9 +1456,24 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                 </div>
             </div>
 
+            <!-- Preview -->
             <div class="fdc-alert warn" id="copyInfo" style="display:none;margin-top:16px;">
                 <i class="fas fa-users"></i>
-                <span id="copyInfoText"></span>
+                <div id="copyInfoText"></div>
+            </div>
+
+            <!-- Type to Confirm (Replace mode) -->
+            <div id="replaceConfirmBox" style="display:none;margin-top:16px;padding:16px;background:#fef2f2;border:2px solid #dc2626;border-radius:12px;">
+                <div style="font-size:12.5px;font-weight:700;color:#7f1d1d;margin-bottom:8px;">
+                    <i class="fas fa-exclamation-triangle"></i> নিশ্চিত করার জন্য টাইপ করুন:
+                </div>
+                <div style="font-family:'Courier New',monospace;font-size:16px;font-weight:700;color:#7f1d1d;text-align:center;padding:8px;background:#fff;border-radius:6px;margin-bottom:10px;" id="replaceConfirmText">
+                    DELETE 2027
+                </div>
+                <input type="text" 
+                       id="replaceConfirmInput" 
+                       placeholder="এখানে টাইপ করুন..."
+                       style="width:100%;padding:10px 14px;border:2px solid #dc2626;border-radius:8px;font-family:'Courier New',monospace;font-size:14px;font-weight:700;text-align:center;text-transform:uppercase;outline:none;">
             </div>
         </div>
 
@@ -1376,7 +1482,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                 <i class="fas fa-times"></i> Cancel
             </button>
             <button class="btn-primary-grad" id="applyCopyBtn" disabled>
-                <i class="fas fa-copy"></i> Copy Students
+                <i class="fas fa-copy" id="applyCopyIcon"></i> <span id="applyCopyBtnText">Copy Students</span>
             </button>
         </div>
     </div>
@@ -1414,6 +1520,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/supabase.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/admin-students.js?v=3"></script>
+<script src="../js/admin-students.js?v=6"></script>
 </body>
 </html>

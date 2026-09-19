@@ -540,6 +540,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .management-card .card-icon.amber { background: linear-gradient(135deg, #f59e0b, #d97706); }
 .management-card .card-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
 .management-card .card-icon.rose { background: linear-gradient(135deg, #f43f5e, #e11d48); }
+.management-card .card-icon.emerald { background: linear-gradient(135deg, #10b981, #047857); }
 
 .management-card .card-content { flex: 1; min-width: 0; padding-right: 24px; position: relative; z-index: 1; }
 .management-card .card-content h6 {
@@ -563,18 +564,22 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     color: var(--gold-dark);
     border-color: rgba(212,175,55,0.3);
 }
+.management-card .badge-count.green {
+    background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(5,150,105,0.1));
+    color: #047857;
+    border-color: rgba(16,185,129,0.3);
+}
+.management-card .badge-count.amber {
+    background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(217,119,6,0.1));
+    color: #92400e;
+    border-color: rgba(245,158,11,0.3);
+}
 
 /* =========================================================
-   SKELETON LOADER (Facebook Style)
+   SKELETON LOADER
 ========================================================= */
 .skeleton {
-    background: linear-gradient(
-        90deg,
-        #f0f2f5 0%,
-        #e4e6eb 20%,
-        #f0f2f5 40%,
-        #f0f2f5 100%
-    );
+    background: linear-gradient(90deg, #f0f2f5 0%, #e4e6eb 20%, #f0f2f5 40%, #f0f2f5 100%);
     background-size: 200% 100%;
     animation: skeletonShimmer 1.4s ease-in-out infinite;
     border-radius: 8px;
@@ -584,10 +589,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     100% { background-position: -200% 0; }
 }
 
-.skeleton-text {
-    height: 14px;
-    margin-bottom: 8px;
-}
+.skeleton-text { height: 14px; margin-bottom: 8px; }
 .skeleton-text-lg { height: 24px; }
 .skeleton-text-sm { height: 11px; }
 .skeleton-text-xs { height: 9px; }
@@ -604,9 +606,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .skeleton-stat-card .skeleton-info { flex: 1; }
 .skeleton-stat-card .skeleton-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    width: 40px; height: 40px; border-radius: 12px;
 }
 
 .skeleton-management-card {
@@ -619,14 +619,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 16px;
 }
 .skeleton-management-card .skeleton-icon-lg {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
-    flex-shrink: 0;
+    width: 56px; height: 56px; border-radius: 16px; flex-shrink: 0;
 }
 .skeleton-management-card .skeleton-content { flex: 1; }
 
-/* Fade in for real content */
 .content-fade-in {
     animation: contentFadeIn 0.5s ease both;
 }
@@ -707,7 +703,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         <div class="brand-icon"><i class="fas fa-shield-alt"></i></div>
         <div>
             <h4>Fulbariya College</h4>
-            <small>Admin Panel v2.4</small>
+            <small>Admin Panel v2.5</small>
         </div>
     </div>
     <div class="user-info">
@@ -728,7 +724,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <!-- MAIN -->
 <div class="main-wrap">
 
-    <!-- HERO BANNER -->
     <div class="hero-banner fade-in">
         <div class="hero-content">
             <h3>আসসালামু আলাইকুম, <span id="welcomeName">Administrator</span>! 👋</h3>
@@ -740,7 +735,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
     </div>
 
-    <!-- PROFILE CARD -->
     <a href="admin-profile.html" class="profile-card fade-in fade-in-delay-1">
         <div class="pc-avatar" id="pcAvatar">A</div>
         <div class="pc-info">
@@ -755,13 +749,11 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
     </a>
 
-    <!-- STATS -->
     <h3 class="section-title fade-in fade-in-delay-1">
         <i class="fas fa-chart-line"></i> Overview
     </h3>
 
     <div class="stat-grid fade-in fade-in-delay-1" id="statGrid">
-        <!-- Skeleton -->
         <div class="skeleton-stat-card">
             <div class="skeleton-info">
                 <div class="skeleton skeleton-text-lg" style="width:60px;margin-bottom:8px;"></div>
@@ -820,7 +812,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
     </div>
 
-    <!-- FEATURED: ACADEMIC HUB -->
     <a href="admin-calendar.html" class="featured-card fade-in fade-in-delay-2">
         <div class="fc-icon"><i class="fas fa-graduation-cap"></i></div>
         <div class="fc-content">
@@ -831,13 +822,11 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         <div class="fc-arrow"><i class="fas fa-arrow-right"></i></div>
     </a>
 
-    <!-- MANAGEMENT -->
     <h3 class="section-title fade-in fade-in-delay-2">
         <i class="fas fa-th-large"></i> Management
     </h3>
 
     <div class="management-grid fade-in fade-in-delay-3" id="managementGrid">
-        <!-- Skeleton cards -->
         <div class="skeleton-management-card">
             <div class="skeleton skeleton-icon-lg"></div>
             <div class="skeleton-content">
@@ -888,10 +877,9 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
     </div>
 
-    <!-- FOOTER -->
     <div class="footer">
         <div class="footer-line"></div>
-        <p><i class="fas fa-shield-alt"></i> Fulbariya College · Admin Panel v2.4</p>
+        <p><i class="fas fa-shield-alt"></i> Fulbariya College · Admin Panel v2.5</p>
         <p style="font-size: 11px; margin-top: 6px;">&copy; 2026 All rights reserved</p>
     </div>
 
@@ -903,7 +891,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/supabase.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin-popup.js"></script>
- 
 <script>
 (function () {
     "use strict";
@@ -1010,14 +997,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         }
     }
 
-    // =========================================================
-    // REAL CONTENT RENDER
-    // =========================================================
     function renderRealContent() {
         const statGrid = document.getElementById('statGrid');
         const managementGrid = document.getElementById('managementGrid');
 
-        // Stat Grid
         if (statGrid) {
             statGrid.innerHTML = `
                 <div class="stat-card">
@@ -1105,7 +1088,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
             statGrid.classList.add('content-fade-in');
         }
 
-        // Management Grid
         if (managementGrid) {
             managementGrid.innerHTML = `
                 <a href="admin-notices.html" class="management-card">
@@ -1220,10 +1202,34 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                         <span class="badge-count" id="badgeGreeting">0</span>
                     </div>
                 </a>
+                <a href="admin-promote.html" class="management-card">
+                    <div class="card-icon emerald"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="card-content">
+                        <h6>15. Promote Students</h6>
+                        <p>Final result থেকে পরবর্তী শ্রেণিতে promote করুন</p>
+                        <span class="badge-count green" id="badgePromote">🎓</span>
+                    </div>
+                </a>
+                <a href="admin-promote-history.html" class="management-card">
+                    <div class="card-icon amber"><i class="fas fa-history"></i></div>
+                    <div class="card-content">
+                        <h6>16. Promotion History</h6>
+                        <p>পুরোনো Promote রেকর্ড ও Restore</p>
+                        <span class="badge-count amber" id="badgeHistory">📜</span>
+                    </div>
+                </a>
+                <a href="admin-promote-settings.html" class="management-card">
+                    <div class="card-icon navy"><i class="fas fa-sliders-h"></i></div>
+                    <div class="card-content">
+                        <h6>17. Promotion Settings</h6>
+                        <p>Pass/Fail rules configure করুন</p>
+                        <span class="badge-count" id="badgePromoteSettings">⚙️</span>
+                    </div>
+                </a>
                 <a href="admin-settings.html" class="management-card">
                     <div class="card-icon navy"><i class="fas fa-cog"></i></div>
                     <div class="card-content">
-                        <h6>15. Settings</h6>
+                        <h6>18. Settings</h6>
                         <p>Manage website and system settings</p>
                         <span class="badge-count">⚙️</span>
                     </div>
@@ -1324,7 +1330,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         }
     }
 
-    // Logout
     window.handleLogout = function () {
         window.fdcConfirm(
             'আপনি কি লগআউট করতে চান?',
@@ -1352,7 +1357,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     };
 
     function init() {
-        console.log('🚀 Admin Dashboard v2.4 initialized');
+        console.log('🚀 Admin Dashboard v2.5 initialized');
         waitForSupabase(checkSession);
     }
 

@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promotion History - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --border: rgba(0,0,0,0.06);
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* ============ HEADER ============ */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.admin-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.admin-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+    flex-shrink: 0;
+}
+.admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+.admin-header .user-box { display: flex; align-items: center; gap: 8px; }
+.avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    border: 2px solid rgba(242,210,123,0.4);
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+
+/* ============ MAIN ============ */
+.main-wrap { max-width: 1300px; margin: 0 auto; padding: 20px 16px 60px; }
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-sub { color: var(--grey); font-size: 13px; margin-bottom: 20px; }
+
+/* ============ FILTER ============ */
+.filter-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 18px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: end;
+}
+.filter-card .filter-item { flex: 1; min-width: 160px; }
+.filter-card label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+    margin-bottom: 5px;
+}
+.filter-card select,
+.filter-card input {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13px;
+    outline: none;
+    transition: 0.25s;
+    font-family: inherit;
+}
+.filter-card select:focus,
+.filter-card input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+    background: #fff;
+}
+
+.btn-primary-grad {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-primary-grad:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,85,0.35); color: #fff; }
+.btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary-grad i { color: var(--gold); }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid #e5e7eb;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
+
+/* ============ BATCH LIST ============ */
+.batch-list {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+}
+.batch-head {
+    display: grid;
+    grid-template-columns: 60px 1.2fr 1fr 1fr 100px 100px 130px;
+    gap: 8px;
+    padding: 12px 16px;
+    background: #f0f4f8;
+    font-size: 10.5px;
+    font-weight: 700;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid var(--border-light);
+}
+.batch-item {
+    display: grid;
+    grid-template-columns: 60px 1.2fr 1fr 1fr 100px 100px 130px;
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border-light);
+    align-items: center;
+    transition: 0.2s;
+}
+.batch-item:last-child { border-bottom: none; }
+.batch-item:hover { background: #fafbff; }
+
+.batch-item .bi-num {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--grey);
+    font-size: 13px;
+}
+.batch-item .bi-source,
+.batch-item .bi-target {
+    font-size: 12.5px;
+    color: var(--dark);
+    line-height: 1.4;
+}
+.batch-item .bi-source strong,
+.batch-item .bi-target strong {
+    color: var(--navy);
+    font-weight: 700;
+    display: block;
+}
+.batch-item .bi-source small,
+.batch-item .bi-target small {
+    color: var(--grey);
+    font-size: 11px;
+}
+.batch-item .bi-count {
+    text-align: center;
+}
+.batch-item .bi-count .num {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--success);
+    line-height: 1;
+}
+.batch-item .bi-count .num.fail { color: var(--danger); }
+.batch-item .bi-count .lbl {
+    font-size: 10px;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-top: 2px;
+    font-weight: 600;
+}
+.batch-item .bi-status {
+    text-align: center;
+}
+.badge-status {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.badge-status.completed { background: #dcfce7; color: #166534; }
+.badge-status.rolled_back { background: #fef3c7; color: #92400e; }
+.badge-status.failed { background: #fecaca; color: #991b1b; }
+
+.batch-item .bi-date {
+    font-size: 11px;
+    color: var(--grey);
+    line-height: 1.3;
+}
+.batch-item .bi-date strong {
+    color: var(--navy);
+    font-weight: 700;
+    display: block;
+}
+
+.batch-item .bi-actions {
+    display: flex;
+    gap: 5px;
+    justify-content: flex-end;
+}
+.action-btn {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.action-btn:hover:not(:disabled) { transform: scale(1.1); }
+.action-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.action-btn.view { background: #e3f2fd; color: #1565c0; }
+.action-btn.view:hover { background: #bbdefb; }
+.action-btn.restore { background: #fef3c7; color: #d97706; }
+.action-btn.restore:hover { background: #fde68a; }
+
+/* ============ EMPTY ============ */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+.empty-state .icon-wrap {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.empty-state i { font-size: 36px; color: var(--navy); opacity: 0.35; }
+.empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
+
+/* ============ MODAL ============ */
+.fdc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.7);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.25s ease;
+}
+.fdc-modal-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.fdc-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    position: relative;
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.fdc-modal-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    padding: 22px 24px;
+    border-radius: 20px 20px 0 0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+.fdc-modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.fdc-modal-header .mh-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.fdc-modal-header .mh-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.fdc-modal-header h5 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
+.fdc-modal-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.fdc-modal-close {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.fdc-modal-close:hover { background: var(--danger); transform: rotate(90deg); }
+
+.fdc-modal-body { padding: 22px 24px; }
+
+/* ============ MODAL DETAILS ============ */
+.detail-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.detail-stat {
+    background: #fafbff;
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    border: 1px solid var(--border-light);
+}
+.detail-stat .num {
+    font-size: 22px;
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    line-height: 1;
+    color: var(--navy);
+}
+.detail-stat.pass .num { color: var(--success); }
+.detail-stat.fail .num { color: var(--danger); }
+.detail-stat.warn .num { color: var(--warning); }
+.detail-stat .lbl {
+    font-size: 10px;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-top: 4px;
+    font-weight: 700;
+}
+
+.student-details-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+}
+.student-details-table thead {
+    background: #f0f4f8;
+}
+.student-details-table th {
+    padding: 10px 8px;
+    text-align: left;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 2px solid var(--border-light);
+}
+.student-details-table th:not(:first-child):not(:nth-child(2)) { text-align: center; }
+.student-details-table td {
+    padding: 10px 8px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--dark);
+}
+.student-details-table td:not(:first-child):not(:nth-child(2)) { text-align: center; }
+.student-details-table td.roll {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--navy);
+}
+.student-details-table td.name { font-weight: 600; }
+.student-details-table td.gpa {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+}
+.student-details-table td .badge {
+    padding: 3px 9px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.student-details-table td .badge.pass { background: #dcfce7; color: #166534; }
+.student-details-table td .badge.fail { background: #fecaca; color: #991b1b; }
+.student-details-table td .badge.no_result { background: #fef3c7; color: #92400e; }
+
+/* ============ PROGRESS ============ */
+.progress-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.progress-overlay.show { display: flex; }
+.progress-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 40px 36px;
+    max-width: 440px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+.progress-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--warning), #d97706);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    margin-bottom: 20px;
+    animation: pulseIcon 2s ease-in-out infinite;
+}
+@keyframes pulseIcon {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245,158,11,0.4); }
+    50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(245,158,11,0); }
+}
+.progress-card h4 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 8px;
+}
+.progress-card p {
+    font-size: 13px;
+    color: var(--grey);
+    margin-bottom: 24px;
+    min-height: 20px;
+}
+.progress-bar-wrap {
+    height: 10px;
+    background: #e5e7eb;
+    border-radius: 50px;
+    overflow: hidden;
+    margin-bottom: 12px;
+}
+.progress-bar-fill {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--warning), #d97706);
+    border-radius: 50px;
+    transition: width 0.4s ease;
+}
+.progress-percent {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--navy);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 900px) {
+    .batch-head,
+    .batch-item {
+        grid-template-columns: 40px 1fr 1fr 80px 90px;
+        gap: 6px;
+    }
+    .batch-head > *:nth-child(6),
+    .batch-item .bi-count.fail { display: none; }
+    .batch-head > *:nth-child(6) { display: none; }
+    .batch-item .bi-count.fail { display: none; }
+}
+@media (max-width: 640px) {
+    .admin-header { padding: 10px 14px; }
+    .admin-header h4 { font-size: 14px; }
+    .main-wrap { padding: 14px 12px 50px; }
+    .page-title { font-size: 18px; }
+
+    .batch-head { display: none; }
+    .batch-item {
+        grid-template-columns: 1fr;
+        padding: 16px;
+        gap: 10px;
+    }
+    .batch-item .bi-actions { justify-content: flex-start; }
+    .batch-item .bi-count { text-align: left; }
+
+    .fdc-modal-header { padding: 18px; }
+    .fdc-modal-body { padding: 18px; }
+    .fdc-modal-header h5 { font-size: 14px; }
+    .student-details-table { font-size: 11.5px; }
+    .student-details-table th,
+    .student-details-table td { padding: 8px 4px; }
+}
+@media (max-width: 480px) {
+    .btn-header span { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ HEADER ============ -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-history"></i></div>
+        <div>
+            <h4>Promotion History</h4>
+            <small>Promote-এর সম্পূর্ণ রেকর্ড</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="avatar-circle" data-admin-avatar>A</div>
+        <a href="admin-promote.html" class="btn-header">
+            <i class="fas fa-graduation-cap"></i> <span>New Promote</span>
+        </a>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+        </a>
+    </div>
+</header>
+
+<!-- ============ MAIN ============ -->
+<div class="main-wrap">
+
+    <h4 class="page-title">
+        <i class="fas fa-history"></i> Promotion History
+    </h4>
+    <p class="page-sub">সব Promote operation-এর রেকর্ড, restore করার অপশন সহ</p>
+
+    <!-- Filter -->
+    <div class="filter-card">
+        <div class="filter-item">
+            <label>Source Class</label>
+            <select id="filterSourceClass">
+                <option value="">All Classes</option>
+                <option value="11">Class 11</option>
+                <option value="12">Class 12</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Source Year</label>
+            <select id="filterSourceYear">
+                <option value="">All Years</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Branch</label>
+            <select id="filterBranch">
+                <option value="">All Branches</option>
+                <option value="HSC">HSC</option>
+                <option value="BM">BM</option>
+            </select>
+        </div>
+        <div class="filter-item">
+            <label>Status</label>
+            <select id="filterStatus">
+                <option value="">All Status</option>
+                <option value="completed">Completed</option>
+                <option value="rolled_back">Rolled Back</option>
+            </select>
+        </div>
+        <div class="filter-item" style="flex:0;">
+            <button class="btn-primary-grad" id="btnApplyFilter">
+                <i class="fas fa-filter"></i> Filter
+            </button>
+        </div>
+    </div>
+
+    <!-- Batch List -->
+    <div class="batch-list" id="batchListWrap">
+        <div class="batch-head">
+            <span>#</span>
+            <span>Source</span>
+            <span>Target</span>
+            <span>Date</span>
+            <span>Promoted</span>
+            <span>Failed</span>
+            <span style="text-align:right;">Actions</span>
+        </div>
+        <div id="batchList"></div>
+    </div>
+
+    <!-- Empty -->
+    <div class="empty-state" id="emptyState" style="display:none;">
+        <div class="icon-wrap"><i class="fas fa-inbox"></i></div>
+        <h6>কোনো promotion history নেই</h6>
+        <p>এখনো কোনো Promote operation করা হয়নি</p>
+    </div>
+
+</div>
+
+<!-- ============ MODAL: VIEW DETAILS ============ -->
+<div class="fdc-modal-overlay" id="detailModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-list-alt"></i></div>
+                <div>
+                    <h5>Promotion Details</h5>
+                    <small id="detailModalSub">—</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeDetailModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="fdc-modal-body" id="detailModalBody">
+            <!-- Dynamically generated -->
+        </div>
+    </div>
+</div>
+
+<!-- ============ PROGRESS OVERLAY ============ -->
+<div class="progress-overlay" id="progressOverlay">
+    <div class="progress-card">
+        <div class="progress-icon">
+            <i class="fas fa-undo"></i>
+        </div>
+        <h4>Restore চলছে...</h4>
+        <p id="progressText">প্রস্তুতি নেওয়া হচ্ছে...</p>
+        <div class="progress-bar-wrap">
+            <div class="progress-bar-fill" id="progressFill"></div>
+        </div>
+        <div class="progress-percent" id="progressPercent">0%</div>
+    </div>
+</div>
+
+<!-- ============ SCRIPTS ============ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin-popup.js"></script>
+<script src="../js/promote-utils.js"></script>
+<script src="../js/promote-restore.js"></script>
+<script src="../js/admin-promote-history.js"></script>
+
+</body>
+</html>
