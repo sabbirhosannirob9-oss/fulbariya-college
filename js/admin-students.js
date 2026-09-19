@@ -3,7 +3,7 @@
  * FULBARIYA COLLEGE — ADMIN STUDENTS MANAGEMENT
  * Location: js/admin-students.js
  * Depends: config.js, supabase.js, auth.js, admin-popup.js
- * Updated: Optional subject query fixed (group_name filter)
+ * Updated: v5 — Copy/Move/Replace + BM Pairing
  * =========================================================
  */
 
@@ -30,10 +30,6 @@
 
     let bulkPreviewRows = [];
 
-    let bsSelectedGroup = [];
-    let bsSelectedOptional = null;
-    let bsMatchedStudents = [];
-
     // =========================================================
     // DOM HELPERS
     // =========================================================
@@ -47,7 +43,7 @@
     }
 
     // =========================================================
-    // SESSION → auto session from year
+    // SESSION
     // =========================================================
     function getSessionFromYear(year) {
         if (!year) return '';
@@ -72,7 +68,7 @@
     }
 
     // =========================================================
-    // LOAD ADMIN INFO
+    // ADMIN INFO
     // =========================================================
     async function loadAdminInfo() {
         try {
@@ -120,18 +116,13 @@
         const years = [];
         for (let i = -2; i <= 2; i++) years.push(currentYear + i);
 
-        const filterYear = $('filterYear');
-        const studentYear = $('studentYear');
-        const bulkYear = $('bulkYear');
-        const copyFromYear = $('copyFromYear');
-        const copyToYear = $('copyToYear');
-
-        years.forEach(y => {
-            if (filterYear) filterYear.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
-            if (studentYear) studentYear.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
-            if (bulkYear) bulkYear.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
-            if (copyFromYear) copyFromYear.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
-            if (copyToYear) copyToYear.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
+        ['filterYear', 'studentYear', 'bulkYear', 'copyFromYear', 'copyToYear'].forEach(id => {
+            const el = $(id);
+            if (el) {
+                years.forEach(y => {
+                    el.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
+                });
+            }
         });
     }
 
@@ -192,13 +183,12 @@
         const total = allStudents.length;
         const hsc = allStudents.filter(s => s.branch === 'HSC').length;
         const bm = allStudents.filter(s => s.branch === 'BM').length;
-        const active = allStudents.filter(s => s.is_active).length;
 
         $('totalStudents').textContent = total;
         $('statTotal').textContent = total;
         $('statHSC').textContent = hsc;
         $('statBM').textContent = bm;
-        $('statActive').textContent = active;
+        $('statActive').textContent = total;
     }
 
     // =========================================================
@@ -334,12 +324,10 @@
 
     // =========================================================
     // LOAD SUBJECTS FOR GROUP
-    // ⭐ Updated: Optional query-তে group_name filter যোগ
     // =========================================================
     async function loadSubjectsForGroup(branch, className, groupName) {
         try {
-            // Compulsory — group_name ছাড়া (কারণ compulsory-তে group_name = NULL)
-            const { data: compulsory, error: compErr } = await window.FDC_SUPABASE
+            const { data: compulsory } = await window.FDC_SUPABASE
                 .from('subjects')
                 .select('*')
                 .eq('branch', branch)
@@ -348,10 +336,7 @@
                 .eq('is_active', true)
                 .order('sort_order');
 
-            if (compErr) console.error('Compulsory error:', compErr);
-
-            // Group subjects — নির্দিষ্ট group-এর
-            const { data: group, error: grpErr } = await window.FDC_SUPABASE
+            const { data: group } = await window.FDC_SUPABASE
                 .from('subjects')
                 .select('*')
                 .eq('branch', branch)
@@ -361,27 +346,15 @@
                 .eq('is_active', true)
                 .order('sort_order');
 
-            if (grpErr) console.error('Group error:', grpErr);
-
-            // ⭐ Optional — নির্দিষ্ট group-এর জন্য (group_name filter যোগ)
-            const { data: optional, error: optErr } = await window.FDC_SUPABASE
+            const { data: optional } = await window.FDC_SUPABASE
                 .from('subjects')
                 .select('*')
                 .eq('branch', branch)
                 .eq('class_name', className)
-                .eq('group_name', groupName)      // ← এটাই নতুন
+                .eq('group_name', groupName)
                 .eq('subject_type', 'optional')
                 .eq('is_active', true)
                 .order('sort_order');
-
-            if (optErr) console.error('Optional error:', optErr);
-
-            console.log('📚 Loaded subjects:', {
-                branch, className, groupName,
-                compulsory: compulsory?.length || 0,
-                group: group?.length || 0,
-                optional: optional?.length || 0
-            });
 
             return {
                 compulsory: compulsory || [],
@@ -395,7 +368,7 @@
     }
 
     // =========================================================
-    // GROUP SUBJECTS BY NAME (১ম + ২য় পত্র একসাথে)
+    // GROUP SUBJECTS BY NAME
     // =========================================================
     function groupSubjectsByName(subjects) {
         const map = new Map();
@@ -416,7 +389,7 @@
     }
 
     // =========================================================
-    // RENDER SUBJECT SELECTION (Modal)
+    // RENDER SUBJECT SELECTION
     // =========================================================
     async function renderSubjectSelection(branch, className, groupName, existingSubjects = []) {
         const subjectsData = await loadSubjectsForGroup(branch, className, groupName);
@@ -424,7 +397,6 @@
         currentGroupSubjects = groupSubjectsByName(subjectsData.group);
         currentOptionalSubjects = groupSubjectsByName(subjectsData.optional);
 
-        // Reset selection
         if (existingSubjects.length === 0) {
             selectedGroupSubjects = [];
             selectedOptionalSubject = null;
@@ -445,21 +417,14 @@
             });
         }
 
-        // Compulsory (locked)
         renderCompulsoryLocked(currentCompulsorySubjects);
-
-        // Group subjects
         renderGroupSubjectList(currentGroupSubjects, selectedGroupSubjects);
-
-        // Optional subjects
         renderOptionalSubjectList(currentOptionalSubjects, selectedOptionalSubject);
 
-        // Show/hide sections
         $('compulsoryBox').style.display = currentCompulsorySubjects.length > 0 ? 'block' : 'none';
         $('groupBox').style.display = currentGroupSubjects.length > 0 ? 'block' : 'none';
         $('optionalBox').style.display = currentOptionalSubjects.length > 0 ? 'block' : 'none';
 
-        // Info message
         const info = $('subjectInfo');
         if (branch === 'BM') {
             info.innerHTML = '<i class="fas fa-info-circle"></i> BM শাখায় trade subject আলাদা করে দেখানো হবে।';
@@ -492,7 +457,7 @@
     function renderGroupSubjectList(list, selectedNames) {
         const el = $('groupList');
         if (list.length === 0) {
-            el.innerHTML = '<div style="grid-column:1/-1;color:var(--grey);font-size:12px;padding:8px;">No group subjects available</div>';
+            el.innerHTML = '<div style="grid-column:1/-1;color:var(--grey);font-size:12px;padding:8px;">No group subjects</div>';
             return;
         }
         el.innerHTML = list.map(g => {
@@ -514,7 +479,7 @@
     function renderOptionalSubjectList(list, selectedName) {
         const el = $('optionalList');
         if (list.length === 0) {
-            el.innerHTML = '<div style="grid-column:1/-1;color:var(--grey);font-size:12px;padding:8px;">No optional subjects available</div>';
+            el.innerHTML = '<div style="grid-column:1/-1;color:var(--grey);font-size:12px;padding:8px;">No optional subjects</div>';
             return;
         }
         el.innerHTML = list.map(g => {
@@ -538,7 +503,7 @@
     }
 
     // =========================================================
-    // SUBJECT SELECTION EVENTS (delegated)
+    // SUBJECT SELECTION EVENTS
     // =========================================================
     document.addEventListener('click', function (e) {
         const groupItem = e.target.closest('[data-group-subject]');
@@ -576,27 +541,11 @@
                 selectedOptionalSubject = name;
                 optItem.classList.add('checked');
             }
-            return;
-        }
-
-        const tradeItem = e.target.closest('[data-trade-subject]');
-        if (tradeItem) {
-            const name = tradeItem.dataset.tradeSubject;
-            document.querySelectorAll('[data-trade-subject]').forEach(el => {
-                el.classList.remove('checked');
-            });
-            if (selectedTradeSubject === name) {
-                selectedTradeSubject = null;
-            } else {
-                selectedTradeSubject = name;
-                tradeItem.classList.add('checked');
-            }
-            return;
         }
     });
 
     // =========================================================
-    // MODAL: OPEN / CLOSE
+    // MODAL HELPERS
     // =========================================================
     function openModal(id) {
         const el = $(id);
@@ -656,7 +605,6 @@
             editingStudentId = id;
             selectedGroupSubjects = [];
             selectedOptionalSubject = null;
-            selectedTradeSubject = null;
 
             $('editStudentId').value = id;
             $('studentModalTitle').textContent = 'Edit Student';
@@ -733,9 +681,7 @@
             const studentData = {
                 name, roll,
                 class_name: className,
-                year,
-                session,
-                branch,
+                year, session, branch,
                 group_name: branch === 'HSC' ? groupName : 'BM-General'
             };
 
@@ -753,7 +699,7 @@
 
             await saveStudentSubjects(studentId, branch, className, groupName);
 
-            window.fdcSuccess(editingStudentId ? 'Student updated successfully!' : 'Student created successfully!');
+            window.fdcSuccess(editingStudentId ? 'Student updated!' : 'Student created!');
             closeModal('studentModal');
             await loadAllStudents();
         } catch (e) {
@@ -814,7 +760,7 @@
         if (!s) return;
 
         window.fdcConfirm(
-            `"${s.name}" কে deactivate করতে চান? সে আর result-এ দেখা যাবে না।`,
+            `"${s.name}" কে deactivate করতে চান?`,
             async function () {
                 try {
                     const { error } = await window.FDC_SUPABASE
@@ -828,11 +774,7 @@
                     window.fdcError('Failed: ' + e.message);
                 }
             },
-            {
-                title: 'Deactivate Student',
-                confirmText: 'Yes, Deactivate',
-                confirmType: 'danger'
-            }
+            { title: 'Deactivate Student', confirmText: 'Yes, Deactivate', confirmType: 'danger' }
         );
     }
 
@@ -846,9 +788,8 @@
 
             const { data: subs } = await window.FDC_SUPABASE
                 .from('student_subjects')
-                .select('subject_type, subject_id, subjects(subject_name, subject_code, paper_number)')
-                .eq('student_id', id)
-                .eq('is_active', true);
+                .select('subject_type, subject_id, subjects(subject_name, subject_code)')
+                .eq('student_id', id);
 
             const compSubs = (subs || []).filter(s => s.subject_type === 'compulsory');
             const grpSubs = (subs || []).filter(s => s.subject_type === 'group');
@@ -861,7 +802,7 @@
                     const sc = s.subjects?.subject_code || '';
                     return `<div style="padding:6px 0;font-size:12.5px;">
                         <strong>${escapeHtml(sn)}</strong>
-                        ${sc ? `<span class="code" style="background:rgba(10,22,85,0.06);color:var(--navy);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px;">${escapeHtml(sc)}</span>` : ''}
+                        ${sc ? `<span style="background:rgba(10,22,85,0.06);color:var(--navy);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px;">${escapeHtml(sc)}</span>` : ''}
                     </div>`;
                 }).join('');
             }
@@ -869,7 +810,7 @@
             const html = `
                 <div style="margin-bottom:16px;">
                     <div style="font-size:11px;color:var(--grey);text-transform:uppercase;font-weight:700;letter-spacing:0.5px;">Student Info</div>
-                    <div style="margin-top:8px;font-size:14px;color:var(--dark);">
+                    <div style="margin-top:8px;font-size:14px;">
                         <div><strong>Name:</strong> ${escapeHtml(student.name)}</div>
                         <div><strong>Roll:</strong> ${escapeHtml(student.roll)}</div>
                         <div><strong>Class:</strong> ${escapeHtml(student.class_name)}</div>
@@ -927,20 +868,15 @@
         bulkPreviewRows = rows;
 
         if (rows.length === 0) {
-            window.fdcWarning('কোনো valid data পাওয়া যায়নি। Roll, Name format ব্যবহার করুন।');
+            window.fdcWarning('কোনো valid data পাওয়া যায়নি।');
             $('bulkPreview').style.display = 'none';
             return;
         }
 
         $('bulkCount').textContent = `(${rows.length} rows)`;
         $('bulkPreviewBody').innerHTML = rows.map((r, i) => `
-            <tr>
-                <td>${i + 1}</td>
-                <td>${escapeHtml(r.roll)}</td>
-                <td>${escapeHtml(r.name)}</td>
-            </tr>
+            <tr><td>${i + 1}</td><td>${escapeHtml(r.roll)}</td><td>${escapeHtml(r.name)}</td></tr>
         `).join('');
-
         $('bulkPreview').style.display = 'block';
     }
 
@@ -963,12 +899,8 @@
             async function () {
                 const session = getSessionFromYear(year);
                 const records = rows.map(r => ({
-                    name: r.name,
-                    roll: r.roll,
-                    class_name: className,
-                    year,
-                    session,
-                    branch,
+                    name: r.name, roll: r.roll,
+                    class_name: className, year, session, branch,
                     group_name: branch === 'HSC' ? null : 'BM-General'
                 }));
 
@@ -977,7 +909,7 @@
                         .from('students').insert(records).select();
                     if (error) {
                         if (error.message.includes('duplicate')) {
-                            window.fdcWarning('কিছু student duplicate ছিল, বাদ পড়েছে।');
+                            window.fdcWarning('কিছু duplicate ছিল।');
                         } else throw error;
                     }
                     window.fdcSuccess(`${(data || []).length} জন student যোগ হয়েছে।`);
@@ -995,182 +927,85 @@
     }
 
     // =========================================================
-    // BULK SUBJECT ASSIGNMENT
+    // COPY / MOVE / REPLACE YEAR (v5)
     // =========================================================
-    async function bsLoadStudents() {
-        const cls = $('bsClass').value;
-        const branch = $('bsBranch').value;
-        const group = $('bsGroup').value;
-
-        if (!cls || !branch) {
-            $('bsInfo').style.display = 'none';
-            $('bsSubjectsArea').style.display = 'none';
-            $('applyBsBtn').disabled = true;
-            return;
+    function getCopyMode() {
+        const radios = document.querySelectorAll('input[name="copyMode"]');
+        for (const r of radios) {
+            if (r.checked) return r.value;
         }
-
-        let query = window.FDC_SUPABASE.from('students').select('*')
-            .eq('class_name', cls).eq('branch', branch).eq('is_active', true);
-
-        if (branch === 'HSC' && group) query = query.eq('group_name', group);
-
-        const { data } = await query;
-        bsMatchedStudents = data || [];
-
-        $('bsInfoText').textContent = `${bsMatchedStudents.length} জন student পাওয়া গেছে`;
-        $('bsInfo').style.display = 'flex';
-
-        if (bsMatchedStudents.length === 0) {
-            $('bsSubjectsArea').style.display = 'none';
-            $('applyBsBtn').disabled = true;
-            return;
-        }
-
-        const subjectsData = await loadSubjectsForGroup(branch, cls, group || 'BM-General');
-        const compGrouped = groupSubjectsByName(subjectsData.compulsory);
-        const grpGrouped = groupSubjectsByName(subjectsData.group);
-        const optGrouped = groupSubjectsByName(subjectsData.optional);
-
-        $('bsCompulsoryList').innerHTML = compGrouped.map(g =>
-            `<div class="subject-item checked disabled">
-                <div class="si-check"><i class="fas fa-check"></i></div>
-                <div class="si-content"><div class="si-name">${escapeHtml(g.name)}</div></div>
-            </div>`
-        ).join('');
-
-        bsSelectedGroup = [];
-        bsSelectedOptional = null;
-
-        $('bsGroupList').innerHTML = grpGrouped.map(g =>
-            `<div class="subject-item" data-bs-group="${escapeHtml(g.name)}">
-                <div class="si-check"></div>
-                <div class="si-content"><div class="si-name">${escapeHtml(g.name)}</div></div>
-            </div>`
-        ).join('');
-
-        $('bsOptionalList').innerHTML = optGrouped.map(g =>
-            `<div class="subject-item" data-bs-opt="${escapeHtml(g.name)}">
-                <div class="si-radio"></div>
-                <div class="si-content"><div class="si-name">${escapeHtml(g.name)}</div></div>
-            </div>`
-        ).join('');
-
-        $('bsSubjectsArea').style.display = 'block';
-        $('applyBsBtn').disabled = true;
-
-        window._bsData = { compGrouped, grpGrouped, optGrouped };
+        return 'copy';
     }
 
-    function bsUpdateApplyBtn() {
-        if ($('bsBranch').value === 'HSC') {
-            $('applyBsBtn').disabled = (bsSelectedGroup.length !== 3 || !bsSelectedOptional);
+    function updateCopyModeUI(mode) {
+        const copyLabel = $('modeCopyLabel');
+        const moveLabel = $('modeMoveLabel');
+        const replaceLabel = $('modeReplaceLabel');
+        const moveWarning = $('moveWarning');
+        const replaceWarning = $('replaceWarning');
+        const replaceBox = $('replaceConfirmBox');
+        const btnText = $('applyCopyBtnText');
+        const btnIcon = $('applyCopyIcon');
+        const btn = $('applyCopyBtn');
+        const modalIcon = $('copyModalIcon');
+        const modalTitle = $('copyModalTitle');
+        const modalSub = $('copyModalSub');
+
+        [copyLabel, moveLabel, replaceLabel].forEach(l => {
+            if (l) l.classList.remove('selected', 'move', 'replace');
+        });
+        if (moveWarning) moveWarning.classList.remove('show');
+        if (replaceWarning) replaceWarning.classList.remove('show');
+        if (replaceBox) replaceBox.style.display = 'none';
+
+        if (mode === 'replace') {
+            if (replaceLabel) replaceLabel.classList.add('selected', 'replace');
+            if (replaceWarning) replaceWarning.classList.add('show');
+            if (replaceBox) replaceBox.style.display = 'block';
+            if (btnText) btnText.textContent = 'Move & Replace';
+            if (btnIcon) btnIcon.className = 'fas fa-sync-alt';
+            if (btn) {
+                btn.style.background = 'linear-gradient(135deg, #7f1d1d, #991b1b)';
+                btn.style.boxShadow = '0 4px 16px rgba(127,29,29,0.4)';
+            }
+            if (modalIcon) modalIcon.className = 'fas fa-sync-alt';
+            if (modalTitle) modalTitle.textContent = 'Move & Replace';
+            if (modalSub) modalSub.textContent = 'Target-এর পুরোনো সব delete হবে';
+        } else if (mode === 'move') {
+            if (moveLabel) moveLabel.classList.add('selected', 'move');
+            if (moveWarning) moveWarning.classList.add('show');
+            if (btnText) btnText.textContent = 'Move Students';
+            if (btnIcon) btnIcon.className = 'fas fa-exchange-alt';
+            if (btn) {
+                btn.style.background = 'linear-gradient(135deg, #dc2626, #b91c1c)';
+                btn.style.boxShadow = '0 4px 16px rgba(220,38,38,0.3)';
+            }
+            if (modalIcon) modalIcon.className = 'fas fa-exchange-alt';
+            if (modalTitle) modalTitle.textContent = 'Move Year';
+            if (modalSub) modalSub.textContent = 'Source থেকে delete হবে';
         } else {
-            $('applyBsBtn').disabled = false;
+            if (copyLabel) copyLabel.classList.add('selected');
+            if (btnText) btnText.textContent = 'Copy Students';
+            if (btnIcon) btnIcon.className = 'fas fa-copy';
+            if (btn) {
+                btn.style.background = 'linear-gradient(135deg, var(--navy), var(--navy-2))';
+                btn.style.boxShadow = '0 4px 16px rgba(10,22,85,0.25)';
+            }
+            if (modalIcon) modalIcon.className = 'fas fa-copy';
+            if (modalTitle) modalTitle.textContent = 'Copy Year';
+            if (modalSub) modalSub.textContent = 'Source-এ থাকবে, target-এ যোগ';
         }
     }
 
-    document.addEventListener('click', function (e) {
-        const g = e.target.closest('[data-bs-group]');
-        if (g) {
-            const name = g.dataset.bsGroup;
-            const i = bsSelectedGroup.indexOf(name);
-            if (i > -1) {
-                bsSelectedGroup.splice(i, 1);
-                g.classList.remove('checked');
-                g.querySelector('.si-check').innerHTML = '';
-            } else {
-                if (bsSelectedGroup.length >= 3) {
-                    window.fdcWarning('সর্বোচ্চ ৩টি group subject।');
-                    return;
-                }
-                bsSelectedGroup.push(name);
-                g.classList.add('checked');
-                g.querySelector('.si-check').innerHTML = '<i class="fas fa-check"></i>';
-            }
-            bsUpdateApplyBtn();
-            return;
-        }
-
-        const o = e.target.closest('[data-bs-opt]');
-        if (o) {
-            const name = o.dataset.bsOpt;
-            document.querySelectorAll('[data-bs-opt]').forEach(el => el.classList.remove('checked'));
-            if (bsSelectedOptional === name) {
-                bsSelectedOptional = null;
-            } else {
-                bsSelectedOptional = name;
-                o.classList.add('checked');
-            }
-            bsUpdateApplyBtn();
-            return;
-        }
-    });
-
-    async function bsApply() {
-        if (!window._bsData) return;
-
-        const { compGrouped, grpGrouped, optGrouped } = window._bsData;
-
-        window.fdcConfirm(
-            `${bsMatchedStudents.length} জন student-কে subject assign করা হবে। নিশ্চিত?`,
-            async function () {
-                try {
-                    let totalRecords = 0;
-
-                    for (const s of bsMatchedStudents) {
-                        await window.FDC_SUPABASE.from('student_subjects').delete().eq('student_id', s.id);
-
-                        const records = [];
-                        const addedIds = new Set();
-
-                        function addSub(subjectId, subjectType) {
-                            if (addedIds.has(subjectId)) return;
-                            addedIds.add(subjectId);
-                            records.push({ student_id: s.id, subject_id: subjectId, subject_type: subjectType });
-                        }
-
-                        compGrouped.forEach(g => {
-                            g.papers.forEach(p => addSub(p.id, 'compulsory'));
-                        });
-
-                        grpGrouped.forEach(g => {
-                            if (bsSelectedGroup.includes(g.name)) {
-                                g.papers.forEach(p => addSub(p.id, 'group'));
-                            }
-                        });
-
-                        if (bsSelectedOptional) {
-                            const opt = optGrouped.find(g => g.name === bsSelectedOptional);
-                            if (opt) {
-                                opt.papers.forEach(p => addSub(p.id, 'optional'));
-                            }
-                        }
-
-                        if (records.length > 0) {
-                            await window.FDC_SUPABASE.from('student_subjects').insert(records);
-                            totalRecords += records.length;
-                        }
-                    }
-
-                    window.fdcSuccess(`${bsMatchedStudents.length} জন student-কে সফলভাবে assign করা হয়েছে!`);
-                    closeModal('bulkSubjectModal');
-                } catch (e) {
-                    window.fdcError('Bulk assign failed: ' + e.message);
-                }
-            },
-            { title: 'Confirm Bulk Assign', confirmText: 'Yes, Assign' }
-        );
-    }
-
-    // =========================================================
-    // COPY FROM PREVIOUS YEAR
-    // =========================================================
     async function copyCheck() {
         const fromCls = $('copyFromClass').value;
         const fromYear = $('copyFromYear').value;
         const toCls = $('copyToClass').value;
         const toYear = $('copyToYear').value;
         const branch = $('copyFromBranch').value;
+        const mode = getCopyMode();
+
+        updateCopyModeUI(mode);
 
         if (!fromCls || !fromYear || !toCls || !toYear) {
             $('copyInfo').style.display = 'none';
@@ -1182,73 +1017,236 @@
             .eq('class_name', fromCls).eq('year', fromYear).eq('is_active', true);
         if (branch) query = query.eq('branch', branch);
 
-        const { data } = await query;
-        const count = (data || []).length;
+        const { data: sourceStudents } = await query;
+        const sourceCount = (sourceStudents || []).length;
 
-        $('copyInfoText').textContent = `${count} জন student copy হবে (Class ${fromCls} → ${toCls}, Year ${fromYear} → ${toYear})।`;
-        $('copyInfo').style.display = 'flex';
-        $('applyCopyBtn').disabled = count === 0;
+        let targetCount = 0;
+        if (mode === 'replace') {
+            let tq = window.FDC_SUPABASE.from('students').select('id', { count: 'exact', head: true })
+                .eq('class_name', toCls).eq('year', toYear).eq('is_active', true);
+            if (branch) tq = tq.eq('branch', branch);
+            const { count } = await tq;
+            targetCount = count || 0;
+        }
+
+        if (sourceCount === 0) {
+            $('copyInfoText').innerHTML = `⚠️ Source-এ কোনো student নেই (Class ${fromCls}, Year ${fromYear})।`;
+            $('copyInfo').className = 'fdc-alert danger';
+            $('copyInfo').style.display = 'flex';
+            $('applyCopyBtn').disabled = true;
+        } else {
+            let infoHtml = `<strong>${sourceCount} জন</strong> student — Class ${fromCls} → ${toCls}, Year ${fromYear} → ${toYear}`;
+            if (mode === 'replace' && targetCount > 0) {
+                infoHtml += `<br><span style="color:#7f1d1d;font-weight:700;">⚠️ Target-এ ${targetCount} জন পুরোনো delete হবে।</span>`;
+            }
+            $('copyInfoText').innerHTML = infoHtml;
+            $('copyInfo').className = 'fdc-alert warn';
+            $('copyInfo').style.display = 'flex';
+            $('applyCopyBtn').disabled = false;
+        }
 
         $('copyToSession').value = getSessionFromYear(toYear);
 
-        window._copyData = { fromCls, fromYear, toCls, toYear, branch, students: data || [] };
+        if (mode === 'replace') {
+            const confirmText = 'DELETE ' + toYear;
+            $('replaceConfirmText').textContent = confirmText;
+            $('replaceConfirmInput').value = '';
+            $('replaceConfirmInput').placeholder = 'টাইপ করুন: ' + confirmText;
+        }
+
+        window._copyData = {
+            fromCls, fromYear, toCls, toYear, branch,
+            students: sourceStudents || [],
+            mode, targetCount
+        };
+    }
+
+    // ⭐ Get paired subject ID
+    async function getPairedSubjectId(subjectId) {
+        try {
+            const { data } = await window.FDC_SUPABASE
+                .from('subjects')
+                .select('paired_with_id')
+                .eq('id', subjectId)
+                .single();
+
+            return data?.paired_with_id || null;
+        } catch (e) {
+            console.warn('Get paired subject error:', e);
+            return null;
+        }
+    }
+
+    // ⭐ Assign subjects (branch-aware)
+    async function assignSubjectsToNewStudent(newStudent, oldStudent, targetClass) {
+        try {
+            const { data: oldSubs } = await window.FDC_SUPABASE
+                .from('student_subjects')
+                .select('subject_id, subject_type')
+                .eq('student_id', oldStudent.id);
+
+            if (!oldSubs || oldSubs.length === 0) return;
+
+            const isBM = (oldStudent.branch === 'BM');
+            const isClassChange = (oldStudent.class_name !== targetClass);
+
+            const records = [];
+
+            if (isBM && isClassChange) {
+                // BM: pairing-based swap
+                console.log(`🔄 BM swap: ${oldStudent.name}`);
+
+                for (const os of oldSubs) {
+                    const pairedId = await getPairedSubjectId(os.subject_id);
+                    if (pairedId) {
+                        records.push({
+                            student_id: newStudent.id,
+                            subject_id: pairedId,
+                            subject_type: os.subject_type
+                        });
+                    } else {
+                        records.push({
+                            student_id: newStudent.id,
+                            subject_id: os.subject_id,
+                            subject_type: os.subject_type
+                        });
+                    }
+                }
+            } else {
+                // HSC or same class: as-is copy
+                console.log(`📋 As-is copy: ${oldStudent.name}`);
+
+                for (const os of oldSubs) {
+                    records.push({
+                        student_id: newStudent.id,
+                        subject_id: os.subject_id,
+                        subject_type: os.subject_type
+                    });
+                }
+            }
+
+            if (records.length > 0) {
+                await window.FDC_SUPABASE.from('student_subjects').insert(records);
+            }
+
+        } catch (e) {
+            console.error('Assign subjects error:', e);
+        }
     }
 
     async function copyApply() {
         if (!window._copyData || window._copyData.students.length === 0) return;
 
-        const { toCls, toYear, students } = window._copyData;
+        const { toCls, toYear, students, mode, branch } = window._copyData;
         const session = getSessionFromYear(toYear);
+        const isCopy = (mode === 'copy');
+        const isMove = (mode === 'move');
+        const isReplace = (mode === 'replace');
+
+        // Type-to-confirm
+        if (isReplace) {
+            const confirmText = 'DELETE ' + toYear;
+            const typed = $('replaceConfirmInput').value.trim().toUpperCase();
+            if (typed !== confirmText) {
+                window.fdcWarning(`নিশ্চিত করতে "${confirmText}" টাইপ করুন।`);
+                return;
+            }
+        }
+
+        let confirmMsg;
+        if (isReplace) {
+            confirmMsg = `⚠️ Move & Replace নিশ্চিত?\n\n` +
+                `• Target-এর ${window._copyData.targetCount || 0} জন delete হবে\n` +
+                `• Source থেকে ${students.length} জন move হবে\n\n` +
+                `এটি undo করা যাবে না!`;
+        } else if (isMove) {
+            confirmMsg = `⚠️ ${students.length} জন MOVE করা হবে।\n\nSource থেকে delete হবে।\n\nনিশ্চিত?`;
+        } else {
+            confirmMsg = `${students.length} জন COPY করা হবে।\n\nনিশ্চিত?`;
+        }
 
         window.fdcConfirm(
-            `${students.length} জন student copy করা হবে। নিশ্চিত?`,
+            confirmMsg,
             async function () {
                 try {
-                    const records = students.map(s => ({
-                        name: s.name,
-                        roll: s.roll,
-                        class_name: toCls,
-                        year: toYear,
-                        session,
-                        branch: s.branch,
-                        group_name: s.group_name
-                    }));
+                    // Step 1: Replace → delete target first
+                    if (isReplace) {
+                        let tq = window.FDC_SUPABASE.from('students').select('id')
+                            .eq('class_name', toCls).eq('year', toYear).eq('is_active', true);
+                        if (branch) tq = tq.eq('branch', branch);
 
-                    const { data, error } = await window.FDC_SUPABASE
-                        .from('students').insert(records).select();
+                        const { data: targetStudents } = await tq;
 
-                    if (error) {
-                        if (error.message.includes('duplicate')) {
-                            window.fdcWarning('কিছু student duplicate ছিল।');
-                        } else throw error;
-                    }
-
-                    for (let i = 0; i < (data || []).length; i++) {
-                        const newStu = data[i];
-                        const oldStu = students[i];
-                        const { data: oldSubs } = await window.FDC_SUPABASE
-                            .from('student_subjects')
-                            .select('subject_id, subject_type')
-                            .eq('student_id', oldStu.id);
-
-                        if (oldSubs && oldSubs.length > 0) {
-                            const newSubs = oldSubs.map(s => ({
-                                student_id: newStu.id,
-                                subject_id: s.subject_id,
-                                subject_type: s.subject_type
-                            }));
-                            await window.FDC_SUPABASE.from('student_subjects').insert(newSubs);
+                        if (targetStudents && targetStudents.length > 0) {
+                            const targetIds = targetStudents.map(s => s.id);
+                            await window.FDC_SUPABASE.from('student_subjects')
+                                .delete().in('student_id', targetIds);
+                            await window.FDC_SUPABASE.from('students')
+                                .delete().in('id', targetIds);
+                            console.log(`🗑️ Deleted ${targetIds.length} from target`);
                         }
                     }
 
-                    window.fdcSuccess(`${(data || []).length} জন student copy হয়েছে!`);
+                    // Step 2: Insert to target
+                    const records = students.map(s => ({
+                        name: s.name, roll: s.roll,
+                        class_name: toCls, year: toYear, session,
+                        branch: s.branch, group_name: s.group_name
+                    }));
+
+                    const { data: inserted, error: insErr } = await window.FDC_SUPABASE
+                        .from('students').insert(records).select();
+
+                    if (insErr) {
+                        if (insErr.message && insErr.message.includes('duplicate')) {
+                            window.fdcWarning('কিছু student duplicate ছিল।');
+                        } else throw insErr;
+                    }
+
+                    const insertedList = inserted || [];
+
+                    // Step 3: Assign subjects (branch-aware)
+                    for (let i = 0; i < insertedList.length; i++) {
+                        const newStu = insertedList[i];
+                        const oldStu = students[i];
+                        if (!oldStu) continue;
+                        await assignSubjectsToNewStudent(newStu, oldStu, toCls);
+                    }
+
+                    // Step 4: Delete source (Move/Replace)
+                    if (isMove || isReplace) {
+                        const sourceIds = students.map(s => s.id);
+                        await window.FDC_SUPABASE.from('student_subjects')
+                            .delete().in('student_id', sourceIds);
+                        const { error: delErr } = await window.FDC_SUPABASE
+                            .from('students').delete().in('id', sourceIds);
+                        if (delErr) throw delErr;
+                    }
+
+                    let successMsg = '';
+                    if (isReplace) successMsg = `✅ ${insertedList.length} জন move & replace হয়েছে!`;
+                    else if (isMove) successMsg = `✅ ${insertedList.length} জন move হয়েছে!`;
+                    else successMsg = `✅ ${insertedList.length} জন copy হয়েছে!`;
+
+                    window.fdcSuccess(successMsg);
                     closeModal('copyYearModal');
+
+                    const copyRadio = document.querySelector('input[name="copyMode"][value="copy"]');
+                    if (copyRadio) copyRadio.checked = true;
+                    updateCopyModeUI('copy');
+
                     await loadAllStudents();
+
                 } catch (e) {
-                    window.fdcError('Copy failed: ' + e.message);
+                    console.error('Copy/Move error:', e);
+                    window.fdcError('Failed: ' + e.message);
                 }
             },
-            { title: 'Confirm Copy', confirmText: 'Yes, Copy' }
+            {
+                title: isReplace ? '⚠️ Confirm Move & Replace' : (isMove ? 'Confirm Move' : 'Confirm Copy'),
+                confirmText: isReplace ? 'Yes, Replace' : (isMove ? 'Yes, Move' : 'Yes, Copy'),
+                confirmType: isReplace ? 'danger' : (isMove ? 'danger' : 'primary')
+            }
         );
     }
 
@@ -1336,36 +1334,57 @@
             document.querySelectorAll('.row-select').forEach(cb => cb.checked = this.checked);
         });
 
+        // Bulk Import
         $('btnBulkImport').addEventListener('click', () => openModal('bulkImportModal'));
         $('closeBulkModal').addEventListener('click', () => closeModal('bulkImportModal'));
         $('cancelBulkBtn').addEventListener('click', () => closeModal('bulkImportModal'));
         $('previewBulkBtn').addEventListener('click', previewBulk);
         $('saveBulkBtn').addEventListener('click', saveBulk);
 
+        // Copy/Move Year
         $('btnCopyYear').addEventListener('click', () => {
             openModal('copyYearModal');
+            const copyRadio = document.querySelector('input[name="copyMode"][value="copy"]');
+            if (copyRadio) copyRadio.checked = true;
+            updateCopyModeUI('copy');
             copyCheck();
         });
         $('closeCopyModal').addEventListener('click', () => closeModal('copyYearModal'));
         $('cancelCopyBtn').addEventListener('click', () => closeModal('copyYearModal'));
+
         ['copyFromClass', 'copyFromYear', 'copyToClass', 'copyToYear', 'copyFromBranch'].forEach(id => {
             $(id).addEventListener('change', copyCheck);
         });
+
+        document.querySelectorAll('input[name="copyMode"]').forEach(radio => {
+            radio.addEventListener('change', function () {
+                updateCopyModeUI(this.value);
+                if (window._copyData) copyCheck();
+            });
+        });
+
+        ['modeCopyLabel', 'modeMoveLabel', 'modeReplaceLabel'].forEach(labelId => {
+            const label = $(labelId);
+            if (label) {
+                label.addEventListener('click', function (e) {
+                    if (e.target.tagName !== 'INPUT') {
+                        const radio = label.querySelector('input[type="radio"]');
+                        if (radio && !radio.checked) {
+                            radio.checked = true;
+                            radio.dispatchEvent(new Event('change'));
+                        }
+                    }
+                });
+            }
+        });
+
         $('applyCopyBtn').addEventListener('click', copyApply);
 
-        $('closeBulkSubjectModal').addEventListener('click', () => closeModal('bulkSubjectModal'));
-        $('cancelBsBtn').addEventListener('click', () => closeModal('bulkSubjectModal'));
-        $('bsClass').addEventListener('change', bsLoadStudents);
-        $('bsBranch').addEventListener('change', async function () {
-            if (this.value) await loadGroupsByBranch(this.value, 'bsGroup');
-            bsLoadStudents();
-        });
-        $('bsGroup').addEventListener('change', bsLoadStudents);
-        $('applyBsBtn').addEventListener('click', bsApply);
-
+        // View modal
         $('closeViewModal').addEventListener('click', () => closeModal('viewStudentModal'));
         $('closeViewBtn').addEventListener('click', () => closeModal('viewStudentModal'));
 
+        // Modal backdrop
         document.querySelectorAll('.fdc-modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function (e) {
                 if (e.target === this) {
@@ -1380,7 +1399,7 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Students initializing...');
+        console.log('🚀 Admin Students v5 initializing...');
 
         loadYearOptions();
         attachEvents();
