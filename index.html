@@ -7,7 +7,20 @@
 <title>ফুলবাড়ীয়া কলেজ | Fulbariya College</title>
 <meta name="description" content="ফুলবাড়ীয়া কলেজ - মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়">
 <meta name="theme-color" content="#0a1655">
+<script>
+(function(){
+    try{
+        if(sessionStorage.getItem("fdc_splash_seen") === "1"){
+            document.documentElement.classList.add("fdc-skip-splash");
+        }else{
+            sessionStorage.setItem("fdc_splash_seen","1");
+        }
+    }catch(e){}
+})();
+</script>
 <style id="fdcSplashStyles">
+html.fdc-skip-splash #fdcSplash{display:none!important}
+html.fdc-skip-splash body>*:not(#fdcSplash):not(#fdcPageLoader){opacity:1!important;animation:none!important}
 #fdcSplash{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#0a1655,#0d1a5e);color:#fff;animation:fdcSplashExit 1s cubic-bezier(.4,0,.2,1) 1.8s forwards;pointer-events:auto;will-change:opacity,transform}
 #fdcSplash::before{content:"";position:absolute;inset:-25%;background:radial-gradient(circle at 50% 44%,rgba(242,210,123,.13),transparent 34%);pointer-events:none}
 .fdc-splash-inner{position:relative;z-index:1;width:min(84vw,360px);text-align:center}
@@ -23,7 +36,43 @@
 @keyframes fdcShimmerBar{from{transform:translateX(-130%)}to{transform:translateX(330%)}}
 @keyframes fdcSplashExit{to{opacity:0;transform:scale(1.03);pointer-events:none}}
 @keyframes fdcHomeIn{from{opacity:0}to{opacity:1}}
-body>*:not(#fdcSplash){opacity:0;animation:fdcHomeIn .65s ease 1.55s forwards}
+body>*:not(#fdcSplash):not(#fdcPageLoader){opacity:0;animation:fdcHomeIn .65s ease 1.55s forwards}
+
+/* =========================================================
+   FULL-PAGE FACEBOOK-STYLE LOADING LAYER
+   Sits below the splash and disappears after the page is ready.
+========================================================= */
+#fdcPageLoader{position:fixed;inset:0;z-index:99998;background:#f7f8fb;overflow:hidden;opacity:1;visibility:visible;transition:opacity .38s ease,visibility .38s ease;pointer-events:auto}
+#fdcPageLoader.fdc-loader-hide{opacity:0;visibility:hidden;pointer-events:none}
+.fdc-loader-shell{width:100%;min-height:100%;background:#f7f8fb}
+.fdc-loader-top{height:46px;background:#e9edf3;position:relative;overflow:hidden}
+.fdc-loader-header{height:92px;background:#fff;border-bottom:1px solid #e9edf3;display:flex;align-items:center;padding:0 18px;gap:14px}
+.fdc-loader-logo{width:48px;height:48px;border-radius:14px}
+.fdc-loader-brand{flex:1;max-width:190px}
+.fdc-loader-line{height:10px;border-radius:6px;margin-bottom:9px}
+.fdc-loader-line:last-child{margin-bottom:0;width:68%}
+.fdc-loader-menu{width:34px;height:34px;border-radius:10px}
+.fdc-loader-hero{height:300px;margin:14px auto 0;width:min(100% - 28px,1100px);border-radius:18px}
+.fdc-loader-row{width:min(100% - 28px,1100px);margin:14px auto;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.fdc-loader-card{height:112px;border-radius:16px}
+.fdc-loader-content{width:min(100% - 28px,1100px);margin:14px auto;display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+.fdc-loader-panel{height:180px;border-radius:17px}
+.fdc-loader-shimmer{background:linear-gradient(90deg,#e9edf3 0%,#f7f9fc 22%,#e2e7ee 42%,#f7f9fc 62%,#e9edf3 100%);background-size:260% 100%;animation:fdcPageShimmer 1.35s linear infinite}
+@keyframes fdcPageShimmer{0%{background-position:120% 0}100%{background-position:-120% 0}}
+@media(max-width:700px){
+    .fdc-loader-top{height:38px}
+    .fdc-loader-header{height:78px;padding:0 14px}
+    .fdc-loader-logo{width:42px;height:42px;border-radius:12px}
+    .fdc-loader-hero{height:255px;margin-top:10px;border-radius:14px}
+    .fdc-loader-row{grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px}
+    .fdc-loader-card{height:92px;border-radius:13px}
+    .fdc-loader-content{grid-template-columns:1fr;margin-top:10px}
+    .fdc-loader-panel{height:150px}
+}
+@media(prefers-reduced-motion:reduce){
+    .fdc-loader-shimmer{animation:none}
+    #fdcSplash{animation:none;opacity:0;pointer-events:none}
+}
 </style>
 
 <link rel="manifest" href="/manifest.json">
@@ -3060,6 +3109,31 @@ img { max-width: 100%; display: block; }
     </div>
 </div>
 
+<!-- FACEBOOK-STYLE PAGE LOADING SKELETON -->
+<div id="fdcPageLoader" aria-hidden="true">
+    <div class="fdc-loader-shell">
+        <div class="fdc-loader-top fdc-loader-shimmer"></div>
+        <div class="fdc-loader-header">
+            <div class="fdc-loader-logo fdc-loader-shimmer"></div>
+            <div class="fdc-loader-brand">
+                <div class="fdc-loader-line fdc-loader-shimmer"></div>
+                <div class="fdc-loader-line fdc-loader-shimmer"></div>
+            </div>
+            <div class="fdc-loader-menu fdc-loader-shimmer"></div>
+        </div>
+        <div class="fdc-loader-hero fdc-loader-shimmer"></div>
+        <div class="fdc-loader-row">
+            <div class="fdc-loader-card fdc-loader-shimmer"></div>
+            <div class="fdc-loader-card fdc-loader-shimmer"></div>
+            <div class="fdc-loader-card fdc-loader-shimmer"></div>
+            <div class="fdc-loader-card fdc-loader-shimmer"></div>
+        </div>
+        <div class="fdc-loader-content">
+            <div class="fdc-loader-panel fdc-loader-shimmer"></div>
+            <div class="fdc-loader-panel fdc-loader-shimmer"></div>
+        </div>
+    </div>
+</div>
 
 <!-- TOP BAR -->
 <div class="top-bar">
@@ -5153,5 +5227,40 @@ function isDismissed() {
 
 })();
 </script>
+
+<!-- ============================================================
+     PAGE LOADER CONTROLLER — UI ONLY
+     Does not touch Supabase, Cloudinary, PWA or existing functions.
+     ============================================================ -->
+<script>
+(function(){
+    "use strict";
+    var loader=document.getElementById("fdcPageLoader");
+    if(!loader) return;
+
+    var hidden=false;
+    var started=Date.now();
+
+    function hideLoader(){
+        if(hidden) return;
+        hidden=true;
+        var elapsed=Date.now()-started;
+        var wait=Math.max(0,520-elapsed);
+        setTimeout(function(){
+            loader.classList.add("fdc-loader-hide");
+            setTimeout(function(){
+                if(loader.parentNode) loader.parentNode.removeChild(loader);
+            },420);
+        },wait);
+    }
+
+    if(document.readyState === "complete") hideLoader();
+    else window.addEventListener("load",hideLoader,{once:true});
+
+    // Safety fallback: slow external resources should never trap the user.
+    setTimeout(hideLoader,3200);
+})();
+</script>
+
 </body>
 </html>
