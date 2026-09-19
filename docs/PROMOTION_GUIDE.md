@@ -1,282 +1,625 @@
-# 🎓 Promote System — Admin Guide
+# 🎓 Fulbariya College — Promotion Guide (Admin Manual)
 
-**Fulbariya College**
-**Version:** 1.0
-
----
-
-## 📌 Promote System কী?
-
-এটি একটি automated system যা **Final পরীক্ষার result** থেকে Pass/Fail detect করে ছাত্র-ছাত্রীদের **পরবর্তী শ্রেণিতে Promote** করে।
-
-- **HSC:** Subjects as-is copy হয় (একই থাকে)
-- **BM:** Subjects auto-swap হয় (Class 11 → Class 12)
+**Version:** 2.0
+**Last Updated:** Session Fix (Academic Session Policy)
+**Target Audience:** College Admin, Office Staff
 
 ---
 
-## 🎯 Promote করার আগে যা যা দরকার
+## 📖 সূচিপত্র
 
-### চেকলিস্ট:
-
-- [ ] Final পরীক্ষার **Result Entry** করা হয়েছে
-- [ ] Result **Publish** করা হয়েছে (Draft → Published)
-- [ ] Student-দের **Subject Assign** করা আছে
-- [ ] BM Branch-এ **Subject Pairing Setup** আছে
-
----
-
-## 📋 Step-by-Step Process
-
-### Step 1 — Dashboard-এ যান
-
-`admin-dashboard.html` → **Management** section → **15. Promote Students** card ক্লিক করুন।
-
-অথবা সরাসরি:
-```
-admin-promote.html
-```
+1. [Promote System কী?](#১-promote-system-কী)
+2. [Session Policy — সবচেয়ে গুরুত্বপূর্ণ](#২-session-policy--সবচেয়ে-গুরুত্বপূর্ণ)
+3. [Promote করার সম্পূর্ণ Workflow](#৩-promote-করার-সম্পূর্ণ-workflow)
+4. [Pass/Fail Rules](#৪-passfail-rules)
+5. [Copy Year vs Move Year vs Move & Replace](#৫-copy-year-vs-move-year-vs-move--replace)
+6. [Restore (Undo) System](#৬-restore-undo-system)
+7. [Subject Pairing (BM Branch)](#৭-subject-pairing-bm-branch)
+8. [Troubleshooting](#৮-troubleshooting)
+9. [FAQ](#৯-faq)
 
 ---
 
-### Step 2 — Source Selection
+## ১. Promote System কী?
 
-**Source = যেখান থেকে ছাত্ররা আসবে**
+**Promote System** = Class 11-এর student-দের **Final Exam-এর result** দেখে স্বয়ংক্রিয়ভাবে **Class 12-এ উত্তীর্ণ** করা।
 
-| Field | কী দিবেন | উদাহরণ |
-|---|---|---|
-| Class | যে class থেকে Promote | Class 11 |
-| Year | যে year-এর ছাত্ররা | 2026 |
-| Branch | শাখা | HSC / BM / All |
-| Exam | Fixed "Final পরীক্ষা" | — |
-
-**তারপর:** `[🔍 Load Students]` ক্লিক করুন।
-
----
-
-### Step 3 — Result Summary দেখুন
+### 🎯 মূল লক্ষ্য
 
 ```
-Total: 60
-✅ Passed: 55 → Promote হবে
-❌ Failed: 3 → Class 11-এ থাকবে
-⚠️ No Result: 2 → Manual decision
+Class 11 (একademic session: 2024-25)
+    ↓ Final Exam Pass হলে
+Class 12 (একademic session: 2024-25) ← একই session
 ```
 
-**👉 Pass করা ছাত্র-ছাত্রীরা auto-checked থাকবে।**
+### ✨ সুবিধা
+
+- ✅ Manual student entry লাগে না
+- ✅ Subject auto-copy হয়
+- ✅ Pass/Fail auto-detect হয়
+- ✅ Full audit trail থাকে
+- ✅ Restore (undo) করা যায়
 
 ---
 
-### Step 4 — Student List Verify
+## ২. Session Policy — সবচেয়ে গুরুত্বপূর্ণ
 
-- ✅ **Pass করা ছাত্র auto-selected**
-- ❌ **Fail করা ছাত্র auto-unchecked**
+### 🔴 বাংলাদেশ HSC-তে Session কী?
 
-**Admin চাইলে:**
-- Pass করা ছাত্রকে uncheck করতে পারবে
-- Fail করা ছাত্রকে check করতে পারবে (override)
-- No Result ছাত্রকে check করতে পারবে
+**Session = ভর্তির বছর (Academic Session)**
 
----
+| বিষয় | ব্যাখ্যা |
+|------|---------|
+| **Session কী?** | Class 11-এ ভর্তি হওয়ার বছর |
+| **Format** | `2024-25` (যেমন) |
+| **কখন বদলায়?** | কখনো না — ভর্তি থেকে পাস পর্যন্ত একই |
+| **কেন?** | বাংলাদেশে session মানে "ব্যাচ" |
 
-### Step 5 — Target Selection
-
-| Field | কী দিবেন | উদাহরণ |
-|---|---|---|
-| Class | পরবর্তী class | Class 12 |
-| Year | পরবর্তী year | 2027 |
-| Session | Auto-fill | 2027-2028 |
-
-**⚠️ সতর্কতা:** Target class-এ বর্তমানে যতজন student আছে — তারা **delete** হবে।
-
----
-
-### Step 6 — Type-to-Confirm
-
-**নিশ্চিত করার জন্য টাইপ করুন:**
+### ✅ সঠিক Behavior
 
 ```
-DELETE 2027
+Class 11 ভর্তি: 2024 (Session: 2024-25)
+    ↓ Class 11 Final Pass
+Class 12-এ Promote
+    ↓
+Class 12-এ থাকবে: Session 2024-25 ← একই session
 ```
 
-**⚠️ এই code টাইপ না করলে `Execute Promote` বাটন কাজ করবে না।**
-
----
-
-### Step 7 — Execute Promote
-
-`[🎓 Execute Promote]` ক্লিক করুন।
-
-**চূড়ান্ত নিশ্চিতকরণ আসবে** → **`Yes, Execute`** ক্লিক করুন।
-
-**Progress দেখা যাবে:**
-```
-🎓 Promote চলছে...
-[████████░░] 80%
-📚 Subjects copy... (45/55)
-```
-
-**সময়:** 55 জন student-এর জন্য ~30 সেকেন্ড।
-
----
-
-### Step 8 — Success Message
+### ❌ ভুল Behavior (যা ঠিক করা হয়েছে)
 
 ```
-✅ 55 জন student সফলভাবে Promote হয়েছে!
+Class 11 (2024-25)
+    ↓ Promote
+Class 12 (2025-26) ← ❌ ভুল! session বদলে গেছে
 ```
 
-Dashboard automatically reload হবে।
+**কারণ:** আগে session target year থেকে generate হতো।
+
+### 🎯 আমাদের website-এর scope
+
+**যা আমরা track করি:**
+- ✅ Class 11 ভর্তি
+- ✅ ১ম সাময়িক, ২য় সাময়িক, টেস্ট
+- ✅ Class 11 Final (Promotion base)
+- ✅ Class 12-এ Promote
+
+**যা আমরা track করি না:**
+- ❌ HSC Board exam (বোর্ডের কাজ)
+- ❌ Board exam-এ fail হলে retake
+- ❌ Improvement exam
+
+**মানে:** আপনার website শুধু **Inter-mediate Level** পর্যন্ত। Board-level সব কিছু বাদ।
 
 ---
 
-## 🔄 Promote করার পরে কী হয়
+## ৩. Promote করার সম্পূর্ণ Workflow
 
-| কী | কোথায় যায় |
-|---|---|
-| Pass করা ছাত্র | Class 11 → Class 12 |
-| Failed ছাত্র | Class 11-এ থাকে |
-| No Result ছাত্র | Class 11-এ থাকে |
-| Target-এর পুরোনো ছাত্র | Permanently delete |
-| Subjects (HSC) | As-is copy |
-| Subjects (BM) | Auto-swap |
+### 🎬 সম্পূর্ণ Cycle (৪ ধাপ)
 
----
+### 📌 ধাপ ১: Final Exam Result Entry
 
-## 🎯 Restore করা (ভুল হলে)
+```
+Admin → Results
+  ↓
+Exam: Class 11 Final
+Class: 11
+Year: 2024
+Branch: HSC
+  ↓
+[Load Students]
+  ↓
+প্রতিটা student-এর marks দিন:
+  • CQ (সৃজনশীল)
+  • MCQ (নৈর্ব্যক্তিক)
+  • Practical (প্রযোজ্য হলে)
+  ↓
+[Publish] ← ⚠️ অবশ্যই publish করতে হবে
+```
 
-### কখন Restore করবেন?
-
-- ভুল class-এ promote হয়েছে
-- ভুল year select হয়েছে
-- ভুল branch-এ promote হয়েছে
-- Admin ভুল student promote করেছে
-
-### কীভাবে Restore করবেন?
-
-1. Dashboard → **16. Promotion History**
-2. Batch list-এ সব Promote রেকর্ড
-3. যে batch restore করবেন → **View Details**
-4. Details verify → **`↺ এই Batch Restore করুন`**
-5. Confirm করুন
-
-**⚠️ Restore করার ফলে:**
-- নতুন promote করা student-রা delete হবে
-- পুরোনো student-রা ফিরে আসবে
-- Original state-এ ফিরে যাবে
+**⚠️ গুরুত্বপূর্ণ:**
+- Result **publish না করলে** Promote System result দেখবে না
+- সব student-এর result entry থাকতে হবে
+- `is_published = true` হতে হবে
 
 ---
 
-## ⚙️ Promote Settings
+### 📌 ধাপ ২: Promote Page-এ যান
 
-**Dashboard → 17. Promotion Settings**
+```
+Admin Dashboard → 15. Promote Students
+```
 
-### Rules:
-
-| Rule | Default | কাজ |
-|---|---|---|
-| **সর্বনিম্ন GPA** | 2.00 | GPA কম হলে Fail |
-| **No Fail Subjects** | ✅ ON | কোনো subject fail থাকলে Fail |
-| **Absent is Fail** | ✅ ON | কোনো subject absent থাকলে Fail |
-| **No Result Action** | Skip | Result না থাকলে promote হবে না |
-
-**⚠️ পরিবর্তন করলে পরবর্তী Promote-এ apply হবে।**
+অথবা সরাসরি: `admin-pages/admin-promote.html`
 
 ---
 
-## 🚨 সাধারণ সমস্যা ও সমাধান
+### 📌 ধাপ ৩: Source Select করুন
 
-### সমস্যা ১: "Load Students" চাপলে কিছু আসে না
+```
+┌─────────────────────────────────────┐
+│ 📤 Source (কোথা থেকে)               │
+├─────────────────────────────────────┤
+│ Class:   [11 ▼]                     │
+│ Year:    [2024 ▼]                   │
+│ Branch:  [HSC ▼]                    │
+│                                     │
+│ [Load Students]                     │
+└─────────────────────────────────────┘
+```
+
+**Load করলে যা দেখবেন:**
+
+```
+┌─────────────────────────────────────┐
+│ 📊 Summary                          │
+│ Total: 50  Pass: 45  Fail: 5        │
+└─────────────────────────────────────┘
+
+┌─────────────────────────────────────┐
+│ ✅ Student List (50)                │
+├─────────────────────────────────────┤
+│ ☑ 101 Sabbir                        │
+│     HSC · Science · Session: 2024-25│
+│     GPA: 4.50   ✅ Pass             │
+│                                     │
+│ ☐ 102 Rahim                         │
+│     HSC · Science · Session: 2024-25│
+│     GPA: 1.80   ❌ Fail             │
+│                                     │
+│ ☑ 103 Karim                         │
+│     HSC · Science · Session: 2024-25│
+│     GPA: 3.75   ✅ Pass             │
+└─────────────────────────────────────┘
+```
+
+**🎯 যা দেখবেন:**
+- Pass students **auto-checked** ✅
+- Fail students **unchecked** ❌
+- প্রতিটা student-এর **Session** দেখাবে
+
+---
+
+### 📌 ধাপ ৪: Target Select করুন
+
+```
+┌─────────────────────────────────────┐
+│ 📥 Target (কোথায় যাবে)             │
+├─────────────────────────────────────┤
+│ Class:   [12 ▼]                     │
+│ Year:    [2025 ▼]                   │
+│                                     │
+│ 🎓 Session থাকবে: 2024-25 ← ✅       │
+└─────────────────────────────────────┘
+```
+
+**⚠️ Session note:**
+- Session **source থেকে copy** হবে
+- Target year থেকে generate হবে না
+- Preview-তে দেখাবে: `🎓 Session থাকবে: 2024-25`
+
+**Target-এ student থাকলে warning:**
+```
+⚠️ Class 12 / Year 2025-এ বর্তমানে 30 জন student আছে।
+⚠️ Promote চালু করলে এরা delete হবে।
+🎓 Session থাকবে: 2024-25
+```
+
+---
+
+### 📌 ধাপ ৫: Final Summary Verify
+
+```
+┌─────────────────────────────────────┐
+│ 📋 Final Summary                    │
+├─────────────────────────────────────┤
+│ 📤 Source:  Class 11 / 2024 / HSC   │
+│ 📥 Target:  Class 12 / 2025         │
+│ 🎓 Session: 2024-25 (source থেকে)   │
+│ ✅ Promote হবে:  45 জন              │
+│ ⏭️ Class 11-এ থাকবে: 5 জন          │
+└─────────────────────────────────────┘
+```
+
+---
+
+### 📌 ধাপ ৬: Execute Promote
+
+**Confirmation Input:**
+
+```
+⚠️ চূড়ান্ত নিশ্চিতকরণ
+
+• 45 জন student Class 12-এ যাবে
+• Session থাকবে: 2024-25 (অপরিবর্তিত)
+• Class 12 / Year 2025-এর পুরোনো সব delete হবে
+• Class 11-এ 5 জন থাকবে
+
+এটি undo করা যাবে না (তবে Restore করা যাবে)।
+
+Type: DELETE 2025  ← টাইপ করুন
+
+[Cancel]  [Yes, Execute]
+```
+
+**Type-to-Confirm:** শুধু `DELETE 2025` টাইপ করলেই button enable হবে।
+
+**Execute চাপলে:**
+
+```
+📦 Batch তৈরি হচ্ছে...        [=====     ] 5%
+🗑️ Target-এর পুরোনো delete... [====      ] 20%
+📝 নতুন student data তৈরি...  [======    ] 30%
+✅ নতুন student insert...     [========  ] 40%
+📚 Subjects copy...           [========= ] 55%
+🗑️ Source delete...           [==========] 88%
+📋 Log save...                [==========] 95%
+✅ সম্পূর্ণ!                  [==========] 100%
+```
+
+---
+
+### 📌 ধাপ ৭: Verify করুন
+
+**Admin → Students-এ যান:**
+
+```
+Filter: Class 12 / Year 2025
+```
+
+**যা দেখবেন:**
+
+| Roll | Name | Class | Year | Session | Branch |
+|------|------|-------|------|---------|--------|
+| 101 | Sabbir | 12 | 2025 | **2024-25** ✅ | HSC |
+| 103 | Karim | 12 | 2025 | **2024-25** ✅ | HSC |
+
+**🎯 Session কখনো বদলায়নি** — এটাই সঠিক।
+
+**এবং Class 11-এ:**
+
+```
+Filter: Class 11 / Year 2024
+```
+
+| Roll | Name | Session | Status |
+|------|------|---------|--------|
+| 102 | Rahim | 2024-25 | ❌ Fail (Class 11-এ থাকবে) |
+
+---
+
+## ৪. Pass/Fail Rules
+
+### ✅ Pass Criteria (তিনটাই পূরণ হতে হবে)
+
+| # | শর্ত |
+|---|------|
+| ১ | **সব subject-এ pass** — কোনো fail নেই |
+| ২ | **কোনো subject-এ absent নেই** |
+| ৩ | **GPA ≥ 2.00** |
+
+### ❌ Fail Criteria (যেকোনো একটা হলেই)
+
+| # | শর্ত |
+|---|------|
+| ১ | কোনো subject-এ **fail** আছে |
+| ২ | কোনো subject-এ **absent** আছে |
+| ৩ | **GPA < 2.00** |
+
+### ⚠️ No Result
+
+- Result entry **নেই** → auto-check হবে না
+- Admin manually decide করবে
+- Manual override-এ check করলে promote হবে
+
+### 🔧 Rules পরিবর্তন
+
+```
+Admin → 17. Promotion Settings
+```
+
+**Rules:**
+
+| Rule | Default | ব্যাখ্যা |
+|------|---------|---------|
+| Minimum GPA | 2.00 | এর নিচে fail |
+| No Fail Subjects | true | একটাও fail থাকলে fail |
+| Absent is Fail | true | absent থাকলে fail |
+
+---
+
+## ৫. Copy Year vs Move Year vs Move & Replace
+
+### 📊 পার্থক্য
+
+| Mode | Source-এ | Target-এ | Session |
+|------|----------|----------|---------|
+| **Copy** | থাকে | নতুন যোগ | same |
+| **Move** | delete | নতুন যোগ | same |
+| **Replace** | delete | পুরোনো delete, নতুন যোগ | same |
+
+### 🔍 কখন কোনটা?
+
+#### 🅰️ Copy Year
+**ব্যবহার:**
+- Backup রাখতে চাইলে
+- Test করতে চাইলে
+- Same student দুই জায়গায় রাখতে হলে
+
+**উদাহরণ:**
+```
+Class 11 (2024) → Copy → Class 11 (2025)
+Source: 50 জন (থাকে)
+Target: 50 জন (নতুন copy)
+```
+
+#### 🅱️ Move Year
+**ব্যবহার:**
+- Class promote না করে year update করতে
+- Session maintain রেখে year পরিবর্তন
+
+**উদাহরণ:**
+```
+Class 11 (2024) → Move → Class 11 (2025)
+Source: delete (50 জন)
+Target: 50 জন (session: 2024-25 same)
+```
+
+#### 🅾️ Move & Replace
+**ব্যবহার:**
+- Target-এ already student থাকলে তাদের replace
+- Promote-এর মতো কাজ
+
+**উদাহরণ:**
+```
+Class 11 (2024) → Replace → Class 12 (2025)
+Target-এ 30 জন ছিল → delete
+Source থেকে 50 জন → move
+Result: Class 12 (2025)-এ 50 জন
+```
+
+### ⚠️ Session Behavior (সব mode-এ)
+
+```
+সব mode-এ session source থেকে copy হবে
+→ Target year থেকে generate হবে না
+```
+
+**Info box-এ দেখাবে:**
+```
+🎓 Session থাকবে: 2024-25
+```
+
+---
+
+## ৬. Restore (Undo) System
+
+### 🎯 কখন ব্যবহার করবেন?
+
+- ❌ ভুল student promote হয়ে গেলে
+- ❌ ভুল year select করলে
+- ❌ Bulk mistake হলে
+
+### 📖 কীভাবে Restore করবেন?
+
+```
+Admin → 16. Promotion History
+  ↓
+[List দেখাবে]
+
+┌─────────────────────────────────────┐
+│ 🎓 Class 11 → 12 (2024 → 2025)      │
+│ Batch ID: a1b2c3d4...               │
+│ Date: 15 Jan 2025, 10:30 AM         │
+│ By: Admin Sabbir                    │
+│ Promoted: 45 জন                     │
+│ Session: 2024-25                    │
+│                                     │
+│ [View Details] [🔄 Restore]         │
+└─────────────────────────────────────┘
+```
+
+### 🔄 Restore কী করে?
+
+```
+1. নতুন insert করা students → delete
+2. পুরোনো (source) students → restore
+3. Subjects → restore
+4. Batch status: "rolled_back"
+```
+
+### ⚠️ Sতর্কতা
+
+- ✅ একবারই restore করা যাবে
+- ✅ Restore করার পর batch-এ "rolled_back" mark
+- ❌ Restore-এর পর আবার restore করা যাবে না
+
+---
+
+## ৭. Subject Pairing (BM Branch)
+
+### 🎯 BM Branch-এ কী হয়?
+
+**HSC-তে:** subject **as-is copy** হয় (same থাকে)।
+
+**BM-তে:** Class change হলে **pair swap** হয়।
+
+### 📋 উদাহরণ
+
+```
+Class 11-এ BM student-এর subject: "বাংলা-১ম পত্র"
+        ↓ Promote (11 → 12)
+Class 12-এ তার subject: "বাংলা-২য় পত্র"
+```
+
+**কারণ:** BM-এ প্রতিটা subject-এর একটা paired version আছে।
+
+### 🔗 Paired Subject Setup
+
+**Database-এ:**
+```sql
+subjects table
+├── subject: "বাংলা-১ম পত্র"
+│   paired_with_id → "বাংলা-২য় পত্র"-এর ID
+└── subject: "বাংলা-২য় পত্র"
+    paired_with_id → "বাংলা-১ম পত্র"-এর ID
+```
+
+**Admin → Subjects-এ setup করা যায়।**
+
+### ⚙️ Automatic Swap
+
+- Promote-এ **স্বয়ংক্রিয়ভাবে** swap হবে
+- Manual কিছু করতে হবে না
+- Console log-এ দেখাবে: `🔄 BM swap: [name]`
+
+---
+
+## ৮. Troubleshooting
+
+### 🔴 সমস্যা ১: "কোনো student পাওয়া যায়নি"
 
 **কারণ:**
-- Final exam-এর result entry হয়নি
-- অথবা result publish হয়নি
+- Source class/year/branch-এ student নেই
+- অথবা সব student-এর result entry নেই
 
 **সমাধান:**
-- admin-results.html-এ result entry করুন
-- তারপর Publish করুন
+```
+1. Admin → Students → Filter verify
+2. Admin → Results → Result entry check
+3. Result publish করেছেন কি না check
+```
 
 ---
 
-### সমস্যা ২: BM-এর subject swap হয় না
+### 🔴 সমস্যা ২: "Pass student auto-check হয়নি"
 
 **কারণ:**
-- Subject Pairing setup করা হয়নি
+- Result publish হয়নি
+- Result-এ `is_published = false`
 
 **সমাধান:**
-- Supabase-এ `subjects` table-এ `paired_with_id` verify করুন
-- Developer-এর সাথে যোগাযোগ করুন
+```
+Admin → Results → Source select
+→ [Publish] button ক্লিক
+```
 
 ---
 
-### সমস্যা ৩: Type-to-Confirm কাজ করে না
+### 🔴 সমস্যা ৩: "Session বদলে গেছে!"
 
 **কারণ:**
-- ভুল code টাইপ করেছেন (Case-sensitive)
+- পুরোনো version-এর code
+- অথবা database-এ ভুল session
 
 **সমাধান:**
-- Screen-এ দেখানো code হুবহু টাইপ করুন
-- Example: `DELETE 2027`
+```
+1. Hard refresh করুন (Ctrl+Shift+R)
+2. Browser cache clear
+3. Console log check করুন:
+   "✅ Session preserved for [name]: 2024-25"
+```
+
+**যদি তারপরো সমস্যা:**
+- Console log-এ error দেখুন
+- Screenshot নিয়ে developer-কে দেখান
 
 ---
 
-### সমস্যা ৪: Promote Execute কাজ করে না
+### 🔴 সমস্যা ৪: "Target delete হলে data হারাবো"
+
+**সমাধান:**
+- Execute-এর আগে backup নিন
+- Restore system থাকবে
+- অথবা **Copy** mode ব্যবহার করুন
+
+---
+
+### 🔴 সমস্যা ৫: "BM subject swap হয়নি"
 
 **কারণ:**
-- Target class / year select করা হয়নি
-- অথবা কোনো student selected নয়
+- `paired_with_id` set করা নেই
 
 **সমাধান:**
-- Target: Class এবং Year দুটোই select করুন
-- কমপক্ষে ১ জন student check করুন
+```
+Admin → Subjects
+→ Subject edit
+→ Paired with → select pair
+→ Save
+```
 
 ---
 
-## 📊 Promote করার Best Time
+## ৯. FAQ
 
-| কখন | কাজ |
-|---|---|
-| **ডিসেম্বর (Year End)** | Class 11 → Class 12 Promote |
-| **জানুয়ারি (Year Start)** | নতুন ছাত্র Class 11-এ Bulk Import |
+### ❓ Promote করার পর board exam fail হলে?
 
-**👉 প্রতি year-এ ২টাই কাজ।**
+**উত্তর:** বোর্ড exam board-এর দায়িত্ব। আপনার website-এ track হবে না।
 
 ---
 
-## ✅ Do's and Don'ts
+### ❓ Session কী কখনো বদলাবে?
 
-### ✅ যা করবেন:
-
-- Promote করার আগে **Backup** নিন
-- ছাত্র-ছাত্রীর **Result verify** করুন
-- Type-to-Confirm **ধীরে ধীরে** টাইপ করুন
-- Failed ছাত্রদের **Class 11-এ রাখুন**
-- Promote-এর পরে **History check** করুন
-
-### ❌ যা করবেন না:
-
-- Result entry না করে Promote করবেন না
-- Backup ছাড়া Promote করবেন না
-- ভুল year-এ Promote করবেন না
-- Type-to-Confirm bypass করার চেষ্টা করবেন না
-- Restore করার আগে verify না করে করবেন না
+**উত্তর:** না। Session = ভর্তির বছর। একবার set হলে কখনো বদলায় না।
 
 ---
 
-## 📞 সাহায্যের জন্য
+### ❓ একই student দুইবার promote হলে?
+
+**উত্তর:** সম্ভব না। Promote-এর পর source থেকে delete হয়ে যায়।
+
+---
+
+### ❓ Bulk-এ 50 জন promote করা যাবে?
+
+**উত্তর:** হ্যাঁ। তেমন কোনো limit নেই।
+
+---
+
+### ❓ Restore করার পর data কি ঠিক থাকবে?
+
+**উত্তর:** হ্যাঁ। `promotion_audit` table-এ সব snapshot থাকে।
+
+---
+
+### ❓ Subject-এ cambio করলে কী হবে?
+
+**উত্তর:** Promote-এর পর subject change করতে হলে **Admin → Students → Edit** ব্যবহার করুন।
+
+---
+
+### ❓ Fail student-দের কী হবে?
+
+**উত্তর:** Class 11-এ থাকবে। পরের বছর আবার Final দিতে হবে।
+
+---
+
+### ❓ Promote-এর পর কি year বদলাবে?
+
+**উত্তর:** হ্যাঁ। Class 11 → 12 হলে year: 2024 → 2025, কিন্তু session: 2024-25 same।
+
+---
+
+### ❓ Session আর Year-এর পার্থক্য কী?
+
+| বিষয় | Year | Session |
+|------|------|---------|
+| মানে | কোন বছরে পড়ছে | কোন batch-এর |
+| উদাহরণ | 2024, 2025 | 2024-25 |
+| বদলায়? | Class change-এ হ্যাঁ | না |
+
+---
+
+## 📞 Support
 
 **সমস্যা হলে:**
-- System Admin: সাব্বির হোসেন নীরব
-- Email: sabbirhosannirob9@gmail.com
+1. এই guide-এর Troubleshooting section দেখুন
+2. Console log check করুন (F12)
+3. Screenshot নিয়ে developer-কে পাঠান
+
+**Contact:** [আপনার contact info]
 
 ---
 
-## 📝 Notes
+**🎓 এই guide follow করলে Promote System নিরাপদভাবে ব্যবহার করতে পারবেন।**
 
-- Promote একবার executed হলে **Batch ID** তৈরি হয়
-- প্রতিটি Promote **History**-তে saved হয়
-- **Restore** করা যাবে (Batch ID দিয়ে)
-- **Audit Log** — প্রতিটি student-এর old & new data saved
-
----
-
-**🎓 Promote System — Fulbariya College**
+**Last Updated:** Session Fix v2.0
