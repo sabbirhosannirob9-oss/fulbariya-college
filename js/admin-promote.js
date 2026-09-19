@@ -2,8 +2,13 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN PROMOTE
  * Location: js/admin-promote.js
+ * Version: v2.0 — Session Preview Added
  * Depends: config.js, supabase.js, auth.js, admin-popup.js,
  *          promote-utils.js, promote-engine.js
+ * 
+ * ⚠️ SESSION POLICY (Bangladesh HSC):
+ *    Promote-এ session source student থেকে COPY হবে।
+ *    Preview table-এ admin verify করতে পারবে।
  * =========================================================
  */
 
@@ -32,11 +37,28 @@
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
+    // =========================================================
+    // SESSION HELPERS
+    // =========================================================
     function getSessionFromYear(year) {
         if (!year) return '';
         const y = parseInt(year);
         if (isNaN(y)) return '';
         return y + '-' + (y + 1);
+    }
+
+    /**
+     * 🎯 Student থেকে সঠিক session বের করে
+     */
+    function getStudentSession(student) {
+        if (!student) return '';
+        if (student.session && String(student.session).trim() !== '') {
+            return String(student.session).trim();
+        }
+        if (student.year) {
+            return getSessionFromYear(student.year);
+        }
+        return '';
     }
 
     // =========================================================
@@ -239,10 +261,16 @@
 
     // =========================================================
     // RENDER STUDENT LIST
+    // 🎯 v2.0 — Session column added
     // =========================================================
     function renderStudentList() {
         const list = $('studentList');
         let html = '';
+
+        // 🎯 Current source session (any student থেকে)
+        const sourceSession = classifiedStudents.length > 0
+            ? getStudentSession(classifiedStudents[0].student)
+            : '';
 
         classifiedStudents.forEach(c => {
             const stu = c.student;
@@ -253,13 +281,16 @@
                                c.status === 'fail' ? '❌ Fail' : '⚠️ No Result';
             const gpaText = c.gpa !== null && c.gpa !== undefined ? c.gpa.toFixed(2) : '—';
 
+            // 🎯 Session preview
+            const studentSession = getStudentSession(stu);
+
             html += `
                 <div class="student-item ${isChecked ? 'checked' : ''} ${c.status}" data-id="${stu.id}">
                     <input type="checkbox" ${isChecked ? 'checked' : ''} data-id="${stu.id}">
                     <span class="si-roll">${escapeHtml(stu.roll)}</span>
                     <span class="si-name">
                         ${escapeHtml(stu.name)}
-                        <small>${escapeHtml(stu.branch)} · ${escapeHtml(stu.group_name || '—')}</small>
+                        <small>${escapeHtml(stu.branch)} · ${escapeHtml(stu.group_name || '—')} · <strong style="color:var(--navy);">Session: ${escapeHtml(studentSession || '—')}</strong></small>
                     </span>
                     <span class="si-gpa">${gpaText}</span>
                     <span class="si-status ${statusClass}">${statusLabel}</span>
@@ -309,8 +340,12 @@
             return;
         }
 
-        // Session auto
-        $('targetSession').value = getSessionFromYear(targetYear);
+        // 🎯 Session preview — source থেকে (target year থেকে নয়)
+        const sourceSession = classifiedStudents.length > 0
+            ? getStudentSession(classifiedStudents[0].student)
+            : getSessionFromYear($('sourceYear').value);
+
+        $('targetSession').value = sourceSession;
 
         // Load target students count
         try {
@@ -334,6 +369,7 @@
                     <div>
                         Class ${targetClass} / Year ${targetYear}-এ বর্তমানে <strong>${targetCount} জন</strong> student আছে।
                         ${targetCount > 0 ? '<br><strong>⚠️ Promote চালু করলে এরা delete হবে।</strong>' : ''}
+                        <br><strong style="color:var(--navy);">🎓 Session থাকবে: ${escapeHtml(sourceSession)}</strong>
                     </div>
                 </div>
             `;
@@ -349,6 +385,7 @@
 
     // =========================================================
     // UPDATE FINAL SUMMARY
+    // 🎯 v2.0 — Session shown
     // =========================================================
     function updateFinalSummary() {
         const sourceClass = $('sourceClass').value;
@@ -366,6 +403,11 @@
         const totalCount = classifiedStudents.length;
         const stayCount = totalCount - selectedCount;
 
+        // 🎯 Session preview
+        const sourceSession = classifiedStudents.length > 0
+            ? getStudentSession(classifiedStudents[0].student)
+            : getSessionFromYear(sourceYear);
+
         $('finalSummary').innerHTML = `
             <div class="summary-box">
                 <div style="font-size:12.5px;color:var(--dark);line-height:2;">
@@ -375,6 +417,9 @@
                         
                         <strong style="color:var(--navy);">📥 Target:</strong>
                         <span>Class ${targetClass} / Year ${targetYear}</span>
+                        
+                        <strong style="color:var(--navy);">🎓 Session:</strong>
+                        <span><strong>${escapeHtml(sourceSession)}</strong> <small style="color:var(--grey);">(source থেকে copy)</small></span>
                         
                         <strong style="color:var(--success);">✅ Promote হবে:</strong>
                         <span><strong>${selectedCount} জন</strong> student</span>
@@ -426,6 +471,7 @@
 
     // =========================================================
     // EXECUTE PROMOTE
+    // 🎯 v2.0 — Session shown in confirmation
     // =========================================================
     async function executePromote() {
         if (isProcessing) return;
@@ -445,11 +491,17 @@
             return window.fdcWarning('কোনো student select করা হয়নি।');
         }
 
+        // 🎯 Session preview
+        const sourceSession = selected.length > 0
+            ? getStudentSession(selected[0].student)
+            : '';
+
         // Final confirmation
         const confirmed = await new Promise(resolve => {
             window.fdcConfirm(
                 `⚠️ চূড়ান্ত নিশ্চিতকরণ\n\n` +
                 `• ${selected.length} জন student Class ${targetClass}-এ যাবে\n` +
+                `• Session থাকবে: ${sourceSession} (অপরিবর্তিত)\n` +
                 `• Class ${targetClass} / Year ${targetYear}-এর পুরোনো সব delete হবে\n` +
                 `• Class ${sourceClass}-এ ${classifiedStudents.length - selected.length} জন থাকবে\n\n` +
                 `এটি undo করা যাবে না (তবে Restore করা যাবে)।`,
@@ -495,6 +547,7 @@
             // Success
             window.fdcSuccess(
                 `✅ ${result.promotedCount} জন student সফলভাবে Promote হয়েছে!\n\n` +
+                `• Session: ${sourceSession} (অপরিবর্তিত)\n` +
                 `• Target delete: ${result.deletedTargetCount} জন\n` +
                 `• Batch ID: ${result.batchId.substring(0, 8)}...`
             );
@@ -631,7 +684,7 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Promote initializing...');
+        console.log('🚀 Admin Promote v2.0 initializing...');
 
         loadYearOptions();
         attachEvents();
@@ -643,7 +696,7 @@
             await loadAdminInfo();
             await loadExams();
 
-            console.log('✅ Admin Promote ready');
+            console.log('✅ Admin Promote v2.0 ready');
         });
     }
 

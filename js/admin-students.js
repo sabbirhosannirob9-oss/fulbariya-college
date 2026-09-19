@@ -2,8 +2,13 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN STUDENTS MANAGEMENT
  * Location: js/admin-students.js
+ * Version: v8 — Session Copy Fix (Copy Year / Move Year / Edit Mode)
  * Depends: config.js, supabase.js, auth.js, admin-popup.js
- * Updated: v7 — Added Permanent Delete Button
+ * 
+ * ⚠️ SESSION POLICY (Bangladesh HSC):
+ *    Session = ভর্তির বছর (Admission Year) — কখনো বদলায় না।
+ *    Copy/Move Year-এ session source থেকে COPY হবে।
+ *    Edit Mode-এ form value prioritize হবে।
  * =========================================================
  */
 
@@ -43,13 +48,28 @@
     }
 
     // =========================================================
-    // SESSION
+    // SESSION HELPERS
     // =========================================================
     function getSessionFromYear(year) {
         if (!year) return '';
         const y = parseInt(year);
         if (isNaN(y)) return '';
         return y + '-' + (y + 1);
+    }
+
+    /**
+     * 🎯 Student থেকে সঠিক session বের করে
+     * Priority: student.session → getSessionFromYear(student.year) → ''
+     */
+    function getStudentSession(student) {
+        if (!student) return '';
+        if (student.session && String(student.session).trim() !== '') {
+            return String(student.session).trim();
+        }
+        if (student.year) {
+            return getSessionFromYear(student.year);
+        }
+        return '';
     }
 
     // =========================================================
@@ -581,6 +601,14 @@
         $('groupFieldWrap').style.display = 'none';
         $('subjectsSection').style.display = 'none';
 
+        // 🎯 session field পুনরায় enable (edit mode-এ readonly থাকতে পারে)
+        const sessionField = $('studentSession');
+        if (sessionField) {
+            sessionField.disabled = false;
+            sessionField.style.opacity = '1';
+            sessionField.style.background = '';
+        }
+
         openModal('studentModal');
     }
 
@@ -613,7 +641,11 @@
             $('studentRoll').value = student.roll || '';
             $('studentClass').value = student.class_name || '';
             $('studentYear').value = student.year || '';
-            $('studentSession').value = student.session || '';
+
+            // 🎯 Edit mode-এ session = student-এর actual session
+            // (না থাকলে year থেকে generate)
+            $('studentSession').value = getStudentSession(student);
+
             $('studentBranch').value = student.branch || '';
 
             if (student.branch === 'HSC') {
@@ -652,6 +684,9 @@
         const branch = $('studentBranch').value;
         const groupName = $('studentGroup').value;
 
+        // 🎯 Form session value — user-editable
+        const formSession = ($('studentSession').value || '').trim();
+
         if (!name) return alert('নাম দিতে হবে।');
         if (!roll) return alert('Roll দিতে হবে।');
         if (!className) return alert('Class সিলেক্ট করুন।');
@@ -668,7 +703,24 @@
             }
         }
 
-        const session = getSessionFromYear(year);
+        // 🎯 Session priority:
+        //   1. Form-এ user যা দিয়েছে
+        //   2. Edit mode-এ actual student-এর session
+        //   3. Year থেকে generate (শেষ fallback)
+        let session = formSession;
+        if (!session && editingStudentId) {
+            const existing = allStudents.find(s => String(s.id) === String(editingStudentId));
+            if (existing) session = getStudentSession(existing);
+        }
+        if (!session) {
+            session = getSessionFromYear(year);
+        }
+
+        console.log('💾 Saving student:');
+        console.log('   Year:', year);
+        console.log('   Form Session:', formSession || '—');
+        console.log('   Final Session:', session);
+
         const btn = $('saveStudentBtn');
         btn.disabled = true;
         const original = btn.innerHTML;
@@ -1132,7 +1184,13 @@
             $('copyInfo').style.display = 'flex';
             $('applyCopyBtn').disabled = true;
         } else {
+            // 🎯 Preview-এ session source থেকে দেখাই
+            const sampleSession = sourceStudents && sourceStudents[0]
+                ? getStudentSession(sourceStudents[0])
+                : getSessionFromYear(fromYear);
+
             let infoHtml = `<strong>${sourceCount} জন</strong> student — Class ${fromCls} → ${toCls}, Year ${fromYear} → ${toYear}`;
+            infoHtml += `<br><span style="color:var(--navy);font-weight:700;">🎓 Session থাকবে: ${escapeHtml(sampleSession)}</span>`;
             if (mode === 'replace' && targetCount > 0) {
                 infoHtml += `<br><span style="color:#7f1d1d;font-weight:700;">⚠️ Target-এ ${targetCount} জন পুরোনো delete হবে।</span>`;
             }
@@ -1142,7 +1200,11 @@
             $('applyCopyBtn').disabled = false;
         }
 
-        $('copyToSession').value = getSessionFromYear(toYear);
+        // 🎯 copyToSession = source session (target year থেকে নয়)
+        const sourceSessionDisplay = (sourceStudents && sourceStudents[0])
+            ? getStudentSession(sourceStudents[0])
+            : getSessionFromYear(fromYear);
+        $('copyToSession').value = sourceSessionDisplay;
 
         if (mode === 'replace') {
             const confirmText = 'DELETE ' + toYear;
@@ -1231,7 +1293,6 @@
         if (!window._copyData || window._copyData.students.length === 0) return;
 
         const { toCls, toYear, students, mode, branch } = window._copyData;
-        const session = getSessionFromYear(toYear);
         const isMove = (mode === 'move');
         const isReplace = (mode === 'replace');
 
@@ -1248,12 +1309,13 @@
         if (isReplace) {
             confirmMsg = `⚠️ Move & Replace নিশ্চিত?\n\n` +
                 `• Target-এর ${window._copyData.targetCount || 0} জন delete হবে\n` +
-                `• Source থেকে ${students.length} জন move হবে\n\n` +
+                `• Source থেকে ${students.length} জন move হবে\n` +
+                `• Session অপরিবর্তিত থাকবে\n\n` +
                 `এটি undo করা যাবে না!`;
         } else if (isMove) {
-            confirmMsg = `⚠️ ${students.length} জন MOVE করা হবে।\n\nSource থেকে delete হবে।\n\nনিশ্চিত?`;
+            confirmMsg = `⚠️ ${students.length} জন MOVE করা হবে।\n\nSource থেকে delete হবে।\n🎓 Session অপরিবর্তিত থাকবে।\n\nনিশ্চিত?`;
         } else {
-            confirmMsg = `${students.length} জন COPY করা হবে।\n\nনিশ্চিত?`;
+            confirmMsg = `${students.length} জন COPY করা হবে।\n\n🎓 Session অপরিবর্তিত থাকবে।\n\nনিশ্চিত?`;
         }
 
         const confirmed = confirm(confirmMsg);
@@ -1276,11 +1338,18 @@
                 }
             }
 
+            // 🎯 SESSION FIX — প্রতিটা student-এর session source থেকে COPY
             const records = students.map(s => ({
                 name: s.name, roll: s.roll,
-                class_name: toCls, year: toYear, session,
+                class_name: toCls, year: toYear,
+                session: getStudentSession(s),  // ✅ source থেকে copy
                 branch: s.branch, group_name: s.group_name
             }));
+
+            console.log('📋 Copy/Move records:');
+            records.forEach(r => {
+                console.log(`   ${r.roll} — Session: ${r.session} (Class ${r.class_name} / Year ${r.year})`);
+            });
 
             const { data: inserted, error: insErr } = await window.FDC_SUPABASE
                 .from('students').insert(records).select();
@@ -1310,9 +1379,9 @@
             }
 
             let successMsg = '';
-            if (isReplace) successMsg = `✅ ${insertedList.length} জন move & replace হয়েছে!`;
-            else if (isMove) successMsg = `✅ ${insertedList.length} জন move হয়েছে!`;
-            else successMsg = `✅ ${insertedList.length} জন copy হয়েছে!`;
+            if (isReplace) successMsg = `✅ ${insertedList.length} জন move & replace হয়েছে!\n🎓 Session অপরিবর্তিত।`;
+            else if (isMove) successMsg = `✅ ${insertedList.length} জন move হয়েছে!\n🎓 Session অপরিবর্তিত।`;
+            else successMsg = `✅ ${insertedList.length} জন copy হয়েছে!\n🎓 Session অপরিবর্তিত।`;
 
             alert(successMsg);
             closeModal('copyYearModal');
@@ -1371,8 +1440,16 @@
             }
         });
 
+        // 🎯 Year change — শুধু ADD mode-এ session auto-fill
+        // Edit mode-এ session কখনো auto-override হবে না
         $('studentYear').addEventListener('change', function () {
-            $('studentSession').value = getSessionFromYear(this.value);
+            if (!editingStudentId) {
+                // শুধু নতুন student add করার সময়
+                $('studentSession').value = getSessionFromYear(this.value);
+            } else {
+                // Edit mode-এ user-কে warn করি
+                console.log('ℹ️ Edit mode — session auto-override করা হয়নি');
+            }
         });
 
         $('studentGroup').addEventListener('change', async function () {
@@ -1475,7 +1552,7 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Students v7 initializing...');
+        console.log('🚀 Admin Students v8 initializing...');
 
         loadYearOptions();
         attachEvents();
@@ -1487,7 +1564,7 @@
             await loadAdminInfo();
             await loadAllStudents();
 
-            console.log('✅ Admin Students ready');
+            console.log('✅ Admin Students v8 ready');
         });
     }
 

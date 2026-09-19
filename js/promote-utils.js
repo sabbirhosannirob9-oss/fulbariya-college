@@ -2,7 +2,12 @@
  * =========================================================
  * FULBARIYA COLLEGE — PROMOTE UTILITIES
  * Location: js/promote-utils.js
+ * Version: v2.0 — Session Helper Added (Academic Session Fix)
  * Purpose: Pass/Fail detection, Pairing lookup, Rule check
+ * 
+ * ⚠️ IMPORTANT — Academic Session Policy (Bangladesh):
+ *    Session = ভর্তির বছর (Admission Year), কখনো বদলায় না।
+ *    Class 11 (2024-25) → Class 12 (2024-25) — same session।
  * =========================================================
  */
 
@@ -11,6 +16,9 @@
 
     const $ = (id) => document.getElementById(id);
 
+    // =========================================================
+    // BASIC HELPERS
+    // =========================================================
     function escapeHtml(str) {
         if (str === null || str === undefined) return '';
         return String(str)
@@ -18,11 +26,50 @@
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
+    /**
+     * Year থেকে session generate করে (fallback only)
+     * যেমন: 2024 → "2024-25"
+     * ⚠️ এটা শুধু fallback — student-এর session না থাকলে ব্যবহার হবে
+     */
     function getSessionFromYear(year) {
         if (!year) return '';
         const y = parseInt(year);
         if (isNaN(y)) return '';
         return y + '-' + (y + 1);
+    }
+
+    /**
+     * 🎯 NEW — Student থেকে সঠিক session বের করে
+     * Priority:
+     *   1. student.session (থাকলে সেটাই)
+     *   2. getSessionFromYear(student.year) — fallback
+     *   3. empty string
+     * 
+     * কখনো target year থেকে generate করে না।
+     */
+    function getStudentSession(student) {
+        if (!student) return '';
+
+        // Priority 1: explicit session column
+        if (student.session && String(student.session).trim() !== '') {
+            return String(student.session).trim();
+        }
+
+        // Priority 2: year থেকে auto-generate (fallback)
+        if (student.year) {
+            return getSessionFromYear(student.year);
+        }
+
+        return '';
+    }
+
+    /**
+     * 🎯 NEW — দুইটা student-এর session একই কি না check করে
+     */
+    function isSameSession(stuA, stuB) {
+        const sA = getStudentSession(stuA);
+        const sB = getStudentSession(stuB);
+        return sA !== '' && sA === sB;
     }
 
     function generateBatchId() {
@@ -331,20 +378,65 @@
     }
 
     // =========================================================
+    // 🎯 NEW — BUILD PROMOTED STUDENT RECORD
+    // =========================================================
+    /**
+     * একটাই জায়গা যেখান থেকে promote-এর সময় নতুন student record তৈরি হবে।
+     * Session সবসময় source student থেকে copy হবে।
+     */
+    function buildPromotedStudentRecord(sourceStudent, targetClass, targetYear, batchId) {
+        if (!sourceStudent) {
+            throw new Error('Source student is required');
+        }
+
+        const session = getStudentSession(sourceStudent);
+
+        console.log(`📋 Build promote record: ${sourceStudent.name}`);
+        console.log(`   Source: Class ${sourceStudent.class_name} / Year ${sourceStudent.year} / Session ${sourceStudent.session || '—'}`);
+        console.log(`   Target: Class ${targetClass} / Year ${targetYear} / Session ${session} (copied)`);
+
+        return {
+            name: sourceStudent.name,
+            roll: sourceStudent.roll,
+            class_name: targetClass,
+            year: targetYear,
+            session: session,  // ✅ source থেকে copy
+            branch: sourceStudent.branch,
+            group_name: sourceStudent.group_name,
+            is_active: true,
+            promoted_in_batch: batchId || null,
+            previous_batch: sourceStudent.promoted_in_batch || null,
+            promoted_at: new Date().toISOString()
+        };
+    }
+
+    // =========================================================
     // EXPORT
     // =========================================================
     window.FDCPromoteUtils = {
+        // Helpers
         generateBatchId,
         getSessionFromYear,
+        getStudentSession,      // 🎯 NEW
+        isSameSession,          // 🎯 NEW
         escapeHtml,
+
+        // Rules
         loadPromotionRules,
+
+        // Detection
         detectPassFail,
+        formatStats,
+
+        // Subject pairing
         getPairedSubjectId,
         getPairedSubjectsBatch,
         preparePromotedSubjects,
-        formatStats
+
+        // Record building
+        buildPromotedStudentRecord  // 🎯 NEW
     };
 
-    console.log('✅ Promote Utils loaded');
+    console.log('✅ Promote Utils v2.0 loaded — Session Helper added');
 
 })();

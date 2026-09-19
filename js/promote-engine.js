@@ -2,7 +2,14 @@
  * =========================================================
  * FULBARIYA COLLEGE — PROMOTE ENGINE
  * Location: js/promote-engine.js
+ * Version: v2.0 — Session Copy Fix (Academic Session Policy)
  * Purpose: Execute promotion with audit log
+ * 
+ * ⚠️ SESSION POLICY (Bangladesh HSC):
+ *    Session = ভর্তির বছর (Admission Year) — কখনো বদলায় না।
+ *    Class 11 (2024-25) → Class 12 (2024-25) — SAME session।
+ *    Session সবসময় source student থেকে COPY হবে,
+ *    কখনো target year থেকে GENERATE হবে না।
  * =========================================================
  */
 
@@ -27,7 +34,15 @@
         } = options;
 
         const batchId = window.FDCPromoteUtils.generateBatchId();
-        const session = window.FDCPromoteUtils.getSessionFromYear(targetYear);
+
+        // 🎯 Session — Target year থেকে নয়, SOURCE থেকে copy হবে
+        // এটা শুধু log-এর জন্য reference session (মূলত প্রতিটা student-এর নিজের session থাকবে)
+        const referenceSession = selectedStudents.length > 0
+            ? window.FDCPromoteUtils.getStudentSession(selectedStudents[0].student)
+            : '';
+
+        console.log('🎓 Batch ID:', batchId);
+        console.log('📋 Reference session (source):', referenceSession);
 
         const result = {
             batchId,
@@ -116,24 +131,27 @@
 
             // =========================================================
             // STEP 3: Prepare new students to insert
+            // 🎯 SESSION FIX — buildPromotedStudentRecord use করছি
             // =========================================================
             onProgress?.('📝 নতুন student data তৈরি করছি...', 30);
 
             const studentsToPromote = selectedStudents.filter(c => c.status === 'pass' || c.userOverride);
 
-            const newStudentRecords = studentsToPromote.map(c => ({
-                name: c.student.name,
-                roll: c.student.roll,
-                class_name: targetClass,
-                year: targetYear,
-                session: session,
-                branch: c.student.branch,
-                group_name: c.student.group_name,
-                is_active: true,
-                promoted_in_batch: batchId,
-                previous_batch: c.student.promoted_in_batch || null,
-                promoted_at: new Date().toISOString()
-            }));
+            const newStudentRecords = studentsToPromote.map(c => {
+                // 🎯 buildPromotedStudentRecord — এটা session source থেকে copy করে
+                return window.FDCPromoteUtils.buildPromotedStudentRecord(
+                    c.student,
+                    targetClass,
+                    targetYear,
+                    batchId
+                );
+            });
+
+            // Debug log
+            console.log('📋 Prepared records:');
+            newStudentRecords.forEach(r => {
+                console.log(`   ${r.roll} — Session: ${r.session} (Class ${r.class_name} / Year ${r.year})`);
+            });
 
             // =========================================================
             // STEP 4: Insert new students
@@ -149,7 +167,7 @@
 
             const insertedMap = new Map();
             (inserted || []).forEach((s, idx) => {
-                // Match by roll
+                // Match by roll + branch
                 const orig = studentsToPromote.find(c =>
                     c.student.roll === s.roll &&
                     c.student.branch === s.branch
@@ -271,7 +289,8 @@
             await savePromotionLog(batchId, {
                 ...options,
                 ...stats,
-                adminInfo
+                adminInfo,
+                referenceSession  // 🎯 log-এ reference session
             });
 
             onProgress?.('✅ সম্পূর্ণ!', 100);
@@ -294,7 +313,8 @@
                     no_result_count: 0,
                     target_deleted_count: result.deletedTargetCount,
                     status: 'failed',
-                    error_message: e.message
+                    error_message: e.message,
+                    referenceSession
                 });
             } catch (logErr) {
                 console.warn('Could not log failure:', logErr);
@@ -322,6 +342,16 @@
                 .from('student_subjects')
                 .select('subject_id, subject_type')
                 .eq('student_id', newStudent.id);
+
+            // 🎯 Session verify log
+            const oldSession = window.FDCPromoteUtils.getStudentSession(oldStu);
+            const newSession = window.FDCPromoteUtils.getStudentSession(newStudent);
+
+            if (oldSession !== newSession) {
+                console.warn(`⚠️ Session mismatch for ${oldStu.name}: ${oldSession} → ${newSession}`);
+            } else {
+                console.log(`✅ Session preserved for ${oldStu.name}: ${newSession}`);
+            }
 
             await window.FDC_SUPABASE
                 .from('promotion_audit')
@@ -351,6 +381,13 @@
     // =========================================================
     async function savePromotionLog(batchId, options) {
         try {
+            // 🎯 Reference session — source থেকে (target year থেকে না)
+            const referenceSession = options.referenceSession
+                || window.FDCPromoteUtils.getStudentSession(
+                    options.selectedStudents?.[0]?.student
+                )
+                || '';
+
             const logData = {
                 batch_id: batchId,
                 performed_by: options.adminInfo?.id || null,
@@ -360,7 +397,7 @@
                 source_branch: options.sourceBranch,
                 target_class: options.targetClass,
                 target_year: options.targetYear,
-                target_session: window.FDCPromoteUtils.getSessionFromYear(options.targetYear),
+                target_session: referenceSession,  // 🎯 source session
                 target_branch: options.sourceBranch,
                 total_students: options.total_students || 0,
                 promoted_count: options.promoted_count || 0,
@@ -392,6 +429,6 @@
         savePromotionLog
     };
 
-    console.log('✅ Promote Engine loaded');
+    console.log('✅ Promote Engine v2.0 loaded — Session Copy Fix applied');
 
 })();
