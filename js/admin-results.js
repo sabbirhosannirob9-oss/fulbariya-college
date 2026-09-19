@@ -2,8 +2,8 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN RESULT ENTRY
  * Location: js/admin-results.js
- * Depends: config.js, supabase.js, auth.js, admin-popup.js
- * Version: Final — Subject names in table headers
+ * Version: v2 — Book-wise + Auto GPA + Live Calculation
+ * Depends: config.js, supabase.js, auth.js, admin-popup.js, gpa-calculator.js
  * =========================================================
  */
 
@@ -15,18 +15,18 @@
     // =========================================================
     let allExams = [];
     let loadedStudents = [];
-    let loadedSubjects = [];
-    let subjectSections = [];
-    let currentExamId = null;
-    let currentExamName = '';
+    let loadedSubjects = [];  // All subjects (with papers)
+    let bookGroups = [];       // Grouped by subject_name (book)
+    let currentExam = null;
     let currentClass = '';
     let currentYear = '';
     let currentBranch = '';
     let currentGroup = '';
     let resultStatus = 'draft';
     let hasUnsavedChanges = false;
+    let activeTab = 0;         // Currently active book tab
 
-    // marks data: { studentId_subjectId: { cq, mcq, practical } }
+    // Marks data: { studentId_subjectId: { cq, mcq, practical, board, continuous } }
     let marksData = {};
 
     // =========================================================
@@ -41,9 +41,6 @@
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
-    // =========================================================
-    // SESSION
-    // =========================================================
     function getSessionFromYear(year) {
         if (!year) return '';
         const y = parseInt(year);
@@ -98,145 +95,9 @@
                 sessionStorage.clear();
                 window.location.replace('admin-login.html');
             },
-            {
-                title: 'Logout Confirmation',
-                confirmText: 'Yes, Logout',
-                cancelText: 'Cancel',
-                confirmType: 'danger'
-            }
+            { title: 'Logout', confirmText: 'Yes, Logout', cancelText: 'Cancel', confirmType: 'danger' }
         );
     };
-
-    // =========================================================
-    // GRADE / GPA CALCULATION
-    // =========================================================
-    function getGradePoint(marks, fullMarks) {
-        if (fullMarks === 0) return 0;
-        const pct = (marks / fullMarks) * 100;
-        if (pct >= 80) return 5.00;
-        if (pct >= 70) return 4.00;
-        if (pct >= 60) return 3.50;
-        if (pct >= 50) return 3.00;
-        if (pct >= 40) return 2.00;
-        if (pct >= 33) return 1.00;
-        return 0.00;
-    }
-
-    function getGrade(marks, fullMarks) {
-        if (fullMarks === 0) return 'F';
-        const pct = (marks / fullMarks) * 100;
-        if (pct >= 80) return 'A+';
-        if (pct >= 70) return 'A';
-        if (pct >= 60) return 'A-';
-        if (pct >= 50) return 'B';
-        if (pct >= 40) return 'C';
-        if (pct >= 33) return 'D';
-        return 'F';
-    }
-
-    function getGradeClass(grade) {
-        const map = {
-            'A+': 'Aplus', 'A': 'A', 'A-': 'Aminus',
-            'B': 'B', 'C': 'C', 'D': 'D', 'F': 'F'
-        };
-        return map[grade] || 'F';
-    }
-
-    // =========================================================
-    // CALCULATE STUDENT GPA (BOARD RULES)
-    // =========================================================
-    function calculateStudentGPA(studentId) {
-        // Subject-কে group করি by name + type
-        const subjectMap = new Map();
-
-        subjectSections.forEach(sec => {
-            sec.subjects.forEach(subj => {
-                const key = subj.subject_name + '|' + subj.subject_type;
-                if (!subjectMap.has(key)) {
-                    subjectMap.set(key, {
-                        name: subj.subject_name,
-                        type: subj.subject_type,
-                        papers: []
-                    });
-                }
-                subjectMap.get(key).papers.push(...subj.papers);
-            });
-        });
-
-        let totalGradePoints = 0;
-        let totalSubjects = 0;
-        let optionalBonus = 0;
-        let hasFail = false;
-        let totalMarksSum = 0;
-
-        subjectMap.forEach((subj) => {
-            let subjTotal = 0;
-            let subjFull = 0;
-            let subjCQPass = true;
-            let subjMCQPass = true;
-            let subjPracticalPass = true;
-
-            subj.papers.forEach(p => {
-                const m = marksData[studentId + '_' + p.id] || { cq: 0, mcq: 0, practical: 0 };
-                const cq = parseFloat(m.cq) || 0;
-                const mcq = parseFloat(m.mcq) || 0;
-                const pr = parseFloat(m.practical) || 0;
-
-                subjTotal += cq + mcq + pr;
-                subjFull += (p.cq_marks || 0) + (p.mcq_marks || 0) + (p.practical_marks || 0);
-
-                if (p.has_cq && cq < Math.ceil((p.cq_marks || 0) * 0.33)) subjCQPass = false;
-                if (p.has_mcq && mcq < Math.ceil((p.mcq_marks || 0) * 0.33)) subjMCQPass = false;
-                if (p.has_practical && pr < Math.ceil((p.practical_marks || 0) * 0.33)) subjPracticalPass = false;
-            });
-
-            totalMarksSum += subjTotal;
-
-            const passTotal = subjFull > 0 ? Math.ceil(subjFull * 0.33) : 0;
-            const isPassed = subjTotal >= passTotal && subjCQPass && subjMCQPass && subjPracticalPass;
-
-            if (subj.type === 'optional') {
-                if (isPassed) {
-                    const gp = getGradePoint(subjTotal, subjFull);
-                    optionalBonus = Math.max(0, gp - 2.00);
-                }
-                // Optional fail → no effect
-            } else {
-                totalSubjects++;
-                if (!isPassed) {
-                    hasFail = true;
-                } else {
-                    totalGradePoints += getGradePoint(subjTotal, subjFull);
-                }
-            }
-        });
-
-        if (hasFail) {
-            return { gpa: 0.00, grade: 'F', totalMarks: totalMarksSum, status: 'fail' };
-        }
-
-        if (totalSubjects === 0) {
-            return { gpa: 0.00, grade: 'F', totalMarks: 0, status: 'fail' };
-        }
-
-        let gpa = (totalGradePoints + optionalBonus) / totalSubjects;
-        if (gpa > 5.00) gpa = 5.00;
-        gpa = Math.round(gpa * 100) / 100;
-
-        const grade = gpaToGrade(gpa);
-
-        return { gpa, grade, totalMarks: totalMarksSum, status: 'pass' };
-    }
-
-    function gpaToGrade(gpa) {
-        if (gpa >= 5.00) return 'A+';
-        if (gpa >= 4.00) return 'A';
-        if (gpa >= 3.50) return 'A-';
-        if (gpa >= 3.00) return 'B';
-        if (gpa >= 2.00) return 'C';
-        if (gpa >= 1.00) return 'D';
-        return 'F';
-    }
 
     // =========================================================
     // LOAD EXAMS
@@ -305,7 +166,7 @@
     }
 
     // =========================================================
-    // LOAD STUDENTS + SUBJECTS
+    // LOAD STUDENTS + SUBJECTS + BOOKS
     // =========================================================
     async function loadStudents() {
         const examId = $('filterExam').value;
@@ -320,9 +181,7 @@
         if (!branch) return window.fdcWarning('Branch সিলেক্ট করুন।');
         if (branch === 'HSC' && !groupName) return window.fdcWarning('Group সিলেক্ট করুন।');
 
-        const exam = allExams.find(e => String(e.id) === String(examId));
-        currentExamId = examId;
-        currentExamName = exam ? exam.display_name : '';
+        currentExam = allExams.find(e => String(e.id) === String(examId));
         currentClass = className;
         currentYear = year;
         currentBranch = branch;
@@ -344,9 +203,7 @@
                 .eq('is_active', true)
                 .order('roll');
 
-            if (branch === 'HSC') {
-                stuQuery = stuQuery.eq('group_name', groupName);
-            }
+            if (branch === 'HSC') stuQuery = stuQuery.eq('group_name', groupName);
 
             const { data: students, error: stuErr } = await stuQuery;
             if (stuErr) throw stuErr;
@@ -354,57 +211,53 @@
             loadedStudents = students || [];
 
             if (loadedStudents.length === 0) {
-                $('marksTable').style.display = 'none';
                 $('emptyState').style.display = 'block';
-                $('emptyState').querySelector('h6').textContent = 'কোনো student পাওয়া যায়নি';
-                $('emptyState').querySelector('p').textContent =
-                    'এই Class + Year + Branch + Group-এ কোনো student যোগ করা হয়নি।';
-                $('actionBar').style.display = 'none';
-                updateStats();
+                $('resultArea').style.display = 'none';
                 return;
             }
 
-            // Load subjects
-            const studentIds = loadedStudents.map(s => s.id);
-            const { data: studentSubs, error: subErr } = await window.FDC_SUPABASE
-                .from('student_subjects')
-                .select('student_id, subject_id, subject_type')
-                .in('student_id', studentIds)
-                .eq('is_active', true);
+            // Load subjects for this class+branch+group
+            const { data: subjects, error: subErr } = await window.FDC_SUPABASE
+                .from('subjects')
+                .select('*')
+                .eq('class_name', className)
+                .eq('branch', branch)
+                .eq('is_active', true)
+                .order('subject_type')
+                .order('sort_order')
+                .order('subject_name')
+                .order('paper_number');
 
             if (subErr) throw subErr;
 
-            if (!studentSubs || studentSubs.length === 0) {
-                $('marksTable').style.display = 'none';
-                $('emptyState').style.display = 'block';
-                $('emptyState').querySelector('h6').textContent = 'Student-দের subject assign করা হয়নি';
-                $('emptyState').querySelector('p').textContent =
-                    'Student Management-এ গিয়ে subject assign করুন।';
-                $('actionBar').style.display = 'none';
-                updateStats();
-                return;
-            }
+            // Filter subjects based on group
+            let filteredSubjects = (subjects || []).filter(s => {
+                if (s.subject_type === 'compulsory' && !s.group_name) return true;
+                if (s.group_name === currentGroup) return true;
+                return false;
+            });
 
-            const subjectIds = [...new Set(studentSubs.map(s => s.subject_id))];
+            // Only subjects that students actually have (optional/group)
+            const studentSubjectIds = await getStudentSubjectIds();
 
-            const { data: subjects, error: subjErr } = await window.FDC_SUPABASE
-                .from('subjects')
-                .select('*')
-                .in('id', subjectIds)
-                .order('sort_order');
+            loadedSubjects = filteredSubjects.filter(s => {
+                if (s.subject_type === 'compulsory') return true;
+                return studentSubjectIds.has(s.id) || studentSubjectIds.size === 0;
+            });
 
-            if (subjErr) throw subjErr;
+            // Group subjects by book (subject_name)
+            buildBookGroups();
 
-            loadedSubjects = subjects || [];
+            // Load existing marks
+            await loadExistingMarks();
 
-            buildSubjectSections();
-            await loadExistingResults();
-            renderMarksTable();
-            updateStats();
+            // Render
+            renderTabs();
+            renderBookSections();
+            updateProgress();
 
-            $('marksTable').style.display = 'table';
             $('emptyState').style.display = 'none';
-            $('actionBar').style.display = 'flex';
+            $('resultArea').style.display = 'block';
 
         } catch (e) {
             console.error('Load students error:', e);
@@ -416,76 +269,75 @@
     }
 
     // =========================================================
-    // BUILD SUBJECT SECTIONS
+    // GET STUDENT SUBJECT IDS
     // =========================================================
-    function buildSubjectSections() {
-        const compSubs = loadedSubjects.filter(s => s.subject_type === 'compulsory');
-        const grpSubs = loadedSubjects.filter(s => s.subject_type === 'group');
-        const optSubs = loadedSubjects.filter(s => s.subject_type === 'optional');
+    async function getStudentSubjectIds() {
+        try {
+            const studentIds = loadedStudents.map(s => s.id);
+            const { data } = await window.FDC_SUPABASE
+                .from('student_subjects')
+                .select('subject_id')
+                .in('student_id', studentIds)
+                .eq('is_active', true);
 
-        function groupByName(subs) {
-            const map = new Map();
-            subs.forEach(s => {
-                if (!map.has(s.subject_name)) {
-                    map.set(s.subject_name, {
-                        subject_name: s.subject_name,
-                        subject_code: s.subject_code,
-                        subject_type: s.subject_type,
-                        has_cq: s.has_cq,
-                        has_mcq: s.has_mcq,
-                        has_practical: s.has_practical,
-                        papers: []
-                    });
-                }
-                map.get(s.subject_name).papers.push(s);
-            });
-            map.forEach(v => v.papers.sort((a, b) => a.paper_number - b.paper_number));
-            return Array.from(map.values());
-        }
-
-        subjectSections = [];
-
-        if (compSubs.length > 0) {
-            subjectSections.push({
-                label: '📌 আবশ্যিক বিষয়',
-                type: 'compulsory',
-                subjects: groupByName(compSubs)
-            });
-        }
-        if (grpSubs.length > 0) {
-            subjectSections.push({
-                label: '📚 গ্রুপের বিষয়',
-                type: 'group',
-                subjects: groupByName(grpSubs)
-            });
-        }
-        if (optSubs.length > 0) {
-            subjectSections.push({
-                label: '🎯 ঐচ্ছিক বিষয়',
-                type: 'optional',
-                subjects: groupByName(optSubs)
-            });
+            return new Set((data || []).map(d => d.subject_id));
+        } catch (e) {
+            console.warn('Get student subjects error:', e);
+            return new Set();
         }
     }
 
     // =========================================================
-    // LOAD EXISTING RESULTS
+    // BUILD BOOK GROUPS
     // =========================================================
-    async function loadExistingResults() {
+    function buildBookGroups() {
+        const map = new Map();
+
+        loadedSubjects.forEach(s => {
+            const key = s.subject_name + '|' + (s.group_name || '') + '|' + s.subject_type;
+            if (!map.has(key)) {
+                map.set(key, {
+                    subject_name: s.subject_name,
+                    subject_code: s.subject_code,
+                    subject_type: s.subject_type,
+                    group_name: s.group_name,
+                    assessment_model: s.assessment_model || 'cq_mcq_practical',
+                    papers: []
+                });
+            }
+            map.get(key).papers.push(s);
+        });
+
+        // Sort papers within each book
+        map.forEach(b => {
+            b.papers.sort((a, c) => (a.paper_number || 1) - (c.paper_number || 1));
+        });
+
+        // Convert to array and order: compulsory → group → optional
+        const typeOrder = { compulsory: 0, group: 1, optional: 2 };
+        bookGroups = Array.from(map.values()).sort((a, b) => {
+            const ta = typeOrder[a.subject_type] ?? 99;
+            const tb = typeOrder[b.subject_type] ?? 99;
+            if (ta !== tb) return ta - tb;
+            return (a.subject_name || '').localeCompare(b.subject_name || '', 'bn');
+        });
+    }
+
+    // =========================================================
+    // LOAD EXISTING MARKS
+    // =========================================================
+    async function loadExistingMarks() {
         marksData = {};
-        resultStatus = 'draft';
 
         try {
             const studentIds = loadedStudents.map(s => s.id);
 
-            const { data: results, error: resErr } = await window.FDC_SUPABASE
+            const { data: results } = await window.FDC_SUPABASE
                 .from('results')
                 .select('id, student_id, status')
                 .in('student_id', studentIds)
-                .eq('exam_id', currentExamId)
+                .eq('exam_id', currentExam.id)
                 .eq('year', currentYear);
-
-            if (resErr) throw resErr;
 
             if (!results || results.length === 0) return;
 
@@ -493,23 +345,22 @@
             if (publishedCount > 0) resultStatus = 'published';
 
             const resultIds = results.map(r => r.id);
-            const { data: details, error: detErr } = await window.FDC_SUPABASE
+            const { data: details } = await window.FDC_SUPABASE
                 .from('result_details')
                 .select('*')
                 .in('result_id', resultIds);
 
-            if (detErr) throw detErr;
-
             (details || []).forEach(d => {
                 const key = d.student_id + '_' + d.subject_id;
                 marksData[key] = {
-                    cq: d.cq_marks || 0,
-                    mcq: d.mcq_marks || 0,
-                    practical: d.practical_marks || 0
+                    cq: d.cq_marks || '',
+                    mcq: d.mcq_marks || '',
+                    practical: d.practical_marks || '',
+                    board: d.board_marks || '',
+                    continuous: d.continuous_marks || ''
                 };
             });
 
-            // Update status badge
             const badge = $('statusBadge');
             if (badge) {
                 if (resultStatus === 'published') {
@@ -520,337 +371,622 @@
                     badge.innerHTML = '<i class="fas fa-pen"></i> Draft';
                 }
             }
-
         } catch (e) {
-            console.warn('Load existing results error:', e);
+            console.warn('Load existing marks error:', e);
         }
     }
 
     // =========================================================
-    // RENDER MARKS TABLE
+    // RENDER TABS
     // =========================================================
-    function renderMarksTable() {
-        renderTableHead();
-        renderTableBody();
+    function renderTabs() {
+        const wrap = $('subjectTabs');
+        let html = '';
+
+        bookGroups.forEach((book, idx) => {
+            const status = getBookFillStatus(book);
+            const statusClass = status.complete ? 'done' : '';
+            const statusIcon = status.complete ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-hourglass-half"></i>';
+            const statusText = status.complete
+                ? `সম্পূর্ণ`
+                : `${status.filled}/${status.total}`;
+
+            html += `<div class="subject-tab ${idx === activeTab ? 'active' : ''}" data-idx="${idx}">
+                <div class="st-name">${escapeHtml(book.subject_name)}</div>
+                <div class="st-status ${statusClass}">${statusIcon} ${statusText}</div>
+            </div>`;
+        });
+
+        wrap.innerHTML = html;
+
+        // Attach events
+        wrap.querySelectorAll('.subject-tab').forEach(tab => {
+            tab.addEventListener('click', function () {
+                activeTab = parseInt(this.dataset.idx);
+                renderTabs();
+                renderBookSections();
+            });
+        });
     }
 
     // =========================================================
-    // RENDER TABLE HEAD — Subject name + Paper + Field
+    // BOOK FILL STATUS
     // =========================================================
-    function renderTableHead() {
-        const thead = $('tableHead');
-        let html = '';
+    function getBookFillStatus(book) {
+        let total = 0;
+        let filled = 0;
 
-        // ============ Row 1: Section headers ============
-        html += '<tr>';
-        html += `<th class="col-roll" rowspan="3">Roll</th>`;
-        html += `<th class="col-name" rowspan="3" style="text-align:left;padding-left:12px;">Name</th>`;
+        loadedStudents.forEach(stu => {
+            book.papers.forEach(p => {
+                const key = stu.id + '_' + p.id;
+                const m = marksData[key] || {};
 
-        subjectSections.forEach(sec => {
-            let totalCols = 0;
-            sec.subjects.forEach(subj => {
-                subj.papers.forEach(p => {
-                    if (p.has_cq) totalCols++;
-                    if (p.has_mcq) totalCols++;
-                    if (p.has_practical) totalCols++;
-                });
-            });
-            html += `<th class="section-header" colspan="${totalCols}">${sec.label}</th>`;
-        });
-
-        html += `<th class="col-gpa" rowspan="3">GPA</th>`;
-        html += `<th class="col-grade" rowspan="3">Grade</th>`;
-        html += `<th class="col-status" rowspan="3">Status</th>`;
-        html += '</tr>';
-
-        // ============ Row 2: Subject names ============
-        html += '<tr>';
-        subjectSections.forEach(sec => {
-            sec.subjects.forEach(subj => {
-                let subjCols = 0;
-                subj.papers.forEach(p => {
-                    if (p.has_cq) subjCols++;
-                    if (p.has_mcq) subjCols++;
-                    if (p.has_practical) subjCols++;
-                });
-
-                const codeLabel = subj.subject_code
-                    ? `<span style="font-size:9px;opacity:0.85;font-weight:600;display:block;color:var(--gold);letter-spacing:0.5px;margin-top:1px;">${escapeHtml(subj.subject_code)}</span>`
-                    : '';
-
-                html += `<th class="subject-header" colspan="${subjCols}" title="${escapeHtml(subj.subject_name)}">
-                    <span style="font-size:11.5px;font-weight:700;letter-spacing:0.2px;display:block;color:#fff;">${escapeHtml(subj.subject_name)}</span>
-                    ${codeLabel}
-                </th>`;
-            });
-        });
-        html += '</tr>';
-
-        // ============ Row 3: Paper + Field type ============
-        html += '<tr>';
-        subjectSections.forEach(sec => {
-            sec.subjects.forEach(subj => {
-                subj.papers.forEach(p => {
-                    const paperLabel = subj.papers.length > 1
-                        ? `${p.paper_number}য়`
-                        : '';
-
+                if (book.assessment_model === 'board_continuous') {
+                    total++;
+                    if (m.board !== '' && m.board !== undefined && m.continuous !== '' && m.continuous !== undefined) {
+                        filled++;
+                    }
+                } else {
                     if (p.has_cq) {
-                        html += `<th class="subject-header col-sub" title="${escapeHtml(subj.subject_name)} ${paperLabel} CQ">
-                            ${paperLabel ? `<span style="font-size:8.5px;display:block;color:var(--gold);font-weight:600;">${paperLabel}</span>` : ''}
-                            CQ
-                        </th>`;
+                        total++;
+                        if (m.cq !== '' && m.cq !== undefined) filled++;
                     }
                     if (p.has_mcq) {
-                        html += `<th class="subject-header col-sub" title="${escapeHtml(subj.subject_name)} ${paperLabel} MCQ">
-                            ${paperLabel ? `<span style="font-size:8.5px;display:block;color:var(--gold);font-weight:600;">${paperLabel}</span>` : ''}
-                            MCQ
-                        </th>`;
+                        total++;
+                        if (m.mcq !== '' && m.mcq !== undefined) filled++;
                     }
                     if (p.has_practical) {
-                        html += `<th class="subject-header col-sub" title="${escapeHtml(subj.subject_name)} ${paperLabel} PR">
-                            ${paperLabel ? `<span style="font-size:8.5px;display:block;color:var(--gold);font-weight:600;">${paperLabel}</span>` : ''}
-                            PR
-                        </th>`;
+                        total++;
+                        if (m.practical !== '' && m.practical !== undefined) filled++;
                     }
-                });
+                }
             });
         });
-        html += '</tr>';
 
-        thead.innerHTML = html;
+        return { total, filled, complete: total > 0 && total === filled };
     }
 
     // =========================================================
-    // RENDER TABLE BODY
+    // RENDER BOOK SECTIONS
     // =========================================================
-    function renderTableBody() {
-        const tbody = $('tableBody');
+    function renderBookSections() {
+        const container = $('bookSections');
         let html = '';
 
-        loadedStudents.forEach(stu => {
-            html += `<tr data-student-id="${stu.id}">`;
-            html += `<td class="cell-roll">${escapeHtml(stu.roll)}</td>`;
-            html += `<td class="cell-name">${escapeHtml(stu.name)}</td>`;
+        bookGroups.forEach((book, bookIdx) => {
+            const isActive = bookIdx === activeTab;
+            if (!isActive) return; // Only show active tab
 
-            subjectSections.forEach(sec => {
-                sec.subjects.forEach(subj => {
-                    subj.papers.forEach(p => {
-                        const key = stu.id + '_' + p.id;
-                        const m = marksData[key] || { cq: '', mcq: '', practical: '' };
+            const status = getBookFillStatus(book);
 
-                        if (p.has_cq) {
-                            html += `<td>${renderInput(stu.id, p.id, 'cq', m.cq, p.cq_marks)}</td>`;
-                        }
-                        if (p.has_mcq) {
-                            html += `<td>${renderInput(stu.id, p.id, 'mcq', m.mcq, p.mcq_marks)}</td>`;
-                        }
-                        if (p.has_practical) {
-                            html += `<td>${renderInput(stu.id, p.id, 'practical', m.practical, p.practical_marks)}</td>`;
-                        }
-                    });
-                });
+            html += `<div class="book-section" data-book-idx="${bookIdx}">
+                <div class="book-header">
+                    <div class="bh-title">
+                        <i class="fas fa-book"></i>
+                        ${escapeHtml(book.subject_name)}
+                        ${book.subject_code ? `<span style="font-size:11px;opacity:0.7;font-weight:600;">(${escapeHtml(book.subject_code)})</span>` : ''}
+                    </div>
+                    <div class="bh-status ${status.complete ? 'done' : ''}">
+                        ${status.complete ? '✅ সম্পূর্ণ' : `${status.filled}/${status.total} filled`}
+                    </div>
+                </div>`;
+
+            // Render each paper
+            book.papers.forEach((paper, paperIdx) => {
+                const paperLabel = book.papers.length > 1
+                    ? `${paper.paper_number === 1 ? '১ম' : '২য়'} পত্র`
+                    : 'Single Paper';
+
+                const paperStatus = getPaperFillStatus(book, paper);
+                const marksSummary = getMarksSummary(book, paper);
+
+                html += `<div class="paper-block">
+                    <div class="paper-header">
+                        <div class="ph-name">
+                            <i class="fas fa-file-alt"></i>
+                            ${paperLabel}
+                        </div>
+                        <div class="ph-marks">
+                            ${book.assessment_model === 'board_continuous'
+                                ? `Board /${paper.cq_marks || 60} | Continuous /${paper.practical_marks || 40}`
+                                : `${paper.has_cq ? `CQ /${paper.cq_marks}` : ''} ${paper.has_mcq ? `MCQ /${paper.mcq_marks}` : ''} ${paper.has_practical ? `Practical /${paper.practical_marks}` : ''}`}
+                        </div>
+                        <div class="ph-count ${paperStatus.complete ? 'complete' : ''}">
+                            ${paperStatus.filled}/${paperStatus.total}
+                        </div>
+                    </div>
+                    <div class="marks-scroll">
+                        <table class="marks-table">
+                            <thead>
+                                <tr>
+                                    <th>Roll</th>
+                                    <th class="col-name">Name</th>
+                                    ${renderPaperHeaders(book, paper)}
+                                    <th>Total</th>
+                                    <th>%</th>
+                                    <th>Grade</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${renderPaperRows(book, paper)}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>`;
             });
 
-            html += `<td class="gpa-cell" data-gpa="${stu.id}">—</td>`;
-            html += `<td data-grade="${stu.id}">—</td>`;
-            html += `<td data-status="${stu.id}">—</td>`;
-            html += '</tr>';
+            html += `</div>`;
         });
 
-        tbody.innerHTML = html;
+        container.innerHTML = html;
 
-        loadedStudents.forEach(stu => {
-            updateStudentResult(stu.id);
-        });
-
+        // Attach input events
         attachInputEvents();
     }
 
-    function renderInput(studentId, subjectId, field, value, maxMarks) {
+    // =========================================================
+    // RENDER PAPER HEADERS
+    // =========================================================
+    function renderPaperHeaders(book, paper) {
+        if (book.assessment_model === 'board_continuous') {
+            return `
+                <th>Board /${paper.cq_marks || 60}</th>
+                <th>Continuous /${paper.practical_marks || 40}</th>
+            `;
+        }
+        let html = '';
+        if (paper.has_cq) html += `<th>CQ /${paper.cq_marks}</th>`;
+        if (paper.has_mcq) html += `<th>MCQ /${paper.mcq_marks}</th>`;
+        if (paper.has_practical) html += `<th>Practical /${paper.practical_marks}</th>`;
+        return html;
+    }
+
+    // =========================================================
+    // RENDER PAPER ROWS
+    // =========================================================
+    function renderPaperRows(book, paper) {
+        let html = '';
+
+        loadedStudents.forEach(stu => {
+            const key = stu.id + '_' + paper.id;
+            const m = marksData[key] || {};
+
+            let inputsHtml = '';
+            if (book.assessment_model === 'board_continuous') {
+                inputsHtml += renderInput(stu.id, paper.id, 'board', m.board, paper.cq_marks || 60, 'board');
+                inputsHtml += renderInput(stu.id, paper.id, 'continuous', m.continuous, paper.practical_marks || 40, 'continuous');
+            } else {
+                if (paper.has_cq) inputsHtml += renderInput(stu.id, paper.id, 'cq', m.cq, paper.cq_marks, 'cq');
+                if (paper.has_mcq) inputsHtml += renderInput(stu.id, paper.id, 'mcq', m.mcq, paper.mcq_marks, 'mcq');
+                if (paper.has_practical) inputsHtml += renderInput(stu.id, paper.id, 'practical', m.practical, paper.practical_marks, 'practical');
+            }
+
+            // Calculate current result
+            const result = calculatePaperFromData(book, paper, m);
+            const rowClass = result.status === 'fail' ? 'fail' : (result.status === 'pass' ? 'pass' : '');
+
+            html += `<tr data-student-id="${stu.id}" class="${rowClass}">
+                <td>${escapeHtml(stu.roll)}</td>
+                <td class="col-name">${escapeHtml(stu.name)}</td>
+                ${inputsHtml}
+                <td class="total-cell" data-total="${stu.id}_${paper.id}">
+                    ${result.total !== null ? result.total : '—'}
+                </td>
+                <td class="percent-cell" data-percent="${stu.id}_${paper.id}">
+                    ${result.percent !== null ? result.percent + '%' : '—'}
+                </td>
+                <td data-grade="${stu.id}_${paper.id}">
+                    ${result.grade !== null
+                        ? `<span class="grade-cell-mini ${window.FDCGPA.getGradeClass(result.grade)}">${result.grade}</span>`
+                        : '—'}
+                </td>
+            </tr>`;
+        });
+
+        return html;
+    }
+
+    // =========================================================
+    // RENDER INPUT
+    // =========================================================
+    function renderInput(studentId, subjectId, field, value, max, fieldType) {
         const key = studentId + '_' + subjectId;
         const inputId = `input_${key}_${field}`;
         const val = (value !== '' && value !== null && value !== undefined) ? value : '';
         const filled = val !== '' ? 'filled' : '';
 
-        return `<div class="marks-input-wrap">
-            <input type="number"
-                   class="marks-input ${filled}"
-                   id="${inputId}"
-                   data-student-id="${studentId}"
-                   data-subject-id="${subjectId}"
-                   data-field="${field}"
-                   data-max="${maxMarks}"
-                   value="${val}"
-                   min="0"
-                   max="${maxMarks}"
-                   placeholder="0">
-            <span class="max-hint">/${maxMarks}</span>
-        </div>`;
+        return `<td>
+            <div class="marks-input-wrap">
+                <input type="number"
+                       class="marks-input ${filled}"
+                       id="${inputId}"
+                       data-student-id="${studentId}"
+                       data-subject-id="${subjectId}"
+                       data-field="${field}"
+                       data-max="${max}"
+                       data-field-type="${fieldType}"
+                       value="${val}"
+                       min="0"
+                       max="${max}"
+                       placeholder="0">
+                <span class="max-hint">/${max}</span>
+            </div>
+        </td>`;
     }
 
     // =========================================================
-    // INPUT EVENTS (attached once)
+    // CALCULATE PAPER FROM DATA
+    // =========================================================
+    function calculatePaperFromData(book, paper, m) {
+        const hasAnyData = (book.assessment_model === 'board_continuous')
+            ? (m.board !== '' && m.board !== undefined) || (m.continuous !== '' && m.continuous !== undefined)
+            : (m.cq !== '' && m.cq !== undefined) || (m.mcq !== '' && m.mcq !== undefined) || (m.practical !== '' && m.practical !== undefined);
+
+        if (!hasAnyData) {
+            return { total: null, percent: null, grade: null, status: 'pending' };
+        }
+
+        if (book.assessment_model === 'board_continuous') {
+            const result = window.FDCGPA.calculateBMTPaperGPA(
+                m.board || 0, m.continuous || 0,
+                paper.cq_marks || 60, paper.practical_marks || 40
+            );
+            return {
+                total: result.total,
+                percent: result.percent,
+                grade: result.grade,
+                status: result.failed ? 'fail' : 'pass'
+            };
+        }
+
+        const result = window.FDCGPA.calculatePaperGPA(
+            { cq: m.cq || 0, mcq: m.mcq || 0, practical: m.practical || 0 },
+            {
+                cq: paper.cq_marks || 0,
+                mcq: paper.mcq_marks || 0,
+                practical: paper.practical_marks || 0,
+                hasCq: paper.has_cq,
+                hasMcq: paper.has_mcq,
+                hasPractical: paper.has_practical
+            }
+        );
+
+        return {
+            total: result.total,
+            percent: result.percent,
+            grade: result.grade,
+            status: result.failed ? 'fail' : 'pass'
+        };
+    }
+
+    // =========================================================
+    // ATTACH INPUT EVENTS
     // =========================================================
     let inputEventsAttached = false;
 
     function attachInputEvents() {
-        if (inputEventsAttached) return;
-        inputEventsAttached = true;
+        const container = $('bookSections');
 
-        const table = $('tableBody');
+        container.querySelectorAll('.marks-input').forEach(input => {
+            if (input.dataset.eventsAttached === 'true') return;
+            input.dataset.eventsAttached = 'true';
 
-        // Input change
-        table.addEventListener('input', function (e) {
-            const input = e.target.closest('.marks-input');
-            if (!input) return;
+            input.addEventListener('input', handleInputChange);
+            input.addEventListener('keydown', handleInputKeydown);
+            input.addEventListener('blur', handleInputBlur);
+        });
+    }
 
-            const studentId = input.dataset.studentId;
-            const subjectId = input.dataset.subjectId;
-            const field = input.dataset.field;
-            const maxMarks = parseInt(input.dataset.max) || 0;
-            let value = parseInt(input.value) || 0;
+    // =========================================================
+    // HANDLE INPUT CHANGE
+    // =========================================================
+    function handleInputChange(e) {
+        const input = e.target;
+        const studentId = input.dataset.studentId;
+        const subjectId = input.dataset.subjectId;
+        const field = input.dataset.field;
+        const max = parseInt(input.dataset.max) || 0;
 
-            if (input.value !== '' && value > maxMarks) {
-                value = maxMarks;
-                input.value = maxMarks;
-                window.fdcWarning(`সর্বোচ্চ ${maxMarks} নম্বর দেওয়া যাবে।`);
-            }
-            if (value < 0) {
-                value = 0;
+        let value = input.value.trim();
+        if (value !== '') {
+            let num = parseFloat(value);
+            if (isNaN(num)) {
+                input.value = '';
+                value = '';
+            } else if (num > max) {
+                input.value = max;
+                input.classList.add('error');
+                setTimeout(() => input.classList.remove('error'), 500);
+                value = max;
+            } else if (num < 0) {
                 input.value = 0;
+                value = 0;
             }
+        }
 
-            const key = studentId + '_' + subjectId;
-            if (!marksData[key]) marksData[key] = { cq: '', mcq: '', practical: '' };
-            marksData[key][field] = input.value === '' ? '' : value;
+        const key = studentId + '_' + subjectId;
+        if (!marksData[key]) marksData[key] = {};
+        marksData[key][field] = input.value;
 
-            if (input.value !== '') input.classList.add('filled');
-            else input.classList.remove('filled');
+        input.classList.toggle('filled', input.value !== '');
 
-            updateStudentResult(studentId);
-            updateStats();
-            markUnsaved();
-        });
+        // Update total/percent/grade for this paper
+        updatePaperCell(studentId, subjectId);
 
-        // Auto-tab after 2 digits
-        table.addEventListener('input', function (e) {
-            const input = e.target.closest('.marks-input');
-            if (!input) return;
+        // Update row color
+        updateRowStatus(studentId);
 
-            if (input.value.length >= 2) {
-                const allInputs = Array.from(table.querySelectorAll('.marks-input'));
-                const idx = allInputs.indexOf(input);
-                if (idx > -1 && idx < allInputs.length - 1) {
-                    allInputs[idx + 1].focus();
-                    allInputs[idx + 1].select();
-                }
-            }
-        });
+        // Update progress and tabs
+        updateProgress();
 
-        // Enter → next field
-        table.addEventListener('keydown', function (e) {
-            if (e.key !== 'Enter') return;
-            const input = e.target.closest('.marks-input');
-            if (!input) return;
-
-            e.preventDefault();
-            const allInputs = Array.from(table.querySelectorAll('.marks-input'));
-            const idx = allInputs.indexOf(input);
-            if (idx > -1 && idx < allInputs.length - 1) {
-                allInputs[idx + 1].focus();
-                allInputs[idx + 1].select();
-            }
-        });
+        // Mark unsaved
+        markUnsaved();
     }
 
     // =========================================================
-    // UPDATE STUDENT RESULT
+    // HANDLE INPUT KEYDOWN
     // =========================================================
-    function updateStudentResult(studentId) {
-        const result = calculateStudentGPA(studentId);
+    function handleInputKeydown(e) {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
 
-        const gpaCell = document.querySelector(`[data-gpa="${studentId}"]`);
-        if (gpaCell) {
-            gpaCell.textContent = result.gpa.toFixed(2);
-            gpaCell.classList.remove('high', 'mid', 'low');
-            if (result.gpa >= 4.50) gpaCell.classList.add('high');
-            else if (result.gpa >= 3.00) gpaCell.classList.add('mid');
-            else gpaCell.classList.add('low');
+        const input = e.target;
+        const allInputs = Array.from(document.querySelectorAll('.marks-input'));
+        const idx = allInputs.indexOf(input);
+        if (idx > -1 && idx < allInputs.length - 1) {
+            allInputs[idx + 1].focus();
+            allInputs[idx + 1].select();
         }
+    }
 
-        const gradeCell = document.querySelector(`[data-grade="${studentId}"]`);
+    // =========================================================
+    // HANDLE INPUT BLUR — AUTO TAB AFTER 2 DIGITS
+    // =========================================================
+    function handleInputBlur(e) {
+        const input = e.target;
+        // Auto-move handled by input event, this is for validation
+    }
+
+    // =========================================================
+    // UPDATE PAPER CELL (total/percent/grade)
+    // =========================================================
+    function updatePaperCell(studentId, subjectId) {
+        const book = bookGroups.find(b => b.papers.some(p => p.id === subjectId));
+        if (!book) return;
+        const paper = book.papers.find(p => p.id === subjectId);
+        if (!paper) return;
+
+        const key = studentId + '_' + subjectId;
+        const m = marksData[key] || {};
+        const result = calculatePaperFromData(book, paper, m);
+
+        const totalCell = document.querySelector(`[data-total="${key}"]`);
+        const percentCell = document.querySelector(`[data-percent="${key}"]`);
+        const gradeCell = document.querySelector(`[data-grade="${key}"]`);
+
+        if (totalCell) totalCell.textContent = result.total !== null ? result.total : '—';
+        if (percentCell) percentCell.textContent = result.percent !== null ? result.percent + '%' : '—';
         if (gradeCell) {
-            const gradeClass = getGradeClass(result.grade);
-            gradeCell.innerHTML = `<span class="grade-cell ${gradeClass}">${result.grade}</span>`;
-        }
-
-        const statusCell = document.querySelector(`[data-status="${studentId}"]`);
-        if (statusCell) {
-            if (result.status === 'pass') {
-                statusCell.innerHTML = '<span style="color:#059669;font-weight:700;font-size:11px;">✓ PASS</span>';
+            if (result.grade) {
+                gradeCell.innerHTML = `<span class="grade-cell-mini ${window.FDCGPA.getGradeClass(result.grade)}">${result.grade}</span>`;
             } else {
-                statusCell.innerHTML = '<span style="color:#dc2626;font-weight:700;font-size:11px;">✗ FAIL</span>';
+                gradeCell.textContent = '—';
             }
         }
     }
 
     // =========================================================
-    // UPDATE STATS
+    // UPDATE ROW STATUS
     // =========================================================
-    function updateStats() {
-        const total = loadedStudents.length;
+    function updateRowStatus(studentId) {
+        const row = document.querySelector(`tr[data-student-id="${studentId}"]`);
+        if (!row) return;
+
+        // Determine overall status from all subjects for this student
+        const studentStatus = calculateStudentOverallStatus(studentId);
+        row.classList.remove('pass', 'fail');
+        if (studentStatus === 'pass') row.classList.add('pass');
+        else if (studentStatus === 'fail') row.classList.add('fail');
+    }
+
+    // =========================================================
+    // CALCULATE STUDENT OVERALL STATUS (for row color)
+    // =========================================================
+    function calculateStudentOverallStatus(studentId) {
+        const subjects = [];
+
+        bookGroups.forEach(book => {
+            if (book.subject_type === 'optional') {
+                // Will add later
+            }
+
+            const paperResults = [];
+            let hasAnyData = false;
+
+            book.papers.forEach(paper => {
+                const key = studentId + '_' + paper.id;
+                const m = marksData[key] || {};
+                const result = calculatePaperFromData(book, paper, m);
+                if (result.total !== null) hasAnyData = true;
+                paperResults.push({
+                    gp: result.grade ? window.FDCGPA.percentToGrade(result.percent).gp : 0,
+                    failed: result.status === 'fail'
+                });
+            });
+
+            if (hasAnyData) {
+                const subjectResult = window.FDCGPA.calculateSubjectGPA(paperResults);
+                subjects.push({
+                    name: book.subject_name,
+                    type: book.subject_type,
+                    gp: subjectResult.gp,
+                    failed: subjectResult.failed
+                });
+            }
+        });
+
+        if (subjects.length === 0) return 'pending';
+
+        const overall = window.FDCGPA.calculateOverallGPA(subjects);
+        return overall.status;
+    }
+
+    // =========================================================
+    // UPDATE PROGRESS
+    // =========================================================
+    function updateProgress() {
+        let total = 0;
         let filled = 0;
-        let passed = 0;
-        let failed = 0;
+        let passCount = 0;
+        let failCount = 0;
 
         loadedStudents.forEach(stu => {
-            const result = calculateStudentGPA(stu.id);
-            if (result.totalMarks > 0) filled++;
-            if (result.status === 'pass') passed++;
-            else failed++;
+            bookGroups.forEach(book => {
+                book.papers.forEach(p => {
+                    const key = stu.id + '_' + p.id;
+                    const m = marksData[key] || {};
+
+                    if (book.assessment_model === 'board_continuous') {
+                        if (m.board !== '' && m.board !== undefined) filled++;
+                        if (m.continuous !== '' && m.continuous !== undefined) filled++;
+                        total += 2;
+                    } else {
+                        if (p.has_cq) { total++; if (m.cq !== '' && m.cq !== undefined) filled++; }
+                        if (p.has_mcq) { total++; if (m.mcq !== '' && m.mcq !== undefined) filled++; }
+                        if (p.has_practical) { total++; if (m.practical !== '' && m.practical !== undefined) filled++; }
+                    }
+                });
+            });
+
+            // Student status
+            const status = calculateStudentOverallStatus(stu.id);
+            if (status === 'pass') passCount++;
+            else if (status === 'fail') failCount++;
         });
 
-        $('totalStudents').textContent = total;
-        $('statTotal').textContent = total;
-        $('statFilled').textContent = filled;
-        $('statPassed').textContent = passed;
-        $('statFailed').textContent = failed;
+        const percent = total > 0 ? Math.round((filled / total) * 100) : 0;
+
+        $('progressPercent').textContent = percent + '%';
+        $('progressFill').style.width = percent + '%';
+
+        // Color
+        const fill = $('progressFill');
+        fill.classList.remove('warn', 'low');
+        if (percent < 30) fill.classList.add('low');
+        else if (percent < 70) fill.classList.add('warn');
+
+        $('statStudents').textContent = loadedStudents.length;
+        $('statBooks').textContent = bookGroups.length;
+        $('statPapers').textContent = bookGroups.reduce((s, b) => s + b.papers.length, 0);
+        $('statFilled').textContent = filled + '/' + total;
+        $('statPass').textContent = passCount;
+        $('statFail').textContent = failCount;
+
+        // Update tabs
+        renderTabs();
+
+        // Update book header count
+        bookGroups.forEach((book, idx) => {
+            if (idx !== activeTab) return;
+            const status = getBookFillStatus(book);
+            const header = document.querySelector(`.book-section[data-book-idx="${idx}"] .bh-status`);
+            if (header) {
+                header.textContent = status.complete
+                    ? '✅ সম্পূর্ণ'
+                    : `${status.filled}/${status.total} filled`;
+                header.classList.toggle('done', status.complete);
+            }
+        });
+
+        // Enable/disable Publish
+        const publishBtn = $('btnPublish');
+        publishBtn.disabled = (percent !== 100);
+    }
+
+    // =========================================================
+    // GET PAPER FILL STATUS
+    // =========================================================
+    function getPaperFillStatus(book, paper) {
+        let total = 0;
+        let filled = 0;
+
+        loadedStudents.forEach(stu => {
+            const key = stu.id + '_' + paper.id;
+            const m = marksData[key] || {};
+
+            if (book.assessment_model === 'board_continuous') {
+                total += 2;
+                if (m.board !== '' && m.board !== undefined) filled++;
+                if (m.continuous !== '' && m.continuous !== undefined) filled++;
+            } else {
+                if (paper.has_cq) { total++; if (m.cq !== '' && m.cq !== undefined) filled++; }
+                if (paper.has_mcq) { total++; if (m.mcq !== '' && m.mcq !== undefined) filled++; }
+                if (paper.has_practical) { total++; if (m.practical !== '' && m.practical !== undefined) filled++; }
+            }
+        });
+
+        return { total, filled, complete: total > 0 && total === filled };
+    }
+
+    // =========================================================
+    // GET MARKS SUMMARY
+    // =========================================================
+    function getMarksSummary(book, paper) {
+        return ''; // placeholder
+    }
+
+    // =========================================================
+    // MARK UNSAVED
+    // =========================================================
+    function markUnsaved() {
+        hasUnsavedChanges = true;
+        const badge = $('statusBadge');
+        if (badge && resultStatus !== 'published') {
+            badge.className = 'status-badge unsaved';
+            badge.innerHTML = '<i class="fas fa-exclamation-circle"></i> Unsaved';
+        }
     }
 
     // =========================================================
     // FILL ALL PRACTICAL = 25
     // =========================================================
     function fillAllPractical() {
-        const inputs = document.querySelectorAll('.marks-input[data-field="practical"]');
-        if (inputs.length === 0) {
-            return window.fdcWarning('এই exam-এ কোনো practical subject নেই।');
-        }
+        let count = 0;
+        document.querySelectorAll('.marks-input[data-field="practical"]').forEach(input => {
+            const max = parseInt(input.dataset.max) || 25;
+            const val = Math.min(25, max);
+            input.value = val;
+            input.classList.add('filled');
+            const key = input.dataset.studentId + '_' + input.dataset.subjectId;
+            if (!marksData[key]) marksData[key] = {};
+            marksData[key].practical = val;
+            count++;
+        });
 
-        window.fdcConfirm(
-            `সব practical field-এ 25 বসানো হবে। নিশ্চিত?`,
-            function () {
-                inputs.forEach(input => {
-                    const max = parseInt(input.dataset.max) || 25;
-                    const value = Math.min(25, max);
-                    input.value = value;
-                    input.classList.add('filled');
+        if (count === 0) return window.fdcWarning('এই exam-এ practical নেই।');
+        window.fdcSuccess(`${count}টি practical field-এ 25 বসানো হয়েছে।`);
+        refreshAll();
+    }
 
-                    const studentId = input.dataset.studentId;
-                    const subjectId = input.dataset.subjectId;
-                    const key = studentId + '_' + subjectId;
-                    if (!marksData[key]) marksData[key] = { cq: '', mcq: '', practical: '' };
-                    marksData[key].practical = value;
-                });
+    // =========================================================
+    // FILL ALL MCQ = 25
+    // =========================================================
+    function fillAllMCQ() {
+        let count = 0;
+        document.querySelectorAll('.marks-input[data-field="mcq"]').forEach(input => {
+            const max = parseInt(input.dataset.max) || 25;
+            const val = Math.min(25, max);
+            input.value = val;
+            input.classList.add('filled');
+            const key = input.dataset.studentId + '_' + input.dataset.subjectId;
+            if (!marksData[key]) marksData[key] = {};
+            marksData[key].mcq = val;
+            count++;
+        });
 
-                loadedStudents.forEach(stu => updateStudentResult(stu.id));
-                updateStats();
-                markUnsaved();
-
-                window.fdcSuccess(`${inputs.length}টি practical field-এ 25 বসানো হয়েছে।`);
-            },
-            { title: 'Fill Practical', confirmText: 'Yes, Fill' }
-        );
+        if (count === 0) return window.fdcWarning('এই exam-এ MCQ নেই।');
+        window.fdcSuccess(`${count}টি MCQ field-এ 25 বসানো হয়েছে।`);
+        refreshAll();
     }
 
     // =========================================================
@@ -863,33 +999,28 @@
                 marksData = {};
                 document.querySelectorAll('.marks-input').forEach(input => {
                     input.value = '';
-                    input.classList.remove('filled', 'error');
+                    input.classList.remove('filled', 'fail', 'error');
                 });
-                loadedStudents.forEach(stu => updateStudentResult(stu.id));
-                updateStats();
-                markUnsaved();
+                refreshAll();
                 window.fdcSuccess('সব marks clear করা হয়েছে।');
             },
-            { title: 'Clear All Marks', confirmText: 'Yes, Clear', confirmType: 'danger' }
+            { title: 'Clear All', confirmText: 'Yes, Clear', confirmType: 'danger' }
         );
     }
 
     // =========================================================
-    // MARK UNSAVED
+    // REFRESH ALL
     // =========================================================
-    function markUnsaved() {
-        hasUnsavedChanges = true;
-        const badge = $('statusBadge');
-        if (badge) {
-            badge.className = 'status-badge unsaved';
-            badge.innerHTML = '<i class="fas fa-exclamation-circle"></i> Unsaved';
-        }
+    function refreshAll() {
+        renderBookSections();
+        updateProgress();
+        markUnsaved();
     }
 
     // =========================================================
     // SAVE / PUBLISH
     // =========================================================
-    async function saveDraft(publish = false) {
+    async function saveResults(publish = false) {
         if (loadedStudents.length === 0) {
             return window.fdcWarning('আগে student load করুন।');
         }
@@ -909,26 +1040,34 @@
                     const status = publish ? 'published' : 'draft';
 
                     for (const stu of loadedStudents) {
+                        // Check if result exists
+                        const { data: existingResult } = await window.FDC_SUPABASE
+                            .from('results')
+                            .select('id')
+                            .eq('student_id', stu.id)
+                            .eq('exam_id', currentExam.id)
+                            .eq('year', currentYear)
+                            .maybeSingle();
+
+                        let resultId;
+
+                        // Calculate overall GPA
+                        const gpaData = calculateStudentGPAForSave(stu.id);
+
                         const resultData = {
                             student_id: stu.id,
-                            exam_id: currentExamId,
+                            exam_id: currentExam.id,
                             year: currentYear,
                             session: session,
                             branch: currentBranch,
                             status: status,
                             is_published: publish,
-                            published_at: publish ? new Date().toISOString() : null
+                            published_at: publish ? new Date().toISOString() : null,
+                            gpa: gpaData.gpa,
+                            grade: gpaData.grade,
+                            total_marks: gpaData.totalMarks
                         };
 
-                        const { data: existingResult } = await window.FDC_SUPABASE
-                            .from('results')
-                            .select('id')
-                            .eq('student_id', stu.id)
-                            .eq('exam_id', currentExamId)
-                            .eq('year', currentYear)
-                            .maybeSingle();
-
-                        let resultId;
                         if (existingResult) {
                             resultId = existingResult.id;
                             await window.FDC_SUPABASE
@@ -954,43 +1093,72 @@
                         // Insert new details
                         const detailsRecords = [];
 
-                        subjectSections.forEach(sec => {
-                            sec.subjects.forEach(subj => {
-                                subj.papers.forEach(p => {
-                                    const key = stu.id + '_' + p.id;
-                                    const m = marksData[key] || { cq: 0, mcq: 0, practical: 0 };
+                        bookGroups.forEach(book => {
+                            book.papers.forEach(paper => {
+                                const key = stu.id + '_' + paper.id;
+                                const m = marksData[key] || {};
 
+                                if (book.assessment_model === 'board_continuous') {
+                                    const board = parseFloat(m.board) || 0;
+                                    const cont = parseFloat(m.continuous) || 0;
+                                    const total = board + cont;
+                                    const maxTotal = (paper.cq_marks || 60) + (paper.practical_marks || 40);
+                                    const percent = maxTotal > 0 ? (total / maxTotal) * 100 : 0;
+                                    const { grade, gp } = window.FDCGPA.percentToGrade(percent);
+                                    const failed = total < maxTotal * 0.33;
+
+                                    detailsRecords.push({
+                                        result_id: resultId,
+                                        student_id: stu.id,
+                                        subject_id: paper.id,
+                                        exam_id: currentExam.id,
+                                        subject_type: book.subject_type,
+                                        paper_number: paper.paper_number || 1,
+                                        board_marks: board,
+                                        continuous_marks: cont,
+                                        cq_marks: 0,
+                                        mcq_marks: 0,
+                                        practical_marks: 0,
+                                        total_marks: total,
+                                        grade: failed ? 'F' : grade,
+                                        grade_point: failed ? 0 : gp,
+                                        status: failed ? 'fail' : 'pass'
+                                    });
+                                } else {
                                     const cq = parseFloat(m.cq) || 0;
                                     const mcq = parseFloat(m.mcq) || 0;
                                     const pr = parseFloat(m.practical) || 0;
                                     const total = cq + mcq + pr;
 
-                                    const full = (p.cq_marks || 0) + (p.mcq_marks || 0) + (p.practical_marks || 0);
-                                    const grade = getGrade(total, full);
-                                    const gp = getGradePoint(total, full);
+                                    const maxTotal = (paper.has_cq ? paper.cq_marks || 0 : 0)
+                                                   + (paper.has_mcq ? paper.mcq_marks || 0 : 0)
+                                                   + (paper.has_practical ? paper.practical_marks || 0 : 0);
+
+                                    const percent = maxTotal > 0 ? (total / maxTotal) * 100 : 0;
+                                    const { grade, gp } = window.FDCGPA.percentToGrade(percent);
 
                                     let pStatus = 'pass';
-                                    if (total < Math.ceil(full * 0.33)) pStatus = 'fail';
-                                    if (p.has_cq && cq < Math.ceil((p.cq_marks || 0) * 0.33)) pStatus = 'fail';
-                                    if (p.has_mcq && mcq < Math.ceil((p.mcq_marks || 0) * 0.33)) pStatus = 'fail';
-                                    if (p.has_practical && pr < Math.ceil((p.practical_marks || 0) * 0.33)) pStatus = 'fail';
+                                    if (paper.has_cq && cq < (paper.cq_marks || 0) * 0.33) pStatus = 'fail';
+                                    else if (paper.has_mcq && mcq < (paper.mcq_marks || 0) * 0.33) pStatus = 'fail';
+                                    else if (paper.has_practical && pr < (paper.practical_marks || 0) * 0.33) pStatus = 'fail';
+                                    else if (total < maxTotal * 0.33) pStatus = 'fail';
 
                                     detailsRecords.push({
                                         result_id: resultId,
                                         student_id: stu.id,
-                                        subject_id: p.id,
-                                        exam_id: currentExamId,
-                                        subject_type: sec.type,
-                                        paper_number: p.paper_number,
+                                        subject_id: paper.id,
+                                        exam_id: currentExam.id,
+                                        subject_type: book.subject_type,
+                                        paper_number: paper.paper_number || 1,
                                         cq_marks: cq,
                                         mcq_marks: mcq,
                                         practical_marks: pr,
                                         total_marks: total,
-                                        grade: grade,
-                                        grade_point: gp,
+                                        grade: pStatus === 'fail' ? 'F' : grade,
+                                        grade_point: pStatus === 'fail' ? 0 : gp,
                                         status: pStatus
                                     });
-                                });
+                                }
                             });
                         });
 
@@ -1000,17 +1168,6 @@
                                 .insert(detailsRecords);
                             if (detErr) throw detErr;
                         }
-
-                        // Update GPA / Grade in results
-                        const stuResult = calculateStudentGPA(stu.id);
-                        await window.FDC_SUPABASE
-                            .from('results')
-                            .update({
-                                gpa: stuResult.gpa,
-                                grade: stuResult.grade,
-                                total_marks: stuResult.totalMarks
-                            })
-                            .eq('id', resultId);
                     }
 
                     hasUnsavedChanges = false;
@@ -1037,11 +1194,60 @@
                 }
             },
             {
-                title: actionLabel + ' Confirmation',
+                title: actionLabel,
                 confirmText: publish ? 'Yes, Publish' : 'Yes, Save',
                 confirmType: publish ? 'success' : 'primary'
             }
         );
+    }
+
+    // =========================================================
+    // CALCULATE STUDENT GPA FOR SAVE
+    // =========================================================
+    function calculateStudentGPAForSave(studentId) {
+        const subjects = [];
+        let totalMarks = 0;
+
+        bookGroups.forEach(book => {
+            const paperResults = [];
+            let hasAnyData = false;
+
+            book.papers.forEach(paper => {
+                const key = studentId + '_' + paper.id;
+                const m = marksData[key] || {};
+                const result = calculatePaperFromData(book, paper, m);
+
+                if (result.total !== null) {
+                    hasAnyData = true;
+                    totalMarks += result.total;
+                }
+
+                const pg = result.percent !== null ? window.FDCGPA.percentToGrade(result.percent) : { gp: 0 };
+                paperResults.push({
+                    gp: pg.gp,
+                    failed: result.status === 'fail'
+                });
+            });
+
+            if (hasAnyData) {
+                const subjectResult = window.FDCGPA.calculateSubjectGPA(paperResults);
+                subjects.push({
+                    name: book.subject_name,
+                    type: book.subject_type,
+                    gp: subjectResult.gp,
+                    failed: subjectResult.failed
+                });
+            }
+        });
+
+        const overall = window.FDCGPA.calculateOverallGPA(subjects);
+        return {
+            gpa: overall.gpa,
+            grade: overall.grade,
+            totalMarks: totalMarks,
+            status: overall.status,
+            failReason: overall.failReason
+        };
     }
 
     // =========================================================
@@ -1052,20 +1258,21 @@
             const branch = this.value;
             if (branch === 'HSC') {
                 $('groupFieldWrap').style.display = 'block';
-                await loadGroupsByBranch(branch);
+                await loadGroupsByBranch('HSC');
             } else if (branch === 'BM') {
                 $('groupFieldWrap').style.display = 'none';
+                $('filterGroup').innerHTML = '<option value="BM-General">BM-General</option>';
             } else {
-                $('groupFieldWrap').style.display = 'block';
-                $('filterGroup').innerHTML = '<option value="">Select Group</option>';
+                $('groupFieldWrap').style.display = 'none';
             }
         });
 
         $('btnLoadStudents').addEventListener('click', loadStudents);
         $('btnFillPractical').addEventListener('click', fillAllPractical);
+        $('btnFillMCQ').addEventListener('click', fillAllMCQ);
         $('btnClearAll').addEventListener('click', clearAll);
-        $('btnSaveDraft').addEventListener('click', () => saveDraft(false));
-        $('btnPublish').addEventListener('click', () => saveDraft(true));
+        $('btnSaveDraft').addEventListener('click', () => saveResults(false));
+        $('btnPublish').addEventListener('click', () => saveResults(true));
 
         window.addEventListener('beforeunload', function (e) {
             if (hasUnsavedChanges) {
@@ -1079,7 +1286,7 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Results initializing...');
+        console.log('🚀 Admin Results v2 initializing...');
 
         loadYearOptions();
         attachEvents();
@@ -1091,7 +1298,7 @@
             await loadAdminInfo();
             await loadExams();
 
-            console.log('✅ Admin Results ready');
+            console.log('✅ Admin Results v2 ready');
         });
     }
 

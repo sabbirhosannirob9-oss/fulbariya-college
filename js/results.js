@@ -2,6 +2,7 @@
  * =========================================================
  * FULBARIYA COLLEGE — PUBLIC RESULT SEARCH
  * Location: js/results.js
+ * Version: v2 — Preview + Redirect to Result Sheet
  * Depends: config.js, supabase.js, admin-popup.js
  * =========================================================
  */
@@ -14,6 +15,8 @@
     // =========================================================
     let currentBranch = 'HSC';
     let allExams = [];
+    let foundStudent = null;
+    let foundResult = null;
 
     // =========================================================
     // DOM HELPERS
@@ -24,14 +27,7 @@
         if (str === null || str === undefined) return '';
         return String(str)
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;').replace(/'/g, "&#39;");
-    }
-
-    function getSessionFromYear(year) {
-        if (!year) return '';
-        const y = parseInt(year);
-        if (isNaN(y)) return '';
-        return y + '-' + (y + 1);
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
     // =========================================================
@@ -47,35 +43,6 @@
             }
             if (++n > 30) clearInterval(i);
         }, 500);
-    }
-
-    // =========================================================
-    // GRADE HELPERS
-    // =========================================================
-    function getGrade(marks, fullMarks) {
-        if (!fullMarks || fullMarks === 0) return 'F';
-        const pct = (marks / fullMarks) * 100;
-        if (pct >= 80) return 'A+';
-        if (pct >= 70) return 'A';
-        if (pct >= 60) return 'A-';
-        if (pct >= 50) return 'B';
-        if (pct >= 40) return 'C';
-        if (pct >= 33) return 'D';
-        return 'F';
-    }
-
-    function getGradeClass(grade) {
-        const map = {
-            'A+': 'Aplus', 'A': 'A', 'A-': 'Aminus',
-            'B': 'B', 'C': 'C', 'D': 'D', 'F': 'F'
-        };
-        return map[grade] || 'F';
-    }
-
-    function getGPAClass(gpa) {
-        if (gpa >= 4.50) return 'gpa-high';
-        if (gpa >= 3.00) return 'gpa-mid';
-        return 'gpa-low';
     }
 
     // =========================================================
@@ -152,6 +119,7 @@
                 document.querySelectorAll('.branch-btn').forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
                 currentBranch = this.dataset.branch;
+                $('inputBranch').value = currentBranch;
 
                 if (currentBranch === 'HSC') {
                     $('groupFieldWrap').style.display = 'block';
@@ -160,8 +128,38 @@
                     $('groupFieldWrap').style.display = 'none';
                     $('inputGroup').innerHTML = '<option value="">Select Group</option>';
                 }
+
+                hideError();
+                hidePreview();
             });
         });
+    }
+
+    // =========================================================
+    // SHOW / HIDE HELPERS
+    // =========================================================
+    function showError(msg) {
+        $('errorText').innerHTML = msg;
+        $('errorAlert').classList.add('show');
+        $('resultPreview').classList.remove('show');
+    }
+
+    function hideError() {
+        $('errorAlert').classList.remove('show');
+    }
+
+    function showLoading() {
+        $('loadingArea').classList.add('show');
+        $('resultPreview').classList.remove('show');
+        hideError();
+    }
+
+    function hideLoading() {
+        $('loadingArea').classList.remove('show');
+    }
+
+    function hidePreview() {
+        $('resultPreview').classList.remove('show');
     }
 
     // =========================================================
@@ -188,14 +186,11 @@
         const original = btn.innerHTML;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> খোঁজা হচ্ছে...';
 
-        // Hide existing
-        $('searchCard').style.display = 'none';
-        $('resultArea').classList.remove('show');
-        $('emptyState').style.display = 'none';
-        $('loadingArea').classList.add('show');
+        hideError();
+        showLoading();
 
         try {
-            // 1. Find student
+            // Find student
             let stuQuery = window.FDC_SUPABASE
                 .from('students')
                 .select('*')
@@ -210,21 +205,18 @@
             }
 
             const { data: students, error: stuErr } = await stuQuery;
-
             if (stuErr) throw stuErr;
 
             if (!students || students.length === 0) {
-                $('loadingArea').classList.remove('show');
-                $('searchCard').style.display = 'block';
-                return window.fdcError(
-                    'এই তথ্য অনুযায়ী কোনো student পাওয়া যায়নি।<br>' +
-                    'Roll, Class, Year, Branch, Group সঠিকভাবে দিন।'
-                );
+                hideLoading();
+                showError('এই তথ্য অনুযায়ী কোনো student পাওয়া যায়নি।<br>Roll, Class, Year, Branch, Group সঠিকভাবে দিন।');
+                return;
             }
 
             const student = students[0];
+            foundStudent = student;
 
-            // 2. Find result
+            // Find result
             const { data: results, error: resErr } = await window.FDC_SUPABASE
                 .from('results')
                 .select('*')
@@ -237,43 +229,20 @@
             if (resErr) throw resErr;
 
             if (!results) {
-                $('loadingArea').classList.remove('show');
-                $('searchCard').style.display = 'block';
-                return window.fdcError(
-                    'এই exam-এ আপনার result এখনো publish করা হয়নি।<br>' +
-                    'পরে আবার চেষ্টা করুন বা কলেজে যোগাযোগ করুন।'
-                );
+                hideLoading();
+                showError('এই exam-এ result এখনো publish করা হয়নি।<br>পরে আবার চেষ্টা করুন বা কলেজে যোগাযোগ করুন।');
+                return;
             }
 
-            // 3. Load result_details with subject info
-            const { data: details, error: detErr } = await window.FDC_SUPABASE
-                .from('result_details')
-                .select('*, subjects(subject_name, subject_code, paper_number, subject_type, has_cq, has_mcq, has_practical, cq_marks, mcq_marks, practical_marks)')
-                .eq('result_id', results.id)
-                .order('subject_id');
+            foundResult = results;
 
-            if (detErr) throw detErr;
-
-            // 4. Also load student_subjects for structure
-            const { data: studentSubs } = await window.FDC_SUPABASE
-                .from('student_subjects')
-                .select('subject_id, subject_type, subjects(*)')
-                .eq('student_id', student.id)
-                .eq('is_active', true);
-
-            // 5. Render marksheet
-            renderMarksheet(student, results, details || [], studentSubs || [], examId);
-
-            // Show result
-            $('loadingArea').classList.remove('show');
-            $('resultArea').classList.add('show');
-            $('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            hideLoading();
+            showPreview(student, results);
 
         } catch (e) {
             console.error('Search error:', e);
-            $('loadingArea').classList.remove('show');
-            $('searchCard').style.display = 'block';
-            window.fdcError('সমস্যা হয়েছে: ' + e.message);
+            hideLoading();
+            showError('সমস্যা হয়েছে: ' + escapeHtml(e.message));
         } finally {
             btn.disabled = false;
             btn.innerHTML = original;
@@ -281,251 +250,67 @@
     }
 
     // =========================================================
-    // RENDER MARKSHEET
+    // SHOW PREVIEW
     // =========================================================
-    function renderMarksheet(student, result, details, studentSubs, examId) {
-        const exam = allExams.find(e => String(e.id) === String(examId));
+    function showPreview(student, result) {
+        $('pvName').textContent = student.name || '—';
+        $('pvRoll').textContent = student.roll || '—';
+        $('pvClass').textContent = student.class_name || '—';
+        $('pvBranch').textContent = student.branch || '—';
+        $('pvGroup').textContent = student.group_name || '—';
+        $('pvSession').textContent = student.session || '—';
+
+        $('pvGPA').textContent = (result.gpa || 0).toFixed(2);
+        $('pvGrade').textContent = result.grade || '—';
+        $('pvMarks').textContent = result.total_marks || '—';
+
+        // Update sub
+        const exam = allExams.find(e => String(e.id) === String(result.exam_id));
         const examName = exam ? exam.display_name : 'Exam';
+        $('previewSub').textContent = `${examName} — ${result.year} | বিস্তারিত দেখতে "View Full Result" চাপুন`;
 
-        // Group details by subject_type and subject_name
-        const subjectsMap = new Map();
+        // Update view button link
+        const viewBtn = $('btnViewResult');
+        viewBtn.href = `result-details.html?student_id=${student.id}&result_id=${result.id}&exam_id=${result.exam_id}`;
 
-        details.forEach(d => {
-            const s = d.subjects;
-            if (!s) return;
+        // Show preview
+        $('resultPreview').classList.add('show');
 
-            const key = s.subject_name + '|' + d.subject_type;
-            if (!subjectsMap.has(key)) {
-                subjectsMap.set(key, {
-                    subject_name: s.subject_name,
-                    subject_code: s.subject_code,
-                    subject_type: d.subject_type,
-                    has_cq: s.has_cq,
-                    has_mcq: s.has_mcq,
-                    has_practical: s.has_practical,
-                    papers: []
-                });
-            }
-            subjectsMap.get(key).papers.push({
-                paper_number: d.paper_number || s.paper_number,
-                cq_marks: d.cq_marks || 0,
-                mcq_marks: d.mcq_marks || 0,
-                practical_marks: d.practical_marks || 0,
-                total_marks: d.total_marks || 0,
-                grade: d.grade || '—',
-                status: d.status || 'pass',
-                max_cq: s.cq_marks || 0,
-                max_mcq: s.mcq_marks || 0,
-                max_practical: s.practical_marks || 0
-            });
-        });
-
-        // Sort papers
-        subjectsMap.forEach(v => v.papers.sort((a, b) => (a.paper_number || 1) - (b.paper_number || 1)));
-
-        // Group by type
-        const grouped = {
-            compulsory: [],
-            group: [],
-            optional: []
-        };
-        subjectsMap.forEach((v, k) => {
-            if (grouped[v.subject_type]) grouped[v.subject_type].push(v);
-        });
-
-        // Sort by subject_name
-        Object.keys(grouped).forEach(k => {
-            grouped[k].sort((a, b) => a.subject_name.localeCompare(b.subject_name, 'bn'));
-        });
-
-        // Section labels
-        const sectionLabels = {
-            compulsory: { icon: 'fa-lock', label: '📌 আবশ্যিক বিষয়' },
-            group: { icon: 'fa-layer-group', label: '📚 গ্রুপের বিষয়' },
-            optional: { icon: 'fa-star', label: '🎯 ঐচ্ছিক বিষয়' }
-        };
-
-        // Build sections HTML
-        let sectionsHTML = '';
-
-        ['compulsory', 'group', 'optional'].forEach(type => {
-            if (grouped[type].length === 0) return;
-
-            sectionsHTML += `
-                <div class="ms-section">
-                    <div class="ms-section-header">
-                        <i class="fas ${sectionLabels[type].icon}"></i>
-                        ${sectionLabels[type].label}
-                    </div>
-                    <table class="ms-table">
-                        <thead>
-                            <tr>
-                                <th>Subject</th>
-                                <th>CQ</th>
-                                <th>MCQ</th>
-                                <th>Practical</th>
-                                <th>Total</th>
-                                <th>Grade</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${grouped[type].map(subj => renderSubjectRows(subj)).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-        });
-
-        // GPA color
-        const gpaClass = getGPAClass(result.gpa || 0);
-
-        // Build marksheet
-        const html = `
-            <div class="marksheet">
-                <div class="ms-header">
-                    <div class="ms-logo"><i class="fas fa-graduation-cap"></i></div>
-                    <h2>Fulbariya Degree College</h2>
-                    <p class="ms-subtitle">Academic Transcript</p>
-                    <span class="ms-exam-badge">${escapeHtml(examName)} - ${escapeHtml(result.year)}</span>
-                </div>
-
-                <div class="ms-student-info">
-                    <div class="ms-info-item">
-                        <span class="label">Student Name</span>
-                        <span class="value">${escapeHtml(student.name)}</span>
-                    </div>
-                    <div class="ms-info-item">
-                        <span class="label">Roll Number</span>
-                        <span class="value">${escapeHtml(student.roll)}</span>
-                    </div>
-                    <div class="ms-info-item">
-                        <span class="label">Class</span>
-                        <span class="value">${escapeHtml(student.class_name)}</span>
-                    </div>
-                    <div class="ms-info-item">
-                        <span class="label">Branch</span>
-                        <span class="value">${escapeHtml(student.branch)}</span>
-                    </div>
-                    <div class="ms-info-item">
-                        <span class="label">Group</span>
-                        <span class="value">${escapeHtml(student.group_name || '—')}</span>
-                    </div>
-                    <div class="ms-info-item">
-                        <span class="label">Session</span>
-                        <span class="value">${escapeHtml(student.session || '—')}</span>
-                    </div>
-                </div>
-
-                <div class="ms-body">
-                    ${sectionsHTML}
-                </div>
-
-                <div class="ms-summary">
-                    <div class="ms-summary-item">
-                        <div class="s-label">Total Marks</div>
-                        <div class="s-value">${escapeHtml(String(result.total_marks || 0))}</div>
-                    </div>
-                    <div class="ms-summary-item">
-                        <div class="s-label">GPA</div>
-                        <div class="s-value ${gpaClass}">${(result.gpa || 0).toFixed(2)}</div>
-                    </div>
-                    <div class="ms-summary-item">
-                        <div class="s-label">Grade</div>
-                        <div class="s-value">${escapeHtml(result.grade || '—')}</div>
-                    </div>
-                </div>
-
-                <div class="ms-footer">
-                    <div class="ms-note">
-                        <i class="fas fa-info-circle"></i>
-                        <span>এই রেজাল্ট অনলাইনে যাচাই করা হয়েছে</span>
-                    </div>
-                    <div class="ms-note">
-                        <i class="fas fa-calendar-alt"></i>
-                        <span>প্রকাশিত: ${result.published_at ? new Date(result.published_at).toLocaleDateString('bn-BD') : '—'}</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="print-btn-wrap">
-                <button class="btn-print" onclick="window.print()">
-                    <i class="fas fa-print"></i> Print / Download
-                </button>
-            </div>
-
-            <div class="search-another">
-                <button class="btn-another" onclick="resetSearch()">
-                    <i class="fas fa-search"></i> আরেকটি রেজাল্ট খুঁজুন
-                </button>
-            </div>
-        `;
-
-        $('resultArea').innerHTML = html;
+        // Scroll to preview
+        setTimeout(() => {
+            $('resultPreview').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
     }
 
     // =========================================================
-    // RENDER SUBJECT ROWS (প্রতি paper আলাদা row)
+    // NEW SEARCH
     // =========================================================
-    function renderSubjectRows(subj) {
-        let html = '';
-
-        subj.papers.forEach((p, idx) => {
-            const isFirst = idx === 0;
-            const paperLabel = subj.papers.length > 1
-                ? `${subj.subject_name} (${p.paper_number}য় পত্র)`
-                : subj.subject_name;
-
-            const codeLabel = subj.subject_code
-                ? `<span class="code-cell">${escapeHtml(subj.subject_code)}</span>`
-                : '';
-
-            const gradeClass = getGradeClass(p.grade);
-            const statusIcon = p.status === 'pass'
-                ? ''
-                : ' <i class="fas fa-times-circle status-fail"></i>';
-
-            html += `
-                <tr>
-                    <td>
-                        ${escapeHtml(paperLabel)}
-                        ${codeLabel}
-                    </td>
-                    <td>${subj.has_cq ? (p.cq_marks || 0) : '—'}</td>
-                    <td>${subj.has_mcq ? (p.mcq_marks || 0) : '—'}</td>
-                    <td>${subj.has_practical ? (p.practical_marks || 0) : '—'}</td>
-                    <td class="total-cell">${p.total_marks || 0}</td>
-                    <td>
-                        <span class="grade-mini ${gradeClass}">${escapeHtml(p.grade || '—')}</span>
-                        ${statusIcon}
-                    </td>
-                </tr>
-            `;
-        });
-
-        return html;
-    }
-
-    // =========================================================
-    // RESET SEARCH
-    // =========================================================
-    window.resetSearch = function () {
-        $('resultArea').classList.remove('show');
-        $('resultArea').innerHTML = '';
-        $('searchCard').style.display = 'block';
-        $('emptyState').style.display = 'block';
+    function newSearch() {
         $('inputRoll').value = '';
+        $('inputClass').value = '';
+        $('inputYear').value = '';
+        $('inputExam').value = '';
+        $('inputGroup').value = '';
+
+        hidePreview();
+        hideError();
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
-    };
+    }
 
     // =========================================================
     // EVENT LISTENERS
     // =========================================================
     function attachEvents() {
         $('btnSearch').addEventListener('click', searchResult);
+        $('btnNewSearch').addEventListener('click', newSearch);
 
-        // Enter key on Roll input → search
+        // Enter key on Roll input
         $('inputRoll').addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') searchResult();
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchResult();
+            }
         });
     }
 
@@ -533,7 +318,7 @@
     // INIT
     // =========================================================
     function init() {
-        console.log('🚀 Public Results initializing...');
+        console.log('🚀 Public Results v2 initializing...');
 
         attachBranchToggle();
         attachEvents();
@@ -542,7 +327,7 @@
         waitForSupabase(async function () {
             await loadExams();
             await loadGroups('HSC');
-            console.log('✅ Public Results ready');
+            console.log('✅ Public Results v2 ready');
         });
     }
 
