@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Result Check - Fulbariya College</title>
+<title>Result Search - Fulbariya College</title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -13,19 +13,16 @@
 :root {
     --navy: #0a1655;
     --navy-2: #1a237e;
-    --navy-3: #0d47a1;
     --gold: #f2d27b;
     --gold-2: #d4af37;
     --gold-dark: #b8941f;
-    --white: #ffffff;
     --off-white: #f8f9fc;
     --grey: #6b7280;
     --dark: #1f2937;
     --success: #10b981;
     --danger: #ef4444;
     --warning: #f59e0b;
-    --border: rgba(0,0,0,0.06);
-    --border-light: rgba(0,0,0,0.04);
+    --border: #e5e7eb;
     --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
     --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
     --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
@@ -34,11 +31,11 @@
 * { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { background: var(--off-white); margin: 0; color: var(--dark); }
 
-/* ============ PUBLIC HEADER ============ */
+/* ============ HEADER ============ */
 .public-header {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
-    padding: 14px 20px;
+    padding: 12px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,7 +44,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     z-index: 1000;
     box-shadow: 0 2px 20px rgba(10,22,85,0.2);
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 10px;
 }
 .public-header::after {
     content: '';
@@ -56,19 +53,23 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
-.public-header .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.public-header .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
 .public-header .brand-icon {
-    width: 44px; height: 44px;
-    border-radius: 12px;
+    width: 38px; height: 38px;
+    border-radius: 10px;
     background: rgba(242,210,123,0.15);
     color: var(--gold);
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
+    font-size: 16px;
     border: 1px solid rgba(242,210,123,0.3);
-    flex-shrink: 0;
 }
-.public-header h4 { margin: 0; font-size: 17px; font-weight: 700; }
-.public-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+.public-header h4 { margin: 0; font-size: 14px; font-weight: 700; }
+.public-header small { font-size: 10px; opacity: 0.85; display: block; margin-top: 1px; }
+
 .btn-header {
     background: rgba(255,255,255,0.12);
     border: 1px solid rgba(255,255,255,0.25);
@@ -84,61 +85,66 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 6px;
     text-decoration: none;
 }
-.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; }
 
 /* ============ HERO ============ */
-.hero {
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
+.hero-section {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
-    padding: 40px 20px 80px;
+    padding: 40px 20px 60px;
     text-align: center;
     position: relative;
     overflow: hidden;
 }
-.hero::before {
+.hero-section::before {
     content: '';
     position: absolute;
-    top: -50%; right: -20%;
-    width: 500px; height: 500px;
-    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
-    border-radius: 50%;
+    top: -50%; right: -50%;
+    width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(242,210,123,0.08) 0%, transparent 60%);
+    pointer-events: none;
 }
-.hero::after {
-    content: '';
-    position: absolute;
-    bottom: -50%; left: -20%;
-    width: 400px; height: 400px;
-    background: radial-gradient(circle, rgba(242,210,123,0.08), transparent 70%);
-    border-radius: 50%;
-}
-.hero-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
-.hero .hero-icon {
-    width: 80px; height: 80px;
-    border-radius: 20px;
-    background: rgba(242,210,123,0.15);
-    color: var(--gold);
-    display: inline-flex;
+.hero-section .hero-content { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+.hero-section .hero-logo {
+    width: 70px; height: 70px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 8px;
+    margin: 0 auto 16px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 34px;
-    border: 2px solid rgba(242,210,123,0.3);
-    margin-bottom: 18px;
-    box-shadow: 0 8px 32px rgba(242,210,123,0.25);
 }
-.hero h1 {
-    font-size: 30px;
-    font-weight: 700;
-    margin: 0 0 10px;
+.hero-section .hero-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+.hero-section h1 {
     font-family: 'Playfair Display', serif;
-    letter-spacing: 0.3px;
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    letter-spacing: 0.5px;
 }
-.hero h1 span { color: var(--gold); }
-.hero p { font-size: 14px; opacity: 0.85; margin: 0; line-height: 1.7; }
+.hero-section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 10px;
+    color: var(--gold);
+}
+.hero-section p {
+    font-size: 13.5px;
+    opacity: 0.9;
+    margin: 0;
+    line-height: 1.6;
+}
 
 /* ============ MAIN ============ */
 .main-wrap {
     max-width: 900px;
-    margin: -50px auto 40px;
+    margin: -30px auto 60px;
     padding: 0 16px;
     position: relative;
     z-index: 2;
@@ -148,465 +154,306 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .search-card {
     background: #fff;
     border-radius: 20px;
-    padding: 26px 24px;
+    padding: 28px 32px;
     box-shadow: var(--shadow-lg);
-    border: 1px solid var(--border-light);
-    margin-bottom: 24px;
+    border: 1px solid rgba(10,22,85,0.05);
 }
-
-/* Branch toggle */
-.branch-toggle {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 22px;
-    background: #f8f9fc;
-    padding: 6px;
-    border-radius: 14px;
-}
-.branch-btn {
-    padding: 14px 16px;
-    border-radius: 10px;
-    border: none;
-    background: transparent;
-    color: var(--grey);
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-    transition: 0.3s;
+.search-card .card-title {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 8px;
-    font-family: inherit;
-}
-.branch-btn:hover { color: var(--navy); }
-.branch-btn.active {
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(10,22,85,0.25);
-}
-.branch-btn.active i { color: var(--gold); }
-.branch-btn i { font-size: 16px; }
-
-/* Form */
-.search-title {
+    gap: 10px;
     font-size: 16px;
     font-weight: 700;
     color: var(--navy);
-    margin-bottom: 18px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    margin-bottom: 6px;
 }
-.search-title i { color: var(--gold-dark); }
+.search-card .card-title i { color: var(--gold-dark); }
+.search-card .card-sub {
+    font-size: 12.5px;
+    color: var(--grey);
+    margin-bottom: 22px;
+}
 
-.form-label-pub {
+.form-label {
     font-size: 11px;
     font-weight: 700;
     color: #4b5563;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    display: block;
     margin-bottom: 6px;
+    display: block;
 }
-.form-label-pub .req { color: var(--danger); }
+.form-label .req { color: var(--danger); }
 
-.form-input-pub,
-.form-select-pub {
+.form-control, .form-select {
     width: 100%;
-    padding: 12px 14px;
-    border-radius: 12px;
+    padding: 11px 14px;
+    border-radius: 10px;
     border: 1.5px solid #e5e7eb;
     background: #fafbff;
-    font-size: 14px;
+    font-size: 13.5px;
     outline: none;
     transition: 0.25s;
     font-family: inherit;
-    color: var(--dark);
+    font-weight: 600;
+    color: var(--navy);
 }
-.form-input-pub:focus,
-.form-select-pub:focus {
+.form-control:focus, .form-select:focus {
     border-color: var(--navy);
     box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
     background: #fff;
 }
+.form-control::placeholder {
+    color: #9ca3af;
+    font-weight: 400;
+}
 
-.btn-search {
-    width: 100%;
-    padding: 14px 20px;
-    border-radius: 12px;
-    border: none;
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    color: #fff;
-    font-size: 15px;
-    font-weight: 700;
+/* Branch Toggle */
+.branch-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.branch-btn {
+    padding: 12px 16px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
     cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 6px 24px rgba(10,22,85,0.3);
+    transition: 0.25s;
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--navy);
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    font-family: inherit;
+    gap: 8px;
+}
+.branch-btn:hover { border-color: var(--navy); }
+.branch-btn.active {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-color: var(--navy);
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+}
+.branch-btn.active i { color: var(--gold); }
+
+/* Submit Button */
+.btn-submit {
+    width: 100%;
+    padding: 14px 24px;
+    border-radius: 50px;
+    border: none;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 6px 20px rgba(10,22,85,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
     margin-top: 8px;
 }
-.btn-search:hover:not(:disabled) {
+.btn-submit:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 10px 32px rgba(10,22,85,0.4);
+    box-shadow: 0 10px 30px rgba(10,22,85,0.4);
 }
-.btn-search:disabled { opacity: 0.6; cursor: not-allowed; }
-.btn-search i { color: var(--gold); }
+.btn-submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+.btn-submit i { color: var(--gold); }
 
-/* ============ MARKSHEET ============ */
-.result-area { display: none; }
-.result-area.show { display: block; animation: fadeIn 0.5s ease; }
-@keyframes fadeIn {
+/* ============ RESULT PREVIEW ============ */
+.result-preview {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid rgba(10,22,85,0.05);
+    padding: 26px 30px;
+    margin-top: 22px;
+    display: none;
+    animation: slideUp 0.4s ease;
+}
+.result-preview.show { display: block; }
+@keyframes slideUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-.marksheet {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: var(--shadow-lg);
-    border: 1px solid var(--border-light);
-    overflow: hidden;
-    position: relative;
+.result-preview .preview-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f0f2f5;
+    margin-bottom: 18px;
 }
-.marksheet::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 5px;
-    background: linear-gradient(90deg, var(--navy), var(--gold), var(--navy));
-}
-
-/* Marksheet header */
-.ms-header {
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    color: #fff;
-    padding: 26px 24px;
-    text-align: center;
-    position: relative;
-}
-.ms-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--gold), transparent);
-}
-.ms-header .ms-logo {
-    width: 60px; height: 60px;
-    border-radius: 14px;
-    background: rgba(242,210,123,0.15);
-    color: var(--gold);
+.result-preview .preview-header .ph-icon {
+    width: 50px; height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    color: #166534;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
-    border: 2px solid rgba(242,210,123,0.3);
-    margin-bottom: 12px;
-}
-.ms-header h2 {
-    margin: 0 0 4px;
     font-size: 22px;
-    font-weight: 700;
-    font-family: 'Playfair Display', serif;
-    letter-spacing: 0.5px;
-    color: #fff;
+    flex-shrink: 0;
 }
-.ms-header .ms-subtitle {
-    font-size: 13px;
-    opacity: 0.85;
-    margin: 0;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-.ms-header .ms-exam-badge {
-    display: inline-block;
-    background: rgba(242,210,123,0.2);
-    color: var(--gold);
-    padding: 5px 16px;
-    border-radius: 50px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 10px;
-    border: 1px solid rgba(242,210,123,0.3);
-}
-
-/* Student info */
-.ms-student-info {
-    background: #fafbff;
-    padding: 20px 24px;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 16px;
-    border-bottom: 1px solid var(--border-light);
-}
-.ms-info-item { display: flex; flex-direction: column; gap: 3px; }
-.ms-info-item .label {
-    font-size: 10px;
-    color: var(--grey);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-.ms-info-item .value {
+.result-preview .preview-header .ph-info { flex: 1; min-width: 0; }
+.result-preview .preview-header .ph-title {
     font-size: 14px;
     font-weight: 700;
     color: var(--navy);
-    font-family: 'Playfair Display', serif;
+}
+.result-preview .preview-header .ph-sub {
+    font-size: 11.5px;
+    color: var(--grey);
+    margin-top: 2px;
 }
 
-/* Marks sections */
-.ms-body { padding: 20px 24px; }
-
-.ms-section {
-    margin-bottom: 22px;
+/* Student Info Grid */
+.preview-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
 }
-.ms-section:last-child { margin-bottom: 0; }
-
-.ms-section-header {
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    color: #fff;
-    padding: 10px 16px;
-    border-radius: 10px 10px 0 0;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.ms-section-header i { color: var(--gold); }
-
-.ms-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12.5px;
-    border: 1px solid var(--border);
-    border-top: none;
-    border-radius: 0 0 10px 10px;
-    overflow: hidden;
-}
-.ms-table thead {
+.info-item {
     background: #fafbff;
+    border-radius: 10px;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
 }
-.ms-table thead th {
-    padding: 10px 8px;
-    text-align: center;
+.info-item .ii-label {
+    font-size: 10px;
+    color: var(--grey);
     font-weight: 700;
-    font-size: 10.5px;
-    color: var(--navy);
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    border-bottom: 2px solid var(--border);
-    white-space: nowrap;
+    margin-bottom: 2px;
 }
-.ms-table thead th:first-child { text-align: left; padding-left: 14px; }
-
-.ms-table tbody td {
-    padding: 10px 8px;
-    text-align: center;
-    border-bottom: 1px solid var(--border-light);
-    font-weight: 600;
-    color: var(--dark);
-}
-.ms-table tbody td:first-child {
-    text-align: left;
-    padding-left: 14px;
-    font-weight: 600;
+.info-item .ii-value {
+    font-size: 13.5px;
     color: var(--navy);
-}
-.ms-table tbody tr:last-child td { border-bottom: none; }
-.ms-table tbody tr:hover { background: #fafbff; }
-
-.ms-table .paper-cell { font-size: 11px; color: var(--grey); font-weight: 500; }
-.ms-table .code-cell {
-    background: rgba(10,22,85,0.06);
-    color: var(--navy);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    font-size: 10px;
     font-weight: 700;
 }
-.ms-table .total-cell { font-weight: 700; color: var(--navy); font-family: 'Playfair Display', serif; font-size: 13.5px; }
 
-.grade-mini {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 11px;
-    font-weight: 700;
-    min-width: 30px;
-}
-.grade-mini.Aplus { background: #dcfce7; color: #166534; }
-.grade-mini.A { background: #d1fae5; color: #065f46; }
-.grade-mini.Aminus { background: #dbeafe; color: #1e40af; }
-.grade-mini.B { background: #fef3c7; color: #92400e; }
-.grade-mini.C { background: #fed7aa; color: #9a3412; }
-.grade-mini.D { background: #fecaca; color: #991b1b; }
-.grade-mini.F { background: #7f1d1d; color: #fff; }
-
-.status-pass { color: #059669; font-weight: 700; }
-.status-fail { color: #dc2626; font-weight: 700; }
-
-/* GPA summary */
-.ms-summary {
+/* Grade Box */
+.grade-display {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
-    padding: 26px 24px;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 18px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    gap: 12px;
     text-align: center;
-    position: relative;
-    overflow: hidden;
 }
-.ms-summary::before {
+.gd-item { position: relative; }
+.gd-item + .gd-item::before {
     content: '';
     position: absolute;
-    top: -50%; right: -10%;
-    width: 300px; height: 300px;
-    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 70%);
-    border-radius: 50%;
+    left: 0;
+    top: 20%;
+    bottom: 20%;
+    width: 1px;
+    background: rgba(242,210,123,0.3);
 }
-.ms-summary-item { position: relative; z-index: 1; }
-.ms-summary-item .s-label {
-    font-size: 10.5px;
-    opacity: 0.85;
+.gd-label {
+    font-size: 10px;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
-    margin-bottom: 6px;
-}
-.ms-summary-item .s-value {
-    font-size: 30px;
-    font-weight: 700;
-    font-family: 'Playfair Display', serif;
+    letter-spacing: 0.5px;
     color: var(--gold);
-    line-height: 1;
+    margin-bottom: 4px;
 }
-.ms-summary-item .s-value.gpa-high { color: #6ee7b7; }
-.ms-summary-item .s-value.gpa-mid { color: #fcd34d; }
-.ms-summary-item .s-value.gpa-low { color: #fca5a5; }
-
-/* Footer */
-.ms-footer {
-    padding: 20px 24px;
-    background: #fafbff;
-    border-top: 1px solid var(--border-light);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 12px;
-    font-size: 11px;
-    color: var(--grey);
-}
-.ms-footer .ms-note {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-.ms-footer .ms-note i { color: var(--gold-dark); }
-
-/* Print button */
-.print-btn-wrap {
-    padding: 20px 24px 0;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-.btn-print {
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    color: #fff;
-    border: none;
-    padding: 12px 26px;
-    border-radius: 50px;
+.gd-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
     font-weight: 700;
-    font-size: 13px;
+    line-height: 1;
+    color: #fff;
+}
+
+/* Preview Actions */
+.preview-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.btn-view {
+    flex: 1;
+    min-width: 180px;
+    padding: 14px 22px;
+    border-radius: 50px;
+    border: none;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 13.5px;
     cursor: pointer;
     transition: 0.3s;
-    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    box-shadow: 0 4px 16px rgba(212,175,55,0.4);
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    text-decoration: none;
 }
-.btn-print:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,85,0.35); color: #fff; }
-.btn-print i { color: var(--gold); }
-
-/* Search another */
-.search-another {
-    text-align: center;
-    margin-top: 20px;
-}
-.btn-another {
-    background: #fff;
-    border: 1.5px solid #e5e7eb;
+.btn-view:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(212,175,55,0.6);
     color: var(--navy);
-    padding: 12px 24px;
+}
+.btn-view i { color: var(--navy); }
+
+.btn-new-search {
+    padding: 14px 22px;
     border-radius: 50px;
-    font-weight: 700;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--navy);
+    font-weight: 600;
     font-size: 13px;
     cursor: pointer;
     transition: 0.25s;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-}
-.btn-another:hover { border-color: var(--navy); background: #f5f7ff; }
-
-/* Empty state */
-.empty-state-public {
-    background: #fff;
-    border-radius: 20px;
-    padding: 60px 24px;
-    text-align: center;
-    box-shadow: var(--shadow-md);
-    border: 1px solid var(--border-light);
-}
-.empty-state-public .icon-wrap {
-    width: 80px; height: 80px;
-    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
     justify-content: center;
-    margin-bottom: 18px;
+    gap: 6px;
 }
-.empty-state-public i { font-size: 34px; color: var(--navy); opacity: 0.35; }
-.empty-state-public h5 { color: var(--navy); font-weight: 700; font-size: 17px; margin-bottom: 8px; }
-.empty-state-public p { font-size: 13px; color: var(--grey); margin: 0; line-height: 1.7; }
+.btn-new-search:hover { border-color: var(--navy); background: #f5f7ff; }
 
-/* Footer */
-.footer {
-    text-align: center;
-    padding: 30px 20px 40px;
-    color: var(--grey);
-    font-size: 12px;
+/* ============ ERROR ALERT ============ */
+.error-alert {
+    background: #fef2f2;
+    border-left: 4px solid var(--danger);
+    color: #991b1b;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 13px;
+    margin-top: 18px;
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    animation: slideUp 0.3s ease;
 }
-.footer i { color: var(--gold-2); }
-.footer .footer-line {
-    max-width: 400px;
-    margin: 0 auto 16px;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(10,22,85,0.15), transparent);
-}
+.error-alert.show { display: flex; }
+.error-alert i { font-size: 18px; margin-top: 1px; flex-shrink: 0; }
 
-/* Loading */
+/* ============ LOADING ============ */
 .loading-area {
     display: none;
     text-align: center;
     padding: 40px 20px;
 }
 .loading-area.show { display: block; }
-.loader-spinner {
+.spinner {
     width: 50px; height: 50px;
     border: 4px solid rgba(10,22,85,0.1);
     border-top-color: var(--navy);
@@ -615,55 +462,49 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     margin: 0 auto 16px;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-.loading-area p { color: var(--grey); font-size: 13px; margin: 0; }
+.loading-area p { color: var(--grey); font-size: 13.5px; margin: 0; font-weight: 600; }
 
-/* Responsive */
+/* ============ INFO TIP ============ */
+.info-tip {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-left: 4px solid #3b82f6;
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    color: #1e40af;
+    margin-top: 18px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.5;
+}
+.info-tip i { font-size: 16px; margin-top: 1px; flex-shrink: 0; }
+.info-tip strong { color: #1e3a8a; }
+
+/* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
-    .public-header { padding: 10px 14px; }
-    .public-header h4 { font-size: 14px; }
-    .hero { padding: 30px 16px 70px; }
-    .hero h1 { font-size: 22px; }
-    .hero p { font-size: 12.5px; }
-    .hero .hero-icon { width: 64px; height: 64px; font-size: 26px; }
-    .main-wrap { padding: 0 12px; margin-top: -45px; }
-    .search-card { padding: 20px 16px; border-radius: 16px; }
-    .branch-btn { padding: 12px 12px; font-size: 12.5px; }
-    .ms-header { padding: 20px 18px; }
-    .ms-header h2 { font-size: 17px; }
-    .ms-student-info { padding: 16px 18px; gap: 12px; }
-    .ms-body { padding: 16px 18px; }
-    .ms-table { font-size: 11px; }
-    .ms-table thead th { padding: 8px 5px; font-size: 9.5px; }
-    .ms-table tbody td { padding: 8px 5px; }
-    .ms-summary { padding: 20px 16px; gap: 12px; }
-    .ms-summary-item .s-value { font-size: 22px; }
-    .ms-summary-item .s-label { font-size: 9.5px; }
-    .ms-footer { padding: 16px 18px; font-size: 10.5px; }
-    .print-btn-wrap { padding: 16px 18px 0; }
-    .btn-print { padding: 10px 20px; font-size: 12.5px; }
+    .hero-section { padding: 30px 16px 50px; }
+    .hero-section h1 { font-size: 22px; }
+    .hero-section h2 { font-size: 17px; }
+    .main-wrap { margin-top: -20px; padding: 0 12px; }
+    .search-card { padding: 22px 20px; }
+    .result-preview { padding: 20px 18px; }
+    .grade-display { padding: 16px; }
+    .gd-value { font-size: 22px; }
+    .preview-info { grid-template-columns: 1fr 1fr; }
+    .btn-view, .btn-new-search { width: 100%; }
 }
 
 @media (max-width: 480px) {
-    .hero h1 { font-size: 19px; }
-    .branch-btn span { display: inline; }
-    .ms-summary { grid-template-columns: 1fr; gap: 16px; }
-    .ms-summary-item { border-bottom: 1px solid rgba(255,255,255,0.15); padding-bottom: 12px; }
-    .ms-summary-item:last-child { border-bottom: none; padding-bottom: 0; }
-}
-
-/* Print styles */
-@media print {
-    .public-header, .hero, .search-card, .print-btn-wrap,
-    .search-another, .footer, .btn-header { display: none !important; }
-    body { background: #fff !important; }
-    .main-wrap { margin: 0 !important; max-width: 100% !important; padding: 0 !important; }
-    .marksheet { box-shadow: none !important; border: 2px solid #000 !important; border-radius: 0 !important; }
-    .marksheet::before { display: none; }
-    .ms-header { background: #0a1655 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .ms-summary { background: #0a1655 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .ms-section-header { background: #0a1655 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-    .result-area { display: block !important; }
-    .ms-body { padding: 14px 18px; }
+    .btn-header span { display: none; }
+    .hero-section .hero-logo { width: 60px; height: 60px; }
+    .hero-section h1 { font-size: 19px; }
+    .hero-section h2 { font-size: 15px; }
+    .search-card { padding: 18px 16px; }
+    .preview-info { grid-template-columns: 1fr; }
+    .grade-display { grid-template-columns: 1fr; }
+    .gd-item + .gd-item::before { display: none; }
+    .gd-item + .gd-item { border-top: 1px solid rgba(242,210,123,0.3); padding-top: 12px; margin-top: 12px; }
 }
 </style>
 </head>
@@ -675,122 +516,193 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         <div class="brand-icon"><i class="fas fa-graduation-cap"></i></div>
         <div>
             <h4>Fulbariya College</h4>
-            <small>Online Result Check</small>
+            <small>Result Search</small>
         </div>
     </div>
-    <a href="../index.html" class="btn-header">
-        <i class="fas fa-home"></i> <span>Home</span>
-    </a>
+    <div>
+        <a href="../index.html" class="btn-header">
+            <i class="fas fa-home"></i> <span>Home</span>
+        </a>
+    </div>
 </header>
 
 <!-- HERO -->
-<section class="hero">
+<section class="hero-section">
     <div class="hero-content">
-        <div class="hero-icon"><i class="fas fa-clipboard-check"></i></div>
-        <h1>Result <span>Check</span></h1>
-        <p>আপনার Roll, Class, Year, Exam সিলেক্ট করে রেজাল্ট দেখুন</p>
+        <div class="hero-logo">
+            <img src="../assets/images/logo1.png" alt="Fulbariya College"
+                 onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\'fas fa-graduation-cap\' style=\'font-size:38px;color:var(--navy);\'></i>';">
+        </div>
+        <h1>FULBARIYA COLLEGE</h1>
+        <h2>Result Search</h2>
+        <p>আপনার পরীক্ষার ফলাফল দেখুন — Roll, Class, Year ও Exam সঠিকভাবে দিন</p>
     </div>
 </section>
 
 <!-- MAIN -->
 <div class="main-wrap">
 
-    <!-- Search Card -->
-    <div class="search-card" id="searchCard">
-
-        <!-- Branch Toggle -->
-        <div class="branch-toggle">
-            <button class="branch-btn active" data-branch="HSC">
-                <i class="fas fa-flask"></i>
-                <span>HSC শাখা</span>
-            </button>
-            <button class="branch-btn" data-branch="BM">
-                <i class="fas fa-briefcase"></i>
-                <span>BM শাখা</span>
-            </button>
+    <!-- SEARCH CARD -->
+    <div class="search-card">
+        <div class="card-title">
+            <i class="fas fa-search"></i> Result Search করুন
         </div>
-
-        <!-- Form -->
-        <h5 class="search-title">
-            <i class="fas fa-search"></i> রেজাল্ট খুঁজুন
-        </h5>
+        <div class="card-sub">নিচের তথ্যগুলো পূরণ করে "Search" চাপুন</div>
 
         <div class="row g-3">
-            <div class="col-md-6">
-                <label class="form-label-pub">Roll Number <span class="req">*</span></label>
-                <input type="text" class="form-input-pub" id="inputRoll" placeholder="যেমন: 101" autocomplete="off">
+
+            <!-- Branch Toggle -->
+            <div class="col-12">
+                <label class="form-label">Branch <span class="req">*</span></label>
+                <div class="branch-toggle">
+                    <button class="branch-btn active" data-branch="HSC">
+                        <i class="fas fa-flask"></i> HSC
+                    </button>
+                    <button class="branch-btn" data-branch="BM">
+                        <i class="fas fa-briefcase"></i> BM (BMT)
+                    </button>
+                </div>
+                <input type="hidden" id="inputBranch" value="HSC">
             </div>
 
+            <!-- Roll -->
             <div class="col-md-6">
-                <label class="form-label-pub">Class <span class="req">*</span></label>
-                <select class="form-select-pub" id="inputClass">
+                <label class="form-label">Roll Number <span class="req">*</span></label>
+                <input type="text" class="form-control" id="inputRoll" placeholder="যেমন: 101" autocomplete="off">
+            </div>
+
+            <!-- Class -->
+            <div class="col-md-6">
+                <label class="form-label">Class <span class="req">*</span></label>
+                <select class="form-select" id="inputClass">
                     <option value="">Select Class</option>
-                    <option value="11">Class 11 (একাদশ)</option>
-                    <option value="12">Class 12 (দ্বাদশ)</option>
+                    <option value="11">Class 11</option>
+                    <option value="12">Class 12</option>
                 </select>
             </div>
 
+            <!-- Year -->
             <div class="col-md-6">
-                <label class="form-label-pub">Year <span class="req">*</span></label>
-                <select class="form-select-pub" id="inputYear">
+                <label class="form-label">Year <span class="req">*</span></label>
+                <select class="form-select" id="inputYear">
                     <option value="">Select Year</option>
                 </select>
             </div>
 
+            <!-- Exam -->
             <div class="col-md-6">
-                <label class="form-label-pub">Exam <span class="req">*</span></label>
-                <select class="form-select-pub" id="inputExam">
+                <label class="form-label">Exam <span class="req">*</span></label>
+                <select class="form-select" id="inputExam">
                     <option value="">Select Exam</option>
                 </select>
             </div>
 
+            <!-- Group (HSC only) -->
             <div class="col-md-6" id="groupFieldWrap">
-                <label class="form-label-pub">Group <span class="req">*</span></label>
-                <select class="form-select-pub" id="inputGroup">
+                <label class="form-label">Group <span class="req">*</span></label>
+                <select class="form-select" id="inputGroup">
                     <option value="">Select Group</option>
                 </select>
             </div>
 
-            <div class="col-12 mt-3">
-                <button class="btn-search" id="btnSearch">
-                    <i class="fas fa-search"></i> রেজাল্ট দেখুন
+            <!-- Submit -->
+            <div class="col-12">
+                <button class="btn-submit" id="btnSearch">
+                    <i class="fas fa-search"></i> Search Result
                 </button>
             </div>
+
         </div>
 
-        <div class="ms-footer" style="border-top: none; background: transparent; padding: 16px 0 0; margin-top: 16px;">
-            <div class="ms-note" style="margin: 0 auto;">
-                <i class="fas fa-info-circle"></i>
-                <span>সব তথ্য সঠিকভাবে পূরণ করুন</span>
+        <!-- Info Tip -->
+        <div class="info-tip">
+            <i class="fas fa-info-circle"></i>
+            <div>
+                <strong>নোট:</strong> শুধু <strong>Publish</strong> করা result দেখতে পাবেন। যদি result না পান, কলেজ অফিসে যোগাযোগ করুন।
             </div>
         </div>
+
+        <!-- Error Alert -->
+        <div class="error-alert" id="errorAlert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div id="errorText"></div>
+        </div>
+
     </div>
 
-    <!-- Loading -->
+    <!-- LOADING -->
     <div class="loading-area" id="loadingArea">
-        <div class="loader-spinner"></div>
-        <p>রেজাল্ট লোড হচ্ছে...</p>
+        <div class="spinner"></div>
+        <p>Result খোঁজা হচ্ছে...</p>
     </div>
 
-    <!-- Result Area -->
-    <div class="result-area" id="resultArea">
-        <!-- Dynamically generated -->
+    <!-- RESULT PREVIEW -->
+    <div class="result-preview" id="resultPreview">
+        <div class="preview-header">
+            <div class="ph-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="ph-info">
+                <div class="ph-title">Result পাওয়া গেছে!</div>
+                <div class="ph-sub" id="previewSub">বিস্তারিত দেখতে "View Full Result" চাপুন</div>
+            </div>
+        </div>
+
+        <!-- Student Info -->
+        <div class="preview-info">
+            <div class="info-item">
+                <div class="ii-label">Student Name</div>
+                <div class="ii-value" id="pvName">—</div>
+            </div>
+            <div class="info-item">
+                <div class="ii-label">Roll Number</div>
+                <div class="ii-value" id="pvRoll">—</div>
+            </div>
+            <div class="info-item">
+                <div class="ii-label">Class</div>
+                <div class="ii-value" id="pvClass">—</div>
+            </div>
+            <div class="info-item">
+                <div class="ii-label">Branch</div>
+                <div class="ii-value" id="pvBranch">—</div>
+            </div>
+            <div class="info-item">
+                <div class="ii-label">Group</div>
+                <div class="ii-value" id="pvGroup">—</div>
+            </div>
+            <div class="info-item">
+                <div class="ii-label">Session</div>
+                <div class="ii-value" id="pvSession">—</div>
+            </div>
+        </div>
+
+        <!-- Grade Display -->
+        <div class="grade-display">
+            <div class="gd-item">
+                <div class="gd-label">GPA</div>
+                <div class="gd-value" id="pvGPA">—</div>
+            </div>
+            <div class="gd-item">
+                <div class="gd-label">Grade</div>
+                <div class="gd-value" id="pvGrade">—</div>
+            </div>
+            <div class="gd-item">
+                <div class="gd-label">Total Marks</div>
+                <div class="gd-value" id="pvMarks">—</div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="preview-actions">
+            <a href="#" class="btn-view" id="btnViewResult">
+                <i class="fas fa-file-invoice"></i> View Full Result
+            </a>
+            <button class="btn-new-search" id="btnNewSearch">
+                <i class="fas fa-redo"></i> New Search
+            </button>
+        </div>
     </div>
 
-    <!-- Empty state (default) -->
-    <div class="empty-state-public" id="emptyState">
-        <div class="icon-wrap"><i class="fas fa-search"></i></div>
-        <h5>রেজাল্ট খুঁজুন</h5>
-        <p>উপরের form পূরণ করে "রেজাল্ট দেখুন" বাটনে ক্লিক করুন</p>
-    </div>
-
-</div>
-
-<!-- FOOTER -->
-<div class="footer">
-    <div class="footer-line"></div>
-    <p><i class="fas fa-shield-alt"></i> Fulbariya College · Result System</p>
-    <p style="font-size: 11px; margin-top: 6px;">&copy; 2026 All rights reserved</p>
 </div>
 
 <!-- SCRIPTS -->
@@ -798,7 +710,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/config.js"></script>
 <script src="../js/supabase.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/results.js"></script>
+<script src="../js/results.js?v=2"></script>
 
 </body>
 </html>
