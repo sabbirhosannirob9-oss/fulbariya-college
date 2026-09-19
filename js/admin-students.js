@@ -3,7 +3,7 @@
  * FULBARIYA COLLEGE — ADMIN STUDENTS MANAGEMENT
  * Location: js/admin-students.js
  * Depends: config.js, supabase.js, auth.js, admin-popup.js
- * Updated: v5 — Copy/Move/Replace + BM Pairing
+ * Updated: v7 — Added Permanent Delete Button
  * =========================================================
  */
 
@@ -87,25 +87,19 @@
     }
 
     // =========================================================
-    // LOGOUT
+    // LOGOUT (Native confirm)
     // =========================================================
     window.handleLogout = function () {
-        window.fdcConfirm(
-            'আপনি কি লগআউট করতে চান?',
-            async function () {
-                try {
-                    if (window.FDCAuth) await window.FDCAuth.logout();
-                } catch (e) { console.warn(e); }
-                sessionStorage.clear();
-                window.location.replace('admin-login.html');
-            },
-            {
-                title: 'Logout Confirmation',
-                confirmText: 'Yes, Logout',
-                cancelText: 'Cancel',
-                confirmType: 'danger'
-            }
-        );
+        const confirmed = confirm('আপনি কি লগআউট করতে চান?');
+        if (!confirmed) return;
+
+        (async function () {
+            try {
+                if (window.FDCAuth) await window.FDCAuth.logout();
+            } catch (e) { console.warn(e); }
+            sessionStorage.clear();
+            window.location.replace('admin-login.html');
+        })();
     };
 
     // =========================================================
@@ -172,7 +166,7 @@
             applyFilters();
         } catch (e) {
             console.error('Load students error:', e);
-            window.fdcError('Student load failed: ' + e.message);
+            alert('Student load failed: ' + e.message);
         }
     }
 
@@ -271,6 +265,9 @@
                         </button>
                         <button class="action-btn toggle off" data-action="toggle" data-id="${s.id}" title="Deactivate">
                             <i class="fas fa-user-slash"></i>
+                        </button>
+                        <button class="action-btn delete" data-action="delete" data-id="${s.id}" title="Delete Permanently">
+                            <i class="fas fa-trash-alt"></i>
                         </button>
                     </div>
                 </td>
@@ -517,7 +514,7 @@
                 if (check) check.innerHTML = '';
             } else {
                 if (selectedGroupSubjects.length >= 3) {
-                    window.fdcWarning('সর্বোচ্চ ৩টি group subject select করা যাবে।');
+                    alert('সর্বোচ্চ ৩টি group subject select করা যাবে।');
                     return;
                 }
                 selectedGroupSubjects.push(name);
@@ -590,7 +587,7 @@
     // =========================================================
     // EDIT STUDENT
     // =========================================================
-    async function openEditStudentModal(id) {
+    window.openEditStudentModal = async function (id) {
         try {
             const { data: student, error } = await window.FDC_SUPABASE
                 .from('students').select('*').eq('id', id).single();
@@ -640,9 +637,9 @@
             openModal('studentModal');
         } catch (e) {
             console.error('Edit student error:', e);
-            window.fdcError('Failed to load student: ' + e.message);
+            alert('Failed to load student: ' + e.message);
         }
-    }
+    };
 
     // =========================================================
     // SAVE STUDENT
@@ -655,19 +652,19 @@
         const branch = $('studentBranch').value;
         const groupName = $('studentGroup').value;
 
-        if (!name) return window.fdcWarning('নাম দিতে হবে।');
-        if (!roll) return window.fdcWarning('Roll দিতে হবে।');
-        if (!className) return window.fdcWarning('Class সিলেক্ট করুন।');
-        if (!year) return window.fdcWarning('Year সিলেক্ট করুন।');
-        if (!branch) return window.fdcWarning('Branch সিলেক্ট করুন।');
-        if (branch === 'HSC' && !groupName) return window.fdcWarning('Group সিলেক্ট করুন।');
+        if (!name) return alert('নাম দিতে হবে।');
+        if (!roll) return alert('Roll দিতে হবে।');
+        if (!className) return alert('Class সিলেক্ট করুন।');
+        if (!year) return alert('Year সিলেক্ট করুন।');
+        if (!branch) return alert('Branch সিলেক্ট করুন।');
+        if (branch === 'HSC' && !groupName) return alert('Group সিলেক্ট করুন।');
 
         if (branch === 'HSC') {
             if (selectedGroupSubjects.length !== 3) {
-                return window.fdcWarning(`গ্রুপ থেকে ঠিক ৩টি বিষয় select করতে হবে। (এখন ${selectedGroupSubjects.length}টি)`);
+                return alert(`গ্রুপ থেকে ঠিক ৩টি বিষয় select করতে হবে। (এখন ${selectedGroupSubjects.length}টি)`);
             }
             if (!selectedOptionalSubject) {
-                return window.fdcWarning('একটি ঐচ্ছিক বিষয় select করুন।');
+                return alert('একটি ঐচ্ছিক বিষয় select করুন।');
             }
         }
 
@@ -699,15 +696,15 @@
 
             await saveStudentSubjects(studentId, branch, className, groupName);
 
-            window.fdcSuccess(editingStudentId ? 'Student updated!' : 'Student created!');
+            alert(editingStudentId ? '✅ Student updated!' : '✅ Student created!');
             closeModal('studentModal');
             await loadAllStudents();
         } catch (e) {
             console.error('Save student error:', e);
             if (e.message && e.message.includes('duplicate')) {
-                window.fdcError('এই Roll + Class + Year + Session + Group আগেই আছে।');
+                alert('❌ এই Roll + Class + Year + Session + Group আগেই আছে।');
             } else {
-                window.fdcError('Save failed: ' + e.message);
+                alert('❌ Save failed: ' + e.message);
             }
         } finally {
             btn.disabled = false;
@@ -753,38 +750,141 @@
     }
 
     // =========================================================
-    // TOGGLE ACTIVE
+    // TOGGLE ACTIVE (Deactivate)
     // =========================================================
-    async function toggleStudent(id) {
-        const s = allStudents.find(x => x.id === id);
-        if (!s) return;
+    window.toggleStudent = async function (id) {
+        console.log('🔵 toggleStudent called:', id);
 
-        window.fdcConfirm(
-            `"${s.name}" কে deactivate করতে চান?`,
-            async function () {
-                try {
-                    const { error } = await window.FDC_SUPABASE
-                        .from('students')
-                        .update({ is_active: false })
-                        .eq('id', id);
-                    if (error) throw error;
-                    window.fdcSuccess('Student deactivated');
-                    await loadAllStudents();
-                } catch (e) {
-                    window.fdcError('Failed: ' + e.message);
-                }
-            },
-            { title: 'Deactivate Student', confirmText: 'Yes, Deactivate', confirmType: 'danger' }
+        const s = allStudents.find(x => String(x.id) === String(id));
+        if (!s) {
+            alert('Student পাওয়া যায়নি।');
+            return;
+        }
+
+        const confirmed = confirm(
+            `"${s.name}" (Roll: ${s.roll}) কে Deactivate করতে চান?\n\n` +
+            `⚠️ এই student আর list-এ দেখা যাবে না।\n` +
+            `✅ তবে তার সব data সংরক্ষিত থাকবে।`
         );
-    }
+
+        if (!confirmed) return;
+
+        try {
+            const { error } = await window.FDC_SUPABASE
+                .from('students')
+                .update({ is_active: false })
+                .eq('id', id);
+
+            if (error) throw error;
+
+            alert('✅ Student deactivated হয়েছে!');
+            await loadAllStudents();
+
+        } catch (e) {
+            console.error('❌ Deactivate error:', e);
+            alert('❌ Failed: ' + e.message);
+        }
+    };
+
+    // =========================================================
+    // DELETE STUDENT (Permanent)
+    // =========================================================
+    window.deleteStudent = async function (id) {
+        console.log('🔴 deleteStudent called:', id);
+
+        const s = allStudents.find(x => String(x.id) === String(id));
+        if (!s) {
+            alert('Student পাওয়া যায়নি।');
+            return;
+        }
+
+        // 1st confirm
+        const firstConfirm = confirm(
+            `⚠️ PERMANENT DELETE ⚠️\n\n` +
+            `"${s.name}" (Roll: ${s.roll})\n` +
+            `Class: ${s.class_name} / ${s.branch}\n\n` +
+            `এই student এবং তার সব data চিরতরে মুছে যাবে!\n\n` +
+            `আপনি কি নিশ্চিত?`
+        );
+
+        if (!firstConfirm) return;
+
+        // 2nd confirm — type verification
+        const typeConfirm = prompt(
+            `⚠️ চূড়ান্ত নিশ্চিতকরণ ⚠️\n\n` +
+            `Delete করতে টাইপ করুন: DELETE\n\n` +
+            `(বড় হাতের অক্ষরে)`
+        );
+
+        if (!typeConfirm || typeConfirm.trim().toUpperCase() !== 'DELETE') {
+            alert('❌ ভুল টাইপ করেছেন। Delete বাতিল।');
+            return;
+        }
+
+        try {
+            console.log('🗑️ Starting permanent delete for student:', s.name);
+
+            // Step 1 — Delete student_subjects
+            console.log('Deleting student_subjects...');
+            await window.FDC_SUPABASE
+                .from('student_subjects')
+                .delete()
+                .eq('student_id', id);
+
+            // Step 2 — Delete result_details
+            console.log('Deleting result_details...');
+            const { data: results } = await window.FDC_SUPABASE
+                .from('results')
+                .select('id')
+                .eq('student_id', id);
+
+            if (results && results.length > 0) {
+                const resultIds = results.map(r => r.id);
+                await window.FDC_SUPABASE
+                    .from('result_details')
+                    .delete()
+                    .in('result_id', resultIds);
+            }
+
+            // Step 3 — Delete results
+            console.log('Deleting results...');
+            await window.FDC_SUPABASE
+                .from('results')
+                .delete()
+                .eq('student_id', id);
+
+            // Step 4 — Delete student
+            console.log('Deleting student...');
+            const { error } = await window.FDC_SUPABASE
+                .from('students')
+                .delete()
+                .eq('id', id);
+
+            if (error) throw error;
+
+            console.log('✅ Student permanently deleted');
+            alert(`✅ "${s.name}" সফলভাবে Delete হয়েছে!\n\nসব data মুছে গেছে।`);
+
+            await loadAllStudents();
+
+        } catch (e) {
+            console.error('❌ Delete error:', e);
+            alert('❌ Delete failed: ' + e.message);
+        }
+    };
 
     // =========================================================
     // VIEW STUDENT
     // =========================================================
-    async function viewStudent(id) {
+    window.viewStudent = async function (id) {
+        console.log('🔵 viewStudent called:', id);
+
         try {
-            const student = allStudents.find(s => s.id === id);
-            if (!student) return;
+            const student = allStudents.find(s => String(s.id) === String(id));
+            if (!student) {
+                alert('Student পাওয়া যায়নি।');
+                return;
+            }
 
             const { data: subs } = await window.FDC_SUPABASE
                 .from('student_subjects')
@@ -841,9 +941,9 @@
             openModal('viewStudentModal');
         } catch (e) {
             console.error('View student error:', e);
-            window.fdcError('Load failed: ' + e.message);
+            alert('Load failed: ' + e.message);
         }
-    }
+    };
 
     // =========================================================
     // BULK IMPORT
@@ -868,7 +968,7 @@
         bulkPreviewRows = rows;
 
         if (rows.length === 0) {
-            window.fdcWarning('কোনো valid data পাওয়া যায়নি।');
+            alert('কোনো valid data পাওয়া যায়নি।');
             $('bulkPreview').style.display = 'none';
             return;
         }
@@ -886,48 +986,45 @@
         const branch = $('bulkBranch').value;
 
         if (!className || !year || !branch) {
-            return window.fdcWarning('Class, Year, Branch সব সিলেক্ট করুন।');
+            return alert('Class, Year, Branch সব সিলেক্ট করুন।');
         }
 
         const rows = bulkPreviewRows.length > 0 ? bulkPreviewRows : parseBulkData();
         if (rows.length === 0) {
-            return window.fdcWarning('কোনো valid data নেই।');
+            return alert('কোনো valid data নেই।');
         }
 
-        window.fdcConfirm(
-            `${rows.length} জন student যোগ করা হবে। নিশ্চিত?`,
-            async function () {
-                const session = getSessionFromYear(year);
-                const records = rows.map(r => ({
-                    name: r.name, roll: r.roll,
-                    class_name: className, year, session, branch,
-                    group_name: branch === 'HSC' ? null : 'BM-General'
-                }));
+        const confirmed = confirm(`${rows.length} জন student যোগ করা হবে। নিশ্চিত?`);
+        if (!confirmed) return;
 
-                try {
-                    const { data, error } = await window.FDC_SUPABASE
-                        .from('students').insert(records).select();
-                    if (error) {
-                        if (error.message.includes('duplicate')) {
-                            window.fdcWarning('কিছু duplicate ছিল।');
-                        } else throw error;
-                    }
-                    window.fdcSuccess(`${(data || []).length} জন student যোগ হয়েছে।`);
-                    closeModal('bulkImportModal');
-                    $('bulkData').value = '';
-                    $('bulkPreview').style.display = 'none';
-                    bulkPreviewRows = [];
-                    await loadAllStudents();
-                } catch (e) {
-                    window.fdcError('Bulk save failed: ' + e.message);
-                }
-            },
-            { title: 'Confirm Bulk Import', confirmText: 'Yes, Import' }
-        );
+        const session = getSessionFromYear(year);
+        const records = rows.map(r => ({
+            name: r.name, roll: r.roll,
+            class_name: className, year, session, branch,
+            group_name: branch === 'HSC' ? null : 'BM-General'
+        }));
+
+        try {
+            const { data, error } = await window.FDC_SUPABASE
+                .from('students').insert(records).select();
+            if (error) {
+                if (error.message.includes('duplicate')) {
+                    alert('⚠️ কিছু duplicate ছিল।');
+                } else throw error;
+            }
+            alert(`✅ ${(data || []).length} জন student যোগ হয়েছে।`);
+            closeModal('bulkImportModal');
+            $('bulkData').value = '';
+            $('bulkPreview').style.display = 'none';
+            bulkPreviewRows = [];
+            await loadAllStudents();
+        } catch (e) {
+            alert('❌ Bulk save failed: ' + e.message);
+        }
     }
 
     // =========================================================
-    // COPY / MOVE / REPLACE YEAR (v5)
+    // COPY / MOVE / REPLACE YEAR
     // =========================================================
     function getCopyMode() {
         const radios = document.querySelectorAll('input[name="copyMode"]');
@@ -1061,7 +1158,6 @@
         };
     }
 
-    // ⭐ Get paired subject ID
     async function getPairedSubjectId(subjectId) {
         try {
             const { data } = await window.FDC_SUPABASE
@@ -1077,7 +1173,6 @@
         }
     }
 
-    // ⭐ Assign subjects (branch-aware)
     async function assignSubjectsToNewStudent(newStudent, oldStudent, targetClass) {
         try {
             const { data: oldSubs } = await window.FDC_SUPABASE
@@ -1093,7 +1188,6 @@
             const records = [];
 
             if (isBM && isClassChange) {
-                // BM: pairing-based swap
                 console.log(`🔄 BM swap: ${oldStudent.name}`);
 
                 for (const os of oldSubs) {
@@ -1113,7 +1207,6 @@
                     }
                 }
             } else {
-                // HSC or same class: as-is copy
                 console.log(`📋 As-is copy: ${oldStudent.name}`);
 
                 for (const os of oldSubs) {
@@ -1139,16 +1232,14 @@
 
         const { toCls, toYear, students, mode, branch } = window._copyData;
         const session = getSessionFromYear(toYear);
-        const isCopy = (mode === 'copy');
         const isMove = (mode === 'move');
         const isReplace = (mode === 'replace');
 
-        // Type-to-confirm
         if (isReplace) {
             const confirmText = 'DELETE ' + toYear;
             const typed = $('replaceConfirmInput').value.trim().toUpperCase();
             if (typed !== confirmText) {
-                window.fdcWarning(`নিশ্চিত করতে "${confirmText}" টাইপ করুন।`);
+                alert(`নিশ্চিত করতে "${confirmText}" টাইপ করুন।`);
                 return;
             }
         }
@@ -1165,89 +1256,77 @@
             confirmMsg = `${students.length} জন COPY করা হবে।\n\nনিশ্চিত?`;
         }
 
-        window.fdcConfirm(
-            confirmMsg,
-            async function () {
-                try {
-                    // Step 1: Replace → delete target first
-                    if (isReplace) {
-                        let tq = window.FDC_SUPABASE.from('students').select('id')
-                            .eq('class_name', toCls).eq('year', toYear).eq('is_active', true);
-                        if (branch) tq = tq.eq('branch', branch);
+        const confirmed = confirm(confirmMsg);
+        if (!confirmed) return;
 
-                        const { data: targetStudents } = await tq;
+        try {
+            if (isReplace) {
+                let tq = window.FDC_SUPABASE.from('students').select('id')
+                    .eq('class_name', toCls).eq('year', toYear).eq('is_active', true);
+                if (branch) tq = tq.eq('branch', branch);
 
-                        if (targetStudents && targetStudents.length > 0) {
-                            const targetIds = targetStudents.map(s => s.id);
-                            await window.FDC_SUPABASE.from('student_subjects')
-                                .delete().in('student_id', targetIds);
-                            await window.FDC_SUPABASE.from('students')
-                                .delete().in('id', targetIds);
-                            console.log(`🗑️ Deleted ${targetIds.length} from target`);
-                        }
-                    }
+                const { data: targetStudents } = await tq;
 
-                    // Step 2: Insert to target
-                    const records = students.map(s => ({
-                        name: s.name, roll: s.roll,
-                        class_name: toCls, year: toYear, session,
-                        branch: s.branch, group_name: s.group_name
-                    }));
-
-                    const { data: inserted, error: insErr } = await window.FDC_SUPABASE
-                        .from('students').insert(records).select();
-
-                    if (insErr) {
-                        if (insErr.message && insErr.message.includes('duplicate')) {
-                            window.fdcWarning('কিছু student duplicate ছিল।');
-                        } else throw insErr;
-                    }
-
-                    const insertedList = inserted || [];
-
-                    // Step 3: Assign subjects (branch-aware)
-                    for (let i = 0; i < insertedList.length; i++) {
-                        const newStu = insertedList[i];
-                        const oldStu = students[i];
-                        if (!oldStu) continue;
-                        await assignSubjectsToNewStudent(newStu, oldStu, toCls);
-                    }
-
-                    // Step 4: Delete source (Move/Replace)
-                    if (isMove || isReplace) {
-                        const sourceIds = students.map(s => s.id);
-                        await window.FDC_SUPABASE.from('student_subjects')
-                            .delete().in('student_id', sourceIds);
-                        const { error: delErr } = await window.FDC_SUPABASE
-                            .from('students').delete().in('id', sourceIds);
-                        if (delErr) throw delErr;
-                    }
-
-                    let successMsg = '';
-                    if (isReplace) successMsg = `✅ ${insertedList.length} জন move & replace হয়েছে!`;
-                    else if (isMove) successMsg = `✅ ${insertedList.length} জন move হয়েছে!`;
-                    else successMsg = `✅ ${insertedList.length} জন copy হয়েছে!`;
-
-                    window.fdcSuccess(successMsg);
-                    closeModal('copyYearModal');
-
-                    const copyRadio = document.querySelector('input[name="copyMode"][value="copy"]');
-                    if (copyRadio) copyRadio.checked = true;
-                    updateCopyModeUI('copy');
-
-                    await loadAllStudents();
-
-                } catch (e) {
-                    console.error('Copy/Move error:', e);
-                    window.fdcError('Failed: ' + e.message);
+                if (targetStudents && targetStudents.length > 0) {
+                    const targetIds = targetStudents.map(s => s.id);
+                    await window.FDC_SUPABASE.from('student_subjects')
+                        .delete().in('student_id', targetIds);
+                    await window.FDC_SUPABASE.from('students')
+                        .delete().in('id', targetIds);
                 }
-            },
-            {
-                title: isReplace ? '⚠️ Confirm Move & Replace' : (isMove ? 'Confirm Move' : 'Confirm Copy'),
-                confirmText: isReplace ? 'Yes, Replace' : (isMove ? 'Yes, Move' : 'Yes, Copy'),
-                confirmType: isReplace ? 'danger' : (isMove ? 'danger' : 'primary')
             }
-        );
+
+            const records = students.map(s => ({
+                name: s.name, roll: s.roll,
+                class_name: toCls, year: toYear, session,
+                branch: s.branch, group_name: s.group_name
+            }));
+
+            const { data: inserted, error: insErr } = await window.FDC_SUPABASE
+                .from('students').insert(records).select();
+
+            if (insErr) {
+                if (insErr.message && insErr.message.includes('duplicate')) {
+                    alert('⚠️ কিছু student duplicate ছিল।');
+                } else throw insErr;
+            }
+
+            const insertedList = inserted || [];
+
+            for (let i = 0; i < insertedList.length; i++) {
+                const newStu = insertedList[i];
+                const oldStu = students[i];
+                if (!oldStu) continue;
+                await assignSubjectsToNewStudent(newStu, oldStu, toCls);
+            }
+
+            if (isMove || isReplace) {
+                const sourceIds = students.map(s => s.id);
+                await window.FDC_SUPABASE.from('student_subjects')
+                    .delete().in('student_id', sourceIds);
+                const { error: delErr } = await window.FDC_SUPABASE
+                    .from('students').delete().in('id', sourceIds);
+                if (delErr) throw delErr;
+            }
+
+            let successMsg = '';
+            if (isReplace) successMsg = `✅ ${insertedList.length} জন move & replace হয়েছে!`;
+            else if (isMove) successMsg = `✅ ${insertedList.length} জন move হয়েছে!`;
+            else successMsg = `✅ ${insertedList.length} জন copy হয়েছে!`;
+
+            alert(successMsg);
+            closeModal('copyYearModal');
+
+            const copyRadio = document.querySelector('input[name="copyMode"][value="copy"]');
+            if (copyRadio) copyRadio.checked = true;
+            updateCopyModeUI('copy');
+
+            await loadAllStudents();
+
+        } catch (e) {
+            console.error('Copy/Move error:', e);
+            alert('❌ Failed: ' + e.message);
+        }
     }
 
     // =========================================================
@@ -1316,10 +1395,11 @@
             const action = btn.dataset.action;
             const id = btn.dataset.id;
 
-            if (action === 'view') viewStudent(id);
-            else if (action === 'edit') openEditStudentModal(id);
-            else if (action === 'subject') openEditStudentModal(id);
-            else if (action === 'toggle') toggleStudent(id);
+            if (action === 'view') window.viewStudent(id);
+            else if (action === 'edit') window.openEditStudentModal(id);
+            else if (action === 'subject') window.openEditStudentModal(id);
+            else if (action === 'toggle') window.toggleStudent(id);
+            else if (action === 'delete') window.deleteStudent(id);
         });
 
         $('paginationBtns').addEventListener('click', function (e) {
@@ -1334,14 +1414,12 @@
             document.querySelectorAll('.row-select').forEach(cb => cb.checked = this.checked);
         });
 
-        // Bulk Import
         $('btnBulkImport').addEventListener('click', () => openModal('bulkImportModal'));
         $('closeBulkModal').addEventListener('click', () => closeModal('bulkImportModal'));
         $('cancelBulkBtn').addEventListener('click', () => closeModal('bulkImportModal'));
         $('previewBulkBtn').addEventListener('click', previewBulk);
         $('saveBulkBtn').addEventListener('click', saveBulk);
 
-        // Copy/Move Year
         $('btnCopyYear').addEventListener('click', () => {
             openModal('copyYearModal');
             const copyRadio = document.querySelector('input[name="copyMode"][value="copy"]');
@@ -1380,11 +1458,9 @@
 
         $('applyCopyBtn').addEventListener('click', copyApply);
 
-        // View modal
         $('closeViewModal').addEventListener('click', () => closeModal('viewStudentModal'));
         $('closeViewBtn').addEventListener('click', () => closeModal('viewStudentModal'));
 
-        // Modal backdrop
         document.querySelectorAll('.fdc-modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function (e) {
                 if (e.target === this) {
@@ -1399,7 +1475,7 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Students v5 initializing...');
+        console.log('🚀 Admin Students v7 initializing...');
 
         loadYearOptions();
         attachEvents();
