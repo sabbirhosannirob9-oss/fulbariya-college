@@ -13,22 +13,17 @@
 :root {
     --navy: #0a1655;
     --navy-2: #1a237e;
-    --navy-3: #0d47a1;
     --gold: #f2d27b;
     --gold-2: #d4af37;
     --gold-dark: #b8941f;
-    --white: #ffffff;
     --off-white: #f8f9fc;
     --grey: #6b7280;
     --dark: #1f2937;
     --success: #10b981;
     --danger: #ef4444;
     --warning: #f59e0b;
-    --border: rgba(0,0,0,0.06);
     --border-light: rgba(0,0,0,0.04);
     --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
-    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
-    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
 }
 
 * { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -56,7 +51,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
-.admin-header .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.admin-header .brand { display: flex; align-items: center; gap: 12px; }
 .admin-header .brand-icon {
     width: 42px; height: 42px;
     border-radius: 12px;
@@ -65,7 +60,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     display: flex; align-items: center; justify-content: center;
     font-size: 18px;
     border: 1px solid rgba(242,210,123,0.3);
-    flex-shrink: 0;
 }
 .admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
 .admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
@@ -78,7 +72,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     display: flex; align-items: center; justify-content: center;
     font-weight: 700; font-size: 15px;
     border: 2px solid rgba(242,210,123,0.4);
-    flex-shrink: 0;
     overflow: hidden;
 }
 .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
@@ -97,7 +90,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 6px;
     text-decoration: none;
 }
-.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; }
 
 /* MAIN */
 .main-wrap { max-width: 1400px; margin: 0 auto; padding: 20px 16px 60px; }
@@ -112,108 +105,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 10px;
 }
 .page-title i { color: var(--gold-dark); }
-.page-title .badge-total {
-    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.06));
-    color: var(--navy);
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-weight: 700;
-    border: 1px solid rgba(10,22,85,0.1);
-}
 .page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
-
-/* TOOLBAR */
-.toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 18px;
-    flex-wrap: wrap;
-}
-.toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-
-.btn-primary-grad {
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 50px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    transition: 0.3s;
-    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
-    display: inline-flex;
-    align-items: center;
-    gap: 7px;
-}
-.btn-primary-grad:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,85,0.35); color: #fff; }
-.btn-primary-grad i { color: var(--gold); }
-
-.btn-secondary {
-    background: #fff;
-    color: var(--navy);
-    border: 1.5px solid #e5e7eb;
-    padding: 10px 18px;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 12.5px;
-    cursor: pointer;
-    transition: 0.25s;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
-
-/* STATS */
-.stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 12px;
-    margin-bottom: 18px;
-}
-.stat-pill {
-    background: #fff;
-    border-radius: 14px;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-light);
-}
-.stat-pill .sp-icon {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    flex-shrink: 0;
-}
-.stat-pill .sp-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
-.stat-pill .sp-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
-.stat-pill .sp-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
-.stat-pill .sp-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
-.stat-pill .sp-info { min-width: 0; }
-.stat-pill .sp-value {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--navy);
-    line-height: 1;
-    font-family: 'Playfair Display', serif;
-}
-.stat-pill .sp-label {
-    font-size: 10.5px;
-    color: var(--grey);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 3px;
-}
 
 /* FILTER */
 .filter-card {
@@ -222,10 +114,11 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     padding: 16px 18px;
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-light);
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 10px;
+    align-items: end;
 }
 .filter-card label {
     font-size: 10.5px;
@@ -255,139 +148,322 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     background: #fff;
 }
 
-/* TABLE */
-.table-card {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-light);
-    overflow: hidden;
-}
-.table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-.subject-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 13px;
-    min-width: 900px;
-}
-.subject-table thead {
+/* BUTTONS */
+.btn-primary-grad {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
-}
-.subject-table thead th {
-    padding: 12px 12px;
-    text-align: left;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
     font-weight: 700;
-    font-size: 11px;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
     white-space: nowrap;
 }
-.subject-table thead th:last-child { text-align: center; width: 130px; }
+.btn-primary-grad:hover:not(:disabled) { transform: translateY(-2px); color: #fff; }
+.btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary-grad i { color: var(--gold); }
 
-.subject-table tbody tr {
-    border-bottom: 1px solid var(--border-light);
-    transition: 0.2s;
-}
-.subject-table tbody tr:hover { background: #fafbff; }
-.subject-table tbody td {
-    padding: 11px 12px;
-    vertical-align: middle;
-    color: var(--dark);
-}
-.subject-table tbody td:last-child { text-align: center; }
-
-.subject-name-cell {
-    font-weight: 600;
+.btn-secondary {
+    background: #fff;
     color: var(--navy);
-    font-size: 13.5px;
-}
-.subject-name-cell small {
-    display: block;
-    font-size: 10.5px;
-    color: var(--grey);
-    font-weight: 500;
-    margin-top: 2px;
-}
-.subject-code {
-    display: inline-block;
-    background: rgba(10,22,85,0.06);
-    color: var(--navy);
-    padding: 2px 7px;
-    border-radius: 4px;
-    font-family: 'Courier New', monospace;
-    font-size: 10.5px;
-    font-weight: 700;
-    margin-right: 6px;
-}
-
-.type-tag {
-    display: inline-block;
-    padding: 3px 10px;
+    border: 1.5px solid #e5e7eb;
+    padding: 9px 16px;
     border-radius: 50px;
-    font-size: 10.5px;
-    font-weight: 700;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-}
-.type-tag.compulsory { background: #dbeafe; color: #1e40af; }
-.type-tag.group { background: #dcfce7; color: #166534; }
-.type-tag.optional { background: #fef3c7; color: #92400e; }
-
-.branch-tag {
-    display: inline-block;
-    padding: 3px 8px;
-    border-radius: 6px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-}
-.branch-tag.HSC { background: rgba(10,22,85,0.08); color: var(--navy); }
-.branch-tag.BM { background: rgba(139,92,246,0.12); color: #6b21a8; }
-
-.marks-info {
-    font-size: 11.5px;
-    color: var(--grey);
     font-weight: 600;
-}
-.marks-info span {
-    display: inline-block;
-    background: #f3f4f6;
-    padding: 2px 6px;
-    border-radius: 4px;
-    margin-right: 3px;
-    color: var(--dark);
-    font-weight: 700;
-}
-
-.action-btns {
-    display: inline-flex;
-    gap: 5px;
-    justify-content: center;
-}
-.action-btn {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    border: none;
-    font-size: 12px;
+    font-size: 12.5px;
     cursor: pointer;
     transition: 0.25s;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    gap: 6px;
 }
-.action-btn:hover { transform: scale(1.1); }
-.action-btn.edit { background: #e3f2fd; color: #1565c0; }
-.action-btn.toggle { background: #dcfce7; color: #166534; }
-.action-btn.toggle.off { background: #fef2f2; color: #dc2626; }
+.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
 
-/* Empty state */
-.empty-state {
+.btn-sm {
+    padding: 6px 12px;
+    font-size: 11.5px;
+    border-radius: 8px;
+}
+
+/* STATS */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+.stat-pill {
+    background: #fff;
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
+.stat-pill .sp-icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+.stat-pill .sp-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
+.stat-pill .sp-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.stat-pill .sp-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.stat-pill .sp-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
+.stat-pill .sp-icon.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; }
+.stat-pill .sp-info { min-width: 0; }
+.stat-pill .sp-value {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.stat-pill .sp-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 3px;
+}
+
+/* ACTION BAR */
+.action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+.action-bar-left, .action-bar-right { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* BOOKS CONTAINER */
+.books-container { display: flex; flex-direction: column; gap: 12px; }
+
+.book-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    overflow: hidden;
+    transition: 0.2s;
+}
+.book-card:hover { box-shadow: 0 4px 16px rgba(10,22,85,0.08); }
+.book-card.inactive { opacity: 0.6; }
+
+.book-header {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    user-select: none;
+    border-bottom: 1px solid transparent;
+    transition: 0.2s;
+}
+.book-card.expanded .book-header {
+    border-bottom-color: var(--border-light);
+    background: #fafbff;
+}
+.book-header:hover { background: #f5f7ff; }
+
+.book-header .bh-expand {
+    width: 24px; height: 24px;
+    border-radius: 6px;
+    background: rgba(10,22,85,0.06);
+    color: var(--navy);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    transition: 0.25s;
+    flex-shrink: 0;
+}
+.book-card.expanded .bh-expand {
+    background: var(--navy);
+    color: var(--gold);
+    transform: rotate(90deg);
+}
+
+.book-header .bh-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.book-header .bh-info { flex: 1; min-width: 0; }
+.book-header .bh-title {
+    font-size: 14.5px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.book-header .bh-subtitle {
+    font-size: 11.5px;
+    color: var(--grey);
+    margin-top: 2px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.book-header .bh-subtitle span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.book-header .bh-actions {
+    display: flex;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+/* TAGS */
+.tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+.tag.branch-HSC { background: rgba(10,22,85,0.08); color: var(--navy); }
+.tag.branch-BM { background: rgba(139,92,246,0.12); color: #6b21a8; }
+.tag.type-compulsory { background: #dbeafe; color: #1e40af; }
+.tag.type-group { background: #dcfce7; color: #166534; }
+.tag.type-optional { background: #fef3c7; color: #92400e; }
+.tag.model-bmt { background: #fce7f3; color: #9d174d; }
+.tag.model-hsc { background: #e0e7ff; color: #3730a3; }
+
+/* BOOK BODY */
+.book-body {
+    display: none;
+    padding: 14px 18px 18px;
+    background: #fafbff;
+}
+.book-card.expanded .book-body { display: block; }
+
+/* PAPER CARD */
+.paper-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1.5px solid #e5e7eb;
+    transition: 0.2s;
+}
+.paper-card:last-child { margin-bottom: 0; }
+.paper-card:hover { border-color: var(--navy); }
+.paper-card.inactive { opacity: 0.55; }
+
+.paper-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.paper-header .ph-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.paper-header .ph-name {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.paper-header .ph-code {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+    background: rgba(10,22,85,0.06);
+    color: var(--navy);
+    padding: 2px 7px;
+    border-radius: 5px;
+    font-weight: 700;
+}
+.paper-header .ph-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.paper-marks {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 8px;
+    margin-top: 8px;
+}
+.mark-box {
+    background: #fafbff;
+    border-radius: 8px;
+    padding: 8px 10px;
     text-align: center;
+    border: 1px solid var(--border-light);
+}
+.mark-box .mb-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.mark-box .mb-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    margin-top: 2px;
+}
+.mark-box.empty .mb-value { color: #9ca3af; }
+.mark-box.muted { background: #f3f4f6; }
+.mark-box.muted .mb-value { color: #9ca3af; }
+
+.paper-info {
+    font-size: 11.5px;
+    color: var(--grey);
+    margin-top: 8px;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.paper-info strong { color: var(--navy); }
+
+/* EMPTY */
+.empty-state {
+    background: #fff;
+    border-radius: 16px;
     padding: 60px 20px;
+    text-align: center;
+    border: 1px solid var(--border-light);
 }
 .empty-state .icon-wrap {
     width: 80px; height: 80px;
@@ -402,43 +478,12 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
 .empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
 
-/* Pagination */
-.pagination-wrap {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 18px;
-    border-top: 1px solid var(--border-light);
-    background: #fafbff;
-    flex-wrap: wrap;
-    gap: 10px;
-}
-.pagination-info { font-size: 12px; color: var(--grey); }
-.pagination-btns { display: flex; gap: 5px; flex-wrap: wrap; }
-.page-btn {
-    min-width: 34px;
-    height: 34px;
-    border-radius: 8px;
-    border: 1.5px solid #e5e7eb;
-    background: #fff;
-    color: var(--dark);
-    font-size: 12.5px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.25s;
-    padding: 0 10px;
-}
-.page-btn:hover:not(:disabled) { border-color: var(--navy); color: var(--navy); }
-.page-btn.active { background: var(--navy); color: #fff; border-color: var(--navy); }
-.page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
-
 /* MODAL */
 .fdc-modal-overlay {
     position: fixed;
     inset: 0;
     background: rgba(6, 29, 54, 0.7);
     backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
     z-index: 9999;
     display: none;
     align-items: center;
@@ -452,12 +497,11 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .fdc-modal {
     background: #fff;
     border-radius: 20px;
-    max-width: 720px;
+    max-width: 780px;
     width: 100%;
     max-height: 92vh;
     overflow-y: auto;
     box-shadow: 0 30px 80px rgba(0,0,0,0.4);
-    position: relative;
     animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 @keyframes slideUp {
@@ -485,7 +529,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
-.fdc-modal-header .mh-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.fdc-modal-header .mh-left { display: flex; align-items: center; gap: 12px; }
 .fdc-modal-header .mh-icon {
     width: 44px; height: 44px;
     border-radius: 12px;
@@ -495,7 +539,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     align-items: center;
     justify-content: center;
     font-size: 18px;
-    flex-shrink: 0;
     border: 1px solid rgba(242,210,123,0.3);
 }
 .fdc-modal-header h5 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
@@ -513,7 +556,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
 }
 .fdc-modal-close:hover { background: var(--danger); transform: rotate(90deg); }
 
@@ -529,7 +571,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     display: block;
 }
 .fdc-form-label .req { color: var(--danger); }
-.fdc-form-label .opt { color: var(--grey); font-weight: 500; text-transform: none; letter-spacing: 0; font-size: 10.5px; }
+.fdc-form-label .opt { color: var(--grey); font-weight: 500; text-transform: none; font-size: 10.5px; }
 
 .fdc-input, .fdc-select {
     width: 100%;
@@ -548,29 +590,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     background: #fff;
 }
 
-.switch-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    background: #fafbff;
-    border: 1.5px solid #e5e7eb;
-    border-radius: 10px;
-}
-.switch-row input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--navy);
-    cursor: pointer;
-}
-.switch-row label {
-    font-weight: 600;
-    font-size: 13px;
-    color: var(--dark);
-    cursor: pointer;
-    margin: 0;
-}
-
 .fdc-modal-footer {
     padding: 16px 24px 22px;
     display: flex;
@@ -583,26 +602,77 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     bottom: 0;
 }
 
-/* Responsive */
+/* PAPER EDITOR */
+.paper-editor {
+    background: #fafbff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+}
+.paper-editor-header {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--navy);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.paper-editor-header i { color: var(--gold-dark); }
+
+.switch-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: #fafbff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+}
+.switch-row input[type="checkbox"] {
+    width: 18px; height: 18px;
+    accent-color: var(--navy);
+    cursor: pointer;
+}
+.switch-row label {
+    font-weight: 600;
+    font-size: 13px;
+    color: var(--dark);
+    cursor: pointer;
+    margin: 0;
+}
+
+/* ALERT */
+.fdc-alert {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+.fdc-alert.info { background: #eff6ff; color: #1e40af; border-left: 3px solid #3b82f6; }
+.fdc-alert.warn { background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; }
+.fdc-alert.danger { background: #fef2f2; color: #991b1b; border-left: 3px solid #dc2626; }
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
-    .admin-header { padding: 10px 14px; }
-    .admin-header h4 { font-size: 14px; }
-    .main-wrap { padding: 14px 12px 50px; }
+    .main-wrap { padding: 14px 12px 60px; }
     .page-title { font-size: 17px; }
-    .toolbar { flex-direction: column; align-items: stretch; }
-    .toolbar-actions { justify-content: center; }
     .filter-card { grid-template-columns: 1fr 1fr; }
-    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .stat-pill { padding: 11px 12px; }
-    .stat-pill .sp-value { font-size: 17px; }
-    .fdc-modal-header { padding: 18px 18px; }
-    .fdc-modal-body { padding: 18px 18px; }
-    .fdc-modal-footer { padding: 14px 18px 18px; }
-    .fdc-modal-header h5 { font-size: 14px; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); }
+    .book-header { padding: 12px 14px; }
+    .book-body { padding: 12px 14px; }
+    .action-bar { flex-direction: column; align-items: stretch; }
+    .action-bar-left, .action-bar-right { justify-content: center; }
 }
 @media (max-width: 480px) {
     .btn-header span { display: none; }
     .filter-card { grid-template-columns: 1fr; }
+    .bh-subtitle { display: none; }
 }
 </style>
 </head>
@@ -631,62 +701,19 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <!-- MAIN -->
 <div class="main-wrap">
 
-    <!-- Toolbar -->
-    <div class="toolbar">
-        <div>
-            <h4 class="page-title">
-                <i class="fas fa-book"></i> Subjects
-                <span class="badge-total" id="totalSubjects">0</span>
-            </h4>
-            <p class="page-sub">HSC ও BM-এর সব বিষয় পরিচালনা করুন</p>
-        </div>
-        <div class="toolbar-actions">
-            <button class="btn-primary-grad" id="btnAddSubject">
-                <i class="fas fa-plus-circle"></i> Add New Subject
-            </button>
-        </div>
-    </div>
+    <h4 class="page-title">
+        <i class="fas fa-book"></i> Subject Management
+    </h4>
+    <p class="page-sub">HSC ও BMT-র সব বই পরিচালনা করুন — book-wise grouped view</p>
 
-    <!-- Stats -->
-    <div class="stats-row">
-        <div class="stat-pill">
-            <div class="sp-icon navy"><i class="fas fa-book"></i></div>
-            <div class="sp-info">
-                <div class="sp-value" id="statTotal">0</div>
-                <div class="sp-label">Total</div>
-            </div>
-        </div>
-        <div class="stat-pill">
-            <div class="sp-icon gold"><i class="fas fa-flask"></i></div>
-            <div class="sp-info">
-                <div class="sp-value" id="statHSC">0</div>
-                <div class="sp-label">HSC</div>
-            </div>
-        </div>
-        <div class="stat-pill">
-            <div class="sp-icon purple"><i class="fas fa-briefcase"></i></div>
-            <div class="sp-info">
-                <div class="sp-value" id="statBM">0</div>
-                <div class="sp-label">BM</div>
-            </div>
-        </div>
-        <div class="stat-pill">
-            <div class="sp-icon green"><i class="fas fa-check-circle"></i></div>
-            <div class="sp-info">
-                <div class="sp-value" id="statActive">0</div>
-                <div class="sp-label">Active</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Filter -->
+    <!-- FILTER -->
     <div class="filter-card">
         <div>
             <label>Branch</label>
             <select id="filterBranch">
                 <option value="">All Branches</option>
                 <option value="HSC">HSC</option>
-                <option value="BM">BM</option>
+                <option value="BM">BM (BMT)</option>
             </select>
         </div>
         <div>
@@ -718,188 +745,275 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
         <div>
             <label>Search</label>
-            <input type="text" id="searchInput" placeholder="Subject name / code...">
+            <input type="text" id="searchInput" placeholder="Book name / code...">
         </div>
     </div>
 
-    <!-- Table -->
-    <div class="table-card">
-        <div class="table-scroll">
-            <table class="subject-table">
-                <thead>
-                    <tr>
-                        <th style="width:50px;">SL</th>
-                        <th>Subject</th>
-                        <th>Branch</th>
-                        <th>Class</th>
-                        <th>Group</th>
-                        <th>Type</th>
-                        <th>Paper</th>
-                        <th>Marks</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="subjectTableBody">
-                    <tr><td colspan="10" style="padding:20px;text-align:center;">
-                        <div style="color:var(--grey);font-size:13px;">লোড হচ্ছে...</div>
-                    </td></tr>
-                </tbody>
-            </table>
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-pill">
+            <div class="sp-icon navy"><i class="fas fa-book"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statBooks">0</div>
+                <div class="sp-label">Books</div>
+            </div>
         </div>
-        <div class="pagination-wrap" id="paginationWrap" style="display:none;">
-            <div class="pagination-info" id="paginationInfo"></div>
-            <div class="pagination-btns" id="paginationBtns"></div>
+        <div class="stat-pill">
+            <div class="sp-icon blue"><i class="fas fa-file-alt"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statPapers">0</div>
+                <div class="sp-label">Papers</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon gold"><i class="fas fa-flask"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statHSC">0</div>
+                <div class="sp-label">HSC</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon purple"><i class="fas fa-briefcase"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statBM">0</div>
+                <div class="sp-label">BM</div>
+            </div>
+        </div>
+        <div class="stat-pill">
+            <div class="sp-icon green"><i class="fas fa-check-circle"></i></div>
+            <div class="sp-info">
+                <div class="sp-value" id="statActive">0</div>
+                <div class="sp-label">Active</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ACTION BAR -->
+    <div class="action-bar">
+        <div class="action-bar-left">
+            <button class="btn-secondary btn-sm" id="btnExpandAll">
+                <i class="fas fa-chevron-down"></i> Expand All
+            </button>
+            <button class="btn-secondary btn-sm" id="btnCollapseAll">
+                <i class="fas fa-chevron-up"></i> Collapse All
+            </button>
+        </div>
+        <div class="action-bar-right">
+            <button class="btn-primary-grad" id="btnAddBook">
+                <i class="fas fa-plus-circle"></i> Add New Book
+            </button>
+        </div>
+    </div>
+
+    <!-- BOOKS CONTAINER -->
+    <div class="books-container" id="booksContainer">
+        <div class="empty-state">
+            <div class="icon-wrap"><i class="fas fa-book"></i></div>
+            <h6>লোড হচ্ছে...</h6>
         </div>
     </div>
 
 </div>
 
-<!-- MODAL: Add/Edit Subject -->
-<div class="fdc-modal-overlay" id="subjectModal">
+<!-- ================================================== -->
+<!-- MODAL: Add/Edit Book -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="bookModal">
     <div class="fdc-modal">
         <div class="fdc-modal-header">
             <div class="mh-left">
-                <div class="mh-icon"><i class="fas fa-book" id="subjectModalIcon"></i></div>
+                <div class="mh-icon"><i class="fas fa-book" id="bookModalIcon"></i></div>
                 <div>
-                    <h5 id="subjectModalTitle">Add New Subject</h5>
-                    <small id="subjectModalSub">বিষয়ের তথ্য পূরণ করুন</small>
+                    <h5 id="bookModalTitle">Add New Book</h5>
+                    <small id="bookModalSub">নতুন বই যোগ করুন</small>
                 </div>
             </div>
-            <button class="fdc-modal-close" id="closeSubjectModal">
+            <button class="fdc-modal-close" id="closeBookModal">
                 <i class="fas fa-times"></i>
             </button>
         </div>
 
         <div class="fdc-modal-body">
-            <input type="hidden" id="editSubjectId" value="">
+
+            <div class="fdc-alert info" id="bookAlert" style="display:none;">
+                <i class="fas fa-info-circle"></i>
+                <div id="bookAlertText"></div>
+            </div>
+
+            <input type="hidden" id="editBookId" value="">
+            <input type="hidden" id="editPaperIds" value="">
 
             <div class="row g-3">
-                <div class="col-md-8">
-                    <label class="fdc-form-label">Subject Name <span class="req">*</span></label>
-                    <input type="text" class="fdc-input" id="subjectName" placeholder="যেমন: পদার্থবিজ্ঞান">
-                </div>
-                <div class="col-md-4">
-                    <label class="fdc-form-label">Subject Code <span class="opt">(optional)</span></label>
-                    <input type="text" class="fdc-input" id="subjectCode" placeholder="174">
+
+                <div class="col-12">
+                    <label class="fdc-form-label">Book Name <span class="req">*</span></label>
+                    <input type="text" class="fdc-input" id="bookName" placeholder="যেমন: পদার্থবিজ্ঞান">
                 </div>
 
                 <div class="col-md-4">
                     <label class="fdc-form-label">Branch <span class="req">*</span></label>
-                    <select class="fdc-select" id="subjectBranch">
+                    <select class="fdc-select" id="bookBranch">
                         <option value="">Select</option>
                         <option value="HSC">HSC</option>
-                        <option value="BM">BM</option>
+                        <option value="BM">BM (BMT)</option>
                     </select>
                 </div>
                 <div class="col-md-4">
                     <label class="fdc-form-label">Class <span class="req">*</span></label>
-                    <select class="fdc-select" id="subjectClass">
+                    <select class="fdc-select" id="bookClass">
                         <option value="">Select</option>
                         <option value="11">Class 11</option>
                         <option value="12">Class 12</option>
                     </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="fdc-form-label">Paper Number <span class="req">*</span></label>
-                    <select class="fdc-select" id="subjectPaper">
-                        <option value="1">1ম পত্র</option>
-                        <option value="2">2য় পত্র</option>
-                    </select>
-                </div>
-
-                <div class="col-md-6">
-                    <label class="fdc-form-label">Group <span class="opt">(শুধু HSC-এর জন্য)</span></label>
-                    <select class="fdc-select" id="subjectGroup">
-                        <option value="">— None (Compulsory) —</option>
+                    <label class="fdc-form-label">Group <span class="req">*</span></label>
+                    <select class="fdc-select" id="bookGroup">
+                        <option value="">Select</option>
                         <option value="Science">Science</option>
                         <option value="Humanities">Humanities</option>
                         <option value="Business">Business</option>
                         <option value="BM-General">BM-General</option>
                     </select>
                 </div>
-                <div class="col-md-6">
+
+                <div class="col-md-4">
                     <label class="fdc-form-label">Subject Type <span class="req">*</span></label>
-                    <select class="fdc-select" id="subjectType">
+                    <select class="fdc-select" id="bookType">
                         <option value="">Select</option>
                         <option value="compulsory">Compulsory</option>
                         <option value="group">Group</option>
                         <option value="optional">Optional</option>
                     </select>
                 </div>
-
-                <div class="col-12" style="margin-top:14px;">
-                    <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">Marks Breakdown</label>
+                <div class="col-md-4">
+                    <label class="fdc-form-label">Assessment Model <span class="req">*</span></label>
+                    <select class="fdc-select" id="bookModel">
+                        <option value="cq_mcq_practical">CQ / MCQ / Practical (HSC)</option>
+                        <option value="board_continuous">Board + Continuous (BMT)</option>
+                    </select>
                 </div>
                 <div class="col-md-4">
-                    <label class="fdc-form-label">CQ Marks</label>
-                    <input type="number" class="fdc-input" id="subjectCQ" value="0" min="0">
-                </div>
-                <div class="col-md-4">
-                    <label class="fdc-form-label">MCQ Marks</label>
-                    <input type="number" class="fdc-input" id="subjectMCQ" value="0" min="0">
-                </div>
-                <div class="col-md-4">
-                    <label class="fdc-form-label">Practical Marks</label>
-                    <input type="number" class="fdc-input" id="subjectPractical" value="0" min="0">
+                    <label class="fdc-form-label">Paper Count <span class="req">*</span></label>
+                    <select class="fdc-select" id="bookPaperCount">
+                        <option value="1">1 Paper (Single)</option>
+                        <option value="2" selected>2 Papers (১ম + ২য়)</option>
+                    </select>
                 </div>
 
-                <div class="col-12">
-                    <div class="switch-row">
-                        <input type="checkbox" id="subjectHasCQ" checked>
-                        <label for="subjectHasCQ">Has CQ</label>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="switch-row">
-                        <input type="checkbox" id="subjectHasMCQ" checked>
-                        <label for="subjectHasMCQ">Has MCQ</label>
-                    </div>
-                </div>
-                <div class="col-12">
-                    <div class="switch-row">
-                        <input type="checkbox" id="subjectHasPractical">
-                        <label for="subjectHasPractical">Has Practical</label>
+                <!-- PAPER 1 -->
+                <div class="col-12" id="paper1Block">
+                    <div class="paper-editor">
+                        <div class="paper-editor-header">
+                            <i class="fas fa-file-alt"></i>
+                            <span>১ম পত্র (Paper 1)</span>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <label class="fdc-form-label">Subject Code</label>
+                                <input type="text" class="fdc-input" id="p1Code" placeholder="174">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fdc-form-label">CQ / Board</label>
+                                <input type="number" class="fdc-input" id="p1CQ" placeholder="50" min="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fdc-form-label">MCQ / Continuous</label>
+                                <input type="number" class="fdc-input" id="p1MCQ" placeholder="25" min="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fdc-form-label">Practical</label>
+                                <input type="number" class="fdc-input" id="p1Practical" placeholder="25" min="0">
+                            </div>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-4">
+                                <div class="switch-row">
+                                    <input type="checkbox" id="p1HasCQ" checked>
+                                    <label for="p1HasCQ">Has CQ</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="switch-row">
+                                    <input type="checkbox" id="p1HasMCQ" checked>
+                                    <label for="p1HasMCQ">Has MCQ</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="switch-row">
+                                    <input type="checkbox" id="p1HasPractical">
+                                    <label for="p1HasPractical">Has Practical</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-12" style="margin-top:14px;">
-                    <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">Flags</label>
-                </div>
-                <div class="col-md-4">
-                    <div class="switch-row">
-                        <input type="checkbox" id="subjectIsGroup">
-                        <label for="subjectIsGroup">is_group</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="switch-row">
-                        <input type="checkbox" id="subjectIsOptional">
-                        <label for="subjectIsOptional">is_optional</label>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="switch-row">
-                        <input type="checkbox" id="subjectIsOnlyOptional">
-                        <label for="subjectIsOnlyOptional">শুধু optional</label>
+                <!-- PAPER 2 -->
+                <div class="col-12" id="paper2Block">
+                    <div class="paper-editor">
+                        <div class="paper-editor-header">
+                            <i class="fas fa-file-alt"></i>
+                            <span>২য় পত্র (Paper 2)</span>
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <label class="fdc-form-label">Subject Code</label>
+                                <input type="text" class="fdc-input" id="p2Code" placeholder="175">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fdc-form-label">CQ / Board</label>
+                                <input type="number" class="fdc-input" id="p2CQ" placeholder="50" min="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fdc-form-label">MCQ / Continuous</label>
+                                <input type="number" class="fdc-input" id="p2MCQ" placeholder="25" min="0">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="fdc-form-label">Practical</label>
+                                <input type="number" class="fdc-input" id="p2Practical" placeholder="25" min="0">
+                            </div>
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-4">
+                                <div class="switch-row">
+                                    <input type="checkbox" id="p2HasCQ" checked>
+                                    <label for="p2HasCQ">Has CQ</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="switch-row">
+                                    <input type="checkbox" id="p2HasMCQ" checked>
+                                    <label for="p2HasMCQ">Has MCQ</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="switch-row">
+                                    <input type="checkbox" id="p2HasPractical">
+                                    <label for="p2HasPractical">Has Practical</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <!-- ACTIVE -->
                 <div class="col-12">
                     <div class="switch-row">
-                        <input type="checkbox" id="subjectIsActive" checked>
-                        <label for="subjectIsActive">Active</label>
+                        <input type="checkbox" id="bookIsActive" checked>
+                        <label for="bookIsActive">Active (students can select this book)</label>
                     </div>
                 </div>
+
             </div>
         </div>
 
         <div class="fdc-modal-footer">
-            <button class="btn-secondary" id="cancelSubjectBtn">
+            <button class="btn-secondary" id="cancelBookBtn">
                 <i class="fas fa-times"></i> Cancel
             </button>
-            <button class="btn-primary-grad" id="saveSubjectBtn">
-                <i class="fas fa-save"></i> Save Subject
+            <button class="btn-primary-grad" id="saveBookBtn">
+                <i class="fas fa-save"></i> Save Book
             </button>
         </div>
     </div>
@@ -911,7 +1025,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/supabase.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/admin-subjects.js"></script>
+<script src="../js/admin-subjects.js?v=2"></script>
 
 </body>
 </html>

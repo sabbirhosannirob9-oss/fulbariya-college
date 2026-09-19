@@ -17,24 +17,20 @@
     --gold: #f2d27b;
     --gold-2: #d4af37;
     --gold-dark: #b8941f;
-    --white: #ffffff;
     --off-white: #f8f9fc;
     --grey: #6b7280;
     --dark: #1f2937;
     --success: #10b981;
     --danger: #ef4444;
     --warning: #f59e0b;
-    --border: rgba(0,0,0,0.06);
     --border-light: rgba(0,0,0,0.04);
     --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
-    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
-    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
 }
 
 * { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { background: var(--off-white); margin: 0; color: var(--dark); }
 
-/* ============ HEADER ============ */
+/* HEADER */
 .admin-header {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
@@ -56,7 +52,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     height: 2px;
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
 }
-.admin-header .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.admin-header .brand { display: flex; align-items: center; gap: 12px; }
 .admin-header .brand-icon {
     width: 42px; height: 42px;
     border-radius: 12px;
@@ -65,11 +61,9 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     display: flex; align-items: center; justify-content: center;
     font-size: 18px;
     border: 1px solid rgba(242,210,123,0.3);
-    flex-shrink: 0;
 }
 .admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
 .admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
-
 .admin-header .user-box { display: flex; align-items: center; gap: 8px; }
 .avatar-circle {
     width: 38px; height: 38px;
@@ -79,7 +73,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     display: flex; align-items: center; justify-content: center;
     font-weight: 700; font-size: 15px;
     border: 2px solid rgba(242,210,123,0.4);
-    flex-shrink: 0;
     overflow: hidden;
 }
 .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
@@ -98,10 +91,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 6px;
     text-decoration: none;
 }
-.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; }
 
-/* ============ MAIN ============ */
-.main-wrap { max-width: 1600px; margin: 0 auto; padding: 20px 16px 60px; }
+/* MAIN */
+.main-wrap { max-width: 1600px; margin: 0 auto; padding: 20px 16px 80px; }
 
 .page-title {
     color: var(--navy);
@@ -113,18 +106,9 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 10px;
 }
 .page-title i { color: var(--gold-dark); }
-.page-title .badge-total {
-    background: linear-gradient(135deg, rgba(10,22,85,0.08), rgba(13,71,161,0.06));
-    color: var(--navy);
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-weight: 700;
-    border: 1px solid rgba(10,22,85,0.1);
-}
 .page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
 
-/* ============ SETUP CARD ============ */
+/* SETUP CARD */
 .setup-card {
     background: #fff;
     border-radius: 16px;
@@ -137,7 +121,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 12px;
     align-items: end;
 }
-.setup-card .filter-item { position: relative; }
 .setup-card label {
     font-size: 10.5px;
     color: var(--grey);
@@ -166,6 +149,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     background: #fff;
 }
 
+/* BUTTONS */
 .btn-primary-grad {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
@@ -183,7 +167,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 7px;
     white-space: nowrap;
 }
-.btn-primary-grad:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,22,85,0.35); color: #fff; }
+.btn-primary-grad:hover:not(:disabled) { transform: translateY(-2px); color: #fff; }
 .btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
 .btn-primary-grad i { color: var(--gold); }
 
@@ -218,62 +202,31 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     align-items: center;
     gap: 6px;
 }
-.btn-gold:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.4); color: var(--navy); }
+.btn-gold:hover:not(:disabled) { transform: translateY(-2px); color: var(--navy); }
 .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* ============ STATS ============ */
-.stats-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 12px;
-    margin-bottom: 18px;
-}
-.stat-pill {
-    background: #fff;
-    border-radius: 14px;
-    padding: 14px 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-light);
-}
-.stat-pill .sp-icon {
-    width: 38px; height: 38px;
-    border-radius: 10px;
+.btn-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(220,38,38,0.3);
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    font-size: 15px;
-    flex-shrink: 0;
+    gap: 6px;
 }
-.stat-pill .sp-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
-.stat-pill .sp-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
-.stat-pill .sp-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
-.stat-pill .sp-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
-.stat-pill .sp-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
-.stat-pill .sp-info { min-width: 0; }
-.stat-pill .sp-value {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--navy);
-    line-height: 1;
-    font-family: 'Playfair Display', serif;
-}
-.stat-pill .sp-label {
-    font-size: 10.5px;
-    color: var(--grey);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-top: 3px;
-}
+.btn-danger:hover { transform: translateY(-2px); color: #fff; }
 
-/* ============ ACTION BAR ============ */
+/* ACTION BAR */
 .action-bar {
     background: #fff;
     border-radius: 16px;
-    padding: 12px 18px;
+    padding: 14px 18px;
     box-shadow: var(--shadow-sm);
     border: 1px solid var(--border-light);
     margin-bottom: 16px;
@@ -283,8 +236,404 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 10px;
     flex-wrap: wrap;
 }
-.action-bar-left { display: flex; gap: 8px; flex-wrap: wrap; }
-.action-bar-right { display: flex; gap: 8px; flex-wrap: wrap; }
+.action-bar-left, .action-bar-right { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* PROGRESS */
+.progress-wrap {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 16px;
+}
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+.progress-header .ph-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.progress-header .ph-percent {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+}
+.progress-bar-track {
+    height: 12px;
+    background: #e5e7eb;
+    border-radius: 20px;
+    overflow: hidden;
+}
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), #059669);
+    border-radius: 20px;
+    transition: width 0.4s ease;
+    width: 0%;
+}
+.progress-bar-fill.warn {
+    background: linear-gradient(90deg, var(--warning), #d97706);
+}
+.progress-bar-fill.low {
+    background: linear-gradient(90deg, var(--danger), #b91c1c);
+}
+.progress-details {
+    margin-top: 10px;
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--grey);
+}
+.progress-details strong { color: var(--navy); }
+
+/* SUBJECT TABS */
+.tabs-wrap {
+    background: #fff;
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 16px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+.subject-tabs {
+    display: flex;
+    gap: 8px;
+    min-width: max-content;
+}
+.subject-tab {
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: #fafbff;
+    border: 1.5px solid #e5e7eb;
+    cursor: pointer;
+    transition: 0.25s;
+    font-size: 12.5px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    min-width: 130px;
+    white-space: nowrap;
+}
+.subject-tab:hover { border-color: var(--navy); background: #f5f7ff; }
+.subject-tab.active {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-color: var(--navy);
+}
+.subject-tab.active .st-name { color: #fff; }
+.subject-tab.active .st-status { color: var(--gold); }
+.subject-tab .st-name {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 12.5px;
+}
+.subject-tab .st-status {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.subject-tab .st-status.done { color: #10b981; }
+.subject-tab.active .st-status.done { color: #86efac; }
+
+/* PAPER SECTION */
+.book-section {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+.book-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 14px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.book-header .bh-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 15px;
+    font-weight: 700;
+}
+.book-header .bh-title i { color: var(--gold); }
+.book-header .bh-status {
+    font-size: 12px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.15);
+    font-weight: 700;
+}
+.book-header .bh-status.done { background: rgba(16,185,129,0.3); color: #86efac; }
+
+/* PAPER */
+.paper-block {
+    border-bottom: 1px solid var(--border-light);
+}
+.paper-block:last-child { border-bottom: none; }
+
+.paper-header {
+    background: #f0f4f8;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border-light);
+}
+.paper-header .ph-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.paper-header .ph-marks {
+    font-size: 11px;
+    color: var(--grey);
+    font-weight: 600;
+    background: #fff;
+    padding: 3px 10px;
+    border-radius: 20px;
+}
+.paper-header .ph-count {
+    font-size: 11.5px;
+    color: var(--grey);
+    font-weight: 700;
+}
+.paper-header .ph-count.complete { color: #10b981; }
+
+/* MARKS TABLE */
+.marks-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.marks-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12.5px;
+    min-width: 800px;
+}
+.marks-table thead {
+    background: #fafbff;
+}
+.marks-table thead th {
+    padding: 8px 10px;
+    text-align: center;
+    font-weight: 700;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    color: var(--navy);
+    letter-spacing: 0.3px;
+    border-bottom: 1px solid var(--border-light);
+    white-space: nowrap;
+}
+.marks-table thead th:first-child { text-align: left; padding-left: 20px; width: 60px; }
+.marks-table thead th.col-name { text-align: left; padding-left: 12px; min-width: 180px; }
+
+.marks-table tbody tr {
+    border-bottom: 1px solid var(--border-light);
+    transition: 0.2s;
+}
+.marks-table tbody tr:hover { background: #fafbff; }
+.marks-table tbody tr.pass { background: #f0fdf4; }
+.marks-table tbody tr.pass:hover { background: #dcfce7; }
+.marks-table tbody tr.fail { background: #fef2f2; }
+.marks-table tbody tr.fail:hover { background: #fee2e2; }
+
+.marks-table tbody td {
+    padding: 6px 8px;
+    text-align: center;
+    vertical-align: middle;
+}
+.marks-table tbody td:first-child {
+    text-align: left;
+    padding-left: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+}
+.marks-table tbody td.col-name {
+    text-align: left;
+    padding-left: 12px;
+    font-weight: 600;
+    font-size: 12.5px;
+    white-space: nowrap;
+}
+
+/* INPUT */
+.marks-input-wrap {
+    position: relative;
+    display: inline-block;
+    width: 70px;
+}
+.marks-input {
+    width: 100%;
+    padding: 6px 4px;
+    border-radius: 6px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    font-size: 13px;
+    text-align: center;
+    outline: none;
+    transition: 0.2s;
+    font-family: 'Hind Siliguri', sans-serif;
+    font-weight: 700;
+    color: var(--navy);
+}
+.marks-input:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(10,22,85,0.1);
+}
+.marks-input.filled { background: #f0fdf4; border-color: #86efac; }
+.marks-input.fail { background: #fef2f2; border-color: #fca5a5; color: var(--danger); }
+.marks-input.error { background: #fef2f2; border-color: #dc2626; animation: shake 0.3s; }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+}
+.max-hint {
+    font-size: 9px;
+    color: var(--grey);
+    display: block;
+    line-height: 1;
+    margin-top: 1px;
+}
+
+/* TOTAL CELLS */
+.total-cell {
+    font-weight: 700;
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    color: var(--navy);
+}
+.percent-cell {
+    font-size: 11px;
+    color: var(--grey);
+    font-weight: 600;
+}
+.grade-cell-mini {
+    font-weight: 700;
+    font-size: 11.5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    min-width: 34px;
+}
+.grade-cell-mini.Aplus { background: #dcfce7; color: #166534; }
+.grade-cell-mini.A { background: #d1fae5; color: #065f46; }
+.grade-cell-mini.Aminus { background: #dbeafe; color: #1e40af; }
+.grade-cell-mini.B { background: #fef3c7; color: #92400e; }
+.grade-cell-mini.C { background: #fed7aa; color: #9a3412; }
+.grade-cell-mini.D { background: #fecaca; color: #991b1b; }
+.grade-cell-mini.F { background: #7f1d1d; color: #fff; }
+
+/* BOOK SUMMARY */
+.book-summary {
+    background: #f0f4f8;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border-light);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 12px;
+}
+.book-summary .bs-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.book-summary .bs-label { color: var(--grey); font-weight: 600; }
+.book-summary .bs-value { color: var(--navy); font-weight: 700; }
+
+/* STUDENT GPA PANEL */
+.gpa-panel {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    display: none;
+}
+.gpa-panel.show { display: block; }
+.gpa-panel .gpa-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e40af;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.gpa-panel .gpa-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+}
+.gpa-panel .gpa-item {
+    background: #fff;
+    border-radius: 8px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12.5px;
+}
+.gpa-panel .gpa-item .gi-label { color: var(--dark); font-weight: 600; }
+.gpa-panel .gpa-item .gi-value { font-weight: 700; color: var(--navy); }
+.gpa-panel .gpa-item .gi-value.high { color: #059669; }
+.gpa-panel .gpa-item .gi-value.mid { color: #d97706; }
+.gpa-panel .gpa-item .gi-value.low { color: #dc2626; }
+
+/* EMPTY */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+}
+.empty-state .icon-wrap {
+    width: 80px; height: 80px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.empty-state i { font-size: 36px; color: var(--navy); opacity: 0.35; }
+.empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
+
+/* STATUS BADGE */
 .status-badge {
     padding: 5px 14px;
     border-radius: 50px;
@@ -300,209 +649,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .status-badge.published { background: #dcfce7; color: #166534; }
 .status-badge.unsaved { background: #fee2e2; color: #991b1b; }
 
-/* ============ MARKS TABLE ============ */
-.marks-wrap {
-    background: #fff;
-    border-radius: 16px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-light);
-    overflow: hidden;
-}
-.marks-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-
-.marks-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 12.5px;
-}
-.marks-table thead {
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    color: #fff;
-}
-.marks-table thead th {
-    padding: 8px 6px;
-    text-align: center;
-    font-weight: 700;
-    font-size: 10px;
-    letter-spacing: 0.3px;
-    text-transform: uppercase;
-    white-space: nowrap;
-    border-right: 1px solid rgba(255,255,255,0.08);
-}
-.marks-table thead th:last-child { border-right: none; }
-
-/* Section headers (rowspan) */
-.marks-table thead .section-header {
-    background: rgba(0,0,0,0.15);
-    font-size: 10.5px;
-    padding: 10px 6px;
-    border-bottom: 2px solid var(--gold);
-}
-.marks-table thead .subject-header {
-    background: rgba(255,255,255,0.05);
-    border-bottom: 1px solid rgba(255,255,255,0.15);
-    color: var(--gold);
-}
-
-.marks-table thead .col-roll { width: 55px; min-width: 55px; }
-.marks-table thead .col-name { width: 150px; min-width: 150px; text-align: left; padding-left: 12px; }
-.marks-table thead .col-sub { width: 90px; min-width: 90px; }
-.marks-table thead .col-gpa { width: 70px; min-width: 70px; }
-.marks-table thead .col-grade { width: 60px; min-width: 60px; }
-.marks-table thead .col-status { width: 70px; min-width: 70px; }
-
-.marks-table tbody tr {
-    border-bottom: 1px solid var(--border-light);
-    transition: 0.2s;
-}
-.marks-table tbody tr:hover { background: #fafbff; }
-.marks-table tbody tr:nth-child(even) { background: #fafbff; }
-.marks-table tbody tr:nth-child(even):hover { background: #f3f6fc; }
-
-.marks-table tbody td {
-    padding: 6px 6px;
-    text-align: center;
-    vertical-align: middle;
-    border-right: 1px solid var(--border-light);
-}
-.marks-table tbody td:last-child { border-right: none; }
-.marks-table tbody td.cell-roll {
-    font-weight: 700;
-    color: var(--navy);
-    font-family: 'Playfair Display', serif;
-    font-size: 13px;
-}
-.marks-table tbody td.cell-name {
-    text-align: left;
-    padding-left: 12px;
-    font-weight: 600;
-    font-size: 12.5px;
-    color: var(--dark);
-    white-space: nowrap;
-}
-
-/* Marks input field */
-.marks-input-wrap {
-    position: relative;
-    display: inline-block;
-    width: 100%;
-}
-.marks-input {
-    width: 100%;
-    padding: 5px 4px;
-    border-radius: 6px;
-    border: 1.5px solid #e5e7eb;
-    background: #fff;
-    font-size: 12px;
-    text-align: center;
-    outline: none;
-    transition: 0.2s;
-    font-family: 'Hind Siliguri', sans-serif;
-    font-weight: 600;
-    color: var(--navy);
-}
-.marks-input:focus {
-    border-color: var(--navy);
-    box-shadow: 0 0 0 3px rgba(10,22,85,0.1);
-    background: #fff;
-}
-.marks-input.filled { background: #f0fdf4; border-color: #86efac; }
-.marks-input.error { background: #fef2f2; border-color: #fca5a5; color: var(--danger); }
-.marks-input:disabled { background: #f3f4f6; color: #9ca3af; cursor: not-allowed; }
-
-.max-hint {
-    font-size: 9px;
-    color: var(--grey);
-    display: block;
-    line-height: 1;
-    margin-top: 1px;
-}
-
-.gpa-cell {
-    font-weight: 700;
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-    color: var(--navy);
-}
-.gpa-cell.high { color: #059669; }
-.gpa-cell.mid { color: #d97706; }
-.gpa-cell.low { color: #dc2626; }
-
-.grade-cell {
-    font-weight: 700;
-    font-size: 12px;
-    padding: 3px 8px;
-    border-radius: 6px;
-    display: inline-block;
-    min-width: 32px;
-}
-.grade-cell.Aplus { background: #dcfce7; color: #166534; }
-.grade-cell.A { background: #d1fae5; color: #065f46; }
-.grade-cell.Aminus { background: #dbeafe; color: #1e40af; }
-.grade-cell.B { background: #fef3c7; color: #92400e; }
-.grade-cell.C { background: #fed7aa; color: #9a3412; }
-.grade-cell.D { background: #fecaca; color: #991b1b; }
-.grade-cell.F { background: #7f1d1d; color: #fff; }
-
-/* Empty state */
-.empty-state {
-    text-align: center;
-    padding: 60px 20px;
-}
-.empty-state .icon-wrap {
-    width: 80px; height: 80px;
-    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
-    border-radius: 50%;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 16px;
-}
-.empty-state i { font-size: 36px; color: var(--navy); opacity: 0.35; }
-.empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
-.empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
-
-/* Skeleton */
-.skeleton-row {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-.skeleton-line {
-    height: 14px;
-    border-radius: 6px;
-    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-}
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-    .admin-header { padding: 10px 14px; }
-    .admin-header h4 { font-size: 14px; }
-    .main-wrap { padding: 14px 12px 50px; }
-    .page-title { font-size: 17px; }
-    .setup-card { padding: 14px; grid-template-columns: 1fr 1fr; }
-    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .stat-pill { padding: 11px 12px; }
-    .stat-pill .sp-value { font-size: 17px; }
-    .action-bar { flex-direction: column; align-items: stretch; }
-    .action-bar-left, .action-bar-right { justify-content: center; }
-    .marks-table thead .col-name { width: 110px; min-width: 110px; }
-    .marks-input { font-size: 11px; padding: 4px 2px; }
-}
-
-@media (max-width: 480px) {
-    .btn-header span { display: none; }
-    .setup-card { grid-template-columns: 1fr; }
-}
-
-/* Notice */
+/* INFO NOTICE */
 .info-notice {
     background: linear-gradient(135deg, #eff6ff, #dbeafe);
     border-left: 4px solid #3b82f6;
@@ -516,7 +663,23 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 10px;
 }
 .info-notice i { font-size: 16px; }
-.info-notice strong { color: #1e3a8a; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .main-wrap { padding: 14px 12px 60px; }
+    .page-title { font-size: 17px; }
+    .setup-card { padding: 14px; grid-template-columns: 1fr 1fr; }
+    .action-bar { flex-direction: column; align-items: stretch; }
+    .action-bar-left, .action-bar-right { justify-content: center; }
+    .marks-input-wrap { width: 60px; }
+    .marks-input { font-size: 12px; padding: 5px 3px; }
+    .book-header { padding: 12px 14px; }
+    .paper-header { padding: 8px 14px; }
+}
+@media (max-width: 480px) {
+    .btn-header span { display: none; }
+    .setup-card { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
@@ -541,149 +704,132 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     </div>
 </header>
 
-<!-- MAIN -->
 <div class="main-wrap">
 
-    <!-- Page Title -->
     <h4 class="page-title">
         <i class="fas fa-clipboard-list"></i> Result Entry
-        <span class="badge-total" id="totalStudents">0</span>
+        <span class="badge-total" id="totalStudents" style="background:rgba(10,22,85,0.08);color:var(--navy);font-size:11px;padding:3px 10px;border-radius:20px;font-weight:700;">0</span>
     </h4>
-    <p class="page-sub">একটি exam-এর জন্য student-দের marks এন্ট্রি করুন</p>
+    <p class="page-sub">শিক্ষার্থীদের প্রতিটি বই ও পত্রের নম্বর এন্ট্রি করুন</p>
 
-    <!-- Info Notice -->
     <div class="info-notice">
         <i class="fas fa-info-circle"></i>
         <div>
-            <strong>ব্যবহারবিধি:</strong> Class + Year + Branch + Group + Exam সিলেক্ট করে <strong>"Load Students"</strong> চাপুন। তারপর প্রতিটি student-এর CQ / MCQ / Practical marks দিন।
+            <strong>ব্যবহারবিধি:</strong> Exam + Class + Year + Branch + Group সিলেক্ট করে <strong>"Load Students"</strong> চাপুন। তারপর প্রতিটি বইয়ের ট্যাবে ক্লিক করে ১ম পত্র ও ২য় পত্রের নম্বর দিন। সব নম্বর দেওয়া হয়ে গেলে <strong>Publish</strong> করুন।
         </div>
     </div>
 
-    <!-- Setup Card -->
+    <!-- SETUP -->
     <div class="setup-card">
-        <div class="filter-item">
-            <label>Exam <span style="color:var(--danger);">*</span></label>
+        <div>
+            <label>Exam *</label>
             <select id="filterExam">
                 <option value="">Select Exam</option>
             </select>
         </div>
-        <div class="filter-item">
-            <label>Class <span style="color:var(--danger);">*</span></label>
+        <div>
+            <label>Class *</label>
             <select id="filterClass">
-                <option value="">Select Class</option>
+                <option value="">Select</option>
                 <option value="11">Class 11</option>
                 <option value="12">Class 12</option>
             </select>
         </div>
-        <div class="filter-item">
-            <label>Year <span style="color:var(--danger);">*</span></label>
+        <div>
+            <label>Year *</label>
             <select id="filterYear">
-                <option value="">Select Year</option>
+                <option value="">Select</option>
             </select>
         </div>
-        <div class="filter-item">
-            <label>Branch <span style="color:var(--danger);">*</span></label>
+        <div>
+            <label>Branch *</label>
             <select id="filterBranch">
-                <option value="">Select Branch</option>
+                <option value="">Select</option>
                 <option value="HSC">HSC</option>
                 <option value="BM">BM</option>
             </select>
         </div>
-        <div class="filter-item" id="groupFieldWrap">
-            <label>Group <span style="color:var(--danger);">*</span></label>
+        <div id="groupFieldWrap" style="display:none;">
+            <label>Group *</label>
             <select id="filterGroup">
-                <option value="">Select Group</option>
+                <option value="">Select</option>
             </select>
         </div>
-        <div class="filter-item">
+        <div>
             <button class="btn-primary-grad" id="btnLoadStudents" style="width:100%;">
                 <i class="fas fa-search"></i> Load Students
             </button>
         </div>
     </div>
 
-    <!-- Stats -->
-    <div class="stats-row">
-        <div class="stat-pill">
-            <div class="sp-icon navy"><i class="fas fa-users"></i></div>
-            <div class="sp-info">
-                <div class="sp-value" id="statTotal">0</div>
-                <div class="sp-label">Students</div>
-            </div>
-        </div>
-        <div class="stat-pill">
-            <div class="sp-icon gold"><i class="fas fa-pen"></i></div>
-            <div class="sp-info">
-                <div class="sp-value" id="statFilled">0</div>
-                <div class="sp-label">Filled</div>
-            </div>
-        </div>
-        <div class="stat-pill">
-            <div class="sp-icon green"><i class="fas fa-check-circle"></i></div>
-            <div class="sp-info">
-                <div class="sp-value" id="statPassed">0</div>
-                <div class="sp-label">Passed</div>
-            </div>
-        </div>
-        <div class="stat-pill">
-            <div class="sp-icon red"><i class="fas fa-times-circle"></i></div>
-            <div class="sp-info">
-                <div class="sp-value" id="statFailed">0</div>
-                <div class="sp-label">Failed</div>
-            </div>
-        </div>
+    <!-- EMPTY STATE -->
+    <div class="empty-state" id="emptyState">
+        <div class="icon-wrap"><i class="fas fa-clipboard-list"></i></div>
+        <h6>এখনো কোনো data লোড হয়নি</h6>
+        <p>উপরে Exam + Class + Year + Branch + Group সিলেক্ট করে "Load Students" চাপুন</p>
     </div>
 
-    <!-- Action Bar -->
-    <div class="action-bar" id="actionBar" style="display:none;">
-        <div class="action-bar-left">
-            <span class="status-badge draft" id="statusBadge">
-                <i class="fas fa-pen"></i> Draft
-            </span>
-        </div>
-        <div class="action-bar-right">
-            <button class="btn-secondary" id="btnFillPractical">
-                <i class="fas fa-bolt"></i> সব Practical = 25
-            </button>
-            <button class="btn-secondary" id="btnClearAll">
-                <i class="fas fa-eraser"></i> Clear All
-            </button>
-            <button class="btn-primary-grad" id="btnSaveDraft">
-                <i class="fas fa-save"></i> Save Draft
-            </button>
-            <button class="btn-gold" id="btnPublish">
-                <i class="fas fa-check-circle"></i> Publish
-            </button>
-        </div>
-    </div>
+    <!-- RESULT AREA -->
+    <div id="resultArea" style="display:none;">
 
-    <!-- Marks Table -->
-    <div class="marks-wrap">
-        <div class="marks-scroll">
-            <table class="marks-table" id="marksTable">
-                <thead id="tableHead">
-                    <!-- Dynamically generated -->
-                </thead>
-                <tbody id="tableBody">
-                    <tr><td colspan="10" style="padding:0;">
-                        <div class="skeleton-row">
-                            <div class="skeleton-line" style="width:80%;"></div>
-                            <div class="skeleton-line" style="width:90%;"></div>
-                            <div class="skeleton-line" style="width:85%;"></div>
-                        </div>
-                    </td></tr>
-                </tbody>
-            </table>
+        <!-- ACTION BAR -->
+        <div class="action-bar">
+            <div class="action-bar-left">
+                <span class="status-badge draft" id="statusBadge">
+                    <i class="fas fa-pen"></i> Draft
+                </span>
+            </div>
+            <div class="action-bar-right">
+                <button class="btn-secondary" id="btnFillPractical">
+                    <i class="fas fa-bolt"></i> সব Practical=25
+                </button>
+                <button class="btn-secondary" id="btnFillMCQ">
+                    <i class="fas fa-bolt"></i> সব MCQ=25
+                </button>
+                <button class="btn-danger" id="btnClearAll">
+                    <i class="fas fa-eraser"></i> Clear All
+                </button>
+                <button class="btn-primary-grad" id="btnSaveDraft">
+                    <i class="fas fa-save"></i> Save Draft
+                </button>
+                <button class="btn-gold" id="btnPublish">
+                    <i class="fas fa-check-circle"></i> Publish
+                </button>
+            </div>
         </div>
-    </div>
 
-    <!-- Empty state (before load) -->
-    <div class="marks-wrap" id="emptyState" style="display:none;">
-        <div class="empty-state">
-            <div class="icon-wrap"><i class="fas fa-clipboard-list"></i></div>
-            <h6>এখনো কোনো data লোড হয়নি</h6>
-            <p>উপরে Exam + Class + Year + Branch + Group সিলেক্ট করে "Load Students" চাপুন</p>
+        <!-- PROGRESS -->
+        <div class="progress-wrap">
+            <div class="progress-header">
+                <div class="ph-title">
+                    <i class="fas fa-chart-line"></i> Overall Progress
+                </div>
+                <div class="ph-percent" id="progressPercent">0%</div>
+            </div>
+            <div class="progress-bar-track">
+                <div class="progress-bar-fill" id="progressFill"></div>
+            </div>
+            <div class="progress-details">
+                <div><strong id="statStudents">0</strong> Students</div>
+                <div><strong id="statBooks">0</strong> Books</div>
+                <div><strong id="statPapers">0</strong> Papers</div>
+                <div><strong id="statFilled">0</strong> Filled</div>
+                <div><strong id="statPass">0</strong> Pass ✅</div>
+                <div><strong id="statFail">0</strong> Fail ❌</div>
+            </div>
         </div>
+
+        <!-- SUBJECT TABS -->
+        <div class="tabs-wrap">
+            <div class="subject-tabs" id="subjectTabs"></div>
+        </div>
+
+        <!-- BOOK SECTIONS -->
+        <div id="bookSections"></div>
+
+        <!-- GPA PANEL -->
+        <div class="gpa-panel" id="gpaPanel"></div>
+
     </div>
 
 </div>
@@ -694,7 +840,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/supabase.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/admin-results.js"></script>
+<script src="../js/gpa-calculator.js"></script>
+<script src="../js/admin-results.js?v=2"></script>
 
 </body>
 </html>

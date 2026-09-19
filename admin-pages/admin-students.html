@@ -222,7 +222,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     align-items: center;
     gap: 7px;
 }
-.btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.4); color: var(--navy); }
+.btn-gold:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(212,175,55,0.4); color: var(--navy); }
+.btn-gold:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* ============ STATS ============ */
 .stats-row {
@@ -434,19 +435,12 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .action-btn:hover { transform: scale(1.1); }
 .action-btn.edit { background: #e3f2fd; color: #1565c0; }
-.action-btn.edit:hover { background: #bbdefb; }
 .action-btn.subject { background: #fef3c7; color: #d97706; }
-.action-btn.subject:hover { background: #fde68a; }
 .action-btn.view { background: #f3e8ff; color: #7c3aed; }
-.action-btn.view:hover { background: #e9d5ff; }
 .action-btn.toggle { background: #dcfce7; color: #166534; }
-.action-btn.toggle:hover { background: #bbf7d0; }
 .action-btn.toggle.off { background: #fef2f2; color: #dc2626; }
-.action-btn.toggle.off:hover { background: #fecaca; }
-
-/* ⭐ NEW: Delete Button */
 .action-btn.delete { background: #7f1d1d; color: #fff; }
-.action-btn.delete:hover { background: #991b1b; transform: scale(1.1); }
+.action-btn.delete:hover { background: #991b1b; }
 
 .row-checkbox {
     width: 16px; height: 16px;
@@ -500,26 +494,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .empty-state i { font-size: 36px; color: var(--navy); opacity: 0.35; }
 .empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
 .empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
-
-.skeleton-row {
-    display: grid;
-    grid-template-columns: 40px 1fr 1fr 1fr 1fr 220px;
-    gap: 12px;
-    padding: 14px;
-    border-bottom: 1px solid var(--border-light);
-    align-items: center;
-}
-.skeleton-line {
-    height: 12px;
-    border-radius: 6px;
-    background: linear-gradient(90deg, #f0f2f5 25%, #e5e7eb 50%, #f0f2f5 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
-}
-@keyframes shimmer {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
-}
 
 /* ============ MODAL ============ */
 .fdc-modal-overlay {
@@ -587,7 +561,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     font-size: 18px;
     flex-shrink: 0;
     border: 1px solid rgba(242,210,123,0.3);
-    transition: 0.3s;
 }
 .fdc-modal-header h5 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
 .fdc-modal-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
@@ -805,9 +778,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .fdc-alert.info { background: #eff6ff; color: #1e40af; border-left: 3px solid #3b82f6; }
 .fdc-alert.warn { background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; }
 .fdc-alert.danger { background: #fef2f2; color: #991b1b; border-left: 3px solid #dc2626; }
+.fdc-alert.success { background: #dcfce7; color: #166534; border-left: 3px solid #10b981; }
 .fdc-alert i { margin-top: 2px; flex-shrink: 0; }
 
-/* ============ COPY MODE SELECTION ============ */
+/* ============ COPY MODE ============ */
 .copy-mode-section {
     background: #f8f9fc;
     border: 1.5px solid var(--border-light);
@@ -870,12 +844,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     cursor: pointer;
     flex-shrink: 0;
 }
-.copy-mode-option.selected.move input[type="radio"] {
-    accent-color: var(--danger);
-}
-.copy-mode-option.selected.replace input[type="radio"] {
-    accent-color: #7f1d1d;
-}
 
 .copy-mode-option .cmo-content { flex: 1; min-width: 0; }
 .copy-mode-option .cmo-title {
@@ -887,8 +855,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     gap: 6px;
     margin-bottom: 3px;
 }
-.copy-mode-option.selected.move .cmo-title { color: var(--danger); }
-.copy-mode-option.selected.replace .cmo-title { color: #7f1d1d; }
 .copy-mode-option .cmo-desc {
     font-size: 11.5px;
     color: var(--grey);
@@ -907,9 +873,180 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     display: none;
 }
 .move-warning.show { display: block; }
-.move-warning strong { color: #7f1d1d; }
 
-/* Bulk import textarea */
+/* ============ BULK IMPORT — NEW STYLES ============ */
+.bulk-step {
+    background: #fafbff;
+    border: 1px solid var(--border-light);
+    border-radius: 14px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+}
+.bulk-step-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.bulk-step-header .step-num {
+    width: 26px;
+    height: 26px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+.bulk-step-header .step-title {
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 13.5px;
+}
+
+.bulk-subsection {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--border-light);
+}
+.bulk-subsection-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.bulk-subsection-title i { color: var(--gold-dark); }
+
+.bulk-subject-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.bulk-subject-chips .chip {
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    color: var(--navy);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 12.5px;
+    border: 1.5px solid rgba(10,22,85,0.15);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.bulk-subject-chips .chip i { color: var(--success); }
+
+.bulk-subject-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 8px;
+}
+
+.bulk-subject-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+    user-select: none;
+}
+.bulk-subject-item:hover {
+    border-color: var(--navy);
+    background: #f5f7ff;
+}
+.bulk-subject-item.checked {
+    border-color: var(--navy);
+    background: linear-gradient(135deg, rgba(10,22,85,0.04), rgba(13,71,161,0.03));
+    box-shadow: 0 0 0 3px rgba(10,22,85,0.06);
+}
+.bulk-subject-item input[type="checkbox"],
+.bulk-subject-item input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--navy);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.bulk-subject-item .bsi-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+    line-height: 1.3;
+}
+
+.roll-range-section {
+    margin-top: 14px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1px dashed rgba(10,22,85,0.2);
+    border-radius: 10px;
+}
+.roll-range-header {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--navy);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+}
+.roll-range-header i { color: var(--gold-dark); }
+
+.bulk-summary {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border-left: 4px solid #3b82f6;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-top: 14px;
+}
+.bulk-summary-header {
+    font-weight: 700;
+    color: #1e40af;
+    font-size: 13px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.bulk-summary-body {
+    font-size: 12.5px;
+    color: #1e3a8a;
+    line-height: 1.8;
+}
+.bulk-summary-body strong { color: #1e40af; }
+
+.bulk-preview {
+    margin-top: 16px;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.bulk-preview-header {
+    background: var(--navy);
+    color: #fff;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 12.5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+.bulk-preview-body {
+    max-height: 320px;
+    overflow-y: auto;
+}
+
 .bulk-textarea {
     width: 100%;
     min-height: 160px;
@@ -929,7 +1066,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     width: 100%;
     border-collapse: collapse;
     font-size: 12px;
-    margin-top: 12px;
 }
 .preview-table th, .preview-table td {
     padding: 8px 10px;
@@ -942,10 +1078,25 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     color: var(--navy);
     font-size: 11px;
     text-transform: uppercase;
+    position: sticky;
+    top: 0;
 }
 .preview-table tbody tr:hover { background: #fafbff; }
+.preview-table tbody tr.warn { background: #fef3c7; }
+.preview-table tbody tr.error { background: #fef2f2; }
 
-/* Responsive */
+.preview-status-badge {
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 50px;
+    text-transform: uppercase;
+}
+.preview-status-badge.ok { background: #dcfce7; color: #166534; }
+.preview-status-badge.warn { background: #fef3c7; color: #92400e; }
+.preview-status-badge.error { background: #fee2e2; color: #991b1b; }
+
+/* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
     .admin-header { padding: 10px 14px; }
     .admin-header h4 { font-size: 14px; }
@@ -962,6 +1113,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     .fdc-modal-footer { padding: 14px 18px 18px; }
     .fdc-modal-header h5 { font-size: 14px; }
     .pagination-wrap { flex-direction: column; }
+    .bulk-subject-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 480px) {
@@ -1105,17 +1257,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     </tr>
                 </thead>
                 <tbody id="studentTableBody">
-                    <tr><td colspan="7" style="padding:0;">
-                        <div class="skeleton-row">
-                            <div class="skeleton-line" style="height:16px;"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line"></div>
-                            <div class="skeleton-line"></div>
-                        </div>
-                    </td></tr>
+                    <tr><td colspan="7" style="padding:20px;text-align:center;">লোড হচ্ছে...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -1223,14 +1365,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     </div>
                     <div class="subject-list" id="optionalList"></div>
                 </div>
-
-                <div class="subject-group-box" id="tradeBox" style="display:none;">
-                    <div class="sgb-header">
-                        <i class="fas fa-tools"></i> Trade Subject
-                        <span class="hint" id="tradeHint">১টি সিলেক্ট করুন</span>
-                    </div>
-                    <div class="subject-list" id="tradeList"></div>
-                </div>
             </div>
         </div>
 
@@ -1246,16 +1380,16 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 </div>
 
 <!-- ================================================== -->
-<!-- MODAL: Bulk Import -->
+<!-- MODAL: Smart Bulk Import -->
 <!-- ================================================== -->
 <div class="fdc-modal-overlay" id="bulkImportModal">
-    <div class="fdc-modal">
+    <div class="fdc-modal wide">
         <div class="fdc-modal-header">
             <div class="mh-left">
                 <div class="mh-icon"><i class="fas fa-file-import"></i></div>
                 <div>
-                    <h5>Bulk Import Students</h5>
-                    <small>Excel থেকে copy করে paste করুন</small>
+                    <h5>Bulk Student Import</h5>
+                    <small>একসাথে অনেক student যোগ করুন</small>
                 </div>
             </div>
             <button class="fdc-modal-close" id="closeBulkModal">
@@ -1264,53 +1398,149 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
 
         <div class="fdc-modal-body">
-            <div class="fdc-alert info">
-                <i class="fas fa-info-circle"></i>
-                <div>
-                    <strong>Format:</strong> প্রতিটি লাইনে — Roll, Name<br>
-                    যেমন: <code>101, মোঃ রহিম</code>
+
+            <!-- STEP 1 -->
+            <div class="bulk-step">
+                <div class="bulk-step-header">
+                    <span class="step-num">1</span>
+                    <span class="step-title">Common Settings (সব student-এর জন্য)</span>
+                </div>
+
+                <div class="row g-3 mt-1">
+                    <div class="col-md-4">
+                        <label class="fdc-form-label">Class <span class="req">*</span></label>
+                        <select class="fdc-select" id="bulkClass">
+                            <option value="">Select</option>
+                            <option value="11">Class 11</option>
+                            <option value="12">Class 12</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="fdc-form-label">Year <span class="req">*</span></label>
+                        <select class="fdc-select" id="bulkYear"></select>
+                    </div>
+                    <div class="col-md-4">
+                        <label class="fdc-form-label">Session <span class="opt">(auto)</span></label>
+                        <input type="text" class="fdc-input" id="bulkSession" readonly style="background:#f0f4f8;cursor:not-allowed;">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="fdc-form-label">Branch <span class="req">*</span></label>
+                        <select class="fdc-select" id="bulkBranch">
+                            <option value="">Select</option>
+                            <option value="HSC">HSC</option>
+                            <option value="BM">BM</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8" id="bulkGroupFieldWrap" style="display:none;">
+                        <label class="fdc-form-label">Group <span class="req">*</span></label>
+                        <select class="fdc-select" id="bulkGroup"></select>
+                    </div>
                 </div>
             </div>
 
-            <div class="row g-3 mb-3">
-                <div class="col-md-4">
-                    <label class="fdc-form-label">Class <span class="req">*</span></label>
-                    <select class="fdc-select" id="bulkClass">
-                        <option value="">Select</option>
-                        <option value="11">Class 11</option>
-                        <option value="12">Class 12</option>
-                    </select>
+            <!-- STEP 2 -->
+            <div class="bulk-step" id="bulkMainSubjectsStep" style="display:none;">
+                <div class="bulk-step-header">
+                    <span class="step-num">2</span>
+                    <span class="step-title">Main Subjects</span>
                 </div>
-                <div class="col-md-4">
-                    <label class="fdc-form-label">Year <span class="req">*</span></label>
-                    <select class="fdc-select" id="bulkYear"></select>
+
+                <div class="bulk-subsection" id="bulkCompulsorySection">
+                    <div class="bulk-subsection-title">
+                        <i class="fas fa-lock"></i> আবশ্যিক (Auto)
+                    </div>
+                    <div class="bulk-subject-chips" id="bulkCompulsoryChips"></div>
                 </div>
-                <div class="col-md-4">
-                    <label class="fdc-form-label">Branch <span class="req">*</span></label>
-                    <select class="fdc-select" id="bulkBranch">
-                        <option value="">Select</option>
-                        <option value="HSC">HSC</option>
-                        <option value="BM">BM</option>
-                    </select>
+
+                <div class="bulk-subsection" id="bulkMainChoiceSection">
+                    <div class="bulk-subsection-title" id="bulkMainChoiceTitle">
+                        <i class="fas fa-layer-group"></i> Main Subject
+                    </div>
+                    <div class="bulk-subject-grid" id="bulkMainChoiceList"></div>
                 </div>
             </div>
 
-            <label class="fdc-form-label">Paste Data <span class="req">*</span></label>
-            <textarea class="bulk-textarea" id="bulkData" placeholder="101, মোঃ রহিম উদ্দিন&#10;102, করিম উদ্দিন&#10;103, সজীব আহমেদ"></textarea>
+            <!-- STEP 3 -->
+            <div class="bulk-step" id="bulk4thSubjectStep" style="display:none;">
+                <div class="bulk-step-header">
+                    <span class="step-num">3</span>
+                    <span class="step-title">৪র্থ Subject (Default)</span>
+                </div>
 
-            <div id="bulkPreview" style="display:none;">
-                <label class="fdc-form-label" style="margin-top:14px;">
-                    Preview <span class="opt" id="bulkCount">(0 rows)</span>
-                </label>
-                <div style="max-height:220px;overflow-y:auto;border:1px solid var(--border-light);border-radius:10px;">
+                <select class="fdc-select" id="bulk4thSubject">
+                    <option value="">Select 4th Subject</option>
+                </select>
+            </div>
+
+            <!-- STEP 4 -->
+            <div class="bulk-step" id="bulkStudentsStep" style="display:none;">
+                <div class="bulk-step-header">
+                    <span class="step-num">4</span>
+                    <span class="step-title">Student List</span>
+                </div>
+
+                <div class="fdc-alert info" style="margin-bottom:12px;">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>Format:</strong><br>
+                        <code>Roll, Name</code> → সবাই default subjects পাবে<br>
+                        <code>Roll, Name, 4th Subject</code> → ৪র্থ subject আলাদা
+                    </div>
+                </div>
+
+                <textarea class="bulk-textarea" id="bulkData" 
+                    placeholder="101, মোঃ রহিম উদ্দিন&#10;102, করিম উদ্দিন&#10;103, সজীব আহমেদ, Biology&#10;104, নাসির হোসেন&#10;105, রফিক ইসলাম, Agricultural"></textarea>
+
+                <div class="roll-range-section">
+                    <div class="roll-range-header">
+                        <i class="fas fa-magic"></i>
+                        <span>Roll Range Auto-Generate (Optional)</span>
+                    </div>
+                    <div class="row g-2 mt-1">
+                        <div class="col-4">
+                            <input type="number" class="fdc-input" id="bulkRangeStart" placeholder="Start" min="1">
+                        </div>
+                        <div class="col-4">
+                            <input type="number" class="fdc-input" id="bulkRangeEnd" placeholder="End" min="1">
+                        </div>
+                        <div class="col-4">
+                            <button class="btn-secondary" id="btnGenerateRange" style="width:100%;">
+                                <i class="fas fa-plus"></i> Generate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUMMARY -->
+            <div class="bulk-summary" id="bulkSummary" style="display:none;">
+                <div class="bulk-summary-header">
+                    <i class="fas fa-clipboard-check"></i> Summary
+                </div>
+                <div class="bulk-summary-body" id="bulkSummaryBody"></div>
+            </div>
+
+            <!-- PREVIEW -->
+            <div class="bulk-preview" id="bulkPreview" style="display:none;">
+                <div class="bulk-preview-header">
+                    <i class="fas fa-eye"></i> Preview <span id="bulkPreviewCount"></span>
+                </div>
+                <div class="bulk-preview-body">
                     <table class="preview-table">
                         <thead>
-                            <tr><th style="width:60px;">#</th><th>Roll</th><th>Name</th></tr>
+                            <tr>
+                                <th style="width:40px;">#</th>
+                                <th style="width:70px;">Roll</th>
+                                <th>Name</th>
+                                <th>4th Subject</th>
+                                <th style="width:80px;">Status</th>
+                            </tr>
                         </thead>
                         <tbody id="bulkPreviewBody"></tbody>
                     </table>
                 </div>
             </div>
+
         </div>
 
         <div class="fdc-modal-footer">
@@ -1320,7 +1550,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
             <button class="btn-gold" id="previewBulkBtn">
                 <i class="fas fa-eye"></i> Preview
             </button>
-            <button class="btn-primary-grad" id="saveBulkBtn">
+            <button class="btn-primary-grad" id="saveBulkBtn" disabled>
                 <i class="fas fa-save"></i> Save All
             </button>
         </div>
@@ -1346,7 +1576,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
 
         <div class="fdc-modal-body">
-
             <div class="copy-mode-section">
                 <div class="copy-mode-title">
                     <i class="fas fa-cog"></i> কী করতে চান?
@@ -1355,61 +1584,40 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     <label class="copy-mode-option selected" id="modeCopyLabel" data-mode="copy">
                         <input type="radio" name="copyMode" value="copy" checked>
                         <div class="cmo-content">
-                            <div class="cmo-title">
-                                <i class="fas fa-copy"></i> Copy Only
-                            </div>
-                            <div class="cmo-desc">
-                                Source-এ থাকবে, target-এ duplicate হবে
-                            </div>
+                            <div class="cmo-title"><i class="fas fa-copy"></i> Copy Only</div>
+                            <div class="cmo-desc">Source-এ থাকবে, target-এ duplicate হবে</div>
                         </div>
                     </label>
                     <label class="copy-mode-option" id="modeMoveLabel" data-mode="move">
                         <input type="radio" name="copyMode" value="move">
                         <div class="cmo-content">
-                            <div class="cmo-title">
-                                <i class="fas fa-exchange-alt"></i> Move
-                            </div>
-                            <div class="cmo-desc">
-                                Source থেকে delete হবে, target-এ যাবে
-                            </div>
+                            <div class="cmo-title"><i class="fas fa-exchange-alt"></i> Move</div>
+                            <div class="cmo-desc">Source থেকে delete হবে, target-এ যাবে</div>
                         </div>
                     </label>
                     <label class="copy-mode-option" id="modeReplaceLabel" data-mode="replace">
                         <input type="radio" name="copyMode" value="replace">
                         <div class="cmo-content">
-                            <div class="cmo-title">
-                                <i class="fas fa-sync-alt"></i> Move & Replace
-                            </div>
-                            <div class="cmo-desc">
-                                Target-এর পুরোনো সব delete হবে, তারপর new move
-                            </div>
+                            <div class="cmo-title"><i class="fas fa-sync-alt"></i> Move & Replace</div>
+                            <div class="cmo-desc">Target-এর পুরোনো সব delete হবে, তারপর new move</div>
                         </div>
                     </label>
                 </div>
 
                 <div class="move-warning" id="moveWarning">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <strong>সতর্কতা:</strong> Source থেকে student-রা <strong>permanently delete</strong> হবে।
+                    <strong>সতর্কতা:</strong> Source থেকে student-রা permanently delete হবে।
                 </div>
-
                 <div class="move-warning" id="replaceWarning" style="background:#fef2f2;border-left-color:#7f1d1d;">
                     <i class="fas fa-exclamation-triangle" style="color:#7f1d1d;"></i>
-                    <strong style="color:#7f1d1d;">সতর্কতা:</strong> Target class-এর <strong>পুরোনো সব student delete</strong> হবে + Source থেকে <strong>সব move</strong> হবে। এটি undo করা যাবে না।
-                </div>
-            </div>
-
-            <div class="fdc-alert info">
-                <i class="fas fa-info-circle"></i>
-                <div>
-                    <strong>HSC:</strong> Subjects একই থাকে → as-is copy হবে।<br>
-                    <strong>BM:</strong> Subjects পরিবর্তন হয় → auto-swap হবে।
+                    <strong style="color:#7f1d1d;">সতর্কতা:</strong> Target class-এর পুরোনো সব student delete হবে + Source থেকে সব move হবে।
                 </div>
             </div>
 
             <div class="row g-3">
                 <div class="col-12">
                     <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">
-                        <i class="fas fa-sign-out-alt"></i> Source (যেখান থেকে)
+                        <i class="fas fa-sign-out-alt"></i> Source
                     </label>
                 </div>
                 <div class="col-md-4">
@@ -1435,7 +1643,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
                 <div class="col-12" style="margin-top:14px;">
                     <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">
-                        <i class="fas fa-sign-in-alt"></i> Target (যেখানে যাবে)
+                        <i class="fas fa-sign-in-alt"></i> Target
                     </label>
                 </div>
                 <div class="col-md-4">
@@ -1465,12 +1673,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                 <div style="font-size:12.5px;font-weight:700;color:#7f1d1d;margin-bottom:8px;">
                     <i class="fas fa-exclamation-triangle"></i> নিশ্চিত করার জন্য টাইপ করুন:
                 </div>
-                <div style="font-family:'Courier New',monospace;font-size:16px;font-weight:700;color:#7f1d1d;text-align:center;padding:8px;background:#fff;border-radius:6px;margin-bottom:10px;" id="replaceConfirmText">
-                    DELETE 2027
-                </div>
-                <input type="text" 
-                       id="replaceConfirmInput" 
-                       placeholder="এখানে টাইপ করুন..."
+                <div style="font-family:'Courier New',monospace;font-size:16px;font-weight:700;color:#7f1d1d;text-align:center;padding:8px;background:#fff;border-radius:6px;margin-bottom:10px;" id="replaceConfirmText">DELETE 2027</div>
+                <input type="text" id="replaceConfirmInput" placeholder="এখানে টাইপ করুন..."
                        style="width:100%;padding:10px 14px;border:2px solid #dc2626;border-radius:8px;font-family:'Courier New',monospace;font-size:14px;font-weight:700;text-align:center;text-transform:uppercase;outline:none;">
             </div>
         </div>
@@ -1487,7 +1691,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 </div>
 
 <!-- ================================================== -->
-<!-- MODAL: View Student Details -->
+<!-- MODAL: View Student -->
 <!-- ================================================== -->
 <div class="fdc-modal-overlay" id="viewStudentModal">
     <div class="fdc-modal">
@@ -1518,6 +1722,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/supabase.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/admin-students.js?v=7"></script>
+<script src="../js/admin-students.js?v=9"></script>
 </body>
 </html>
