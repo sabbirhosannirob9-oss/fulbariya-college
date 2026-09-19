@@ -339,7 +339,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     width: 100%;
     border-collapse: collapse;
     font-size: 13px;
-    min-width: 720px;
+    min-width: 780px;
 }
 .student-table thead {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
@@ -355,7 +355,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     white-space: nowrap;
 }
 .student-table thead th:first-child { width: 40px; }
-.student-table thead th:last-child { text-align: center; width: 180px; }
+.student-table thead th:last-child { text-align: center; width: 220px; }
 
 .student-table tbody tr {
     border-bottom: 1px solid var(--border-light);
@@ -444,6 +444,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .action-btn.toggle.off { background: #fef2f2; color: #dc2626; }
 .action-btn.toggle.off:hover { background: #fecaca; }
 
+/* ⭐ NEW: Delete Button */
+.action-btn.delete { background: #7f1d1d; color: #fff; }
+.action-btn.delete:hover { background: #991b1b; transform: scale(1.1); }
+
 .row-checkbox {
     width: 16px; height: 16px;
     cursor: pointer;
@@ -499,7 +503,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
 .skeleton-row {
     display: grid;
-    grid-template-columns: 40px 1fr 1fr 1fr 1fr 180px;
+    grid-template-columns: 40px 1fr 1fr 1fr 1fr 220px;
     gap: 12px;
     padding: 14px;
     border-bottom: 1px solid var(--border-light);
@@ -1097,7 +1101,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                         <th>Class</th>
                         <th>Branch</th>
                         <th>Group</th>
-                        <th style="text-align:center;">Actions</th>
+                        <th style="text-align:center;width:220px;">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="studentTableBody">
@@ -1324,7 +1328,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 </div>
 
 <!-- ================================================== -->
-<!-- MODAL: Copy / Move Year (v5 — 3 Modes) -->
+<!-- MODAL: Copy / Move Year -->
 <!-- ================================================== -->
 <div class="fdc-modal-overlay" id="copyYearModal">
     <div class="fdc-modal">
@@ -1343,7 +1347,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
         <div class="fdc-modal-body">
 
-            <!-- Mode Selection -->
             <div class="copy-mode-section">
                 <div class="copy-mode-title">
                     <i class="fas fa-cog"></i> কী করতে চান?
@@ -1395,7 +1398,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                 </div>
             </div>
 
-            <!-- Info -->
             <div class="fdc-alert info">
                 <i class="fas fa-info-circle"></i>
                 <div>
@@ -1404,7 +1406,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                 </div>
             </div>
 
-            <!-- Source -->
             <div class="row g-3">
                 <div class="col-12">
                     <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">
@@ -1432,7 +1433,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     </select>
                 </div>
 
-                <!-- Target -->
                 <div class="col-12" style="margin-top:14px;">
                     <label class="fdc-form-label" style="color:var(--navy);font-size:13px;">
                         <i class="fas fa-sign-in-alt"></i> Target (যেখানে যাবে)
@@ -1456,13 +1456,11 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                 </div>
             </div>
 
-            <!-- Preview -->
             <div class="fdc-alert warn" id="copyInfo" style="display:none;margin-top:16px;">
                 <i class="fas fa-users"></i>
                 <div id="copyInfoText"></div>
             </div>
 
-            <!-- Type to Confirm (Replace mode) -->
             <div id="replaceConfirmBox" style="display:none;margin-top:16px;padding:16px;background:#fef2f2;border:2px solid #dc2626;border-radius:12px;">
                 <div style="font-size:12.5px;font-weight:700;color:#7f1d1d;margin-bottom:8px;">
                     <i class="fas fa-exclamation-triangle"></i> নিশ্চিত করার জন্য টাইপ করুন:
@@ -1520,6 +1518,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/supabase.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/admin-students.js?v=6"></script>
+<script src="../js/admin-students.js?v=7"></script>
 </body>
 </html>
