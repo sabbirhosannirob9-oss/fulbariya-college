@@ -2,8 +2,8 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN RESULT ENTRY
  * Location: js/admin-results.js
- * Version: v2 — Book-wise + Auto GPA + Live Calculation
- * Depends: config.js, supabase.js, auth.js, admin-popup.js, gpa-calculator.js
+ * Version: v2.1 — Dynamic Years (Session Helper)
+ * Depends: config.js, supabase.js, auth.js, admin-popup.js, gpa-calculator.js, session-helper.js
  * =========================================================
  */
 
@@ -15,8 +15,8 @@
     // =========================================================
     let allExams = [];
     let loadedStudents = [];
-    let loadedSubjects = [];  // All subjects (with papers)
-    let bookGroups = [];       // Grouped by subject_name (book)
+    let loadedSubjects = [];
+    let bookGroups = [];
     let currentExam = null;
     let currentClass = '';
     let currentYear = '';
@@ -24,9 +24,8 @@
     let currentGroup = '';
     let resultStatus = 'draft';
     let hasUnsavedChanges = false;
-    let activeTab = 0;         // Currently active book tab
+    let activeTab = 0;
 
-    // Marks data: { studentId_subjectId: { cq, mcq, practical, board, continuous } }
     let marksData = {};
 
     // =========================================================
@@ -126,18 +125,19 @@
     }
 
     // =========================================================
-    // LOAD YEAR OPTIONS
+    // ✅ LOAD YEAR OPTIONS — via Session Helper (Dynamic)
     // =========================================================
-    function loadYearOptions() {
-        const currentYear = new Date().getFullYear();
-        const years = [];
-        for (let i = -2; i <= 2; i++) years.push(currentYear + i);
-
-        const select = $('filterYear');
-        select.innerHTML = '<option value="">Select Year</option>';
-        years.forEach(y => {
-            select.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
+    async function loadYearOptions() {
+        await window.FDCSession.fillYearDropdown('filterYear', {
+            autoSelectCurrent: false
         });
+
+        // Set current year as default
+        const cy = window.FDCSession.getCurrentYear();
+        const el = $('filterYear');
+        if (el) el.value = cy;
+
+        console.log('✅ Year options loaded (dynamic)');
     }
 
     // =========================================================
@@ -193,7 +193,6 @@
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
 
         try {
-            // Load students
             let stuQuery = window.FDC_SUPABASE
                 .from('students')
                 .select('*')
@@ -216,7 +215,6 @@
                 return;
             }
 
-            // Load subjects for this class+branch+group
             const { data: subjects, error: subErr } = await window.FDC_SUPABASE
                 .from('subjects')
                 .select('*')
@@ -230,14 +228,12 @@
 
             if (subErr) throw subErr;
 
-            // Filter subjects based on group
             let filteredSubjects = (subjects || []).filter(s => {
                 if (s.subject_type === 'compulsory' && !s.group_name) return true;
                 if (s.group_name === currentGroup) return true;
                 return false;
             });
 
-            // Only subjects that students actually have (optional/group)
             const studentSubjectIds = await getStudentSubjectIds();
 
             loadedSubjects = filteredSubjects.filter(s => {
@@ -245,13 +241,9 @@
                 return studentSubjectIds.has(s.id) || studentSubjectIds.size === 0;
             });
 
-            // Group subjects by book (subject_name)
             buildBookGroups();
-
-            // Load existing marks
             await loadExistingMarks();
 
-            // Render
             renderTabs();
             renderBookSections();
             updateProgress();
@@ -308,12 +300,10 @@
             map.get(key).papers.push(s);
         });
 
-        // Sort papers within each book
         map.forEach(b => {
             b.papers.sort((a, c) => (a.paper_number || 1) - (c.paper_number || 1));
         });
 
-        // Convert to array and order: compulsory → group → optional
         const typeOrder = { compulsory: 0, group: 1, optional: 2 };
         bookGroups = Array.from(map.values()).sort((a, b) => {
             const ta = typeOrder[a.subject_type] ?? 99;
@@ -387,9 +377,7 @@
             const status = getBookFillStatus(book);
             const statusClass = status.complete ? 'done' : '';
             const statusIcon = status.complete ? '<i class="fas fa-check-circle"></i>' : '<i class="fas fa-hourglass-half"></i>';
-            const statusText = status.complete
-                ? `সম্পূর্ণ`
-                : `${status.filled}/${status.total}`;
+            const statusText = status.complete ? `সম্পূর্ণ` : `${status.filled}/${status.total}`;
 
             html += `<div class="subject-tab ${idx === activeTab ? 'active' : ''}" data-idx="${idx}">
                 <div class="st-name">${escapeHtml(book.subject_name)}</div>
@@ -399,7 +387,6 @@
 
         wrap.innerHTML = html;
 
-        // Attach events
         wrap.querySelectorAll('.subject-tab').forEach(tab => {
             tab.addEventListener('click', function () {
                 activeTab = parseInt(this.dataset.idx);
@@ -455,7 +442,7 @@
 
         bookGroups.forEach((book, bookIdx) => {
             const isActive = bookIdx === activeTab;
-            if (!isActive) return; // Only show active tab
+            if (!isActive) return;
 
             const status = getBookFillStatus(book);
 
@@ -471,14 +458,12 @@
                     </div>
                 </div>`;
 
-            // Render each paper
             book.papers.forEach((paper, paperIdx) => {
                 const paperLabel = book.papers.length > 1
                     ? `${paper.paper_number === 1 ? '১ম' : '২য়'} পত্র`
                     : 'Single Paper';
 
                 const paperStatus = getPaperFillStatus(book, paper);
-                const marksSummary = getMarksSummary(book, paper);
 
                 html += `<div class="paper-block">
                     <div class="paper-header">
@@ -519,8 +504,6 @@
         });
 
         container.innerHTML = html;
-
-        // Attach input events
         attachInputEvents();
     }
 
@@ -561,7 +544,6 @@
                 if (paper.has_practical) inputsHtml += renderInput(stu.id, paper.id, 'practical', m.practical, paper.practical_marks, 'practical');
             }
 
-            // Calculate current result
             const result = calculatePaperFromData(book, paper, m);
             const rowClass = result.status === 'fail' ? 'fail' : (result.status === 'pass' ? 'pass' : '');
 
@@ -662,8 +644,6 @@
     // =========================================================
     // ATTACH INPUT EVENTS
     // =========================================================
-    let inputEventsAttached = false;
-
     function attachInputEvents() {
         const container = $('bookSections');
 
@@ -673,7 +653,6 @@
 
             input.addEventListener('input', handleInputChange);
             input.addEventListener('keydown', handleInputKeydown);
-            input.addEventListener('blur', handleInputBlur);
         });
     }
 
@@ -710,16 +689,9 @@
 
         input.classList.toggle('filled', input.value !== '');
 
-        // Update total/percent/grade for this paper
         updatePaperCell(studentId, subjectId);
-
-        // Update row color
         updateRowStatus(studentId);
-
-        // Update progress and tabs
         updateProgress();
-
-        // Mark unsaved
         markUnsaved();
     }
 
@@ -740,15 +712,7 @@
     }
 
     // =========================================================
-    // HANDLE INPUT BLUR — AUTO TAB AFTER 2 DIGITS
-    // =========================================================
-    function handleInputBlur(e) {
-        const input = e.target;
-        // Auto-move handled by input event, this is for validation
-    }
-
-    // =========================================================
-    // UPDATE PAPER CELL (total/percent/grade)
+    // UPDATE PAPER CELL
     // =========================================================
     function updatePaperCell(studentId, subjectId) {
         const book = bookGroups.find(b => b.papers.some(p => p.id === subjectId));
@@ -782,7 +746,6 @@
         const row = document.querySelector(`tr[data-student-id="${studentId}"]`);
         if (!row) return;
 
-        // Determine overall status from all subjects for this student
         const studentStatus = calculateStudentOverallStatus(studentId);
         row.classList.remove('pass', 'fail');
         if (studentStatus === 'pass') row.classList.add('pass');
@@ -790,16 +753,12 @@
     }
 
     // =========================================================
-    // CALCULATE STUDENT OVERALL STATUS (for row color)
+    // CALCULATE STUDENT OVERALL STATUS
     // =========================================================
     function calculateStudentOverallStatus(studentId) {
         const subjects = [];
 
         bookGroups.forEach(book => {
-            if (book.subject_type === 'optional') {
-                // Will add later
-            }
-
             const paperResults = [];
             let hasAnyData = false;
 
@@ -858,7 +817,6 @@
                 });
             });
 
-            // Student status
             const status = calculateStudentOverallStatus(stu.id);
             if (status === 'pass') passCount++;
             else if (status === 'fail') failCount++;
@@ -869,7 +827,6 @@
         $('progressPercent').textContent = percent + '%';
         $('progressFill').style.width = percent + '%';
 
-        // Color
         const fill = $('progressFill');
         fill.classList.remove('warn', 'low');
         if (percent < 30) fill.classList.add('low');
@@ -882,10 +839,8 @@
         $('statPass').textContent = passCount;
         $('statFail').textContent = failCount;
 
-        // Update tabs
         renderTabs();
 
-        // Update book header count
         bookGroups.forEach((book, idx) => {
             if (idx !== activeTab) return;
             const status = getBookFillStatus(book);
@@ -898,7 +853,6 @@
             }
         });
 
-        // Enable/disable Publish
         const publishBtn = $('btnPublish');
         publishBtn.disabled = (percent !== 100);
     }
@@ -926,13 +880,6 @@
         });
 
         return { total, filled, complete: total > 0 && total === filled };
-    }
-
-    // =========================================================
-    // GET MARKS SUMMARY
-    // =========================================================
-    function getMarksSummary(book, paper) {
-        return ''; // placeholder
     }
 
     // =========================================================
@@ -1040,7 +987,6 @@
                     const status = publish ? 'published' : 'draft';
 
                     for (const stu of loadedStudents) {
-                        // Check if result exists
                         const { data: existingResult } = await window.FDC_SUPABASE
                             .from('results')
                             .select('id')
@@ -1050,8 +996,6 @@
                             .maybeSingle();
 
                         let resultId;
-
-                        // Calculate overall GPA
                         const gpaData = calculateStudentGPAForSave(stu.id);
 
                         const resultData = {
@@ -1070,27 +1014,16 @@
 
                         if (existingResult) {
                             resultId = existingResult.id;
-                            await window.FDC_SUPABASE
-                                .from('results')
-                                .update(resultData)
-                                .eq('id', resultId);
+                            await window.FDC_SUPABASE.from('results').update(resultData).eq('id', resultId);
                         } else {
                             const { data: inserted, error: insErr } = await window.FDC_SUPABASE
-                                .from('results')
-                                .insert([resultData])
-                                .select()
-                                .single();
+                                .from('results').insert([resultData]).select().single();
                             if (insErr) throw insErr;
                             resultId = inserted.id;
                         }
 
-                        // Delete old details
-                        await window.FDC_SUPABASE
-                            .from('result_details')
-                            .delete()
-                            .eq('result_id', resultId);
+                        await window.FDC_SUPABASE.from('result_details').delete().eq('result_id', resultId);
 
-                        // Insert new details
                         const detailsRecords = [];
 
                         bookGroups.forEach(book => {
@@ -1116,9 +1049,7 @@
                                         paper_number: paper.paper_number || 1,
                                         board_marks: board,
                                         continuous_marks: cont,
-                                        cq_marks: 0,
-                                        mcq_marks: 0,
-                                        practical_marks: 0,
+                                        cq_marks: 0, mcq_marks: 0, practical_marks: 0,
                                         total_marks: total,
                                         grade: failed ? 'F' : grade,
                                         grade_point: failed ? 0 : gp,
@@ -1150,9 +1081,7 @@
                                         exam_id: currentExam.id,
                                         subject_type: book.subject_type,
                                         paper_number: paper.paper_number || 1,
-                                        cq_marks: cq,
-                                        mcq_marks: mcq,
-                                        practical_marks: pr,
+                                        cq_marks: cq, mcq_marks: mcq, practical_marks: pr,
                                         total_marks: total,
                                         grade: pStatus === 'fail' ? 'F' : grade,
                                         grade_point: pStatus === 'fail' ? 0 : gp,
@@ -1164,8 +1093,7 @@
 
                         if (detailsRecords.length > 0) {
                             const { error: detErr } = await window.FDC_SUPABASE
-                                .from('result_details')
-                                .insert(detailsRecords);
+                                .from('result_details').insert(detailsRecords);
                             if (detErr) throw detErr;
                         }
                     }
@@ -1286,9 +1214,15 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Results v2 initializing...');
+        console.log('🚀 Admin Results v2.1 initializing...');
 
-        loadYearOptions();
+        if (!window.FDCSession) {
+            console.warn('⚠️ Session helper not loaded, retrying...');
+            setTimeout(init, 300);
+            return;
+        }
+
+        await loadYearOptions();
         attachEvents();
 
         waitForSupabase(async function () {
@@ -1298,7 +1232,7 @@
             await loadAdminInfo();
             await loadExams();
 
-            console.log('✅ Admin Results v2 ready');
+            console.log('✅ Admin Results v2.1 ready');
         });
     }
 

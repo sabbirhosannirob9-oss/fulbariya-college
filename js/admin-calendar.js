@@ -1,17 +1,12 @@
 /**
- * =========================================================
  * FULBARIYA COLLEGE — ADMIN CALENDAR MANAGEMENT
  * Location: js/admin-calendar.js
- * Depends: config.js, supabase.js, auth.js, admin-popup.js
- * =========================================================
+ * Version: v2.0 — Dynamic Years (Session Helper)
  */
 
 (function () {
     "use strict";
 
-    // =========================================================
-    // STATE
-    // =========================================================
     let allEvents = [];
     let filteredEvents = [];
     let editingId = null;
@@ -27,9 +22,6 @@
 
     const MONTHS_BN = ['জানু', 'ফেব্রু', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টে', 'অক্টো', 'নভে', 'ডিসে'];
 
-    // =========================================================
-    // DOM HELPERS
-    // =========================================================
     const $ = (id) => document.getElementById(id);
 
     function escapeHtml(str) {
@@ -45,9 +37,6 @@
         return d.toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    // =========================================================
-    // WAIT FOR SUPABASE
-    // =========================================================
     function waitForSupabase(cb) {
         if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) return cb();
         window.addEventListener('fdc:supabase-ready', cb);
@@ -60,9 +49,6 @@
         }, 500);
     }
 
-    // =========================================================
-    // ADMIN INFO
-    // =========================================================
     async function loadAdminInfo() {
         try {
             const result = await window.FDCAuth.getCurrentAdmin();
@@ -79,9 +65,6 @@
         } catch (e) { console.warn('Admin info error:', e); }
     }
 
-    // =========================================================
-    // LOGOUT
-    // =========================================================
     window.handleLogout = function () {
         window.fdcConfirm(
             'আপনি কি লগআউট করতে চান?',
@@ -101,31 +84,20 @@
         );
     };
 
-    // =========================================================
-    // LOAD YEAR OPTIONS
-    // =========================================================
-    function loadYearOptions() {
-        const currentYear = new Date().getFullYear();
-        const years = [];
-        for (let i = -1; i <= 2; i++) years.push(currentYear + i);
-
-        const filterYear = $('filterYear');
-        const eventYear = $('eventYear');
-
-        filterYear.innerHTML = '<option value="">All Years</option>';
-        eventYear.innerHTML = '';
-
-        years.forEach(y => {
-            filterYear.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
-            eventYear.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
+    // ✅ Year options via helper
+    async function loadYearOptions() {
+        await window.FDCSession.fillYearDropdown('filterYear', {
+            includeAll: true,
+            allLabel: 'All Years'
         });
 
-        eventYear.value = currentYear;
+        await window.FDCSession.fillYearDropdown('eventYear', {
+            autoSelectCurrent: true
+        });
+
+        console.log('✅ Year options loaded');
     }
 
-    // =========================================================
-    // LOAD ALL EVENTS
-    // =========================================================
     async function loadAllEvents() {
         try {
             const { data, error } = await window.FDC_SUPABASE
@@ -139,6 +111,11 @@
             console.log('✅ Loaded events:', allEvents.length);
 
             $('totalEvents').textContent = allEvents.length;
+
+            // Refresh years
+            window.FDCSession.clearCache();
+            await loadYearOptions();
+
             applyFilters();
         } catch (e) {
             console.error('Load events error:', e);
@@ -146,9 +123,6 @@
         }
     }
 
-    // =========================================================
-    // APPLY FILTERS
-    // =========================================================
     function applyFilters() {
         const fYear = $('filterYear').value;
         const fType = $('filterType').value;
@@ -156,7 +130,7 @@
         const search = $('searchInput').value.toLowerCase().trim();
 
         filteredEvents = allEvents.filter(ev => {
-            if (fYear && ev.year !== fYear) return false;
+            if (fYear && String(ev.year) !== String(fYear)) return false;
             if (fType && ev.event_type !== fType) return false;
             if (fStatus === 'published' && !ev.is_published) return false;
             if (fStatus === 'unpublished' && ev.is_published) return false;
@@ -170,9 +144,6 @@
         renderEvents();
     }
 
-    // =========================================================
-    // RENDER EVENTS
-    // =========================================================
     function renderEvents() {
         const list = $('eventsList');
 
@@ -209,7 +180,6 @@
                     <div class="day">${day}</div>
                     <div class="month">${month}</div>
                 </div>
-
                 <div class="event-body">
                     <h4>
                         ${escapeHtml(ev.title)}
@@ -224,15 +194,14 @@
                         <span><i class="fas fa-calendar-check"></i> ${ev.year}</span>
                     </div>
                 </div>
-
                 <div class="event-actions">
                     <button class="action-btn edit" data-action="edit" data-id="${ev.id}" title="Edit">
                         <i class="fas fa-edit"></i>
                     </button>
-                    <button class="action-btn toggle ${ev.is_published ? '' : 'off'}" data-action="toggle" data-id="${ev.id}" title="${ev.is_published ? 'Unpublish' : 'Publish'}">
+                    <button class="action-btn toggle ${ev.is_published ? '' : 'off'}" data-action="toggle" data-id="${ev.id}">
                         <i class="fas fa-${ev.is_published ? 'eye-slash' : 'eye'}"></i>
                     </button>
-                    <button class="action-btn delete" data-action="delete" data-id="${ev.id}" title="Delete">
+                    <button class="action-btn delete" data-action="delete" data-id="${ev.id}">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -242,9 +211,6 @@
         list.innerHTML = html;
     }
 
-    // =========================================================
-    // MODAL: OPEN / CLOSE
-    // =========================================================
     function openModal(id) {
         const el = $(id);
         if (el) el.classList.add('show');
@@ -257,12 +223,8 @@
         document.body.style.overflow = '';
     }
 
-    // =========================================================
-    // ADD EVENT
-    // =========================================================
     function openAddEventModal() {
         editingId = null;
-
         $('editId').value = '';
         $('modalTitle').textContent = 'Add New Event';
         $('modalSub').textContent = 'ইভেন্টের তথ্য পূরণ করুন';
@@ -271,7 +233,7 @@
 
         $('eventTitle').value = '';
         $('eventType').value = '';
-        $('eventYear').value = new Date().getFullYear();
+        $('eventYear').value = window.FDCSession.getCurrentYear();
         $('eventStart').value = '';
         $('eventEnd').value = '';
         $('eventDescription').value = '';
@@ -280,15 +242,11 @@
         openModal('eventModal');
     }
 
-    // =========================================================
-    // EDIT EVENT
-    // =========================================================
     function openEditEventModal(id) {
         const ev = allEvents.find(e => e.id === id);
         if (!ev) return;
 
         editingId = id;
-
         $('editId').value = id;
         $('modalTitle').textContent = 'Edit Event';
         $('modalSub').textContent = ev.title;
@@ -297,7 +255,7 @@
 
         $('eventTitle').value = ev.title || '';
         $('eventType').value = ev.event_type || '';
-        $('eventYear').value = ev.year || new Date().getFullYear();
+        $('eventYear').value = ev.year || window.FDCSession.getCurrentYear();
         $('eventStart').value = ev.start_date || '';
         $('eventEnd').value = ev.end_date || '';
         $('eventDescription').value = ev.description || '';
@@ -306,9 +264,6 @@
         openModal('eventModal');
     }
 
-    // =========================================================
-    // SAVE EVENT
-    // =========================================================
     async function saveEvent() {
         const title = $('eventTitle').value.trim();
         const eventType = $('eventType').value;
@@ -318,15 +273,11 @@
         const description = $('eventDescription').value.trim();
         const isPublished = $('eventPublished').checked;
 
-        // Validation
         if (!title) return window.fdcWarning('Event title দিতে হবে।');
         if (!eventType) return window.fdcWarning('Event type সিলেক্ট করুন।');
         if (!year) return window.fdcWarning('Year সিলেক্ট করুন।');
         if (!start) return window.fdcWarning('Start date দিতে হবে।');
-
-        if (end && end < start) {
-            return window.fdcWarning('End date, Start date-এর আগে হতে পারে না।');
-        }
+        if (end && end < start) return window.fdcWarning('End date, Start date-এর আগে হতে পারে না।');
 
         const btn = $('saveBtn');
         btn.disabled = true;
@@ -347,25 +298,22 @@
             let result;
             if (editingId) {
                 result = await window.FDC_SUPABASE
-                    .from('calendar_events')
-                    .update(payload)
-                    .eq('id', editingId)
-                    .select();
+                    .from('calendar_events').update(payload).eq('id', editingId).select();
             } else {
                 result = await window.FDC_SUPABASE
-                    .from('calendar_events')
-                    .insert([payload])
-                    .select();
+                    .from('calendar_events').insert([payload]).select();
             }
 
             if (result.error) throw result.error;
 
-            window.fdcSuccess(editingId ? 'Event updated successfully!' : 'Event created successfully!');
+            window.FDCSession.clearCache();
+
+            window.fdcSuccess(editingId ? 'Event updated!' : 'Event created!');
             closeModal('eventModal');
             await loadAllEvents();
 
         } catch (e) {
-            console.error('Save event error:', e);
+            console.error('Save error:', e);
             window.fdcError('Save failed: ' + e.message);
         } finally {
             btn.disabled = false;
@@ -373,79 +321,54 @@
         }
     }
 
-    // =========================================================
-    // DELETE EVENT
-    // =========================================================
     async function deleteEvent(id) {
         const ev = allEvents.find(e => e.id === id);
         if (!ev) return;
 
         window.fdcConfirm(
-            `"${ev.title}" কে delete করা হবে? এটা ফিরিয়ে আনা যাবে না।`,
+            `"${ev.title}" কে delete করা হবে?`,
             async function () {
                 try {
                     const { error } = await window.FDC_SUPABASE
-                        .from('calendar_events')
-                        .delete()
-                        .eq('id', id);
+                        .from('calendar_events').delete().eq('id', id);
                     if (error) throw error;
-                    window.fdcSuccess('Event deleted successfully!');
+                    window.fdcSuccess('Event deleted!');
                     await loadAllEvents();
                 } catch (e) {
                     window.fdcError('Delete failed: ' + e.message);
                 }
             },
-            {
-                title: 'Delete Event',
-                confirmText: 'Yes, Delete',
-                confirmType: 'danger'
-            }
+            { title: 'Delete Event', confirmText: 'Yes, Delete', confirmType: 'danger' }
         );
     }
 
-    // =========================================================
-    // TOGGLE PUBLISH
-    // =========================================================
     async function togglePublish(id) {
         const ev = allEvents.find(e => e.id === id);
         if (!ev) return;
 
         const newState = !ev.is_published;
-        const action = newState ? 'Publish' : 'Unpublish';
-
         try {
             const { error } = await window.FDC_SUPABASE
-                .from('calendar_events')
-                .update({ is_published: newState })
-                .eq('id', id);
-
+                .from('calendar_events').update({ is_published: newState }).eq('id', id);
             if (error) throw error;
-            window.fdcSuccess(`Event ${action}ed successfully!`);
+            window.fdcSuccess(`Event ${newState ? 'published' : 'unpublished'}!`);
             await loadAllEvents();
         } catch (e) {
             window.fdcError('Failed: ' + e.message);
         }
     }
 
-    // =========================================================
-    // EVENT LISTENERS
-    // =========================================================
     function attachEvents() {
-        // Add button
         $('btnAddEvent').addEventListener('click', openAddEventModal);
-
-        // Modal
         $('closeModal').addEventListener('click', () => closeModal('eventModal'));
         $('cancelBtn').addEventListener('click', () => closeModal('eventModal'));
         $('saveBtn').addEventListener('click', saveEvent);
 
-        // Filters
         ['filterYear', 'filterType', 'filterStatus'].forEach(id => {
             $(id).addEventListener('change', applyFilters);
         });
         $('searchInput').addEventListener('input', applyFilters);
 
-        // Event list actions (delegated)
         $('eventsList').addEventListener('click', function (e) {
             const btn = e.target.closest('[data-action]');
             if (!btn) return;
@@ -457,7 +380,6 @@
             else if (action === 'toggle') togglePublish(id);
         });
 
-        // Modal backdrop
         document.querySelectorAll('.fdc-modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function (e) {
                 if (e.target === this) {
@@ -467,24 +389,16 @@
             });
         });
 
-        // ESC key
         document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
-                document.querySelectorAll('.fdc-modal-overlay.show').forEach(m => {
-                    m.classList.remove('show');
-                });
+                document.querySelectorAll('.fdc-modal-overlay.show').forEach(m => m.classList.remove('show'));
                 document.body.style.overflow = '';
             }
         });
     }
 
-    // =========================================================
-    // INIT
-    // =========================================================
     async function init() {
-        console.log('🚀 Admin Calendar initializing...');
-
-        loadYearOptions();
+        console.log('🚀 Admin Calendar v2.0 initializing...');
         attachEvents();
 
         waitForSupabase(async function () {
@@ -492,6 +406,7 @@
             if (!admin) return;
 
             await loadAdminInfo();
+            await loadYearOptions();
             await loadAllEvents();
 
             console.log('✅ Admin Calendar ready');
@@ -503,5 +418,4 @@
     } else {
         init();
     }
-
 })();

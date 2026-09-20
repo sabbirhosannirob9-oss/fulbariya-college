@@ -1,19 +1,12 @@
 /**
- * =========================================================
  * FULBARIYA COLLEGE — PUBLIC ACADEMIC CALENDAR
  * Location: js/academic-hub.js
- * Version: v2.0 — Calendar only (Routine tab removed)
- * Depends: config.js, supabase.js
- * Table: calendar_events
- * =========================================================
+ * Version: v3.0 — Dynamic Years (Session Helper)
  */
 
 (function () {
     "use strict";
 
-    // =========================================================
-    // STATE
-    // =========================================================
     let allEvents = [];
     let filteredEvents = [];
 
@@ -28,9 +21,6 @@
 
     const MONTHS_BN = ['জানু', 'ফেব্রু', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টে', 'অক্টো', 'নভে', 'ডিসে'];
 
-    // =========================================================
-    // DOM HELPERS
-    // =========================================================
     const $ = (id) => document.getElementById(id);
 
     function escapeHtml(str) {
@@ -48,15 +38,11 @@
 
     function getTodayStr() {
         const d = new Date();
-        const y = d.getFullYear();
-        const m = String(d.getMonth() + 1).padStart(2, '0');
-        const day = String(d.getDate()).padStart(2, '0');
-        return y + '-' + m + '-' + day;
+        return d.getFullYear() + '-' +
+            String(d.getMonth() + 1).padStart(2, '0') + '-' +
+            String(d.getDate()).padStart(2, '0');
     }
 
-    // =========================================================
-    // WAIT FOR SUPABASE
-    // =========================================================
     function waitForSupabase(cb) {
         if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) return cb();
         window.addEventListener('fdc:supabase-ready', cb);
@@ -69,26 +55,14 @@
         }, 500);
     }
 
-    // =========================================================
-    // YEAR OPTIONS
-    // =========================================================
-    function loadYearOptions() {
-        const currentYear = new Date().getFullYear();
-        const years = [];
-        for (let i = -1; i <= 2; i++) years.push(currentYear + i);
-
-        const filterYear = $('calFilterYear');
-        if (!filterYear) return;
-
-        filterYear.innerHTML = '<option value="">All Years</option>';
-        years.forEach(y => {
-            filterYear.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
+    async function loadYearOptions() {
+        await window.FDCSession.fillYearDropdown('calFilterYear', {
+            includeAll: true,
+            allLabel: 'All Years'
         });
+        console.log('✅ Year options loaded');
     }
 
-    // =========================================================
-    // LOAD CALENDAR EVENTS
-    // =========================================================
     async function loadEvents() {
         try {
             const { data, error } = await window.FDC_SUPABASE
@@ -105,10 +79,13 @@
             const countEl = $('calendarCount');
             if (countEl) countEl.textContent = allEvents.length;
 
+            window.FDCSession.clearCache();
+            await loadYearOptions();
+
             updateCalendarStats();
             applyCalendarFilters();
         } catch (e) {
-            console.error('Load events error:', e);
+            console.error('Load error:', e);
             const list = $('eventsList');
             if (list) {
                 list.innerHTML = `<div class="empty-state">
@@ -120,25 +97,13 @@
         }
     }
 
-    // =========================================================
-    // CALENDAR STATS
-    // =========================================================
     function updateCalendarStats() {
-        const total = allEvents.length;
-        const exam = allEvents.filter(e => e.event_type === 'exam').length;
-        const holiday = allEvents.filter(e => e.event_type === 'holiday').length;
-        const event = allEvents.filter(e => e.event_type === 'event').length;
-
-        const el = (id) => $(id);
-        if (el('calStatTotal')) el('calStatTotal').textContent = total;
-        if (el('calStatExam')) el('calStatExam').textContent = exam;
-        if (el('calStatHoliday')) el('calStatHoliday').textContent = holiday;
-        if (el('calStatEvent')) el('calStatEvent').textContent = event;
+        if ($('calStatTotal')) $('calStatTotal').textContent = allEvents.length;
+        if ($('calStatExam')) $('calStatExam').textContent = allEvents.filter(e => e.event_type === 'exam').length;
+        if ($('calStatHoliday')) $('calStatHoliday').textContent = allEvents.filter(e => e.event_type === 'holiday').length;
+        if ($('calStatEvent')) $('calStatEvent').textContent = allEvents.filter(e => e.event_type === 'event').length;
     }
 
-    // =========================================================
-    // CALENDAR FILTERS
-    // =========================================================
     function applyCalendarFilters() {
         const fYear = $('calFilterYear').value;
         const fType = $('calFilterType').value;
@@ -163,9 +128,6 @@
         renderEvents();
     }
 
-    // =========================================================
-    // RENDER EVENTS
-    // =========================================================
     function renderEvents() {
         const list = $('eventsList');
 
@@ -223,7 +185,6 @@
                     <div class="month">${month}</div>
                     <div class="year">${yearShort}</div>
                 </div>
-
                 <div class="event-body">
                     <h4>
                         ${escapeHtml(ev.title)}
@@ -243,27 +204,19 @@
         list.innerHTML = html;
     }
 
-    // =========================================================
-    // EVENT LISTENERS
-    // =========================================================
     function attachEvents() {
-        // Calendar filters
         ['calFilterYear', 'calFilterType', 'calFilterTime'].forEach(id => {
             const el = $(id);
             if (el) el.addEventListener('change', applyCalendarFilters);
         });
     }
 
-    // =========================================================
-    // INIT
-    // =========================================================
     function init() {
-        console.log('🚀 Academic Calendar v2.0 initializing...');
-
-        loadYearOptions();
+        console.log('🚀 Academic Calendar v3.0 initializing...');
         attachEvents();
 
         waitForSupabase(async function () {
+            await loadYearOptions();
             await loadEvents();
             console.log('✅ Academic Calendar ready');
         });
@@ -274,5 +227,5 @@
     } else {
         init();
     }
-
 })();
+ 

@@ -2,13 +2,9 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN PROMOTE
  * Location: js/admin-promote.js
- * Version: v2.0 — Session Preview Added
+ * Version: v2.1 — Dynamic Years (Session Helper)
  * Depends: config.js, supabase.js, auth.js, admin-popup.js,
- *          promote-utils.js, promote-engine.js
- * 
- * ⚠️ SESSION POLICY (Bangladesh HSC):
- *    Promote-এ session source student থেকে COPY হবে।
- *    Preview table-এ admin verify করতে পারবে।
+ *          promote-utils.js, promote-engine.js, session-helper.js
  * =========================================================
  */
 
@@ -47,17 +43,12 @@
         return y + '-' + (y + 1);
     }
 
-    /**
-     * 🎯 Student থেকে সঠিক session বের করে
-     */
     function getStudentSession(student) {
         if (!student) return '';
         if (student.session && String(student.session).trim() !== '') {
             return String(student.session).trim();
         }
-        if (student.year) {
-            return getSessionFromYear(student.year);
-        }
+        if (student.year) return getSessionFromYear(student.year);
         return '';
     }
 
@@ -110,35 +101,26 @@
                 sessionStorage.clear();
                 window.location.replace('admin-login.html');
             },
-            {
-                title: 'Logout Confirmation',
-                confirmText: 'Yes, Logout',
-                cancelText: 'Cancel',
-                confirmType: 'danger'
-            }
+            { title: 'Logout Confirmation', confirmText: 'Yes, Logout', cancelText: 'Cancel', confirmType: 'danger' }
         );
     };
 
     // =========================================================
-    // LOAD YEAR OPTIONS
+    // ✅ LOAD YEAR OPTIONS — via Session Helper (Dynamic)
     // =========================================================
-    function loadYearOptions() {
-        const currentYear = new Date().getFullYear();
-        const years = [];
-        for (let i = -2; i <= 3; i++) years.push(currentYear + i);
-
-        ['sourceYear', 'targetYear'].forEach(id => {
-            const el = $(id);
-            if (!el) return;
-            el.innerHTML = '<option value="">Select Year</option>';
-            years.forEach(y => {
-                el.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
-            });
+    async function loadYearOptions() {
+        await window.FDCSession.fillYearDropdown('sourceYear', {
+            autoSelectCurrent: false
         });
+        await window.FDCSession.fillYearDropdown('targetYear', {
+            autoSelectCurrent: false
+        });
+
+        console.log('✅ Year options loaded (dynamic)');
     }
 
     // =========================================================
-    // LOAD EXAMS (Find Final)
+    // LOAD EXAMS
     // =========================================================
     async function loadExams() {
         try {
@@ -152,7 +134,6 @@
 
             allExams = data || [];
 
-            // Find "Final" exam
             finalExam = allExams.find(e =>
                 (e.exam_name || '').toLowerCase() === 'final'
             ) || allExams[allExams.length - 1];
@@ -169,7 +150,7 @@
     }
 
     // =========================================================
-    // LOAD STUDENTS (Main Action)
+    // LOAD STUDENTS
     // =========================================================
     async function loadStudents() {
         if (isProcessing) return;
@@ -178,7 +159,6 @@
         const sourceYear = $('sourceYear').value;
         const sourceBranch = $('sourceBranch').value;
 
-        // Validation
         if (!sourceClass) return window.fdcWarning('Class সিলেক্ট করুন।');
         if (!sourceYear) return window.fdcWarning('Year সিলেক্ট করুন।');
         if (!sourceBranch) return window.fdcWarning('Branch সিলেক্ট করুন।');
@@ -194,7 +174,6 @@
         $('emptyStudents').style.display = 'none';
 
         try {
-            // Detect Pass/Fail from result
             classifiedStudents = await window.FDCPromoteUtils.detectPassFail({
                 sourceClass: sourceClass,
                 sourceYear: sourceYear,
@@ -211,15 +190,11 @@
                 return;
             }
 
-            // Auto-select Pass students
             selectedStudentIds.clear();
             classifiedStudents.forEach(c => {
-                if (c.status === 'pass') {
-                    selectedStudentIds.add(c.student.id);
-                }
+                if (c.status === 'pass') selectedStudentIds.add(c.student.id);
             });
 
-            // Render
             renderSummary();
             renderStudentList();
 
@@ -228,7 +203,6 @@
             $('stepStudents').classList.remove('disabled');
             $('stepTarget').classList.remove('disabled');
 
-            // Update confirm text if target already selected
             updateConfirmText();
 
         } catch (e) {
@@ -261,16 +235,10 @@
 
     // =========================================================
     // RENDER STUDENT LIST
-    // 🎯 v2.0 — Session column added
     // =========================================================
     function renderStudentList() {
         const list = $('studentList');
         let html = '';
-
-        // 🎯 Current source session (any student থেকে)
-        const sourceSession = classifiedStudents.length > 0
-            ? getStudentSession(classifiedStudents[0].student)
-            : '';
 
         classifiedStudents.forEach(c => {
             const stu = c.student;
@@ -281,7 +249,6 @@
                                c.status === 'fail' ? '❌ Fail' : '⚠️ No Result';
             const gpaText = c.gpa !== null && c.gpa !== undefined ? c.gpa.toFixed(2) : '—';
 
-            // 🎯 Session preview
             const studentSession = getStudentSession(stu);
 
             html += `
@@ -314,19 +281,6 @@
     }
 
     // =========================================================
-    // TOGGLE STUDENT
-    // =========================================================
-    function toggleStudent(studentId, checked) {
-        if (checked) {
-            selectedStudentIds.add(studentId);
-        } else {
-            selectedStudentIds.delete(studentId);
-        }
-        updateSelectedCount();
-        updateFinalSummary();
-    }
-
-    // =========================================================
     // TARGET CHANGE
     // =========================================================
     async function onTargetChange() {
@@ -340,14 +294,12 @@
             return;
         }
 
-        // 🎯 Session preview — source থেকে (target year থেকে নয়)
         const sourceSession = classifiedStudents.length > 0
             ? getStudentSession(classifiedStudents[0].student)
             : getSessionFromYear($('sourceYear').value);
 
         $('targetSession').value = sourceSession;
 
-        // Load target students count
         try {
             let query = window.FDC_SUPABASE
                 .from('students')
@@ -385,7 +337,6 @@
 
     // =========================================================
     // UPDATE FINAL SUMMARY
-    // 🎯 v2.0 — Session shown
     // =========================================================
     function updateFinalSummary() {
         const sourceClass = $('sourceClass').value;
@@ -403,7 +354,6 @@
         const totalCount = classifiedStudents.length;
         const stayCount = totalCount - selectedCount;
 
-        // 🎯 Session preview
         const sourceSession = classifiedStudents.length > 0
             ? getStudentSession(classifiedStudents[0].student)
             : getSessionFromYear(sourceYear);
@@ -471,7 +421,6 @@
 
     // =========================================================
     // EXECUTE PROMOTE
-    // 🎯 v2.0 — Session shown in confirmation
     // =========================================================
     async function executePromote() {
         if (isProcessing) return;
@@ -482,7 +431,6 @@
         const targetClass = $('targetClass').value;
         const targetYear = $('targetYear').value;
 
-        // Get selected students from classified
         const selected = classifiedStudents.filter(c =>
             selectedStudentIds.has(c.student.id)
         );
@@ -491,12 +439,10 @@
             return window.fdcWarning('কোনো student select করা হয়নি।');
         }
 
-        // 🎯 Session preview
         const sourceSession = selected.length > 0
             ? getStudentSession(selected[0].student)
             : '';
 
-        // Final confirmation
         const confirmed = await new Promise(resolve => {
             window.fdcConfirm(
                 `⚠️ চূড়ান্ত নিশ্চিতকরণ\n\n` +
@@ -513,14 +459,10 @@
                     confirmType: 'danger'
                 }
             );
-            setTimeout(() => {
-                // If user cancels, this won't fire — handled by fdcConfirm
-            }, 100);
         });
 
         if (!confirmed) return;
 
-        // Show progress
         isProcessing = true;
         showProgress();
 
@@ -541,10 +483,8 @@
                 }
             );
 
-            // Hide progress
             hideProgress();
 
-            // Success
             window.fdcSuccess(
                 `✅ ${result.promotedCount} জন student সফলভাবে Promote হয়েছে!\n\n` +
                 `• Session: ${sourceSession} (অপরিবর্তিত)\n` +
@@ -552,7 +492,6 @@
                 `• Batch ID: ${result.batchId.substring(0, 8)}...`
             );
 
-            // Reset
             setTimeout(() => {
                 window.location.reload();
             }, 2500);
@@ -588,13 +527,10 @@
     // ATTACH EVENTS
     // =========================================================
     function attachEvents() {
-        // Load button
         $('btnLoadStudents').addEventListener('click', loadStudents);
 
-        // Source select changes → reset
         ['sourceClass', 'sourceYear', 'sourceBranch'].forEach(id => {
             $(id).addEventListener('change', function () {
-                // If already loaded, warn
                 if (classifiedStudents.length > 0) {
                     classifiedStudents = [];
                     selectedStudentIds.clear();
@@ -606,12 +542,10 @@
             });
         });
 
-        // Target changes
         ['targetClass', 'targetYear'].forEach(id => {
             $(id).addEventListener('change', onTargetChange);
         });
 
-        // Select All
         $('selectAll').addEventListener('change', function () {
             if (this.checked) {
                 classifiedStudents.forEach(c => selectedStudentIds.add(c.student.id));
@@ -619,7 +553,6 @@
                 selectedStudentIds.clear();
             }
 
-            // Update all checkboxes
             document.querySelectorAll('.student-item').forEach(item => {
                 const id = parseInt(item.dataset.id);
                 const cb = item.querySelector('input[type="checkbox"]');
@@ -634,7 +567,6 @@
             checkConfirmInput();
         });
 
-        // Student list (event delegation)
         $('studentList').addEventListener('change', function (e) {
             const cb = e.target.closest('input[type="checkbox"]');
             if (!cb) return;
@@ -655,7 +587,6 @@
             checkConfirmInput();
         });
 
-        // Click on student item (not checkbox) → toggle
         $('studentList').addEventListener('click', function (e) {
             if (e.target.tagName === 'INPUT') return;
             const item = e.target.closest('.student-item');
@@ -668,7 +599,6 @@
             }
         });
 
-        // Confirm input
         $('confirmInput').addEventListener('input', checkConfirmInput);
         $('confirmInput').addEventListener('keydown', function (e) {
             if (e.key === 'Enter' && !$('btnExecute').disabled) {
@@ -676,7 +606,6 @@
             }
         });
 
-        // Execute
         $('btnExecute').addEventListener('click', executePromote);
     }
 
@@ -684,9 +613,15 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Promote v2.0 initializing...');
+        console.log('🚀 Admin Promote v2.1 initializing...');
 
-        loadYearOptions();
+        if (!window.FDCSession) {
+            console.warn('⚠️ Session helper not loaded, retrying...');
+            setTimeout(init, 300);
+            return;
+        }
+
+        await loadYearOptions();
         attachEvents();
 
         waitForSupabase(async function () {
@@ -696,7 +631,7 @@
             await loadAdminInfo();
             await loadExams();
 
-            console.log('✅ Admin Promote v2.0 ready');
+            console.log('✅ Admin Promote v2.1 ready');
         });
     }
 
