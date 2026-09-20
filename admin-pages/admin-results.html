@@ -680,6 +680,40 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     .btn-header span { display: none; }
     .setup-card { grid-template-columns: 1fr; }
 }
+  /* Pass hint mini */
+.marks-input-wrap {
+    position: relative;
+}
+.pass-hint-mini {
+    display: block;
+    font-size: 9.5px;
+    color: #16a34a;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+}
+.marks-input.fail-border {
+    border-color: #ef4444 !important;
+    background: #fef2f2 !important;
+    color: #991b1b !important;
+}
+.marks-input.error {
+    animation: errorFlash 0.5s ease;
+}
+@keyframes errorFlash {
+    0%, 100% { background: #fff; }
+    50% { background: #fee2e2; }
+}
+.marks-table th small {
+    display: inline-block;
+    font-weight: 700;
+    font-size: 10px;
+    padding: 1px 4px;
+    border-radius: 3px;
+    background: #dcfce7;
+    margin-left: 3px;
+}
 </style>
 </head>
 <body>
