@@ -29,7 +29,7 @@
 * { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { background: var(--off-white); margin: 0; color: var(--dark); }
 
-/* ============ HEADER (app) ============ */
+/* ============ HEADER ============ */
 .public-header {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
@@ -88,7 +88,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 /* ============ MAIN ============ */
 .main-wrap { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
 
-/* ============ LOADING ============ */
+/* ============ LOADING / EMPTY ============ */
 .loading-area {
     display: none;
     text-align: center;
@@ -106,7 +106,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading-area p { color: var(--grey); font-size: 14px; margin: 0; }
 
-/* ============ EMPTY STATE ============ */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -141,6 +140,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     overflow: hidden;
     margin-bottom: 20px;
     border: 1px solid var(--border);
+    position: relative;
 }
 
 /* Watermark */
@@ -156,7 +156,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     pointer-events: none;
     z-index: 0;
 }
-.sheet-wrapper { position: relative; }
 
 /* ============ SHEET HEADER ============ */
 .sheet-header {
@@ -230,7 +229,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     background: #fafbff;
     border-bottom: 2px solid var(--border);
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 12px 20px;
     position: relative;
     z-index: 1;
@@ -630,33 +629,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .error-alert i { font-size: 18px; margin-top: 1px; }
 
-/* ============ LOADING OVERLAY (for PDF) ============ */
-.pdf-loading {
-    position: fixed;
-    inset: 0;
-    background: rgba(6, 29, 54, 0.85);
-    backdrop-filter: blur(4px);
-    z-index: 99999;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 16px;
-    color: #fff;
-}
-.pdf-loading.show { display: flex; }
-.pdf-loading .spinner {
-    border-color: rgba(255,255,255,0.2);
-    border-top-color: var(--gold);
-    margin: 0;
-}
-.pdf-loading p {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 0.3px;
-    margin: 0;
-}
-
 /* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
     .main-wrap { padding: 14px 10px 50px; }
@@ -688,26 +660,189 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     .marks-table thead th:first-child { width: auto; }
 }
 
-/* ============ PRINT STYLES ============ */
+/* ======================================================================== */
+/*                    PRINT STYLES — OFFICIAL TRANSCRIPT                    */
+/* ======================================================================== */
 @media print {
-    body { background: #fff !important; }
+    /* Page setup */
+    @page {
+        size: A4 portrait;
+        margin: 10mm 8mm;
+    }
+
+    /* Reset */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    html, body {
+        background: #fff !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        font-size: 11pt !important;
+    }
+
+    /* Hide non-printable elements */
     .public-header,
     .action-buttons,
-    .pdf-loading,
     .error-alert,
     .loading-area,
     .empty-state { display: none !important; }
-    .main-wrap { padding: 0 !important; max-width: none !important; }
+
+    /* Main container reset */
+    .main-wrap {
+        padding: 0 !important;
+        max-width: none !important;
+        margin: 0 !important;
+    }
+
+    .result-area { display: block !important; }
+
+    /* Sheet wrapper */
     .sheet-wrapper {
         box-shadow: none !important;
         border-radius: 0 !important;
         margin: 0 !important;
         border: none !important;
+        page-break-inside: auto;
+        position: relative;
+    }
+    .sheet-wrapper::before {
+        opacity: 0.05 !important;
+        background-size: 300px !important;
+    }
+
+    /* Header — keep on first page */
+    .sheet-header {
+        page-break-inside: avoid;
+        page-break-after: avoid;
+        padding: 14px 18px !important;
+    }
+    .sheet-header .sh-logo {
+        width: 55px !important;
+        height: 55px !important;
+    }
+    .sheet-header .sh-college { font-size: 18pt !important; }
+    .sheet-header .sh-address { font-size: 9pt !important; }
+    .sheet-header .sh-title { font-size: 11pt !important; padding-top: 6px !important; margin-top: 6px !important; }
+    .sheet-header .sh-exam { font-size: 9pt !important; }
+
+    /* Student info */
+    .student-info {
+        page-break-inside: avoid;
+        page-break-after: avoid;
+        padding: 12px 18px !important;
+        gap: 8px 14px !important;
+    }
+    .si-item .si-label { font-size: 8pt !important; }
+    .si-item .si-value { font-size: 10pt !important; }
+
+    /* Sections */
+    .section {
+        padding: 10px 18px !important;
+        page-break-inside: auto;
+    }
+    .section + .section {
+        padding-top: 0 !important;
+        page-break-before: auto;
+    }
+    .section-title {
+        page-break-after: avoid;
+        font-size: 10pt !important;
+        padding: 5px 10px !important;
+        margin-bottom: 8px !important;
+    }
+
+    /* Tables */
+    .marks-table {
+        page-break-inside: auto;
+        font-size: 9.5pt !important;
+        width: 100% !important;
+    }
+    .marks-table thead {
+        display: table-header-group;
+    }
+    .marks-table thead th {
+        font-size: 8.5pt !important;
+        padding: 6px 4px !important;
+        background: #0a1655 !important;
+        color: #fff !important;
+    }
+    .marks-table tbody tr {
+        page-break-inside: avoid;
+        page-break-after: auto;
+    }
+    .marks-table tbody tr.book-header {
+        page-break-after: avoid;
         page-break-inside: avoid;
     }
-    .sheet-wrapper::before { opacity: 0.03 !important; }
-    .marks-table tbody tr { page-break-inside: avoid; }
-    .marks-table thead { display: table-header-group; }
+    .marks-table tbody tr.combined-row {
+        page-break-inside: avoid;
+        page-break-before: avoid;
+    }
+    .marks-table tbody td {
+        padding: 5px 4px !important;
+        font-size: 9pt !important;
+    }
+
+    /* Paper label */
+    .paper-label {
+        padding-left: 18px !important;
+        font-size: 9pt !important;
+    }
+
+    /* Grade badges */
+    .grade-badge {
+        padding: 2px 6px !important;
+        font-size: 8.5pt !important;
+        border: 1px solid rgba(0,0,0,0.1) !important;
+    }
+
+    /* Total cell */
+    .total-cell { font-size: 10pt !important; }
+    .gp-cell { font-size: 9.5pt !important; }
+    .marks-cell { font-size: 9pt !important; }
+
+    /* Result summary */
+    .result-summary {
+        page-break-inside: avoid;
+        page-break-before: auto;
+        padding: 14px 18px !important;
+    }
+    .summary-title { font-size: 10.5pt !important; margin-bottom: 10px !important; }
+    .summary-breakdown { padding: 10px 14px !important; margin-bottom: 12px !important; }
+    .sb-row { font-size: 9.5pt !important; padding: 4px 0 !important; }
+    .sb-value { font-size: 10pt !important; }
+    .sb-row.highlight { font-size: 10.5pt !important; }
+
+    /* Final box */
+    .final-box {
+        gap: 8px !important;
+        page-break-inside: avoid;
+        margin-top: 10px !important;
+    }
+    .fb-item { padding: 10px 8px !important; }
+    .fb-label { font-size: 8pt !important; }
+    .fb-value { font-size: 18pt !important; }
+    .fb-item.status .fb-value { font-size: 15pt !important; }
+
+    /* Footer */
+    .sheet-footer {
+        page-break-inside: avoid;
+        padding: 14px 18px !important;
+    }
+    .footer-note { font-size: 8.5pt !important; }
+    .signature .sig-line { font-size: 9pt !important; }
+    .signature .sig-sub { font-size: 8pt !important; }
+
+    /* Page break helpers */
+    .page-break { page-break-after: always; }
+    .no-page-break { page-break-inside: avoid; }
+
+    /* Remove hover effects */
+    .marks-table tbody tr:hover { background: transparent !important; }
 }
 </style>
 </head>
@@ -753,10 +888,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
         <!-- Action Buttons -->
         <div class="action-buttons">
-            <button class="btn-action gold" id="btnDownloadPDF">
+            <button class="btn-action gold" id="btnPrint">
                 <i class="fas fa-file-pdf"></i> Download PDF
             </button>
-            <button class="btn-action primary" id="btnPrint">
+            <button class="btn-action primary" id="btnPrintNative">
                 <i class="fas fa-print"></i> Print
             </button>
             <button class="btn-action secondary" id="btnShare">
@@ -770,19 +905,12 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
 </div>
 
-<!-- PDF Loading Overlay -->
-<div class="pdf-loading" id="pdfLoading">
-    <div class="spinner"></div>
-    <p>PDF তৈরি করা হচ্ছে...</p>
-</div>
-
 <!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 <script src="../js/config.js"></script>
 <script src="../js/supabase.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/result-details.js?v=2"></script>
+<script src="../js/result-details.js?v=3"></script>
 
 </body>
 </html>
