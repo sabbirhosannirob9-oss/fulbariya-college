@@ -29,7 +29,7 @@
 * { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { background: var(--off-white); margin: 0; color: var(--dark); }
 
-/* HEADER */
+/* ============ HEADER ============ */
 .admin-header {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
@@ -92,7 +92,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; }
 
-/* MAIN */
+/* ============ MAIN ============ */
 .main-wrap { max-width: 1300px; margin: 0 auto; padding: 20px 16px 60px; }
 
 .page-title {
@@ -115,7 +115,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
 
-/* TOOLBAR */
+/* ============ TOOLBAR ============ */
 .toolbar {
     display: flex;
     justify-content: space-between;
@@ -198,7 +198,25 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .btn-gold:hover:not(:disabled) { transform: translateY(-2px); color: var(--navy); }
 .btn-gold:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* STATS */
+.btn-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(220,38,38,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.btn-danger:hover:not(:disabled) { transform: translateY(-2px); color: #fff; }
+.btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ============ STATS ============ */
 .stats-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -245,7 +263,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     margin-top: 3px;
 }
 
-/* FILTER */
+/* ============ FILTER ============ */
 .filter-card {
     background: #fff;
     border-radius: 16px;
@@ -285,7 +303,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     background: #fff;
 }
 
-/* TABLE */
+/* ============ TABLE ============ */
 .table-card {
     background: #fff;
     border-radius: 16px;
@@ -449,7 +467,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
 .empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
 
-/* MODAL */
+/* ============ MODAL ============ */
 .fdc-modal-overlay {
     position: fixed;
     inset: 0;
@@ -480,6 +498,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     to { opacity: 1; transform: translateY(0) scale(1); }
 }
 .fdc-modal.wide { max-width: 900px; }
+.fdc-modal.narrow { max-width: 520px; }
 
 .fdc-modal-header {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
@@ -573,7 +592,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     bottom: 0;
 }
 
-/* BULK IMPORT STYLES */
+/* ============ BULK IMPORT STYLES ============ */
 .bulk-step {
     background: #fafbff;
     border: 1px solid var(--border-light);
@@ -606,7 +625,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     font-size: 13.5px;
 }
 
-/* Compulsory chips */
 .bulk-compulsory-box {
     background: #f0fdf4;
     border: 1.5px solid #86efac;
@@ -651,7 +669,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     font-style: italic;
 }
 
-/* Main subject selection grid */
 .bulk-main-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -732,7 +749,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     color: #166534;
 }
 
-/* Student textarea */
 .bulk-textarea {
     width: 100%;
     min-height: 160px;
@@ -748,7 +764,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .bulk-textarea:focus { border-color: var(--navy); background: #fff; }
 
-/* Roll range */
 .roll-range-section {
     margin-top: 14px;
     padding: 12px 14px;
@@ -766,7 +781,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     margin-bottom: 8px;
 }
 
-/* Summary */
 .bulk-summary {
     background: linear-gradient(135deg, #eff6ff, #dbeafe);
     border-left: 4px solid #3b82f6;
@@ -790,7 +804,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .bulk-summary-body strong { color: #1e40af; }
 
-/* Preview */
 .bulk-preview {
     margin-top: 16px;
     border: 1px solid var(--border-light);
@@ -845,7 +858,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .preview-status-badge.warn { background: #fef3c7; color: #92400e; }
 .preview-status-badge.error { background: #fee2e2; color: #991b1b; }
 
-/* Alerts */
+/* ============ ALERTS ============ */
 .fdc-alert {
     padding: 12px 16px;
     border-radius: 10px;
@@ -860,7 +873,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .fdc-alert.warn { background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; }
 .fdc-alert.danger { background: #fef2f2; color: #991b1b; border-left: 3px solid #dc2626; }
 
-/* Responsive */
+/* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
     .admin-header { padding: 10px 14px; }
     .main-wrap { padding: 14px 12px 50px; }
@@ -1025,7 +1038,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 </div>
 
 <!-- ================================================== -->
-<!-- MODAL: Add/Edit Student (Simple) -->
+<!-- MODAL: Add/Edit Student -->
 <!-- ================================================== -->
 <div class="fdc-modal-overlay" id="studentModal">
     <div class="fdc-modal wide">
@@ -1094,7 +1107,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
             <div class="fdc-alert warn" style="margin-top:16px;">
                 <i class="fas fa-info-circle"></i>
-                <div><strong>নোট:</strong> Subject assign করার জন্য Bulk Import ব্যবহার করুন, অথবা student list-এ [📚] button click করুন।</div>
+                <div><strong>নোট:</strong> Subject assign করার জন্য Bulk Import ব্যবহার করুন।</div>
             </div>
         </div>
 
@@ -1302,7 +1315,9 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     </div>
 </div>
 
+<!-- ================================================== -->
 <!-- MODAL: View Student -->
+<!-- ================================================== -->
 <div class="fdc-modal-overlay" id="viewStudentModal">
     <div class="fdc-modal">
         <div class="fdc-modal-header">
@@ -1331,7 +1346,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/config.js"></script>
 <script src="../js/supabase.js"></script>
 <script src="../js/auth.js"></script>
-<script src="../js/admin-popup.js"></script>
-<script src="../js/admin-students.js?v=10"></script>
+<script src="../js/admin-popup.js?v=2"></script>
+<script src="../js/admin-students.js?v=11"></script>
 </body>
 </html>
