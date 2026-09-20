@@ -2,18 +2,25 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v2.2.0
+ * Version: v2.2.1
  * Purpose: PWA Install + Offline Caching
- * Changes v2.2.0:
+ *
+ * Changes v2.2.1:
+ *   - FIXED: net::ERR_FAILED issue (cache.add → fetch+put)
+ *   - FIXED: Partial cache install (non-200 response skip)
+ *   - IMPROVED: Better fetch fallback for stale cache
+ *   - IMPROVED: Network-first for HTML pages
  *   - Class Routine + Exam Routine system added
  *   - Academic Hub cleanup (Routine tab removed)
- *   - Old unused files removed from cache
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v2.2.0';
+const CACHE_VERSION = 'fdc-v2.2.1';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
+
+// Max items in dynamic cache
+const DYNAMIC_CACHE_LIMIT = 60;
 
 // =========================================================
 // STATIC ASSETS — Pre-cache on install
@@ -79,10 +86,10 @@ const STATIC_ASSETS = [
     '/js/admin-profile.js',
     '/js/admin-board-final.js',
 
-    // ⭐ JS — Class Routine (NEW v2.2.0)
+    // JS — Class Routine (v2.2.0+)
     '/js/admin-class-routine.js?v=2',
 
-    // ⭐ JS — Exam Routine (NEW v2.2.0)
+    // JS — Exam Routine (v2.2.0+)
     '/js/admin-exam-routine.js?v=1',
 
     // JS — Promote System
@@ -97,7 +104,7 @@ const STATIC_ASSETS = [
     // JS — GPA Calculator
     '/js/gpa-calculator.js',
 
-    // ⭐ JS — Public Routine (NEW v2.2.0)
+    // JS — Public Routine (v2.2.0+)
     '/js/class-routine.js?v=2',
     '/js/exam-routine.js?v=2',
     '/js/academic-hub.js?v=2',
@@ -118,13 +125,13 @@ const STATIC_ASSETS = [
     '/public-pages/admission.html',
     '/public-pages/academics.html',
 
-    // ⭐ Academic Hub (updated — Calendar only)
+    // Academic Hub (Calendar only)
     '/public-pages/academic-hub.html',
 
-    // ⭐ Class Routine Board (NEW v2.2.0)
+    // Class Routine Board
     '/public-pages/class-routine.html',
 
-    // ⭐ Exam Routine Board (NEW v2.2.0)
+    // Exam Routine Board
     '/public-pages/exam-routine.html',
 
     // Admin Pages
@@ -145,15 +152,15 @@ const STATIC_ASSETS = [
     '/admin-pages/admin-profile.html',
     '/admin-pages/admin-board-final.html',
 
-    // ⭐ Admin Class Routine (NEW v2.2.0)
+    // Admin Class Routine
     '/admin-pages/admin-class-routine.html',
 
-    // ⭐ Admin Exam Routine (NEW v2.2.0)
+    // Admin Exam Routine
     '/admin-pages/admin-exam-routine.html'
 ];
 
 // =========================================================
-// INSTALL — Pre-cache static assets
+// INSTALL — Pre-cache static assets (SAFE version)
 // =========================================================
 self.addEventListener('install', function (event) {
     console.log('[SW] Installing v' + CACHE_VERSION + '...');
@@ -162,16 +169,27 @@ self.addEventListener('install', function (event) {
         caches.open(STATIC_CACHE).then(function (cache) {
             console.log('[SW] Caching ' + STATIC_ASSETS.length + ' static assets');
 
-            // Cache individually so one failure doesn't break all
+            // ✅ SAFE: fetch + put instead of cache.add
+            // Non-200 responses are skipped, failures don't break install
             return Promise.all(
                 STATIC_ASSETS.map(function (url) {
-                    return cache.add(url).catch(function (err) {
-                        console.warn('[SW] Failed to cache:', url, err.message || err);
-                    });
+                    return fetch(url, { cache: 'no-cache' })
+                        .then(function (response) {
+                            if (response && response.status === 200) {
+                                return cache.put(url, response);
+                            }
+                            console.warn('[SW] Skipped (status ' + (response ? response.status : '?') + '):', url);
+                        })
+                        .catch(function (err) {
+                            console.warn('[SW] Failed to cache:', url, err.message || err);
+                        });
                 })
             );
         }).then(function () {
-            console.log('[SW] Install complete');
+            console.log('[SW] Install complete — skipping waiting');
+            return self.skipWaiting();
+        }).catch(function (err) {
+            console.error('[SW] Install error:', err);
             return self.skipWaiting();
         })
     );
@@ -194,26 +212,52 @@ self.addEventListener('activate', function (event) {
                 })
             );
         }).then(function () {
-            console.log('[SW] Activate complete');
+            console.log('[SW] Activate complete — claiming clients');
             return self.clients.claim();
+        }).catch(function (err) {
+            console.error('[SW] Activate error:', err);
         })
     );
 });
 
 // =========================================================
-// FETCH — Smart caching strategy
+// HELPER — Trim dynamic cache (keep latest N items)
+// =========================================================
+function trimCache(cacheName, maxItems) {
+    caches.open(cacheName).then(function (cache) {
+        cache.keys().then(function (keys) {
+            if (keys.length > maxItems) {
+                cache.delete(keys[0]).then(function () {
+                    trimCache(cacheName, maxItems);
+                });
+            }
+        });
+    });
+}
+
+// =========================================================
+// HELPER — Check if request is HTML page
+// =========================================================
+function isHtmlRequest(request) {
+    const accept = request.headers.get('accept') || '';
+    return accept.includes('text/html');
+}
+
+// =========================================================
+// FETCH — Smart caching strategy (FIXED)
 // =========================================================
 self.addEventListener('fetch', function (event) {
     const request = event.request;
     const url = new URL(request.url);
 
-    // =====================================================
     // Skip non-GET requests
-    // =====================================================
     if (request.method !== 'GET') return;
 
+    // Skip chrome-extension, etc.
+    if (!url.protocol.startsWith('http')) return;
+
     // =====================================================
-    // Skip external APIs (Supabase, Cloudinary, CDN)
+    // External APIs (Supabase, Cloudinary, CDN, Fonts)
     // Network-first with cache fallback
     // =====================================================
     if (
@@ -229,81 +273,111 @@ self.addEventListener('fetch', function (event) {
         url.hostname.includes('fonts.gstatic.com')
     ) {
         event.respondWith(
-            fetch(request).catch(function () {
-                return caches.match(request);
-            })
+            fetch(request)
+                .then(function (response) {
+                    return response;
+                })
+                .catch(function () {
+                    return caches.match(request);
+                })
         );
         return;
     }
 
     // =====================================================
-    // Same-origin requests
+    // Same-origin requests only
     // =====================================================
-    if (url.origin === location.origin) {
+    if (url.origin !== location.origin) return;
 
-        // Admin pages — Network-first (always fresh data)
-        if (url.pathname.startsWith('/admin-pages/')) {
-            event.respondWith(
-                fetch(request).then(function (response) {
-                    if (response && response.status === 200 && response.type === 'basic') {
+    // =====================================================
+    // HTML pages — NETWORK-FIRST (always fresh, fallback to cache)
+    // This FIXES net::ERR_FAILED
+    // =====================================================
+    if (isHtmlRequest(request)) {
+        event.respondWith(
+            fetch(request)
+                .then(function (response) {
+                    // Cache successful responses
+                    if (response && response.status === 200) {
                         const responseClone = response.clone();
                         caches.open(DYNAMIC_CACHE).then(function (cache) {
                             cache.put(request, responseClone);
+                            trimCache(DYNAMIC_CACHE, DYNAMIC_CACHE_LIMIT);
                         });
                     }
                     return response;
-                }).catch(function () {
+                })
+                .catch(function () {
+                    // Network failed — try cache
                     return caches.match(request).then(function (cached) {
                         if (cached) return cached;
-                        if (request.headers.get('accept') && request.headers.get('accept').includes('text/html')) {
-                            return caches.match('/admin-pages/admin-login.html');
-                        }
+
+                        // Fallback to homepage for offline
+                        return caches.match('/index.html');
                     });
                 })
-            );
-            return;
-        }
+        );
+        return;
+    }
 
-        // Public pages — Cache-first (fast, offline-friendly)
-        event.respondWith(
-            caches.match(request).then(function (cached) {
-                if (cached) return cached;
-
-                return fetch(request).then(function (response) {
-                    if (response && response.status === 200 && response.type === 'basic') {
+    // =====================================================
+    // JS / CSS / Images — STALE-WHILE-REVALIDATE
+    // =====================================================
+    event.respondWith(
+        caches.match(request).then(function (cached) {
+            const fetchPromise = fetch(request)
+                .then(function (response) {
+                    if (response && response.status === 200) {
                         const responseClone = response.clone();
                         caches.open(DYNAMIC_CACHE).then(function (cache) {
                             cache.put(request, responseClone);
+                            trimCache(DYNAMIC_CACHE, DYNAMIC_CACHE_LIMIT);
                         });
                     }
                     return response;
-                }).catch(function () {
-                    // Offline fallback
-                    if (request.headers.get('accept') && request.headers.get('accept').includes('text/html')) {
-                        return caches.match('/index.html');
-                    }
+                })
+                .catch(function () {
+                    return cached;
                 });
-            })
-        );
-    }
+
+            // Return cached immediately if available, else wait for fetch
+            return cached || fetchPromise;
+        })
+    );
 });
 
 // =========================================================
 // MESSAGE — For manual cache update
 // =========================================================
 self.addEventListener('message', function (event) {
-    if (event.data && event.data.type === 'SKIP_WAITING') {
+    if (!event.data) return;
+
+    if (event.data.type === 'SKIP_WAITING') {
         console.log('[SW] Skipping waiting');
         self.skipWaiting();
     }
 
-    if (event.data && event.data.type === 'CLEAR_CACHE') {
-        console.log('[SW] Clearing cache per request');
+    if (event.data.type === 'CLEAR_CACHE') {
+        console.log('[SW] Clearing all caches per request');
         caches.keys().then(function (keys) {
             return Promise.all(keys.map(function (key) {
                 return caches.delete(key);
             }));
+        }).then(function () {
+            console.log('[SW] All caches cleared');
+            if (event.source) {
+                event.source.postMessage({ type: 'CACHE_CLEARED' });
+            }
         });
+    }
+
+    if (event.data.type === 'CHECK_VERSION') {
+        if (event.source) {
+            event.source.postMessage({
+                type: 'VERSION',
+                version: CACHE_VERSION
+            });
+        }
     }
 });
 
