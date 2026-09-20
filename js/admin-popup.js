@@ -1,12 +1,37 @@
 /**
  * =========================================================
  * FULBARIYA COLLEGE - UNIVERSAL ADMIN POPUP SYSTEM
- * একটি ফাইল — সব অ্যাডমিন পেজে ব্যবহারযোগ্য
+ * Location: js/admin-popup.js
+ * Version: v2.0 — Added fdcPromptInput (Type-to-Confirm)
+ * 
+ * Features:
+ *  - fdcAlert()      → Generic popup
+ *  - fdcSuccess()    → Green success
+ *  - fdcError()      → Red error
+ *  - fdcWarning()    → Yellow warning
+ *  - fdcConfirm()    → Yes/No confirmation
+ *  - fdcDetails()    → Info grid popup
+ *  - fdcPromptInput() → Type-to-Confirm with text input ✨ NEW
+ *  - fdcPopup()      → Full custom
+ *  - fdcClosePopup() → Programmatic close
  * =========================================================
  */
 
 (function () {
     "use strict";
+
+    // =========================================================
+    // INTERNAL HELPERS
+    // =========================================================
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
 
     // =========================================================
     // POPUP HTML TEMPLATE
@@ -252,13 +277,19 @@
         font-family: inherit;
     }
 
+    .fdc-popup-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none !important;
+    }
+
     .fdc-popup-btn-primary {
         background: linear-gradient(135deg, #1a237e, #0d47a1);
         color: #fff;
         box-shadow: 0 4px 16px rgba(26, 35, 126, 0.25);
     }
 
-    .fdc-popup-btn-primary:hover {
+    .fdc-popup-btn-primary:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(26, 35, 126, 0.35);
     }
@@ -269,7 +300,7 @@
         box-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
     }
 
-    .fdc-popup-btn-success:hover {
+    .fdc-popup-btn-success:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
     }
@@ -280,7 +311,7 @@
         box-shadow: 0 4px 16px rgba(239, 68, 68, 0.25);
     }
 
-    .fdc-popup-btn-danger:hover {
+    .fdc-popup-btn-danger:hover:not(:disabled) {
         transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(239, 68, 68, 0.4);
     }
@@ -291,7 +322,7 @@
         border: 1.5px solid rgba(0, 0, 0, 0.06);
     }
 
-    .fdc-popup-btn-secondary:hover { background: #e5e7eb; }
+    .fdc-popup-btn-secondary:hover:not(:disabled) { background: #e5e7eb; }
 
     /* ===== MOBILE ===== */
     @media (max-width: 520px) {
@@ -374,7 +405,7 @@
         injectPopupDOM();
 
         const {
-            type = 'info',          // info | success | error | warning | confirm
+            type = 'info',
             title = 'Message',
             subtitle = '',
             body = '',
@@ -387,7 +418,6 @@
 
         const overlay = document.getElementById('fdcPopupOverlay');
         const box = document.getElementById('fdcPopupBox');
-        const header = document.getElementById('fdcPopupHeader');
         const iconEl = document.getElementById('fdcPopupIcon');
         const titleEl = document.getElementById('fdcPopupTitle');
         const subtitleEl = document.getElementById('fdcPopupSubtitle');
@@ -436,7 +466,6 @@
                 </button>`;
             });
         } else {
-            // Default: single close button
             btnHTML = `<button class="fdc-popup-btn fdc-popup-btn-primary" data-action="close">
                 <i class="fas fa-check"></i> ঠিক আছে
             </button>`;
@@ -540,9 +569,6 @@
 
     /**
      * ডিটেইলস দেখানো (গ্রিড আকারে)
-     * @param {string} title - Modal title
-     * @param {Array} items - [{ icon, label, value, full }]
-     * @param {object} options - { subtitle, type, buttons }
      */
     window.fdcDetails = function (title, items = [], options = {}) {
         let gridHTML = '<div class="fdc-popup-grid">';
@@ -589,6 +615,154 @@
     window.fdcClosePopup = closePopup;
 
     // =========================================================
+    // 🆕 fdcPromptInput — Type-to-Confirm Modal
+    // =========================================================
+    /**
+     * Text input সহ confirm popup (DELETE confirmation-এর জন্য)
+     * 
+     * @param {object} options
+     *   - title: Header title
+     *   - subtitle: Header subtitle (optional)
+     *   - message: Body message (HTML supported)
+     *   - placeholder: Input placeholder text
+     *   - expectedValue: যে value টাইপ করতে হবে (e.g., "DELETE")
+     *   - confirmText: Confirm button text
+     *   - cancelText: Cancel button text
+     *   - confirmType: 'danger' | 'primary' | 'success'
+     *   - onConfirm: Callback when confirmed
+     *   - onCancel: Callback when cancelled (optional)
+     * 
+     * example:
+     *   window.fdcPromptInput({
+     *       title: 'Delete Confirmation',
+     *       message: 'Type DELETE to confirm',
+     *       expectedValue: 'DELETE',
+     *       confirmText: 'Yes, Delete',
+     *       onConfirm: function() { ... }
+     *   });
+     */
+    window.fdcPromptInput = function (options = {}) {
+        const {
+            title = '⚠️ Confirmation',
+            subtitle = '',
+            message = 'চালিয়ে যেতে নিচের box-এ টাইপ করুন।',
+            placeholder = 'Type here...',
+            expectedValue = 'DELETE',
+            confirmText = 'Confirm',
+            cancelText = 'Cancel',
+            confirmType = 'danger',
+            onConfirm = null,
+            onCancel = null
+        } = options;
+
+        injectPopupDOM();
+
+        const overlay = document.getElementById('fdcPopupOverlay');
+        const box = document.getElementById('fdcPopupBox');
+        const iconEl = document.getElementById('fdcPopupIcon');
+        const titleEl = document.getElementById('fdcPopupTitle');
+        const subtitleEl = document.getElementById('fdcPopupSubtitle');
+        const bodyEl = document.getElementById('fdcPopupBody');
+        const footerEl = document.getElementById('fdcPopupFooter');
+        const closeBtn = document.getElementById('fdcPopupClose');
+
+        // Force confirm type
+        box.className = 'fdc-popup-box confirm';
+
+        // Icon
+        iconEl.innerHTML = `<i class="fas fa-exclamation-triangle"></i>`;
+
+        // Title
+        titleEl.textContent = title;
+        subtitleEl.textContent = subtitle;
+        subtitleEl.style.display = subtitle ? 'block' : 'none';
+
+        // Body — custom with input
+        const inputId = 'fdcPromptInputField_' + Date.now();
+        bodyEl.innerHTML = `
+            <p style="margin-bottom:16px;">${message}</p>
+            
+            <div style="background:#fff;border:2px solid #dc2626;border-radius:12px;padding:16px;text-align:center;">
+                <div style="font-size:11px;font-weight:700;color:#7f1d1d;margin-bottom:8px;text-transform:uppercase;letter-spacing:0.5px;">
+                    নিশ্চিত করতে টাইপ করুন
+                </div>
+                <div style="font-family:'Courier New',monospace;font-size:18px;font-weight:700;color:#7f1d1d;background:#fef2f2;padding:8px 16px;border-radius:8px;display:inline-block;margin-bottom:12px;letter-spacing:2px;">
+                    ${escapeHtml(expectedValue)}
+                </div>
+                <input 
+                    type="text" 
+                    id="${inputId}"
+                    placeholder="${escapeHtml(placeholder)}"
+                    autocomplete="off"
+                    autocapitalize="characters"
+                    style="width:100%;padding:12px 14px;border:2px solid #dc2626;border-radius:10px;font-family:'Courier New',monospace;font-size:15px;font-weight:700;text-align:center;text-transform:uppercase;letter-spacing:2px;outline:none;color:#7f1d1d;"
+                >
+            </div>
+        `;
+
+        // Close button
+        closeBtn.style.display = 'flex';
+
+        // Footer — Confirm disabled by default
+        footerEl.innerHTML = `
+            <button class="fdc-popup-btn fdc-popup-btn-secondary" data-action="cancel">
+                <i class="fas fa-times"></i> ${escapeHtml(cancelText)}
+            </button>
+            <button class="fdc-popup-btn fdc-popup-btn-${confirmType}" data-action="confirm" disabled>
+                <i class="fas fa-check"></i> ${escapeHtml(confirmText)}
+            </button>
+        `;
+
+        const confirmBtn = footerEl.querySelector('[data-action="confirm"]');
+        const cancelBtn = footerEl.querySelector('[data-action="cancel"]');
+        const input = document.getElementById(inputId);
+
+        // Input validation
+        input.addEventListener('input', function () {
+            const typed = this.value.trim().toUpperCase();
+            const expected = String(expectedValue).trim().toUpperCase();
+
+            if (typed === expected) {
+                confirmBtn.disabled = false;
+                input.style.background = '#dcfce7';
+                input.style.borderColor = '#16a34a';
+                input.style.color = '#166534';
+            } else {
+                confirmBtn.disabled = true;
+                input.style.background = '';
+                input.style.borderColor = '#dc2626';
+                input.style.color = '#7f1d1d';
+            }
+        });
+
+        // Enter key on input
+        input.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' && !confirmBtn.disabled) {
+                confirmBtn.click();
+            }
+        });
+
+        // Cancel button
+        cancelBtn.addEventListener('click', function () {
+            if (typeof onCancel === 'function') onCancel();
+            closePopup();
+        });
+
+        // Confirm button
+        confirmBtn.addEventListener('click', function () {
+            if (typeof onConfirm === 'function') onConfirm();
+            closePopup();
+        });
+
+        // Show
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+
+        // Auto-focus input
+        setTimeout(() => input.focus(), 300);
+    };
+
+    // =========================================================
     // AUTO-INJECT ON LOAD
     // =========================================================
     if (document.readyState === 'loading') {
@@ -597,6 +771,6 @@
         injectPopupDOM();
     }
 
-    console.log('🎨 FDC Popup System loaded');
+    console.log('🎨 FDC Popup System v2.0 loaded — with fdcPromptInput');
 
 })();

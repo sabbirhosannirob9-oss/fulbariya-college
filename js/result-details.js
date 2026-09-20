@@ -2,7 +2,7 @@
  * =========================================================
  * FULBARIYA COLLEGE — RESULT DETAILS (Public Student View)
  * Location: js/result-details.js
- * Version: v2 — Book-wise grouped, PDF download
+ * Version: v3 — Print-based PDF
  * Depends: config.js, supabase.js, admin-popup.js
  * =========================================================
  */
@@ -35,8 +35,6 @@
         if (!dateStr) return '—';
         try {
             const d = new Date(dateStr);
-            const months = ['January', 'February', 'March', 'April', 'May', 'June',
-                            'July', 'August', 'September', 'October', 'November', 'December'];
             const bnMonths = ['জানুয়ারি', 'ফেব্রুয়ারি', 'মার্চ', 'এপ্রিল', 'মে', 'জুন',
                              'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর'];
             return `${d.getDate()} ${bnMonths[d.getMonth()]} ${d.getFullYear()}`;
@@ -144,7 +142,6 @@
         $('resultArea').classList.remove('show');
 
         try {
-            // Load student
             const { data: stuData, error: stuErr } = await window.FDC_SUPABASE
                 .from('students')
                 .select('*')
@@ -158,7 +155,6 @@
             }
             student = stuData;
 
-            // Load result
             const { data: resData, error: resErr } = await window.FDC_SUPABASE
                 .from('results')
                 .select('*')
@@ -173,7 +169,6 @@
             }
             result = resData;
 
-            // Load result_details with subject info
             const { data: detData, error: detErr } = await window.FDC_SUPABASE
                 .from('result_details')
                 .select('*, subjects(*)')
@@ -181,7 +176,6 @@
                 .order('subject_id');
 
             if (detErr) throw detErr;
-
             details = detData || [];
 
             if (details.length === 0) {
@@ -189,10 +183,7 @@
                 return;
             }
 
-            // Group by book
             buildBookGroups();
-
-            // Render
             renderSheet();
 
             $('loadingArea').classList.remove('show');
@@ -236,7 +227,6 @@
                     assessment_model: subj.assessment_model || 'cq_mcq_practical',
                     subject_code: subj.subject_code,
                     papers: [],
-                    papersGP: [],
                     failed: false
                 });
             }
@@ -265,11 +255,9 @@
             if (d.status === 'fail') book.failed = true;
         });
 
-        // Sort papers and calculate combined GP
         map.forEach(book => {
             book.papers.sort((a, b) => (a.paper_number || 1) - (b.paper_number || 1));
 
-            // Combined GP = average of paper GPs
             if (book.papers.length > 0) {
                 if (book.failed) {
                     book.combinedGP = 0;
@@ -281,7 +269,6 @@
                     book.combinedGrade = gpToGrade(book.combinedGP);
                 }
 
-                // Total marks for book
                 book.combinedTotal = book.papers.reduce((s, p) => s + (p.total || 0), 0);
                 book.combinedMax = book.papers.reduce((s, p) => {
                     if (book.assessment_model === 'board_continuous') {
@@ -294,7 +281,6 @@
             }
         });
 
-        // Order: compulsory → group → optional
         const typeOrder = { compulsory: 0, group: 1, optional: 2 };
         bookGroups = Array.from(map.values()).sort((a, b) => {
             const ta = typeOrder[a.subject_type] ?? 99;
@@ -311,24 +297,16 @@
         const exam = allExams.find(e => String(e.id) === String(result.exam_id));
         const examName = exam ? exam.display_name : 'Exam';
 
-        // Group books by section
         const sections = {
             compulsory: bookGroups.filter(b => b.subject_type === 'compulsory'),
             group: bookGroups.filter(b => b.subject_type === 'group'),
             optional: bookGroups.filter(b => b.subject_type === 'optional')
         };
 
-        // Calculate overall GPA
         const gpaData = calculateOverallGPA();
 
-        // Get exam status
-        const statusText = gpaData.status === 'pass' ? '✅ PASS' : '❌ FAIL';
-        const statusClass = gpaData.status === 'fail' ? 'fail' : '';
-
-        // Build HTML
         let html = `
             <div class="sheet-wrapper" id="sheetWrapper">
-                <!-- Header -->
                 <div class="sheet-header">
                     <div class="sh-logo">
                         <img src="../assets/images/logo1.png" alt="Fulbariya College"
@@ -342,7 +320,6 @@
                     </div>
                 </div>
 
-                <!-- Student Info -->
                 <div class="student-info">
                     <div class="si-item">
                         <div class="si-label">Student Name</div>
@@ -371,7 +348,6 @@
                 </div>
         `;
 
-        // Sections
         if (sections.compulsory.length > 0) {
             html += renderSection('📌 আবশ্যিক বিষয় (Compulsory)', sections.compulsory);
         }
@@ -382,10 +358,8 @@
             html += renderSection('🎯 ৪র্থ বিষয় (Optional)', sections.optional);
         }
 
-        // Result Summary
         html += renderSummary(gpaData);
 
-        // Footer
         html += `
                 <div class="sheet-footer">
                     <div class="footer-note">
@@ -433,7 +407,6 @@
         books.forEach(book => {
             const isBMT = book.assessment_model === 'board_continuous';
 
-            // Book header row
             html += `
                 <tr class="book-header">
                     <td colspan="7">
@@ -446,7 +419,6 @@
                 </tr>
             `;
 
-            // Paper rows
             book.papers.forEach(p => {
                 const paperLabel = book.papers.length > 1
                     ? `${p.paper_number === 1 ? '১ম' : '২য়'} পত্র`
@@ -479,7 +451,6 @@
                 }
             });
 
-            // Combined row (if multiple papers)
             if (book.papers.length > 1) {
                 html += `
                     <tr class="combined-row">
@@ -506,7 +477,7 @@
 
         let breakdownHTML = '';
 
-        mainSubjects.forEach((book, idx) => {
+        mainSubjects.forEach((book) => {
             const gp = book.failed ? 0 : book.combinedGP;
             breakdownHTML += `
                 <div class="sb-row">
@@ -586,7 +557,6 @@
         const mainSubjects = bookGroups.filter(b => b.subject_type !== 'optional');
         const optional = bookGroups.find(b => b.subject_type === 'optional');
 
-        // Compulsory fail check
         const compulsoryFail = bookGroups.find(b => b.subject_type === 'compulsory' && b.failed);
         if (compulsoryFail) {
             return {
@@ -596,7 +566,6 @@
             };
         }
 
-        // Main fail check
         const mainFail = mainSubjects.find(b => b.failed);
         if (mainFail) {
             return {
@@ -606,7 +575,6 @@
             };
         }
 
-        // Main sum
         const mainSum = mainSubjects.reduce((s, b) => s + (b.combinedGP || 0), 0);
         const mainCount = mainSubjects.length;
 
@@ -614,13 +582,11 @@
             return { gpa: 0, grade: 'F', status: 'fail', mainSum: 0, bonus: 0, mainCount: 0 };
         }
 
-        // 4th bonus
         let bonus = 0;
         if (optional && !optional.failed && optional.combinedGP > 2.00) {
             bonus = optional.combinedGP - 2.00;
         }
 
-        // Overall GPA
         let gpa = (mainSum + bonus) / mainCount;
         if (gpa > 5.00) gpa = 5.00;
         gpa = Math.round(gpa * 100) / 100;
@@ -636,54 +602,23 @@
     }
 
     // =========================================================
-    // DOWNLOAD PDF
+    // PRINT / DOWNLOAD PDF (via Browser Print)
     // =========================================================
-    async function downloadPDF() {
-        const wrapper = $('sheetWrapper');
-        if (!wrapper) return window.fdcError('Result sheet পাওয়া যায়নি।');
+    function downloadPDF() {
+        // Set document title for PDF filename
+        const originalTitle = document.title;
+        const pdfFilename = `Result_${student.roll}_${student.name.replace(/\s+/g, '_')}_${result.year}`;
+        document.title = pdfFilename;
 
-        const loading = $('pdfLoading');
-        loading.classList.add('show');
+        // Open print dialog (user selects "Save as PDF")
+        window.print();
 
-        try {
-            // Filename
-            const filename = `Result_${student.roll}_${student.name.replace(/\s+/g, '_')}_${result.year}.pdf`;
-
-            // Options
-            const opt = {
-                margin: [8, 8, 8, 8],
-                filename: filename,
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: {
-                    scale: 2,
-                    useCORS: true,
-                    allowTaint: true,
-                    letterRendering: true,
-                    logging: false,
-                    backgroundColor: '#ffffff'
-                },
-                jsPDF: {
-                    unit: 'mm',
-                    format: 'a4',
-                    orientation: 'portrait'
-                },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-            };
-
-            await html2pdf().set(opt).from(wrapper).save();
-
-            window.fdcSuccess('✅ PDF download শুরু হয়েছে!');
-        } catch (e) {
-            console.error('PDF error:', e);
-            window.fdcError('PDF তৈরি করা যায়নি: ' + e.message);
-        } finally {
-            loading.classList.remove('show');
-        }
+        // Restore title after print dialog closes
+        setTimeout(() => {
+            document.title = originalTitle;
+        }, 1000);
     }
 
-    // =========================================================
-    // PRINT
-    // =========================================================
     function printSheet() {
         window.print();
     }
@@ -702,7 +637,6 @@
             if (navigator.share) {
                 await navigator.share(shareData);
             } else {
-                // Fallback: copy to clipboard
                 await navigator.clipboard.writeText(window.location.href);
                 window.fdcSuccess('✅ Link copied to clipboard!');
             }
@@ -717,12 +651,12 @@
     // ATTACH EVENTS
     // =========================================================
     function attachEvents() {
-        const btnPDF = $('btnDownloadPDF');
         const btnPrint = $('btnPrint');
+        const btnPrintNative = $('btnPrintNative');
         const btnShare = $('btnShare');
 
-        if (btnPDF) btnPDF.addEventListener('click', downloadPDF);
-        if (btnPrint) btnPrint.addEventListener('click', printSheet);
+        if (btnPrint) btnPrint.addEventListener('click', downloadPDF);
+        if (btnPrintNative) btnPrintNative.addEventListener('click', printSheet);
         if (btnShare) btnShare.addEventListener('click', shareSheet);
     }
 
@@ -730,14 +664,14 @@
     // INIT
     // =========================================================
     function init() {
-        console.log('🚀 Result Details v2 initializing...');
+        console.log('🚀 Result Details v3 initializing...');
 
         attachEvents();
 
         waitForSupabase(async function () {
             await loadExams();
             await loadDetails();
-            console.log('✅ Result Details v2 ready');
+            console.log('✅ Result Details v3 ready');
         });
     }
 

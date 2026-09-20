@@ -1,9 +1,10 @@
 /**
  * =========================================================
- * FULBARIYA COLLEGE — PUBLIC ACADEMIC HUB
+ * FULBARIYA COLLEGE — PUBLIC ACADEMIC CALENDAR
  * Location: js/academic-hub.js
+ * Version: v2.0 — Calendar only (Routine tab removed)
  * Depends: config.js, supabase.js
- * Features: Calendar Tab + Routine Tab
+ * Table: calendar_events
  * =========================================================
  */
 
@@ -15,8 +16,6 @@
     // =========================================================
     let allEvents = [];
     let filteredEvents = [];
-    let allRoutines = [];
-    let filteredRoutines = [];
 
     const EVENT_TYPES = {
         exam: { label: 'পরীক্ষা', icon: 'fa-file-alt' },
@@ -71,35 +70,6 @@
     }
 
     // =========================================================
-    // TAB SWITCHING
-    // =========================================================
-    function initTabs() {
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                const tab = this.dataset.tab;
-
-                // Update buttons
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                // Update content
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                $('tab-' + tab).classList.add('active');
-
-                // URL hash update
-                window.history.replaceState(null, '', '#' + tab);
-            });
-        });
-
-        // Check URL hash on load
-        const hash = window.location.hash.substring(1);
-        if (hash === 'routine' || hash === 'calendar') {
-            const btn = document.querySelector(`.tab-btn[data-tab="${hash}"]`);
-            if (btn) btn.click();
-        }
-    }
-
-    // =========================================================
     // YEAR OPTIONS
     // =========================================================
     function loadYearOptions() {
@@ -108,6 +78,8 @@
         for (let i = -1; i <= 2; i++) years.push(currentYear + i);
 
         const filterYear = $('calFilterYear');
+        if (!filterYear) return;
+
         filterYear.innerHTML = '<option value="">All Years</option>';
         years.forEach(y => {
             filterYear.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
@@ -130,16 +102,21 @@
             allEvents = data || [];
             console.log('✅ Loaded events:', allEvents.length);
 
-            $('calendarCount').textContent = allEvents.length;
+            const countEl = $('calendarCount');
+            if (countEl) countEl.textContent = allEvents.length;
+
             updateCalendarStats();
             applyCalendarFilters();
         } catch (e) {
             console.error('Load events error:', e);
-            $('eventsList').innerHTML = `<div class="empty-state">
-                <div class="icon-wrap"><i class="fas fa-exclamation-circle"></i></div>
-                <h6>লোড করা যায়নি</h6>
-                <p>${escapeHtml(e.message)}</p>
-            </div>`;
+            const list = $('eventsList');
+            if (list) {
+                list.innerHTML = `<div class="empty-state">
+                    <div class="icon-wrap"><i class="fas fa-exclamation-circle"></i></div>
+                    <h6>লোড করা যায়নি</h6>
+                    <p>${escapeHtml(e.message)}</p>
+                </div>`;
+            }
         }
     }
 
@@ -152,10 +129,11 @@
         const holiday = allEvents.filter(e => e.event_type === 'holiday').length;
         const event = allEvents.filter(e => e.event_type === 'event').length;
 
-        $('calStatTotal').textContent = total;
-        $('calStatExam').textContent = exam;
-        $('calStatHoliday').textContent = holiday;
-        $('calStatEvent').textContent = event;
+        const el = (id) => $(id);
+        if (el('calStatTotal')) el('calStatTotal').textContent = total;
+        if (el('calStatExam')) el('calStatExam').textContent = exam;
+        if (el('calStatHoliday')) el('calStatHoliday').textContent = holiday;
+        if (el('calStatEvent')) el('calStatEvent').textContent = event;
     }
 
     // =========================================================
@@ -168,7 +146,7 @@
         const today = getTodayStr();
 
         filteredEvents = allEvents.filter(ev => {
-            if (fYear && ev.year !== fYear) return false;
+            if (fYear && String(ev.year) !== String(fYear)) return false;
             if (fType && ev.event_type !== fType) return false;
 
             if (fTime === 'upcoming') {
@@ -266,159 +244,13 @@
     }
 
     // =========================================================
-    // LOAD ROUTINES
-    // =========================================================
-    async function loadRoutines() {
-        try {
-            const { data, error } = await window.FDC_SUPABASE
-                .from('class_routines')
-                .select('*')
-                .eq('is_published', true)
-                .order('branch', { ascending: true })
-                .order('class_name', { ascending: true })
-                .order('display_order', { ascending: true });
-
-            if (error) throw error;
-
-            allRoutines = data || [];
-            console.log('✅ Loaded routines:', allRoutines.length);
-
-            $('routineCount').textContent = allRoutines.length;
-            applyRoutineFilters();
-        } catch (e) {
-            console.error('Load routines error:', e);
-            $('routineGrid').innerHTML = `<div class="empty-state">
-                <div class="icon-wrap"><i class="fas fa-exclamation-circle"></i></div>
-                <h6>লোড করা যায়নি</h6>
-                <p>${escapeHtml(e.message)}</p>
-            </div>`;
-        }
-    }
-
-    // =========================================================
-    // ROUTINE FILTERS
-    // =========================================================
-    function applyRoutineFilters() {
-        const fBranch = $('rtFilterBranch').value;
-        const fClass = $('rtFilterClass').value;
-        const fGroup = $('rtFilterGroup').value;
-
-        filteredRoutines = allRoutines.filter(r => {
-            if (fBranch && r.branch !== fBranch) return false;
-            if (fClass && r.class_name !== fClass) return false;
-            if (fGroup && r.group_name !== fGroup) return false;
-            return true;
-        });
-
-        renderRoutines();
-    }
-
-    // =========================================================
-    // RENDER ROUTINES
-    // =========================================================
-    function renderRoutines() {
-        const grid = $('routineGrid');
-
-        if (filteredRoutines.length === 0) {
-            grid.innerHTML = `<div class="empty-state">
-                <div class="icon-wrap"><i class="fas fa-calendar-week"></i></div>
-                <h6>কোনো রুটিন পাওয়া যায়নি</h6>
-                <p>Filter পরিবর্তন করে দেখুন</p>
-            </div>`;
-            return;
-        }
-
-        let html = '';
-        filteredRoutines.forEach(r => {
-            const branchShort = r.branch || 'HSC';
-            const groupTag = r.group_name
-                ? `<span class="rc-tag group"><i class="fas fa-users"></i> ${escapeHtml(r.group_name)}</span>`
-                : '';
-
-            const titleText = r.title || 'Routine';
-
-            html += `<div class="routine-card">
-                <div class="rc-img-wrap" data-action="preview" data-id="${r.id}">
-                    <span class="rc-branch">${escapeHtml(branchShort)}</span>
-                    <img src="${escapeHtml(r.image_url)}" alt="${escapeHtml(titleText)}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22240%22%3E%3Crect fill=%22%23f0f4ff%22 width=%22300%22 height=%22240%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 fill=%22%230a1655%22 font-size=%2240%22 text-anchor=%22middle%22 dy=%22.3em%22%3E📋%3C/text%3E%3C/svg%3E'">
-                    <div class="rc-overlay-btn">
-                        <i class="fas fa-expand"></i>
-                    </div>
-                </div>
-
-                <div class="rc-body">
-                    <div class="rc-title">${escapeHtml(titleText)}</div>
-                    <div class="rc-meta">
-                        <span class="rc-tag class"><i class="fas fa-graduation-cap"></i> Class ${escapeHtml(r.class_name)}</span>
-                        ${groupTag}
-                    </div>
-
-                    <div class="rc-actions">
-                        <button class="rc-btn" data-action="preview" data-id="${r.id}">
-                            <i class="fas fa-eye"></i> View
-                        </button>
-                        <a href="${escapeHtml(r.image_url)}" target="_blank" download class="rc-btn outline">
-                            <i class="fas fa-download"></i> Save
-                        </a>
-                    </div>
-                </div>
-            </div>`;
-        });
-
-        grid.innerHTML = html;
-    }
-
-    // =========================================================
-    // PREVIEW MODAL
-    // =========================================================
-    function openPreview(id) {
-        const r = allRoutines.find(x => x.id === id);
-        if (!r) return;
-
-        $('previewImg').src = r.image_url;
-        $('previewDownload').href = r.image_url;
-        $('previewOverlay').classList.add('show');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closePreview() {
-        $('previewOverlay').classList.remove('show');
-        document.body.style.overflow = '';
-    }
-
-    // =========================================================
     // EVENT LISTENERS
     // =========================================================
     function attachEvents() {
         // Calendar filters
         ['calFilterYear', 'calFilterType', 'calFilterTime'].forEach(id => {
-            $(id).addEventListener('change', applyCalendarFilters);
-        });
-
-        // Routine filters
-        ['rtFilterBranch', 'rtFilterClass', 'rtFilterGroup'].forEach(id => {
-            $(id).addEventListener('change', applyRoutineFilters);
-        });
-
-        // Routine card actions (delegated)
-        $('routineGrid').addEventListener('click', function (e) {
-            const target = e.target.closest('[data-action="preview"]');
-            if (!target) return;
-            const id = parseInt(target.dataset.id);
-            openPreview(id);
-        });
-
-        // Preview modal close
-        $('previewClose').addEventListener('click', closePreview);
-        $('previewOverlay').addEventListener('click', function (e) {
-            if (e.target === this) closePreview();
-        });
-
-        // ESC key
-        document.addEventListener('keydown', function (e) {
-            if (e.key === 'Escape') {
-                if ($('previewOverlay').classList.contains('show')) closePreview();
-            }
+            const el = $(id);
+            if (el) el.addEventListener('change', applyCalendarFilters);
         });
     }
 
@@ -426,18 +258,14 @@
     // INIT
     // =========================================================
     function init() {
-        console.log('🚀 Academic Hub initializing...');
+        console.log('🚀 Academic Calendar v2.0 initializing...');
 
-        initTabs();
         loadYearOptions();
         attachEvents();
 
         waitForSupabase(async function () {
-            await Promise.all([
-                loadEvents(),
-                loadRoutines()
-            ]);
-            console.log('✅ Academic Hub ready');
+            await loadEvents();
+            console.log('✅ Academic Calendar ready');
         });
     }
 

@@ -2,8 +2,13 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN SUBJECT MANAGEMENT
  * Location: js/admin-subjects.js
- * Version: v2 — Book-wise Accordion UI
- * Depends: config.js, supabase.js, auth.js, admin-popup.js
+ * Version: v3 — Custom Popups (fdc*)
+ * Depends: config.js, supabase.js, auth.js, admin-popup.js v2
+ * 
+ * ✅ POPUP POLICY:
+ *    - সব alert() → fdcSuccess / fdcError / fdcWarning
+ *    - সব confirm() → fdcConfirm
+ *    - prompt() → fdcPromptInput (type-to-confirm)
  * =========================================================
  */
 
@@ -14,7 +19,7 @@
     // STATE
     // =========================================================
     let allSubjects = [];
-    let bookGroups = [];       // Grouped by book
+    let bookGroups = [];
     let filteredBooks = [];
     let expandedBooks = new Set();
     let editingBookKey = null;
@@ -78,7 +83,12 @@
                 sessionStorage.clear();
                 window.location.replace('admin-login.html');
             },
-            { title: 'Logout', confirmText: 'Yes, Logout', cancelText: 'Cancel', confirmType: 'danger' }
+            {
+                title: 'লগআউট নিশ্চিত করুন',
+                confirmText: 'হ্যাঁ, লগআউট',
+                cancelText: 'বাতিল',
+                confirmType: 'danger'
+            }
         );
     };
 
@@ -142,30 +152,21 @@
             const book = map.get(key);
             book.papers.push(s);
 
-            // Book inactive if all papers inactive
             if (s.is_active) book.isActive = true;
         });
 
-        // Sort papers within each book
         map.forEach(book => {
             book.papers.sort((a, b) => (a.paper_number || 1) - (b.paper_number || 1));
-
-            // If any paper is inactive, book is still active (at least one active)
             book.isActive = book.papers.some(p => p.is_active);
         });
 
-        // Convert to array with type ordering
         const typeOrder = { compulsory: 0, group: 1, optional: 2 };
         bookGroups = Array.from(map.values()).sort((a, b) => {
-            // Branch order
             if (a.branch !== b.branch) return a.branch === 'HSC' ? -1 : 1;
-            // Class order
             if (a.class_name !== b.class_name) return a.class_name.localeCompare(b.class_name);
-            // Type order
             const ta = typeOrder[a.subject_type] ?? 99;
             const tb = typeOrder[b.subject_type] ?? 99;
             if (ta !== tb) return ta - tb;
-            // Name order
             return (a.subject_name || '').localeCompare(b.subject_name || '', 'bn');
         });
     }
@@ -229,7 +230,6 @@
             const totalMarks = calculateBookTotal(book);
             const paperCount = book.papers.length;
 
-            // Branch tag
             const branchClass = book.branch === 'HSC' ? 'branch-HSC' : 'branch-BM';
             const typeClass = 'type-' + book.subject_type;
             const modelClass = book.assessment_model === 'board_continuous' ? 'model-bmt' : 'model-hsc';
@@ -293,7 +293,7 @@
     function renderPaperCards(book) {
         let html = '';
 
-        book.papers.forEach((paper, idx) => {
+        book.papers.forEach((paper) => {
             const paperLabel = book.papers.length > 1
                 ? `${paper.paper_number === 1 ? '১ম' : '২য়'} পত্র`
                 : 'Single Paper';
@@ -405,7 +405,6 @@
         $('bookModalIcon').className = 'fas fa-book';
         $('saveBookBtn').innerHTML = '<i class="fas fa-save"></i> Save Book';
 
-        // Reset form
         $('bookName').value = '';
         $('bookBranch').value = '';
         $('bookClass').value = '';
@@ -419,7 +418,6 @@
         resetPaperInputs(2);
 
         $('paper2Block').style.display = 'block';
-
         $('bookAlert').style.display = 'none';
 
         openModal('bookModal');
@@ -451,7 +449,6 @@
         $('bookModalIcon').className = 'fas fa-edit';
         $('saveBookBtn').innerHTML = '<i class="fas fa-save"></i> Update Book';
 
-        // Fill form
         $('bookName').value = book.subject_name || '';
         $('bookBranch').value = book.branch || '';
         $('bookClass').value = book.class_name || '';
@@ -461,7 +458,6 @@
         $('bookPaperCount').value = String(book.papers.length);
         $('bookIsActive').checked = book.isActive;
 
-        // Fill papers
         book.papers.forEach((p, idx) => {
             const num = idx + 1;
             if (num > 2) return;
@@ -476,7 +472,6 @@
         });
 
         $('paper2Block').style.display = book.papers.length > 1 ? 'block' : 'none';
-
         $('bookAlert').style.display = 'none';
 
         openModal('bookModal');
@@ -495,7 +490,7 @@
         const paperCount = parseInt($('bookPaperCount').value) || 1;
         const isActive = $('bookIsActive').checked;
 
-        // Validation
+        // Validation — Custom popups
         if (!name) return window.fdcWarning('Book Name দিতে হবে।');
         if (!branch) return window.fdcWarning('Branch সিলেক্ট করুন।');
         if (!className) return window.fdcWarning('Class সিলেক্ট করুন।');
@@ -504,7 +499,6 @@
             return window.fdcWarning('Group সিলেক্ট করুন।');
         }
 
-        // Gather papers
         const papers = [];
         for (let num = 1; num <= paperCount; num++) {
             const code = $(`p${num}Code`).value.trim();
@@ -534,18 +528,16 @@
 
         try {
             if (editingBookKey) {
-                // UPDATE existing
                 await updateExistingBook(editingBookKey, papers, isActive);
             } else {
-                // INSERT new
                 await insertNewBook({
                     name, branch, className, groupName,
                     subjectType, model, papers, isActive
                 });
             }
 
-            window.fdcSuccess(editingBookKey ? '✅ Book updated!' : '✅ Book created!');
             closeModal('bookModal');
+            window.fdcSuccess(editingBookKey ? 'Book সফলভাবে update হয়েছে!' : 'Book সফলভাবে যোগ হয়েছে!');
             await loadAllSubjects();
         } catch (e) {
             console.error('Save book error:', e);
@@ -609,9 +601,7 @@
 
         const groupValue = subjectType === 'compulsory' ? null : groupName;
 
-        // Update each paper
         for (const p of papers) {
-            // Find existing paper with this paper_number
             const existingPaper = book.papers.find(ep => ep.paper_number === p.paper_number);
 
             if (existingPaper) {
@@ -636,7 +626,6 @@
                     .eq('id', existingPaper.id);
                 if (error) throw error;
             } else {
-                // Insert new paper
                 const { error } = await window.FDC_SUPABASE
                     .from('subjects')
                     .insert({
@@ -660,7 +649,6 @@
             }
         }
 
-        // If papers were reduced (e.g., 2 → 1), delete removed paper
         const newPaperNumbers = papers.map(p => p.paper_number);
         for (const ep of book.papers) {
             if (!newPaperNumbers.includes(ep.paper_number)) {
@@ -680,7 +668,7 @@
         const action = newState ? 'Activate' : 'Deactivate';
 
         window.fdcConfirm(
-            `"${book.subject_name}" (${book.papers.length} paper)-কে ${action} করতে চান?`,
+            `"${escapeHtml(book.subject_name)}" (${book.papers.length} paper)-কে ${action} করতে চান?`,
             async function () {
                 try {
                     const ids = book.papers.map(p => p.id);
@@ -689,37 +677,45 @@
                         .update({ is_active: newState })
                         .in('id', ids);
                     if (error) throw error;
-                    window.fdcSuccess(`✅ Book ${action}d!`);
+                    window.fdcSuccess(`Book সফলভাবে ${action}d হয়েছে!`);
                     await loadAllSubjects();
                 } catch (e) {
                     window.fdcError('Failed: ' + e.message);
                 }
             },
             {
-                title: action + ' Book',
-                confirmText: 'Yes, ' + action,
+                title: `${action} Book`,
+                confirmText: 'হ্যাঁ, ' + action,
+                cancelText: 'বাতিল',
                 confirmType: newState ? 'success' : 'danger'
             }
         );
     }
 
     // =========================================================
-    // DELETE BOOK
+    // DELETE BOOK — Type-to-Confirm
     // =========================================================
     async function deleteBook(bookKey) {
         const book = bookGroups.find(b => b.key === bookKey);
         if (!book) return;
 
-        window.fdcConfirm(
-            `"${book.subject_name}" (${book.papers.length} paper) চিরতরে delete হবে।\n\n` +
-            `⚠️ সতর্কতা: যদি কোনো student এই book-এ enrolled থাকে, তাদের data-ও প্রভাবিত হবে।\n\n` +
-            `আপনি কি নিশ্চিত?`,
-            async function () {
-                const typed = prompt('নিশ্চিত করতে "DELETE" টাইপ করুন:');
-                if (!typed || typed.trim().toUpperCase() !== 'DELETE') {
-                    return window.fdcWarning('Delete বাতিল।');
-                }
-
+        window.fdcPromptInput({
+            title: '⚠️ Delete Book',
+            subtitle: `${escapeHtml(book.subject_name)} (${book.papers.length} paper)`,
+            message: `
+                এই book এবং সব related data <strong>চিরতরে</strong> মুছে যাবে।
+                <p style="margin-top:12px;color:#991b1b;">
+                    <strong>⚠️ সতর্কতা:</strong> যদি কোনো student এই book-এ enrolled থাকে,
+                    তাদের subject assignments-ও প্রভাবিত হবে।
+                </p>
+                <p style="margin-top:8px;color:#7f1d1d;font-weight:700;">এটি undo করা যাবে না!</p>
+            `,
+            expectedValue: 'DELETE',
+            placeholder: 'টাইপ করুন: DELETE',
+            confirmText: 'হ্যাঁ, Delete করুন',
+            cancelText: 'বাতিল',
+            confirmType: 'danger',
+            onConfirm: async function () {
                 try {
                     const ids = book.papers.map(p => p.id);
                     const { error } = await window.FDC_SUPABASE
@@ -727,29 +723,21 @@
                         .delete()
                         .in('id', ids);
                     if (error) throw error;
-                    window.fdcSuccess('✅ Book deleted!');
+                    window.fdcSuccess('Book সফলভাবে delete হয়েছে!');
                     await loadAllSubjects();
                 } catch (e) {
                     window.fdcError('Failed: ' + e.message);
                 }
-            },
-            {
-                title: '⚠️ Delete Book',
-                confirmText: 'Yes, Delete',
-                confirmType: 'danger'
             }
-        );
+        });
     }
 
     // =========================================================
     // EDIT SINGLE PAPER
     // =========================================================
     function editSinglePaper(paperId) {
-        // Find book containing this paper
         const book = bookGroups.find(b => b.papers.some(p => p.id === paperId));
         if (!book) return;
-
-        // Open full book editor but focus on this paper
         openEditBookModal(book.key);
     }
 
@@ -772,27 +760,22 @@
     // EVENT LISTENERS
     // =========================================================
     function attachEvents() {
-        // Add button
         $('btnAddBook').addEventListener('click', openAddBookModal);
 
-        // Modal
         $('closeBookModal').addEventListener('click', () => closeModal('bookModal'));
         $('cancelBookBtn').addEventListener('click', () => closeModal('bookModal'));
         $('saveBookBtn').addEventListener('click', saveBook);
 
-        // Paper count change
         $('bookPaperCount').addEventListener('change', function () {
             const count = parseInt(this.value);
             $('paper2Block').style.display = count > 1 ? 'block' : 'none';
         });
 
-        // Filters
         ['filterBranch', 'filterClass', 'filterGroup', 'filterType'].forEach(id => {
             $(id).addEventListener('change', applyFilters);
         });
         $('searchInput').addEventListener('input', applyFilters);
 
-        // Expand/Collapse all
         $('btnExpandAll').addEventListener('click', () => {
             filteredBooks.forEach(b => expandedBooks.add(b.key));
             renderBooks();
@@ -802,7 +785,6 @@
             renderBooks();
         });
 
-        // Delegated events on books container
         $('booksContainer').addEventListener('click', function (e) {
             const actionBtn = e.target.closest('[data-action]');
             if (!actionBtn) return;
@@ -812,7 +794,6 @@
             const bookKey = bookCard ? bookCard.dataset.bookKey : null;
 
             if (action === 'toggle') {
-                // Only toggle if click on header (not on action buttons)
                 if (e.target.closest('.bh-actions')) return;
                 if (bookKey) toggleBookExpand(bookKey);
             } else if (action === 'edit') {
@@ -827,7 +808,6 @@
             }
         });
 
-        // Modal backdrop
         document.querySelectorAll('.fdc-modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function (e) {
                 if (e.target === this) {
@@ -842,7 +822,7 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Subjects v2 initializing...');
+        console.log('🚀 Admin Subjects v3 initializing...');
 
         attachEvents();
 
@@ -853,7 +833,7 @@
             await loadAdminInfo();
             await loadAllSubjects();
 
-            console.log('✅ Admin Subjects v2 ready');
+            console.log('✅ Admin Subjects v3 ready');
         });
     }
 

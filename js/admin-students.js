@@ -2,8 +2,8 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN STUDENTS MANAGEMENT
  * Location: js/admin-students.js
- * Version: v10 — Correct Subject Handling
- * Depends: config.js, supabase.js, auth.js, admin-popup.js
+ * Version: v11 — Custom Popups (fdc*) + Type-to-Confirm
+ * Depends: config.js, supabase.js, auth.js, admin-popup.js v2
  * 
  * ⚠️ SESSION POLICY (Bangladesh HSC):
  *    Session = ভর্তির বছর — কখনো বদলায় না।
@@ -14,6 +14,11 @@
  *    Business: 3 select from 8, 4th = বাকি
  *    Humanities: 3 select from 7, 4th = বাকি
  *    BMT: 8 fixed compulsory
+ * 
+ * ✅ POPUP POLICY:
+ *    - সব alert() → fdcSuccess / fdcError / fdcWarning
+ *    - সব confirm() → fdcConfirm
+ *    - prompt() → fdcPromptInput (type-to-confirm)
  * =========================================================
  */
 
@@ -25,11 +30,10 @@
     // =========================================================
     const SUBJECT_STRUCTURE = {
         HSC: {
-            // সব HSC group-এ same compulsory
             globalCompulsory: ['বাংলা', 'English', 'ICT'],
 
             Science: {
-                type: 'fixed_choice',  // Fixed 2 + Choice 1
+                type: 'fixed_choice',
                 fixedMain: ['পদার্থবিজ্ঞান', 'রসায়ন'],
                 choiceMain: ['জীববিজ্ঞান', 'উচ্চতর গণিত'],
                 mainCount: 3,
@@ -42,7 +46,7 @@
             },
 
             Business: {
-                type: 'select_3',  // 3 select from pool
+                type: 'select_3',
                 mainPool: [
                     'হিসাববিজ্ঞান',
                     'ব্যবসায় সংগঠন ও ব্যবস্থাপনা',
@@ -113,22 +117,16 @@
 
     let editingStudentId = null;
 
-    // Bulk import state
     let bulkState = {
         config: {
-            class_name: '',
-            year: '',
-            session: '',
-            branch: '',
-            group: '',
-            mainSelected: [],       // Main subject names
-            fourthSubject: ''       // Default 4th
+            class_name: '', year: '', session: '', branch: '', group: '',
+            mainSelected: [], fourthSubject: ''
         },
-        allSubjects: [],            // All subjects from DB for this class/branch/group
-        compulsorySubjects: [],     // Compulsory subjects (বাংলা, English, ICT)
-        mainSubjects: [],           // Main subjects available
-        fourthSubjects: [],         // 4th subject options
-        students: [],               // Parsed students
+        allSubjects: [],
+        compulsorySubjects: [],
+        mainSubjects: [],
+        fourthSubjects: [],
+        students: [],
         previewValid: false
     };
 
@@ -198,14 +196,22 @@
     // LOGOUT
     // =========================================================
     window.handleLogout = function () {
-        if (!confirm('আপনি কি লগআউট করতে চান?')) return;
-        (async function () {
-            try {
-                if (window.FDCAuth) await window.FDCAuth.logout();
-            } catch (e) { console.warn(e); }
-            sessionStorage.clear();
-            window.location.replace('admin-login.html');
-        })();
+        window.fdcConfirm(
+            'আপনি কি লগআউট করতে চান?',
+            async function () {
+                try {
+                    if (window.FDCAuth) await window.FDCAuth.logout();
+                } catch (e) { console.warn(e); }
+                sessionStorage.clear();
+                window.location.replace('admin-login.html');
+            },
+            {
+                title: 'লগআউট নিশ্চিত করুন',
+                confirmText: 'হ্যাঁ, লগআউট',
+                cancelText: 'বাতিল',
+                confirmType: 'danger'
+            }
+        );
     };
 
     // =========================================================
@@ -277,7 +283,7 @@
             applyFilters();
         } catch (e) {
             console.error('Load students error:', e);
-            alert('Student load failed: ' + e.message);
+            window.fdcError('Student load failed: ' + e.message);
         }
     }
 
@@ -481,7 +487,7 @@
             openModal('studentModal');
         } catch (e) {
             console.error('Edit student error:', e);
-            alert('Failed to load student: ' + e.message);
+            window.fdcError('Failed to load student: ' + e.message);
         }
     };
 
@@ -498,12 +504,12 @@
 
         const formSession = ($('studentSession').value || '').trim();
 
-        if (!name) return alert('নাম দিতে হবে।');
-        if (!roll) return alert('Roll দিতে হবে।');
-        if (!className) return alert('Class সিলেক্ট করুন।');
-        if (!year) return alert('Year সিলেক্ট করুন।');
-        if (!branch) return alert('Branch সিলেক্ট করুন।');
-        if (branch === 'HSC' && !groupName) return alert('Group সিলেক্ট করুন।');
+        if (!name) return window.fdcWarning('নাম দিতে হবে।');
+        if (!roll) return window.fdcWarning('Roll দিতে হবে।');
+        if (!className) return window.fdcWarning('Class সিলেক্ট করুন।');
+        if (!year) return window.fdcWarning('Year সিলেক্ট করুন।');
+        if (!branch) return window.fdcWarning('Branch সিলেক্ট করুন।');
+        if (branch === 'HSC' && !groupName) return window.fdcWarning('Group সিলেক্ট করুন।');
 
         let session = formSession;
         if (!session && editingStudentId) {
@@ -535,12 +541,20 @@
                 if (error) throw error;
             }
 
-            alert(editingStudentId ? '✅ Student updated!' : '✅ Student created!');
             closeModal('studentModal');
+
+            window.fdcSuccess(
+                editingStudentId ? 'Student সফলভাবে update হয়েছে!' : 'Student সফলভাবে যোগ হয়েছে!'
+            );
+
             await loadAllStudents();
         } catch (e) {
             console.error('Save student error:', e);
-            alert('❌ Save failed: ' + e.message);
+            if (e.message && e.message.includes('duplicate')) {
+                window.fdcError('এই Roll + Class + Year + Branch আগেই আছে।');
+            } else {
+                window.fdcError('Save failed: ' + e.message);
+            }
         } finally {
             btn.disabled = false;
             btn.innerHTML = original;
@@ -548,42 +562,119 @@
     }
 
     // =========================================================
-    // TOGGLE / DELETE / VIEW
+    // TOGGLE ACTIVE
     // =========================================================
     window.toggleStudent = async function (id) {
         const s = allStudents.find(x => String(x.id) === String(id));
-        if (!s) return alert('Student পাওয়া যায়নি।');
-        if (!confirm(`"${s.name}" কে Deactivate করতে চান?`)) return;
-        try {
-            await window.FDC_SUPABASE.from('students').update({ is_active: false }).eq('id', id);
-            alert('✅ Deactivated!');
-            await loadAllStudents();
-        } catch (e) { alert('❌ Failed: ' + e.message); }
+        if (!s) return window.fdcError('Student পাওয়া যায়নি।');
+
+        window.fdcConfirm(
+            `"${escapeHtml(s.name)}" (Roll: ${escapeHtml(s.roll)}) কে Deactivate করতে চান?`,
+            async function () {
+                try {
+                    await window.FDC_SUPABASE
+                        .from('students')
+                        .update({ is_active: false })
+                        .eq('id', id);
+                    window.fdcSuccess('Student deactivate হয়েছে।');
+                    await loadAllStudents();
+                } catch (e) {
+                    window.fdcError('Deactivate failed: ' + e.message);
+                }
+            },
+            {
+                title: 'Deactivate Student',
+                subtitle: 'Data সংরক্ষিত থাকবে',
+                confirmText: 'হ্যাঁ, Deactivate',
+                cancelText: 'বাতিল',
+                confirmType: 'danger'
+            }
+        );
     };
 
+    // =========================================================
+    // DELETE STUDENT (Permanent) — Type-to-Confirm
+    // =========================================================
     window.deleteStudent = async function (id) {
         const s = allStudents.find(x => String(x.id) === String(id));
-        if (!s) return alert('Student পাওয়া যায়নি।');
-        if (!confirm(`⚠️ PERMANENT DELETE "${s.name}"?`)) return;
-        const typed = prompt('Type DELETE to confirm:');
-        if (!typed || typed.trim().toUpperCase() !== 'DELETE') return alert('Cancelled.');
+        if (!s) return window.fdcError('Student পাওয়া যায়নি।');
 
-        try {
-            await window.FDC_SUPABASE.from('student_subjects').delete().eq('student_id', id);
-            const { data: results } = await window.FDC_SUPABASE.from('results').select('id').eq('student_id', id);
-            if (results && results.length > 0) {
-                await window.FDC_SUPABASE.from('result_details').delete().in('result_id', results.map(r => r.id));
+        window.fdcPromptInput({
+            title: '⚠️ PERMANENT DELETE',
+            subtitle: `${escapeHtml(s.name)} (Roll: ${escapeHtml(s.roll)})`,
+            message: `
+                এই student এবং তার সব data <strong>চিরতরে</strong> মুছে যাবে:
+                <ul style="margin:10px 0 0 20px;padding:0;color:#991b1b;">
+                    <li>Student তথ্য</li>
+                    <li>Subject assignments</li>
+                    <li>Results + Result details</li>
+                </ul>
+                <p style="margin-top:12px;color:#7f1d1d;font-weight:700;">এটি undo করা যাবে না!</p>
+            `,
+            expectedValue: 'DELETE',
+            placeholder: 'টাইপ করুন: DELETE',
+            confirmText: 'হ্যাঁ, Delete করুন',
+            cancelText: 'বাতিল',
+            confirmType: 'danger',
+            onConfirm: async function () {
+                // Show loading state
+                window.fdcAlert(
+                    '<i class="fas fa-spinner fa-spin"></i> Delete করা হচ্ছে...',
+                    'অপেক্ষা করুন',
+                    'info'
+                );
+
+                try {
+                    // Delete student_subjects
+                    await window.FDC_SUPABASE
+                        .from('student_subjects')
+                        .delete()
+                        .eq('student_id', id);
+
+                    // Delete result_details
+                    const { data: results } = await window.FDC_SUPABASE
+                        .from('results')
+                        .select('id')
+                        .eq('student_id', id);
+
+                    if (results && results.length > 0) {
+                        const resultIds = results.map(r => r.id);
+                        await window.FDC_SUPABASE
+                            .from('result_details')
+                            .delete()
+                            .in('result_id', resultIds);
+                    }
+
+                    // Delete results
+                    await window.FDC_SUPABASE
+                        .from('results')
+                        .delete()
+                        .eq('student_id', id);
+
+                    // Delete student
+                    const { error } = await window.FDC_SUPABASE
+                        .from('students')
+                        .delete()
+                        .eq('id', id);
+
+                    if (error) throw error;
+
+                    window.fdcSuccess(`"${escapeHtml(s.name)}" সফলভাবে delete হয়েছে।`);
+                    await loadAllStudents();
+                } catch (e) {
+                    console.error('Delete error:', e);
+                    window.fdcError('Delete failed: ' + e.message);
+                }
             }
-            await window.FDC_SUPABASE.from('results').delete().eq('student_id', id);
-            await window.FDC_SUPABASE.from('students').delete().eq('id', id);
-            alert('✅ Deleted!');
-            await loadAllStudents();
-        } catch (e) { alert('❌ Delete failed: ' + e.message); }
+        });
     };
 
+    // =========================================================
+    // VIEW STUDENT
+    // =========================================================
     window.viewStudent = async function (id) {
         const student = allStudents.find(s => String(s.id) === String(id));
-        if (!student) return alert('Student পাওয়া যায়নি।');
+        if (!student) return window.fdcError('Student পাওয়া যায়নি।');
 
         try {
             const { data: subs } = await window.FDC_SUPABASE
@@ -596,13 +687,13 @@
             const optSubs = (subs || []).filter(s => s.subject_type === 'optional');
 
             function renderList(list) {
-                if (list.length === 0) return '<div style="color:var(--grey);font-size:12px;">কিছু নেই</div>';
+                if (list.length === 0) return '<div style="color:#6b7280;font-size:12px;">কিছু নেই</div>';
                 return list.map(s => `<div style="padding:4px 0;font-size:12.5px;">• ${escapeHtml(s.subjects?.subject_name || '—')}</div>`).join('');
             }
 
             const html = `
                 <div style="margin-bottom:16px;">
-                    <div style="font-size:11px;color:var(--grey);text-transform:uppercase;font-weight:700;letter-spacing:0.5px;">Student Info</div>
+                    <div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:700;letter-spacing:0.5px;">Student Info</div>
                     <div style="margin-top:8px;font-size:14px;line-height:1.8;">
                         <div><strong>Name:</strong> ${escapeHtml(student.name)}</div>
                         <div><strong>Roll:</strong> ${escapeHtml(student.roll)}</div>
@@ -613,22 +704,33 @@
                         <div><strong>Session:</strong> ${escapeHtml(student.session || '—')}</div>
                     </div>
                 </div>
-                <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border-light);">
-                    <div style="font-size:11px;color:var(--grey);text-transform:uppercase;font-weight:700;margin-bottom:8px;">Subjects (${(subs || []).length})</div>
-                    <div style="margin-bottom:12px;"><div style="font-size:12px;color:var(--navy);font-weight:700;margin-bottom:4px;">📌 আবশ্যিক</div>${renderList(compSubs)}</div>
-                    <div style="margin-bottom:12px;"><div style="font-size:12px;color:var(--navy);font-weight:700;margin-bottom:4px;">📚 গ্রুপের</div>${renderList(grpSubs)}</div>
-                    <div><div style="font-size:12px;color:var(--navy);font-weight:700;margin-bottom:4px;">🎯 ঐচ্ছিক</div>${renderList(optSubs)}</div>
+                <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,0,0,0.06);">
+                    <div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:700;margin-bottom:8px;">Subjects (${(subs || []).length})</div>
+                    <div style="margin-bottom:12px;"><div style="font-size:12px;color:#0a1655;font-weight:700;margin-bottom:4px;">📌 আবশ্যিক</div>${renderList(compSubs)}</div>
+                    <div style="margin-bottom:12px;"><div style="font-size:12px;color:#0a1655;font-weight:700;margin-bottom:4px;">📚 গ্রুপের</div>${renderList(grpSubs)}</div>
+                    <div><div style="font-size:12px;color:#0a1655;font-weight:700;margin-bottom:4px;">🎯 ঐচ্ছিক</div>${renderList(optSubs)}</div>
                 </div>
             `;
-            $('viewStudentBody').innerHTML = html;
-            openModal('viewStudentModal');
-        } catch (e) { alert('Load failed: ' + e.message); }
+
+            window.fdcPopup({
+                type: 'info',
+                title: 'Student Details',
+                subtitle: student.name,
+                body: html,
+                buttons: [{
+                    text: 'বন্ধ করুন',
+                    type: 'primary',
+                    icon: 'fa-times',
+                    action: 'close'
+                }]
+            });
+        } catch (e) {
+            window.fdcError('Load failed: ' + e.message);
+        }
     };
 
     // =========================================================
-    // =========================================================
-    // ★★★ BULK IMPORT — SMART SYSTEM ★★★
-    // =========================================================
+    // ★★★ BULK IMPORT ★★★
     // =========================================================
 
     function resetBulkModal() {
@@ -713,9 +815,6 @@
         } catch (e) { console.error('Load groups error:', e); }
     }
 
-    // =========================================================
-    // ON GROUP CHANGE — Render Subject UI
-    // =========================================================
     async function onBulkGroupChange() {
         const branch = $('bulkBranch').value;
         const group = $('bulkGroup').value;
@@ -728,7 +827,6 @@
             return;
         }
 
-        // Load ALL subjects for this class+branch+group
         try {
             const { data: subjects, error } = await window.FDC_SUPABASE
                 .from('subjects')
@@ -743,15 +841,12 @@
 
             bulkState.allSubjects = subjects || [];
 
-            // Categorize
             categorizeSubjects(branch, group);
 
-            // Render UI
             renderBulkCompulsory();
             renderBulkMainSelection(branch, group);
             renderBulkFourthSubject(branch, group);
 
-            // Show steps
             $('bulkCompulsoryStep').style.display = 'block';
             $('bulkMainStep').style.display = 'block';
             if (bulkState.config.hasFourth !== false) {
@@ -762,7 +857,7 @@
             updateBulkSummary();
         } catch (e) {
             console.error('Load subjects error:', e);
-            alert('Subject load failed: ' + e.message);
+            window.fdcError('Subject load failed: ' + e.message);
         }
     }
 
@@ -782,9 +877,6 @@
         bulkState.fourthSubjects = [];
     }
 
-    // =========================================================
-    // CATEGORIZE SUBJECTS (by book name)
-    // =========================================================
     function categorizeSubjects(branch, group) {
         const all = bulkState.allSubjects;
         const structure = SUBJECT_STRUCTURE[branch]?.[group];
@@ -794,7 +886,6 @@
             return;
         }
 
-        // Group by book name
         const bookMap = new Map();
         all.forEach(s => {
             if (!bookMap.has(s.subject_name)) {
@@ -811,12 +902,10 @@
 
         const books = Array.from(bookMap.values());
 
-        // Compulsory (বাংলা, English, ICT) — type=compulsory & group_name=null
         bulkState.compulsorySubjects = books.filter(b =>
             b.subject_type === 'compulsory' && !b.group_name
         );
 
-        // For BMT — সব compulsory
         if (branch === 'BM') {
             bulkState.mainSubjects = books.filter(b => b.subject_type === 'compulsory');
             bulkState.fourthSubjects = [];
@@ -824,11 +913,7 @@
             return;
         }
 
-        // HSC — Compulsory = বাংলা, English, ICT
-        // Main subjects = structure অনুযায়ী
-
         if (branch === 'HSC' && group === 'Science') {
-            // Science: fixed 2 + choice 1
             const fixedNames = structure.fixedMain;
             const choiceNames = structure.choiceMain;
 
@@ -836,15 +921,13 @@
                 fixedNames.includes(b.subject_name) || choiceNames.includes(b.subject_name)
             );
 
-            // 4th pool — main-এ যা নেই
             bulkState.fourthSubjects = books.filter(b =>
                 structure.fourthPool.includes(b.subject_name) &&
-                !fixedNames.includes(b.subject_name)  // Fixed 2 always main
+                !fixedNames.includes(b.subject_name)
             );
 
             bulkState.config.hasFourth = true;
         } else if (branch === 'HSC' && (group === 'Business' || group === 'Humanities')) {
-            // Business/Humanities: 3 select from pool
             bulkState.mainSubjects = books.filter(b =>
                 structure.mainPool.includes(b.subject_name)
             );
@@ -857,15 +940,12 @@
         }
     }
 
-    // =========================================================
-    // RENDER BULK COMPULSORY
-    // =========================================================
     function renderBulkCompulsory() {
         const list = $('bulkCompulsoryList');
         const books = bulkState.compulsorySubjects;
 
         if (books.length === 0) {
-            list.innerHTML = '<div style="color:var(--grey);font-size:12px;">কোনো compulsory subject নেই।</div>';
+            list.innerHTML = '<div style="color:#6b7280;font-size:12px;">কোনো compulsory subject নেই।</div>';
             return;
         }
 
@@ -880,24 +960,18 @@
         }).join('');
     }
 
-    // =========================================================
-    // RENDER BULK MAIN SELECTION
-    // =========================================================
     function renderBulkMainSelection(branch, group) {
         const structure = SUBJECT_STRUCTURE[branch][group];
         const list = $('bulkMainList');
         const title = $('bulkMainTitle');
-        const counter = $('bulkMainCounter');
 
         bulkState.config.mainSelected = [];
 
         if (structure.type === 'fixed_choice') {
-            // Science: Fixed 2 + Choice 1
             title.textContent = 'Main Subjects (পদার্থ + রসায়ন fixed, ৩য়টি select করুন)';
 
             let html = '';
 
-            // Fixed main
             structure.fixedMain.forEach(name => {
                 html += `<div class="bulk-subject-item fixed checked" data-subject="${escapeHtml(name)}">
                     <input type="checkbox" checked disabled>
@@ -906,8 +980,7 @@
                 </div>`;
             });
 
-            // Choice main (radio)
-            structure.choiceMain.forEach((name, idx) => {
+            structure.choiceMain.forEach((name) => {
                 html += `<label class="bulk-subject-item" data-subject="${escapeHtml(name)}">
                     <input type="radio" name="bulkMainRadio" value="${escapeHtml(name)}">
                     <span class="bsi-name">${escapeHtml(name)}</span>
@@ -917,19 +990,16 @@
 
             list.innerHTML = html;
 
-            // Attach events
             list.querySelectorAll('input[name="bulkMainRadio"]').forEach(radio => {
                 radio.addEventListener('change', function () {
                     bulkState.config.mainSelected = [...structure.fixedMain, this.value];
 
-                    // Visual
                     list.querySelectorAll('.bulk-subject-item').forEach(item => {
                         if (item.classList.contains('fixed')) return;
                         const inp = item.querySelector('input');
                         item.classList.toggle('checked', inp.checked);
                     });
 
-                    // Re-render 4th subject
                     renderBulkFourthSubject(branch, group);
                     updateBulkMainCounter(structure.mainCount);
                     updateBulkSummary();
@@ -939,7 +1009,6 @@
             updateBulkMainCounter(structure.mainCount);
 
         } else if (structure.type === 'select_3') {
-            // Business/Humanities: 3 select
             title.textContent = `Main Subjects (৩টি select করুন)`;
 
             list.innerHTML = structure.mainPool.map(name => {
@@ -957,19 +1026,17 @@
 
                     if (checked.length > structure.mainCount) {
                         this.checked = false;
-                        alert(`সর্বোচ্চ ${structure.mainCount}টি select করা যাবে।`);
+                        window.fdcWarning(`সর্বোচ্চ ${structure.mainCount}টি select করা যাবে।`);
                         return;
                     }
 
                     bulkState.config.mainSelected = checked.map(c => c.value);
 
-                    // Visual
                     list.querySelectorAll('.bulk-subject-item').forEach(item => {
                         const inp = item.querySelector('input');
                         item.classList.toggle('checked', inp.checked);
                     });
 
-                    // Re-render 4th subject
                     renderBulkFourthSubject(branch, group);
                     updateBulkMainCounter(structure.mainCount);
                     updateBulkSummary();
@@ -979,7 +1046,6 @@
             updateBulkMainCounter(structure.mainCount);
 
         } else if (structure.type === 'all_fixed') {
-            // BMT: সব fixed
             title.textContent = 'Main Subjects (সব fixed compulsory)';
 
             list.innerHTML = structure.mainFixed.map(name => {
@@ -1003,9 +1069,6 @@
         counter.classList.toggle('complete', current === required);
     }
 
-    // =========================================================
-    // RENDER 4TH SUBJECT DROPDOWN
-    // =========================================================
     function renderBulkFourthSubject(branch, group) {
         const select = $('bulkFourthSubject');
         const structure = SUBJECT_STRUCTURE[branch][group];
@@ -1016,9 +1079,7 @@
             return;
         }
 
-        // Main-এ যেগুলো select হয়েছে, সেগুলো বাদ
         const mainSelected = bulkState.config.mainSelected;
-        const fixedMain = structure.fixedMain || [];
 
         const available = bulkState.fourthSubjects.filter(b =>
             !mainSelected.includes(b.subject_name)
@@ -1030,7 +1091,6 @@
                 `<option value="${escapeHtml(b.subject_name)}">${escapeHtml(b.subject_name)}</option>`);
         });
 
-        // Clear selection if previously selected was removed
         const current = select.value;
         if (current && !available.find(b => b.subject_name === current)) {
             select.value = '';
@@ -1045,9 +1105,6 @@
         updateBulkSummary();
     }
 
-    // =========================================================
-    // SUMMARY
-    // =========================================================
     function updateBulkSummary() {
         const cfg = bulkState.config;
 
@@ -1083,27 +1140,25 @@
         $('bulkSummary').style.display = 'block';
     }
 
-    // =========================================================
-    // ROLL RANGE GENERATE
-    // =========================================================
     function generateBulkRange() {
         const start = parseInt($('bulkRangeStart').value);
         const end = parseInt($('bulkRangeEnd').value);
 
-        if (!start || !end || end < start) return alert('সঠিক roll range দিন।');
-        if (end - start > 500) return alert('সর্বোচ্চ ৫০০ roll।');
+        if (!start || !end || end < start) {
+            return window.fdcWarning('সঠিক roll range দিন।');
+        }
+        if (end - start > 500) {
+            return window.fdcWarning('সর্বোচ্চ ৫০০ roll generate করা যাবে।');
+        }
 
         const lines = [];
         for (let i = start; i <= end; i++) lines.push(`${i}, `);
 
         const current = $('bulkData').value.trim();
         $('bulkData').value = current ? current + '\n' + lines.join('\n') : lines.join('\n');
-        alert(`${end - start + 1}টি roll generate হয়েছে।`);
+        window.fdcSuccess(`${end - start + 1}টি roll generate হয়েছে।`);
     }
 
-    // =========================================================
-    // PARSE STUDENTS
-    // =========================================================
     function parseBulkStudents() {
         const raw = $('bulkData').value.trim();
         if (!raw) return [];
@@ -1127,29 +1182,25 @@
         return rows;
     }
 
-    // =========================================================
-    // PREVIEW
-    // =========================================================
     async function previewBulkImport() {
         const cfg = bulkState.config;
         const structure = SUBJECT_STRUCTURE[cfg.branch]?.[cfg.group];
 
         if (!cfg.class_name || !cfg.year || !cfg.branch || !cfg.group) {
-            return alert('Common settings পূরণ করুন।');
+            return window.fdcWarning('Common settings পূরণ করুন।');
         }
-        if (!structure) return alert('Subject structure পাওয়া যায়নি।');
+        if (!structure) return window.fdcError('Subject structure পাওয়া যায়নি।');
 
         if (cfg.mainSelected.length !== structure.mainCount) {
-            return alert(`Main-এ ${structure.mainCount}টি subject select করুন। এখন ${cfg.mainSelected.length}টি।`);
+            return window.fdcWarning(`Main-এ ${structure.mainCount}টি subject select করুন। এখন ${cfg.mainSelected.length}টি।`);
         }
         if (structure.hasFourth && !cfg.fourthSubject) {
-            return alert('৪র্থ Subject select করুন।');
+            return window.fdcWarning('৪র্থ Subject select করুন।');
         }
 
         const students = parseBulkStudents();
-        if (students.length === 0) return alert('কোনো student নেই।');
+        if (students.length === 0) return window.fdcWarning('কোনো student নেই।');
 
-        // Internal duplicates
         const rollMap = new Map();
         students.forEach(s => {
             if (!s.roll) { s.row_status = 'error'; s.error_msg = 'No roll'; return; }
@@ -1163,7 +1214,6 @@
             }
         });
 
-        // DB duplicates
         const rolls = students.map(s => s.roll).filter(r => r);
         if (rolls.length > 0) {
             const { data: existing } = await window.FDC_SUPABASE
@@ -1183,7 +1233,6 @@
             });
         }
 
-        // Validate 4th override
         if (structure.hasFourth) {
             students.forEach(s => {
                 if (s.fourth_override) {
@@ -1206,8 +1255,12 @@
         if (!hasErrors) {
             const warnings = students.filter(s => s.row_status === 'warn').length;
             if (warnings > 0) {
-                alert(`⚠️ ${warnings}টি student DB-তে আগেই আছে — skip হবে।`);
+                window.fdcWarning(`${warnings}টি student DB-তে আগেই আছে — skip হবে।`);
+            } else {
+                window.fdcSuccess(`${students.length}টি student ready — Save All চাপুন।`);
             }
+        } else {
+            window.fdcError('কিছু student-এ error আছে — Preview-তে দেখুন।');
         }
     }
 
@@ -1240,78 +1293,77 @@
         $('bulkPreview').style.display = 'block';
     }
 
-    // =========================================================
-    // SAVE BULK IMPORT
-    // =========================================================
     async function saveBulkImport() {
         const cfg = bulkState.config;
         const structure = SUBJECT_STRUCTURE[cfg.branch][cfg.group];
         const students = bulkState.students.filter(s => s.row_status !== 'error' && s.row_status !== 'warn');
 
-        if (students.length === 0) return alert('কোনো valid student নেই।');
-        if (!confirm(`${students.length} জন student যোগ করা হবে। নিশ্চিত?`)) return;
+        if (students.length === 0) return window.fdcWarning('কোনো valid student নেই।');
 
-        const btn = $('saveBulkBtn');
-        const original = btn.innerHTML;
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        window.fdcConfirm(
+            `${students.length} জন student যোগ করা হবে। নিশ্চিত?`,
+            async function () {
+                const btn = $('saveBulkBtn');
+                const original = btn.innerHTML;
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
-        try {
-            // Prepare student records
-            const studentRecords = students.map(s => ({
-                name: s.name || 'Student ' + s.roll,
-                roll: s.roll,
-                class_name: cfg.class_name,
-                year: cfg.year,
-                session: cfg.session,
-                branch: cfg.branch,
-                group_name: cfg.branch === 'HSC' ? cfg.group : 'BM-General',
-                is_active: true
-            }));
+                try {
+                    const studentRecords = students.map(s => ({
+                        name: s.name || 'Student ' + s.roll,
+                        roll: s.roll,
+                        class_name: cfg.class_name,
+                        year: cfg.year,
+                        session: cfg.session,
+                        branch: cfg.branch,
+                        group_name: cfg.branch === 'HSC' ? cfg.group : 'BM-General',
+                        is_active: true
+                    }));
 
-            const { data: inserted, error: insErr } = await window.FDC_SUPABASE
-                .from('students')
-                .insert(studentRecords)
-                .select();
+                    const { data: inserted, error: insErr } = await window.FDC_SUPABASE
+                        .from('students')
+                        .insert(studentRecords)
+                        .select();
 
-            if (insErr) throw insErr;
+                    if (insErr) throw insErr;
 
-            // Assign subjects to each student
-            for (const stu of (inserted || [])) {
-                const matched = students.find(s => s.roll === stu.roll);
-                if (!matched) continue;
+                    for (const stu of (inserted || [])) {
+                        const matched = students.find(s => s.roll === stu.roll);
+                        if (!matched) continue;
 
-                const subjectRecords = buildSubjectRecords(
-                    stu.id,
-                    cfg,
-                    structure,
-                    matched.fourth_override || cfg.fourthSubject
-                );
+                        const subjectRecords = buildSubjectRecords(
+                            stu.id, cfg, structure,
+                            matched.fourth_override || cfg.fourthSubject
+                        );
 
-                if (subjectRecords.length > 0) {
-                    const { error: subErr } = await window.FDC_SUPABASE
-                        .from('student_subjects')
-                        .insert(subjectRecords);
-                    if (subErr) console.error('Subject insert error:', subErr);
+                        if (subjectRecords.length > 0) {
+                            await window.FDC_SUPABASE
+                                .from('student_subjects')
+                                .insert(subjectRecords);
+                        }
+                    }
+
+                    closeModal('bulkImportModal');
+                    window.fdcSuccess(`${inserted.length} জন student সফলভাবে যোগ হয়েছে!`);
+                    await loadAllStudents();
+
+                } catch (e) {
+                    console.error('Bulk save error:', e);
+                    window.fdcError('Save failed: ' + e.message);
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = original;
                 }
+            },
+            {
+                title: 'Bulk Import নিশ্চিত করুন',
+                confirmText: 'হ্যাঁ, Save করুন',
+                cancelText: 'বাতিল',
+                confirmType: 'primary'
             }
-
-            alert(`✅ ${inserted.length} জন student সফলভাবে যোগ হয়েছে!`);
-            closeModal('bulkImportModal');
-            await loadAllStudents();
-
-        } catch (e) {
-            console.error('Bulk save error:', e);
-            alert('❌ Save failed: ' + e.message);
-        } finally {
-            btn.disabled = false;
-            btn.innerHTML = original;
-        }
+        );
     }
 
-    // =========================================================
-    // BUILD SUBJECT RECORDS FOR A STUDENT
-    // =========================================================
     function buildSubjectRecords(studentId, cfg, structure, fourthSubject) {
         const records = [];
         const addedIds = new Set();
@@ -1328,12 +1380,10 @@
             });
         }
 
-        // 1. Compulsory (বাংলা, English, ICT)
         bulkState.compulsorySubjects.forEach(book => {
             addPapers(book, 'compulsory');
         });
 
-        // 2. Main subjects
         bulkState.mainSubjects.forEach(book => {
             if (cfg.mainSelected.includes(book.subject_name)) {
                 const type = (cfg.branch === 'BM') ? 'compulsory' : 'group';
@@ -1341,12 +1391,9 @@
             }
         });
 
-        // 3. 4th subject
         if (fourthSubject && structure.hasFourth) {
             const fourthBook = bulkState.fourthSubjects.find(b => b.subject_name === fourthSubject);
-            if (fourthBook) {
-                addPapers(fourthBook, 'optional');
-            }
+            if (fourthBook) addPapers(fourthBook, 'optional');
         }
 
         return records;
@@ -1356,7 +1403,6 @@
     // EVENT LISTENERS
     // =========================================================
     function attachEvents() {
-        // Student CRUD
         $('btnAddStudent').addEventListener('click', openAddStudentModal);
         $('closeStudentModal').addEventListener('click', () => closeModal('studentModal'));
         $('cancelStudentBtn').addEventListener('click', () => closeModal('studentModal'));
@@ -1378,13 +1424,11 @@
             }
         });
 
-        // Filters
         ['filterClass', 'filterYear', 'filterBranch', 'filterGroup'].forEach(id => {
             $(id).addEventListener('change', applyFilters);
         });
         $('searchInput').addEventListener('input', applyFilters);
 
-        // Table actions
         $('studentTableBody').addEventListener('click', function (e) {
             const btn = e.target.closest('[data-action]');
             if (!btn) return;
@@ -1398,7 +1442,6 @@
             else if (action === 'delete') window.deleteStudent(id);
         });
 
-        // Pagination
         $('paginationBtns').addEventListener('click', function (e) {
             const btn = e.target.closest('[data-page]');
             if (!btn || btn.disabled) return;
@@ -1411,9 +1454,6 @@
             document.querySelectorAll('.row-select').forEach(cb => cb.checked = this.checked);
         });
 
-        // =========================================================
-        // BULK IMPORT EVENTS
-        // =========================================================
         $('btnBulkImport').addEventListener('click', () => {
             resetBulkModal();
             openModal('bulkImportModal');
@@ -1432,11 +1472,9 @@
         $('previewBulkBtn').addEventListener('click', previewBulkImport);
         $('saveBulkBtn').addEventListener('click', saveBulkImport);
 
-        // View modal
         $('closeViewModal').addEventListener('click', () => closeModal('viewStudentModal'));
         $('closeViewBtn').addEventListener('click', () => closeModal('viewStudentModal'));
 
-        // Modal backdrop
         document.querySelectorAll('.fdc-modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function (e) {
                 if (e.target === this) {
@@ -1451,7 +1489,7 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Students v10 initializing...');
+        console.log('🚀 Admin Students v11 initializing...');
 
         loadYearOptions();
         attachEvents();
@@ -1463,7 +1501,7 @@
             await loadAdminInfo();
             await loadAllStudents();
 
-            console.log('✅ Admin Students v10 ready');
+            console.log('✅ Admin Students v11 ready');
         });
     }
 
