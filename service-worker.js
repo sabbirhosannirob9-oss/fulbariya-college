@@ -2,22 +2,21 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v2.4.0
+ * Version: v2.6.0
  * Purpose: PWA Install + Offline Caching
  *
- * Changes v2.4.0:
- *   - Class Routine v4 (Image + PDF support)
- *   - Exam Routine v3 (Image + PDF support)
- *   - Cache version bump for forced refresh
- *   - Session Helper integrated
- *   - Dynamic years system
- *   - Academic Hub v3
- *   - FIXED: net::ERR_FAILED (cache.add → fetch+put)
- *   - Network-first for HTML pages
+ * Changes v2.6.0:
+ *   - Admin Results v3.0 (Document-based pass marks)
+ *   - Admin Promote v3.1 (URL params for section)
+ *   - Admin Students v13 (Grouped List)
+ *   - Admin Subjects v4 (Section-based UI)
+ *   - GPA Calculator v2 (Document-based pass rule)
+ *   - Promote Utils v4 (Individual Component Pass)
+ *   - Session Helper dynamic year system
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v2.4.0';
+const CACHE_VERSION = 'fdc-v2.6.0';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -27,12 +26,12 @@ const DYNAMIC_CACHE_LIMIT = 60;
 // STATIC ASSETS — Pre-cache on install
 // =========================================================
 const STATIC_ASSETS = [
-    // Core
+    // ==================== Core ====================
     '/',
     '/index.html',
     '/manifest.json',
 
-    // Icons / Images
+    // ==================== Icons / Images ====================
     '/assets/images/logo1.png',
     '/assets/images/web-app-manifest-192x192.png',
     '/assets/images/web-app-manifest-512x512.png',
@@ -40,44 +39,44 @@ const STATIC_ASSETS = [
     '/assets/images/favicon-96x96.png',
     '/assets/images/favicon.ico',
 
-    // CSS
+    // ==================== CSS ====================
     '/css/style.css',
     '/css/responsive.css',
     '/css/admin.css',
     '/css/student.css',
     '/css/notice-board.css',
 
-    // JS — Core
+    // ==================== JS — Core ====================
     '/js/config.js',
     '/js/supabase.js',
     '/js/auth.js',
     '/js/app.js',
     '/js/scroll-restore.js',
 
-    // ✅ Session Helper
+    // ✅ Session Helper (central year system)
     '/js/session-helper.js',
 
-    // JS — Public
+    // ==================== JS — Public ====================
     '/js/notice-board.js',
     '/js/gallery.js',
     '/js/results.js?v=2',
     '/js/result-details.js?v=2',
 
-    // JS — Student
+    // ==================== JS — Student ====================
     '/js/student.js',
     '/js/student-login.js',
     '/js/student-dashboard.js',
 
-    // JS — Admin Core
+    // ==================== JS — Admin Core ====================
     '/js/admin-guard.js',
-    '/js/admin-popup.js',
+    '/js/admin-popup.js?v=2',
     '/js/admin-login.js',
 
-    // JS — Admin Pages
+    // ==================== JS — Admin Pages ====================
     '/js/admin-dashboard.js',
-    '/js/admin-students.js?v=9',
-    '/js/admin-subjects.js?v=2',
-    '/js/admin-results.js?v=2',
+    '/js/admin-students.js?v=13',
+    '/js/admin-subjects.js?v=4',
+    '/js/admin-results.js?v=3',
     '/js/admin-notices.js',
     '/js/admin-news.js',
     '/js/admin-gallery.js',
@@ -90,30 +89,28 @@ const STATIC_ASSETS = [
     '/js/admin-profile.js',
     '/js/admin-board-final.js',
 
-    // ✅ JS — Class Routine (v4 — Image + PDF)
+    // ==================== JS — Class / Exam Routine ====================
     '/js/admin-class-routine.js?v=4',
-
-    // ✅ JS — Exam Routine (v3 — Image + PDF)
     '/js/admin-exam-routine.js?v=3',
 
-    // JS — Promote System
-    '/js/promote-utils.js?v=2',
-    '/js/promote-engine.js?v=2',
-    '/js/promote-restore.js',
-    '/js/promote-rules.js',
-    '/js/admin-promote.js?v=2',
-    '/js/admin-promote-history.js',
-    '/js/admin-promote-settings.js',
+    // ==================== JS — Promote System ====================
+    '/js/promote-utils.js?v=4',
+    '/js/promote-engine.js?v=3',
+    '/js/promote-restore.js?v=3',
+    '/js/promote-rules.js?v=3',
+    '/js/admin-promote.js?v=3.1',
+    '/js/admin-promote-history.js?v=3',
+    '/js/admin-promote-settings.js?v=3',
 
-    // JS — GPA Calculator
-    '/js/gpa-calculator.js',
+    // ==================== JS — GPA Calculator ====================
+    '/js/gpa-calculator.js?v=2',
 
-    // JS — Public Routine
+    // ==================== JS — Public Routine ====================
     '/js/class-routine.js?v=2',
     '/js/exam-routine.js?v=2',
     '/js/academic-hub.js?v=3',
 
-    // Public Pages
+    // ==================== Public Pages ====================
     '/public-pages/results.html',
     '/public-pages/result-details.html',
     '/public-pages/result-overview.html',
@@ -138,7 +135,7 @@ const STATIC_ASSETS = [
     // Exam Routine Board
     '/public-pages/exam-routine.html',
 
-    // Admin Pages
+    // ==================== Admin Pages ====================
     '/admin-pages/admin-dashboard.html',
     '/admin-pages/admin-login.html',
     '/admin-pages/admin-students.html',
@@ -156,11 +153,16 @@ const STATIC_ASSETS = [
     '/admin-pages/admin-profile.html',
     '/admin-pages/admin-board-final.html',
 
-    // Admin Class Routine
+    // Class Routine
     '/admin-pages/admin-class-routine.html',
 
-    // Admin Exam Routine
-    '/admin-pages/admin-exam-routine.html'
+    // Exam Routine
+    '/admin-pages/admin-exam-routine.html',
+
+    // Promote Pages
+    '/admin-pages/admin-promote.html',
+    '/admin-pages/admin-promote-history.html',
+    '/admin-pages/admin-promote-settings.html'
 ];
 
 // =========================================================
