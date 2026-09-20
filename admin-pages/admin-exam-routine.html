@@ -10,6 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
+/* ============================================================
+   SAME STYLES AS CLASS ROUTINE (identical)
+   ============================================================ */
 :root {
     --navy: #0a1655;
     --navy-2: #1a237e;
@@ -32,7 +35,6 @@
 * { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; }
 body { background: var(--off-white); margin: 0; color: var(--dark); }
 
-/* HEADER */
 .admin-header {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
     color: #fff;
@@ -95,7 +97,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; transform: translateY(-1px); }
 
-/* MAIN */
 .main-wrap { max-width: 1200px; margin: 0 auto; padding: 20px 16px 60px; }
 
 .page-title {
@@ -119,7 +120,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
 
-/* TOOLBAR */
 .toolbar {
     display: flex;
     justify-content: space-between;
@@ -164,7 +164,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; }
 
-/* FILTER */
 .filter-card {
     background: #fff;
     border-radius: 16px;
@@ -204,11 +203,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     background: #fff;
 }
 
-/* ROUTINES LIST */
-.routines-list {
-    display: grid;
-    gap: 12px;
-}
+.routines-list { display: grid; gap: 12px; }
 
 .routine-item {
     background: #fff;
@@ -244,11 +239,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     position: relative;
     border: 1px solid var(--border);
 }
-.routine-thumb img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+.routine-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .routine-thumb .overlay {
     position: absolute;
     inset: 0;
@@ -288,11 +279,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     font-size: 11.5px;
     color: var(--grey);
 }
-.routine-meta span {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
+.routine-meta span { display: inline-flex; align-items: center; gap: 5px; }
 .routine-meta i { color: var(--gold-dark); }
 
 .exam-badge {
@@ -333,15 +320,9 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .status-badge.published { background: #dcfce7; color: #166534; }
 .status-badge.draft { background: #fef3c7; color: #92400e; }
 
-.routine-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    flex-shrink: 0;
-}
+.routine-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
 .action-btn {
-    width: 34px;
-    height: 34px;
+    width: 34px; height: 34px;
     border-radius: 8px;
     border: none;
     font-size: 13px;
@@ -357,7 +338,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .action-btn.toggle { background: #dcfce7; color: #166534; }
 .action-btn.toggle.off { background: #fef2f2; color: #dc2626; }
 
-/* EMPTY STATE */
 .empty-state {
     text-align: center;
     padding: 60px 20px;
@@ -366,8 +346,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     border: 1px solid var(--border-light);
 }
 .empty-state .icon-wrap {
-    width: 80px;
-    height: 80px;
+    width: 80px; height: 80px;
     background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
     border-radius: 50%;
     display: inline-flex;
@@ -379,7 +358,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .empty-state h6 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
 .empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
 
-/* LOADING */
 .loading-card {
     background: #fff;
     border-radius: 16px;
@@ -388,8 +366,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     border: 1px solid var(--border-light);
 }
 .loading-spinner {
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     border: 4px solid rgba(10,22,85,0.1);
     border-top-color: var(--navy);
     border-radius: 50%;
@@ -399,7 +376,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 @keyframes spin { to { transform: rotate(360deg); } }
 .loading-card p { color: var(--grey); font-size: 13px; margin: 0; }
 
-/* MODAL */
 .fdc-modal-overlay {
     position: fixed;
     inset: 0;
@@ -521,8 +497,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     border-radius: 10px;
 }
 .switch-row input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
+    width: 18px; height: 18px;
     accent-color: var(--navy);
     cursor: pointer;
 }
@@ -546,7 +521,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     bottom: 0;
 }
 
-/* IMAGE UPLOAD */
 .image-upload-area {
     border: 2px dashed #c8cdda;
     border-radius: 12px;
@@ -557,32 +531,16 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     transition: 0.3s;
     position: relative;
 }
-.image-upload-area:hover {
-    border-color: var(--navy);
-    background: #f5f7ff;
-}
+.image-upload-area:hover { border-color: var(--navy); background: #f5f7ff; }
 .image-upload-area input[type="file"] {
     position: absolute;
     inset: 0;
     opacity: 0;
     cursor: pointer;
 }
-.image-upload-area .upload-icon {
-    font-size: 32px;
-    color: var(--navy);
-    opacity: 0.5;
-    margin-bottom: 10px;
-}
-.image-upload-area .upload-text {
-    font-size: 13px;
-    color: var(--dark);
-    font-weight: 600;
-}
-.image-upload-area .upload-sub {
-    font-size: 11px;
-    color: var(--grey);
-    margin-top: 4px;
-}
+.image-upload-area .upload-icon { font-size: 32px; color: var(--navy); opacity: 0.5; margin-bottom: 10px; }
+.image-upload-area .upload-text { font-size: 13px; color: var(--dark); font-weight: 600; }
+.image-upload-area .upload-sub { font-size: 11px; color: var(--grey); margin-top: 4px; }
 
 .image-preview {
     display: none;
@@ -602,10 +560,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .image-preview .remove-btn {
     position: absolute;
-    top: 10px;
-    right: 10px;
-    width: 36px;
-    height: 36px;
+    top: 10px; right: 10px;
+    width: 36px; height: 36px;
     border-radius: 50%;
     background: rgba(220,38,38,0.9);
     color: #fff;
@@ -617,10 +573,25 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     justify-content: center;
     transition: 0.25s;
     box-shadow: 0 4px 12px rgba(220,38,38,0.4);
+    z-index: 5;
 }
 .image-preview .remove-btn:hover { background: #b91c1c; transform: scale(1.1); }
 
-/* PREVIEW MODAL */
+.pdf-preview {
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    text-align: center;
+}
+.pdf-preview i.fa-file-pdf { font-size: 56px; color: #dc2626; margin-bottom: 12px; }
+.pdf-preview .pdf-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #7f1d1d;
+    margin: 0 0 6px;
+    word-break: break-all;
+}
+.pdf-preview .pdf-hint { font-size: 11px; color: #991b1b; margin: 0; }
+
 .preview-overlay {
     position: fixed;
     inset: 0;
@@ -653,10 +624,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .preview-close {
     position: absolute;
-    top: -50px;
-    right: 0;
-    width: 44px;
-    height: 44px;
+    top: -50px; right: 0;
+    width: 44px; height: 44px;
     border-radius: 50%;
     background: rgba(255,255,255,0.15);
     border: 1px solid rgba(255,255,255,0.3);
@@ -670,7 +639,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .preview-close:hover { background: var(--danger); transform: rotate(90deg); }
 
-/* RESPONSIVE */
 @media (max-width: 768px) {
     .admin-header { padding: 10px 14px; }
     .admin-header h4 { font-size: 14px; }
@@ -696,7 +664,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="admin-header">
     <div class="brand">
         <div class="brand-icon"><i class="fas fa-file-alt"></i></div>
@@ -716,10 +683,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     </div>
 </header>
 
-<!-- MAIN -->
 <div class="main-wrap">
 
-    <!-- Toolbar -->
     <div class="toolbar">
         <div>
             <h4 class="page-title">
@@ -733,13 +698,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </button>
     </div>
 
-    <!-- Filter -->
     <div class="filter-card">
         <div>
             <label>Exam</label>
-            <select id="filterExam">
-                <option value="">All Exams</option>
-            </select>
+            <select id="filterExam"><option value="">All Exams</option></select>
         </div>
         <div>
             <label>Branch</label>
@@ -765,7 +727,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
     </div>
 
-    <!-- Routines List -->
     <div class="routines-list" id="routinesList">
         <div class="loading-card">
             <div class="loading-spinner"></div>
@@ -775,9 +736,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
 </div>
 
-<!-- ================================================== -->
-<!-- MODAL: Add/Edit Routine -->
-<!-- ================================================== -->
 <div class="fdc-modal-overlay" id="routineModal">
     <div class="fdc-modal">
         <div class="fdc-modal-header">
@@ -800,7 +758,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
             <div class="row g-3">
 
-                <!-- Exam -->
                 <div class="col-md-6">
                     <label class="fdc-form-label">Exam <span class="req">*</span></label>
                     <select class="fdc-select" id="routineExam">
@@ -812,7 +769,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     </select>
                 </div>
 
-                <!-- Branch -->
                 <div class="col-md-6">
                     <label class="fdc-form-label">Branch <span class="req">*</span></label>
                     <select class="fdc-select" id="routineBranch">
@@ -824,7 +780,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     </select>
                 </div>
 
-                <!-- Dynamic Field 1 -->
                 <div class="col-md-6" id="dynamicField1Wrap" style="display:none;">
                     <label class="fdc-form-label" id="dynamicField1Label">Group</label>
                     <select class="fdc-select" id="dynamicField1">
@@ -832,52 +787,89 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     </select>
                 </div>
 
-                <!-- Dynamic Field 2 -->
                 <div class="col-md-6" id="dynamicField2Wrap" style="display:none;">
                     <label class="fdc-form-label" id="dynamicField2Label">Year</label>
-                    <select class="fdc-select" id="dynamicField2">
-                        <option value="">Select</option>
-                    </select>
+
+                    <div style="display:flex;gap:6px;align-items:stretch;">
+                        <select class="fdc-select" id="dynamicField2" style="flex:1;">
+                            <option value="">Select</option>
+                        </select>
+                        <button type="button"
+                                id="btnAddSession"
+                                class="btn-secondary"
+                                style="display:none;padding:0 14px;white-space:nowrap;font-size:12px;"
+                                title="নতুন Session যোগ করুন">
+                            <i class="fas fa-plus"></i> নতুন
+                        </button>
+                    </div>
+
+                    <div id="sessionAddPanel"
+                         style="display:none;margin-top:8px;padding:10px;background:#f5f7ff;border:1.5px solid #e5e7eb;border-radius:10px;">
+                        <label class="fdc-form-label" style="font-size:10px;">নতুন Session (যেমন: 2028-2029)</label>
+                        <div style="display:flex;gap:6px;">
+                            <input type="text"
+                                   class="fdc-input"
+                                   id="newSessionInput"
+                                   placeholder="2028-2029"
+                                   style="flex:1;padding:8px 10px;font-size:13px;">
+                            <button type="button"
+                                    class="btn-primary-grad"
+                                    id="btnSaveSession"
+                                    style="padding:8px 14px;font-size:12px;border-radius:10px;">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button type="button"
+                                    class="btn-secondary"
+                                    id="btnCancelSession"
+                                    style="padding:8px 14px;font-size:12px;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <small style="display:block;margin-top:6px;font-size:10px;color:#6b7280;">
+                            Format: YYYY-YYYY (যেমন 2028-2029)
+                        </small>
+                    </div>
                 </div>
 
-                <!-- Session -->
                 <div class="col-md-6">
                     <label class="fdc-form-label">Session</label>
                     <input type="text" class="fdc-input" id="routineSession" placeholder="2026-2027">
                 </div>
 
-                <!-- Title -->
                 <div class="col-12">
                     <label class="fdc-form-label">Title <span class="req">*</span></label>
                     <input type="text" class="fdc-input" id="routineTitle" placeholder="HSC Science 1st Year Final Exam Routine">
                 </div>
 
-                <!-- Description -->
                 <div class="col-12">
                     <label class="fdc-form-label">Description</label>
                     <textarea class="fdc-textarea" id="routineDescription" placeholder="বিস্তারিত (optional)"></textarea>
                 </div>
 
-                <!-- Image Upload -->
+                <!-- ✅ Image / PDF Upload -->
                 <div class="col-12">
-                    <label class="fdc-form-label">Exam Routine Image <span class="req">*</span></label>
+                    <label class="fdc-form-label">Exam Routine File (Image / PDF) <span class="req">*</span></label>
 
                     <div class="image-upload-area" id="imageDropArea">
-                        <input type="file" id="imageInput" accept="image/*">
+                        <input type="file" id="imageInput" accept="image/*,application/pdf">
                         <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                        <div class="upload-text">ছবি আপলোড করতে ক্লিক করুন</div>
-                        <div class="upload-sub">JPG, PNG · Max 5MB</div>
+                        <div class="upload-text">ফাইল আপলোড করতে ক্লিক করুন</div>
+                        <div class="upload-sub">JPG, PNG, PDF · Max 10MB</div>
                     </div>
 
                     <div class="image-preview" id="imagePreview">
-                        <img id="previewImg" src="" alt="Preview">
+                        <img id="previewImg" src="" alt="Preview" style="display:none;">
+                        <div id="previewPdf" class="pdf-preview" style="display:none;">
+                            <i class="fas fa-file-pdf"></i>
+                            <p class="pdf-name" id="previewPdfName">document.pdf</p>
+                            <p class="pdf-hint">PDF file selected</p>
+                        </div>
                         <button class="remove-btn" id="removeImage">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Publish -->
                 <div class="col-12">
                     <div class="switch-row">
                         <input type="checkbox" id="routinePublished" checked>
@@ -899,9 +891,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     </div>
 </div>
 
-<!-- ================================================== -->
-<!-- MODAL: Preview -->
-<!-- ================================================== -->
 <div class="preview-overlay" id="previewOverlay">
     <div class="preview-box">
         <button class="preview-close" id="previewClose">
@@ -911,14 +900,14 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     </div>
 </div>
 
-<!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/config.js"></script>
 <script src="../js/supabase.js"></script>
 <script src="../js/auth.js"></script>
 <script src="../js/cloudinary.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/admin-exam-routine.js?v=1"></script>
+<script src="../js/session-helper.js"></script>
+<script src="../js/admin-exam-routine.js?v=3"></script>
 
 </body>
 </html>

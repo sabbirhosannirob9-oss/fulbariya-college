@@ -534,7 +534,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     bottom: 0;
 }
 
-/* IMAGE UPLOAD */
+/* IMAGE / PDF UPLOAD */
 .image-upload-area {
     border: 2px dashed #c8cdda;
     border-radius: 12px;
@@ -605,8 +605,33 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     justify-content: center;
     transition: 0.25s;
     box-shadow: 0 4px 12px rgba(220,38,38,0.4);
+    z-index: 5;
 }
 .image-preview .remove-btn:hover { background: #b91c1c; transform: scale(1.1); }
+
+/* PDF PREVIEW */
+.pdf-preview {
+    padding: 30px 20px;
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    text-align: center;
+}
+.pdf-preview i.fa-file-pdf {
+    font-size: 56px;
+    color: #dc2626;
+    margin-bottom: 12px;
+}
+.pdf-preview .pdf-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #7f1d1d;
+    margin: 0 0 6px;
+    word-break: break-all;
+}
+.pdf-preview .pdf-hint {
+    font-size: 11px;
+    color: #991b1b;
+    margin: 0;
+}
 
 /* PREVIEW MODAL */
 .preview-overlay {
@@ -707,7 +732,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <!-- MAIN -->
 <div class="main-wrap">
 
-    <!-- Toolbar -->
     <div class="toolbar">
         <div>
             <h4 class="page-title">
@@ -721,7 +745,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </button>
     </div>
 
-    <!-- Filter -->
     <div class="filter-card">
         <div>
             <label>Branch</label>
@@ -747,7 +770,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         </div>
     </div>
 
-    <!-- Routines List -->
     <div class="routines-list" id="routinesList">
         <div class="loading-card">
             <div class="loading-spinner"></div>
@@ -757,9 +779,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
 </div>
 
-<!-- ================================================== -->
 <!-- MODAL: Add/Edit Routine -->
-<!-- ================================================== -->
 <div class="fdc-modal-overlay" id="routineModal">
     <div class="fdc-modal">
         <div class="fdc-modal-header">
@@ -782,7 +802,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
             <div class="row g-3">
 
-                <!-- Branch -->
                 <div class="col-md-6">
                     <label class="fdc-form-label">Branch <span class="req">*</span></label>
                     <select class="fdc-select" id="routineBranch">
@@ -794,7 +813,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     </select>
                 </div>
 
-                <!-- Dynamic fields container -->
                 <div class="col-md-6" id="dynamicField1Wrap" style="display:none;">
                     <label class="fdc-form-label" id="dynamicField1Label">Group</label>
                     <select class="fdc-select" id="dynamicField1">
@@ -804,49 +822,91 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
                 <div class="col-md-6" id="dynamicField2Wrap" style="display:none;">
                     <label class="fdc-form-label" id="dynamicField2Label">Year</label>
-                    <select class="fdc-select" id="dynamicField2">
-                        <option value="">Select</option>
-                    </select>
+
+                    <div style="display:flex;gap:6px;align-items:stretch;">
+                        <select class="fdc-select" id="dynamicField2" style="flex:1;">
+                            <option value="">Select</option>
+                        </select>
+                        <button type="button"
+                                id="btnAddSession"
+                                class="btn-secondary"
+                                style="display:none;padding:0 14px;white-space:nowrap;font-size:12px;"
+                                title="নতুন Session যোগ করুন">
+                            <i class="fas fa-plus"></i> নতুন
+                        </button>
+                    </div>
+
+                    <div id="sessionAddPanel"
+                         style="display:none;margin-top:8px;padding:10px;background:#f5f7ff;border:1.5px solid #e5e7eb;border-radius:10px;">
+                        <label class="fdc-form-label" style="font-size:10px;">নতুন Session (যেমন: 2028-2029)</label>
+                        <div style="display:flex;gap:6px;">
+                            <input type="text"
+                                   class="fdc-input"
+                                   id="newSessionInput"
+                                   placeholder="2028-2029"
+                                   style="flex:1;padding:8px 10px;font-size:13px;">
+                            <button type="button"
+                                    class="btn-primary-grad"
+                                    id="btnSaveSession"
+                                    style="padding:8px 14px;font-size:12px;border-radius:10px;">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button type="button"
+                                    class="btn-secondary"
+                                    id="btnCancelSession"
+                                    style="padding:8px 14px;font-size:12px;">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <small style="display:block;margin-top:6px;font-size:10px;color:#6b7280;">
+                            Format: YYYY-YYYY (যেমন 2028-2029)
+                        </small>
+                    </div>
                 </div>
 
-                <!-- Session -->
                 <div class="col-md-6">
                     <label class="fdc-form-label">Session</label>
                     <input type="text" class="fdc-input" id="routineSession" placeholder="2026-2027">
                 </div>
 
-                <!-- Title -->
                 <div class="col-12">
                     <label class="fdc-form-label">Title <span class="req">*</span></label>
                     <input type="text" class="fdc-input" id="routineTitle" placeholder="HSC Science 1st Year Class Routine">
                 </div>
 
-                <!-- Description -->
                 <div class="col-12">
                     <label class="fdc-form-label">Description</label>
                     <textarea class="fdc-textarea" id="routineDescription" placeholder="বিস্তারিত (optional)"></textarea>
                 </div>
 
-                <!-- Image Upload -->
+                <!-- ✅ Image / PDF Upload -->
                 <div class="col-12">
-                    <label class="fdc-form-label">Routine Image <span class="req">*</span></label>
+                    <label class="fdc-form-label">Routine File (Image / PDF) <span class="req">*</span></label>
 
                     <div class="image-upload-area" id="imageDropArea">
-                        <input type="file" id="imageInput" accept="image/*">
+                        <input type="file" id="imageInput" accept="image/*,application/pdf">
                         <div class="upload-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-                        <div class="upload-text">ছবি আপলোড করতে ক্লিক করুন</div>
-                        <div class="upload-sub">JPG, PNG · Max 5MB</div>
+                        <div class="upload-text">ফাইল আপলোড করতে ক্লিক করুন</div>
+                        <div class="upload-sub">JPG, PNG, PDF · Max 10MB</div>
                     </div>
 
                     <div class="image-preview" id="imagePreview">
-                        <img id="previewImg" src="" alt="Preview">
+                        <!-- Image preview -->
+                        <img id="previewImg" src="" alt="Preview" style="display:none;">
+
+                        <!-- PDF preview -->
+                        <div id="previewPdf" class="pdf-preview" style="display:none;">
+                            <i class="fas fa-file-pdf"></i>
+                            <p class="pdf-name" id="previewPdfName">document.pdf</p>
+                            <p class="pdf-hint">PDF file selected</p>
+                        </div>
+
                         <button class="remove-btn" id="removeImage">
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Publish -->
                 <div class="col-12">
                     <div class="switch-row">
                         <input type="checkbox" id="routinePublished" checked>
@@ -868,9 +928,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     </div>
 </div>
 
-<!-- ================================================== -->
 <!-- MODAL: Preview -->
-<!-- ================================================== -->
 <div class="preview-overlay" id="previewOverlay">
     <div class="preview-box">
         <button class="preview-close" id="previewClose">
@@ -887,7 +945,8 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/auth.js"></script>
 <script src="../js/cloudinary.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/admin-class-routine.js?v=2"></script>
+<script src="../js/session-helper.js"></script>
+<script src="../js/admin-class-routine.js?v=4"></script>
 
 </body>
 </html>
