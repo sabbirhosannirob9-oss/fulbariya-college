@@ -2,24 +2,25 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v2.2.1
+ * Version: v2.4.0
  * Purpose: PWA Install + Offline Caching
  *
- * Changes v2.2.1:
- *   - FIXED: net::ERR_FAILED issue (cache.add → fetch+put)
- *   - FIXED: Partial cache install (non-200 response skip)
- *   - IMPROVED: Better fetch fallback for stale cache
- *   - IMPROVED: Network-first for HTML pages
- *   - Class Routine + Exam Routine system added
- *   - Academic Hub cleanup (Routine tab removed)
+ * Changes v2.4.0:
+ *   - Class Routine v4 (Image + PDF support)
+ *   - Exam Routine v3 (Image + PDF support)
+ *   - Cache version bump for forced refresh
+ *   - Session Helper integrated
+ *   - Dynamic years system
+ *   - Academic Hub v3
+ *   - FIXED: net::ERR_FAILED (cache.add → fetch+put)
+ *   - Network-first for HTML pages
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v2.2.1';
+const CACHE_VERSION = 'fdc-v2.4.0';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
-// Max items in dynamic cache
 const DYNAMIC_CACHE_LIMIT = 60;
 
 // =========================================================
@@ -53,6 +54,9 @@ const STATIC_ASSETS = [
     '/js/app.js',
     '/js/scroll-restore.js',
 
+    // ✅ Session Helper
+    '/js/session-helper.js',
+
     // JS — Public
     '/js/notice-board.js',
     '/js/gallery.js',
@@ -77,7 +81,7 @@ const STATIC_ASSETS = [
     '/js/admin-notices.js',
     '/js/admin-news.js',
     '/js/admin-gallery.js',
-    '/js/admin-calendar.js',
+    '/js/admin-calendar.js?v=2',
     '/js/admin-bncc.js',
     '/js/admin-scouts.js',
     '/js/admin-greeting.js',
@@ -86,11 +90,11 @@ const STATIC_ASSETS = [
     '/js/admin-profile.js',
     '/js/admin-board-final.js',
 
-    // JS — Class Routine (v2.2.0+)
-    '/js/admin-class-routine.js?v=2',
+    // ✅ JS — Class Routine (v4 — Image + PDF)
+    '/js/admin-class-routine.js?v=4',
 
-    // JS — Exam Routine (v2.2.0+)
-    '/js/admin-exam-routine.js?v=1',
+    // ✅ JS — Exam Routine (v3 — Image + PDF)
+    '/js/admin-exam-routine.js?v=3',
 
     // JS — Promote System
     '/js/promote-utils.js?v=2',
@@ -104,10 +108,10 @@ const STATIC_ASSETS = [
     // JS — GPA Calculator
     '/js/gpa-calculator.js',
 
-    // JS — Public Routine (v2.2.0+)
+    // JS — Public Routine
     '/js/class-routine.js?v=2',
     '/js/exam-routine.js?v=2',
-    '/js/academic-hub.js?v=2',
+    '/js/academic-hub.js?v=3',
 
     // Public Pages
     '/public-pages/results.html',
@@ -160,7 +164,7 @@ const STATIC_ASSETS = [
 ];
 
 // =========================================================
-// INSTALL — Pre-cache static assets (SAFE version)
+// INSTALL — Pre-cache static assets
 // =========================================================
 self.addEventListener('install', function (event) {
     console.log('[SW] Installing v' + CACHE_VERSION + '...');
@@ -169,8 +173,6 @@ self.addEventListener('install', function (event) {
         caches.open(STATIC_CACHE).then(function (cache) {
             console.log('[SW] Caching ' + STATIC_ASSETS.length + ' static assets');
 
-            // ✅ SAFE: fetch + put instead of cache.add
-            // Non-200 responses are skipped, failures don't break install
             return Promise.all(
                 STATIC_ASSETS.map(function (url) {
                     return fetch(url, { cache: 'no-cache' })
@@ -221,7 +223,7 @@ self.addEventListener('activate', function (event) {
 });
 
 // =========================================================
-// HELPER — Trim dynamic cache (keep latest N items)
+// HELPER — Trim dynamic cache
 // =========================================================
 function trimCache(cacheName, maxItems) {
     caches.open(cacheName).then(function (cache) {
@@ -236,7 +238,7 @@ function trimCache(cacheName, maxItems) {
 }
 
 // =========================================================
-// HELPER — Check if request is HTML page
+// HELPER — Check if HTML request
 // =========================================================
 function isHtmlRequest(request) {
     const accept = request.headers.get('accept') || '';
@@ -244,21 +246,17 @@ function isHtmlRequest(request) {
 }
 
 // =========================================================
-// FETCH — Smart caching strategy (FIXED)
+// FETCH — Smart caching strategy
 // =========================================================
 self.addEventListener('fetch', function (event) {
     const request = event.request;
     const url = new URL(request.url);
 
-    // Skip non-GET requests
     if (request.method !== 'GET') return;
-
-    // Skip chrome-extension, etc.
     if (!url.protocol.startsWith('http')) return;
 
     // =====================================================
-    // External APIs (Supabase, Cloudinary, CDN, Fonts)
-    // Network-first with cache fallback
+    // External APIs — Network first
     // =====================================================
     if (
         url.hostname.includes('supabase.co') ||
@@ -285,19 +283,17 @@ self.addEventListener('fetch', function (event) {
     }
 
     // =====================================================
-    // Same-origin requests only
+    // Same-origin only
     // =====================================================
     if (url.origin !== location.origin) return;
 
     // =====================================================
-    // HTML pages — NETWORK-FIRST (always fresh, fallback to cache)
-    // This FIXES net::ERR_FAILED
+    // HTML pages — NETWORK-FIRST
     // =====================================================
     if (isHtmlRequest(request)) {
         event.respondWith(
             fetch(request)
                 .then(function (response) {
-                    // Cache successful responses
                     if (response && response.status === 200) {
                         const responseClone = response.clone();
                         caches.open(DYNAMIC_CACHE).then(function (cache) {
@@ -308,11 +304,8 @@ self.addEventListener('fetch', function (event) {
                     return response;
                 })
                 .catch(function () {
-                    // Network failed — try cache
                     return caches.match(request).then(function (cached) {
                         if (cached) return cached;
-
-                        // Fallback to homepage for offline
                         return caches.match('/index.html');
                     });
                 })
@@ -340,14 +333,13 @@ self.addEventListener('fetch', function (event) {
                     return cached;
                 });
 
-            // Return cached immediately if available, else wait for fetch
             return cached || fetchPromise;
         })
     );
 });
 
 // =========================================================
-// MESSAGE — For manual cache update
+// MESSAGE — Manual cache control
 // =========================================================
 self.addEventListener('message', function (event) {
     if (!event.data) return;
