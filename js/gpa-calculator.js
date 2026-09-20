@@ -2,19 +2,62 @@
  * =========================================================
  * FULBARIYA COLLEGE — GPA CALCULATOR
  * Location: js/gpa-calculator.js
- * Purpose: Bangladesh HSC GPA calculation (paper-wise)
+ * Version: v2.0 — Document-Based Pass Marks + Individual Component Rule
  * 
- * Rules:
+ * Rules (Bangladesh Education Board):
  *  - Paper GPA = (CQ+MCQ+P) / max → grade point
  *  - Subject GPA = average of paper GPAs
  *  - Overall GPA = (Sum of Main 6 GPA + 4th Bonus) / 6
- *  - Fail: any compulsory subject fail or paper < 33%
+ *  - Fail: any compulsory subject fail or any component < pass mark
  *  - 4th Bonus = max(0, 4th GPA - 2.00)
+ * 
+ * ✅ Pass Marks (Document-based exact values):
+ *  - 100 Full → Pass 33
+ *  - 70 Full  → Pass 23
+ *  - 60 Full  → Pass 20
+ *  - 50 Full  → Pass 17
+ *  - 40 Full  → Pass 13
+ *  - 30 Full  → Pass 10
+ *  - 25 Full  → Pass 8
  * =========================================================
  */
 
 (function () {
     "use strict";
+
+    // =========================================================
+    // 🎯 PASS MARK CALCULATOR (Document-Based)
+    // =========================================================
+    /**
+     * Calculate pass mark based on full marks.
+     * Uses Document-specified exact values.
+     * 
+     * @param {number} fullMarks - Full marks of component
+     * @returns {number} - Pass mark
+     */
+    function calcPassMark(fullMarks) {
+        const f = parseFloat(fullMarks) || 0;
+        if (f === 0) return 0;
+
+        // ✅ Document-based exact values
+        const PASS_MAP = {
+            100: 33,
+            70: 23,
+            60: 20,
+            50: 17,
+            40: 13,
+            30: 10,
+            25: 8,
+            20: 7,
+            15: 5,
+            10: 4
+        };
+
+        if (PASS_MAP[f] !== undefined) return PASS_MAP[f];
+
+        // Fallback: 33.33% rounded up
+        return Math.ceil(f * 0.3333);
+    }
 
     // =========================================================
     // GRADE HELPERS
@@ -54,7 +97,7 @@
     }
 
     // =========================================================
-    // PAPER GPA CALCULATION
+    // 🎯 PAPER GPA CALCULATION (Individual Component Pass)
     // =========================================================
     /**
      * @param {object} marks - { cq, mcq, practical }
@@ -84,22 +127,19 @@
         const percent = Math.round((total / maxTotal) * 10000) / 100;
         const { grade, gp } = percentToGrade(percent);
 
-        // Fail detection
+        // ✅ Individual Component Pass Check (Document-based)
         let failed = false;
         let failReason = '';
 
-        if (maxCq > 0 && cq < maxCq * 0.33) {
+        if (maxCq > 0 && cq < calcPassMark(maxCq)) {
             failed = true;
-            failReason = `CQ fail (${cq}/${maxCq})`;
-        } else if (maxMcq > 0 && mcq < maxMcq * 0.33) {
+            failReason = `CQ fail (${cq}/${maxCq}, need ${calcPassMark(maxCq)})`;
+        } else if (maxMcq > 0 && mcq < calcPassMark(maxMcq)) {
             failed = true;
-            failReason = `MCQ fail (${mcq}/${maxMcq})`;
-        } else if (maxP > 0 && practical < maxP * 0.33) {
+            failReason = `MCQ fail (${mcq}/${maxMcq}, need ${calcPassMark(maxMcq)})`;
+        } else if (maxP > 0 && practical < calcPassMark(maxP)) {
             failed = true;
-            failReason = `Practical fail (${practical}/${maxP})`;
-        } else if (total < maxTotal * 0.33) {
-            failed = true;
-            failReason = `Overall fail (${total}/${maxTotal})`;
+            failReason = `Practical fail (${practical}/${maxP}, need ${calcPassMark(maxP)})`;
         }
 
         return {
@@ -144,7 +184,7 @@
     }
 
     // =========================================================
-    // OVERALL GPA CALCULATION
+    // 🎯 OVERALL GPA CALCULATION (4th Subject Grace Rule)
     // =========================================================
     /**
      * @param {array} subjects - [{name, type, gp, failed}]
@@ -192,7 +232,9 @@
             return { gpa: 0, grade: 'F', status: 'fail', failReason: 'No main subjects' };
         }
 
-        // Step 4: 4th subject bonus
+        // ✅ Step 4: 4th subject bonus (grace rule)
+        // 4th fail → no propagation, no bonus
+        // 4th pass → bonus = max(0, GP - 2.00)
         const optional = subjects.find(s => s.type === 'optional');
         let bonus = 0;
         if (optional && !optional.failed && optional.gp > 2.00) {
@@ -219,12 +261,8 @@
     }
 
     // =========================================================
-    // BMT GPA CALCULATION (Board + Continuous)
+    // BMT GPA CALCULATION
     // =========================================================
-    /**
-     * @param {array} subjects - [{name, board, continuous, failed}]
-     * @returns {object} - { gpa, grade, status }
-     */
     function calculateBMTGPA(subjects) {
         if (!subjects || subjects.length === 0) {
             return { gpa: 0, grade: 'F', status: 'fail' };
@@ -247,22 +285,42 @@
     }
 
     // =========================================================
-    // BMT PAPER GPA (Board + Continuous)
+    // 🎯 BMT PAPER GPA (Board + Continuous)
     // =========================================================
+    /**
+     * @param {number} boardMarks - Board marks
+     * @param {number} continuousMarks - Continuous marks
+     * @param {number} maxBoard - Max board marks
+     * @param {number} maxContinuous - Max continuous marks
+     * @returns {object} - { total, maxTotal, percent, grade, gp, failed, failReason }
+     */
     function calculateBMTPaperGPA(boardMarks, continuousMarks, maxBoard, maxContinuous) {
         const board = parseFloat(boardMarks) || 0;
         const cont = parseFloat(continuousMarks) || 0;
         const total = board + cont;
-        const maxTotal = (parseFloat(maxBoard) || 0) + (parseFloat(maxContinuous) || 0);
+
+        const maxB = parseFloat(maxBoard) || 0;
+        const maxC = parseFloat(maxContinuous) || 0;
+        const maxTotal = maxB + maxC;
 
         if (maxTotal === 0) {
-            return { total: 0, maxTotal: 0, percent: 0, grade: 'F', gp: 0, failed: true };
+            return { total: 0, maxTotal: 0, percent: 0, grade: 'F', gp: 0, failed: true, failReason: 'Invalid max marks' };
         }
 
         const percent = Math.round((total / maxTotal) * 10000) / 100;
         const { grade, gp } = percentToGrade(percent);
 
-        const failed = (total < maxTotal * 0.33);
+        // ✅ Individual Component Pass Check (Board + Continuous)
+        let failed = false;
+        let failReason = '';
+
+        if (maxB > 0 && board < calcPassMark(maxB)) {
+            failed = true;
+            failReason = `Board fail (${board}/${maxB}, need ${calcPassMark(maxB)})`;
+        } else if (maxC > 0 && cont < calcPassMark(maxC)) {
+            failed = true;
+            failReason = `Continuous fail (${cont}/${maxC}, need ${calcPassMark(maxC)})`;
+        }
 
         return {
             total,
@@ -270,7 +328,8 @@
             percent,
             grade: failed ? 'F' : grade,
             gp: failed ? 0 : gp,
-            failed
+            failed,
+            failReason
         };
     }
 
@@ -289,6 +348,9 @@
     // EXPORT
     // =========================================================
     window.FDCGPA = {
+        // ✅ Document-based pass mark
+        calcPassMark,
+
         // Helpers
         percentToGrade,
         gpToGrade,
@@ -306,6 +368,6 @@
         calculateBMTPaperGPA
     };
 
-    console.log('✅ GPA Calculator loaded');
+    console.log('✅ GPA Calculator v2.0 loaded — Document-based Pass Marks');
 
 })();

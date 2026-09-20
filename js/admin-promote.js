@@ -2,9 +2,13 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN PROMOTE
  * Location: js/admin-promote.js
- * Version: v2.1 — Dynamic Years (Session Helper)
+ * Version: v3.1 — Session Copy Fix + Manual Override + URL Params
  * Depends: config.js, supabase.js, auth.js, admin-popup.js,
- *          promote-utils.js, promote-engine.js, session-helper.js
+ *          promote-utils.js v4, promote-engine.js v3, session-helper.js
+ * 
+ * ⚠️ SESSION POLICY: Session = source student থেকে copy
+ * ✅ PASS RULE: Individual Component (Document-based)
+ * ✅ URL PARAMS: section promote button থেকে auto-fill
  * =========================================================
  */
 
@@ -33,9 +37,6 @@
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
-    // =========================================================
-    // SESSION HELPERS
-    // =========================================================
     function getSessionFromYear(year) {
         if (!year) return '';
         const y = parseInt(year);
@@ -68,14 +69,13 @@
     }
 
     // =========================================================
-    // LOAD ADMIN INFO
+    // ADMIN INFO
     // =========================================================
     async function loadAdminInfo() {
         try {
             const result = await window.FDCAuth.getCurrentAdmin();
             if (result && result.admin) {
                 adminInfo = result.admin;
-
                 const avatar = document.querySelector('[data-admin-avatar]');
                 if (avatar) {
                     if (result.admin.image_url) {
@@ -101,22 +101,22 @@
                 sessionStorage.clear();
                 window.location.replace('admin-login.html');
             },
-            { title: 'Logout Confirmation', confirmText: 'Yes, Logout', cancelText: 'Cancel', confirmType: 'danger' }
+            {
+                title: 'লগআউট নিশ্চিত করুন',
+                confirmText: 'হ্যাঁ, লগআউট',
+                cancelText: 'বাতিল',
+                confirmType: 'danger'
+            }
         );
     };
 
     // =========================================================
-    // ✅ LOAD YEAR OPTIONS — via Session Helper (Dynamic)
+    // LOAD YEAR OPTIONS
     // =========================================================
     async function loadYearOptions() {
-        await window.FDCSession.fillYearDropdown('sourceYear', {
-            autoSelectCurrent: false
-        });
-        await window.FDCSession.fillYearDropdown('targetYear', {
-            autoSelectCurrent: false
-        });
-
-        console.log('✅ Year options loaded (dynamic)');
+        await window.FDCSession.fillYearDropdown('sourceYear', { autoSelectCurrent: false });
+        await window.FDCSession.fillYearDropdown('targetYear', { autoSelectCurrent: false });
+        console.log('✅ Year options loaded');
     }
 
     // =========================================================
@@ -133,7 +133,6 @@
             if (error) throw error;
 
             allExams = data || [];
-
             finalExam = allExams.find(e =>
                 (e.exam_name || '').toLowerCase() === 'final'
             ) || allExams[allExams.length - 1];
@@ -141,7 +140,6 @@
             if (finalExam) {
                 $('examDisplay').value = finalExam.display_name || 'Final পরীক্ষা';
             }
-
             console.log('✅ Final exam:', finalExam);
         } catch (e) {
             console.error('Load exams error:', e);
@@ -181,7 +179,7 @@
                 examId: finalExam.id
             });
 
-            console.log('✅ Classified students:', classifiedStudents.length);
+            console.log('✅ Classified:', classifiedStudents.length);
 
             if (classifiedStudents.length === 0) {
                 $('loadStatus').innerHTML = '';
@@ -244,11 +242,10 @@
             const stu = c.student;
             const isChecked = selectedStudentIds.has(stu.id);
             const statusClass = c.status === 'pass' ? 'pass' :
-                               c.status === 'fail' ? 'fail' : 'no-result';
+                                c.status === 'fail' ? 'fail' : 'no-result';
             const statusLabel = c.status === 'pass' ? '✅ Pass' :
-                               c.status === 'fail' ? '❌ Fail' : '⚠️ No Result';
+                                c.status === 'fail' ? '❌ Fail' : '⚠️ No Result';
             const gpaText = c.gpa !== null && c.gpa !== undefined ? c.gpa.toFixed(2) : '—';
-
             const studentSession = getStudentSession(stu);
 
             html += `
@@ -274,7 +271,6 @@
     // =========================================================
     function updateSelectedCount() {
         $('selectedCount').textContent = selectedStudentIds.size;
-
         const total = classifiedStudents.length;
         const allChecked = total > 0 && selectedStudentIds.size === total;
         $('selectAll').checked = allChecked;
@@ -294,11 +290,14 @@
             return;
         }
 
+        // 🎯 Session from source student
         const sourceSession = classifiedStudents.length > 0
             ? getStudentSession(classifiedStudents[0].student)
             : getSessionFromYear($('sourceYear').value);
 
-        $('targetSession').value = sourceSession;
+        if ($('targetSession')) {
+            $('targetSession').value = sourceSession;
+        }
 
         try {
             let query = window.FDC_SUPABASE
@@ -364,16 +363,16 @@
                     <div style="display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline;">
                         <strong style="color:var(--navy);">📤 Source:</strong>
                         <span>Class ${sourceClass} / Year ${sourceYear} / ${sourceBranch}</span>
-                        
+
                         <strong style="color:var(--navy);">📥 Target:</strong>
                         <span>Class ${targetClass} / Year ${targetYear}</span>
-                        
+
                         <strong style="color:var(--navy);">🎓 Session:</strong>
                         <span><strong>${escapeHtml(sourceSession)}</strong> <small style="color:var(--grey);">(source থেকে copy)</small></span>
-                        
+
                         <strong style="color:var(--success);">✅ Promote হবে:</strong>
                         <span><strong>${selectedCount} জন</strong> student</span>
-                        
+
                         <strong style="color:var(--warning);">⏭️ Class ${sourceClass}-এ থাকবে:</strong>
                         <span><strong>${stayCount} জন</strong> student</span>
                     </div>
@@ -443,66 +442,58 @@
             ? getStudentSession(selected[0].student)
             : '';
 
-        const confirmed = await new Promise(resolve => {
-            window.fdcConfirm(
-                `⚠️ চূড়ান্ত নিশ্চিতকরণ\n\n` +
-                `• ${selected.length} জন student Class ${targetClass}-এ যাবে\n` +
-                `• Session থাকবে: ${sourceSession} (অপরিবর্তিত)\n` +
-                `• Class ${targetClass} / Year ${targetYear}-এর পুরোনো সব delete হবে\n` +
-                `• Class ${sourceClass}-এ ${classifiedStudents.length - selected.length} জন থাকবে\n\n` +
-                `এটি undo করা যাবে না (তবে Restore করা যাবে)।`,
-                function () { resolve(true); },
-                {
-                    title: '🎓 Execute Promote',
-                    confirmText: 'Yes, Execute',
-                    cancelText: 'Cancel',
-                    confirmType: 'danger'
+        window.fdcConfirm(
+            `⚠️ চূড়ান্ত নিশ্চিতকরণ\n\n` +
+            `• ${selected.length} জন student Class ${targetClass}-এ যাবে\n` +
+            `• Session থাকবে: ${sourceSession} (অপরিবর্তিত)\n` +
+            `• Class ${targetClass} / Year ${targetYear}-এর পুরোনো সব delete হবে\n` +
+            `• Class ${sourceClass}-এ ${classifiedStudents.length - selected.length} জন থাকবে\n\n` +
+            `এটি undo করা যাবে না (তবে Restore করা যাবে)।`,
+            async function () {
+                isProcessing = true;
+                showProgress();
+
+                try {
+                    const result = await window.FDCPromoteEngine.executePromote(
+                        {
+                            sourceClass,
+                            sourceYear,
+                            targetClass,
+                            targetYear,
+                            sourceBranch,
+                            selectedStudents: selected,
+                            deleteTarget: true,
+                            adminInfo
+                        },
+                        (message, percent) => updateProgress(message, percent)
+                    );
+
+                    hideProgress();
+
+                    window.fdcSuccess(
+                        `✅ ${result.promotedCount} জন student সফলভাবে Promote হয়েছে!\n\n` +
+                        `• Session: ${sourceSession} (অপরিবর্তিত)\n` +
+                        `• Target delete: ${result.deletedTargetCount} জন\n` +
+                        `• Batch ID: ${result.batchId.substring(0, 8)}...`
+                    );
+
+                    setTimeout(() => window.location.reload(), 2500);
+
+                } catch (e) {
+                    console.error('Execute error:', e);
+                    hideProgress();
+                    window.fdcError('Promote failed: ' + e.message);
+                } finally {
+                    isProcessing = false;
                 }
-            );
-        });
-
-        if (!confirmed) return;
-
-        isProcessing = true;
-        showProgress();
-
-        try {
-            const result = await window.FDCPromoteEngine.executePromote(
-                {
-                    sourceClass,
-                    sourceYear,
-                    targetClass,
-                    targetYear,
-                    sourceBranch,
-                    selectedStudents: selected,
-                    deleteTarget: true,
-                    adminInfo
-                },
-                (message, percent) => {
-                    updateProgress(message, percent);
-                }
-            );
-
-            hideProgress();
-
-            window.fdcSuccess(
-                `✅ ${result.promotedCount} জন student সফলভাবে Promote হয়েছে!\n\n` +
-                `• Session: ${sourceSession} (অপরিবর্তিত)\n` +
-                `• Target delete: ${result.deletedTargetCount} জন\n` +
-                `• Batch ID: ${result.batchId.substring(0, 8)}...`
-            );
-
-            setTimeout(() => {
-                window.location.reload();
-            }, 2500);
-
-        } catch (e) {
-            console.error('Execute error:', e);
-            hideProgress();
-            window.fdcError('Promote failed: ' + e.message);
-        } finally {
-            isProcessing = false;
-        }
+            },
+            {
+                title: '🎓 Execute Promote',
+                confirmText: 'Yes, Execute',
+                cancelText: 'Cancel',
+                confirmType: 'danger'
+            }
+        );
     }
 
     // =========================================================
@@ -524,96 +515,183 @@
     }
 
     // =========================================================
+    // ✅ URL PARAMETER HANDLER
+    // =========================================================
+    function readUrlParams() {
+        try {
+            const params = new URLSearchParams(window.location.search);
+
+            const className = params.get('class');
+            const year = params.get('year');
+            const branch = params.get('branch');
+            const group = params.get('group');
+
+            const result = {};
+
+            if (className && $('sourceClass')) {
+                $('sourceClass').value = className;
+                result.class = className;
+            }
+
+            if (year && $('sourceYear')) {
+                const yearPart = year.split('-')[0];
+                $('sourceYear').value = yearPart;
+                result.year = yearPart;
+            }
+
+            if (branch && $('sourceBranch')) {
+                $('sourceBranch').value = branch;
+                result.branch = branch;
+            }
+
+            if (group) {
+                result.group = group;
+            }
+
+            // Auto-set target class
+            if (className && $('targetClass')) {
+                const nextClass = className === '11' ? '12' : '11';
+                $('targetClass').value = nextClass;
+                result.targetClass = nextClass;
+
+                // Auto-set target year
+                if (year) {
+                    const yearPart = parseInt(year.split('-')[0]);
+                    if (!isNaN(yearPart) && $('targetYear')) {
+                        const targetYear = yearPart + 1;
+                        $('targetYear').value = String(targetYear);
+                        result.targetYear = targetYear;
+                    }
+                }
+            }
+
+            if (Object.keys(result).length > 0) {
+                console.log('✅ URL params applied:', result);
+
+                setTimeout(() => {
+                    window.fdcAlert(
+                        `<strong>Auto-filled from section:</strong><br>` +
+                        `Class: ${result.class || '—'} · Year: ${result.year || '—'} · Branch: ${result.branch || '—'}` +
+                        (result.group ? ` · Group: ${result.group}` : '') +
+                        `<br><br>এখন <strong>Load Students</strong> ক্লিক করুন।`,
+                        'Section থেকে Auto-Fill',
+                        'info'
+                    );
+                }, 800);
+            }
+
+            return result;
+
+        } catch (e) {
+            console.warn('URL params error:', e);
+            return {};
+        }
+    }
+
+    // =========================================================
     // ATTACH EVENTS
     // =========================================================
     function attachEvents() {
         $('btnLoadStudents').addEventListener('click', loadStudents);
 
         ['sourceClass', 'sourceYear', 'sourceBranch'].forEach(id => {
-            $(id).addEventListener('change', function () {
-                if (classifiedStudents.length > 0) {
-                    classifiedStudents = [];
-                    selectedStudentIds.clear();
-                    $('studentsSection').style.display = 'none';
-                    $('stepTarget').classList.add('disabled');
-                    $('stepConfirm').classList.add('disabled');
-                    $('targetInfo').innerHTML = '';
-                }
-            });
+            const el = $(id);
+            if (el) {
+                el.addEventListener('change', function () {
+                    if (classifiedStudents.length > 0) {
+                        classifiedStudents = [];
+                        selectedStudentIds.clear();
+                        $('studentsSection').style.display = 'none';
+                        $('stepTarget').classList.add('disabled');
+                        $('stepConfirm').classList.add('disabled');
+                        $('targetInfo').innerHTML = '';
+                    }
+                });
+            }
         });
 
         ['targetClass', 'targetYear'].forEach(id => {
-            $(id).addEventListener('change', onTargetChange);
+            const el = $(id);
+            if (el) el.addEventListener('change', onTargetChange);
         });
 
-        $('selectAll').addEventListener('change', function () {
-            if (this.checked) {
-                classifiedStudents.forEach(c => selectedStudentIds.add(c.student.id));
-            } else {
-                selectedStudentIds.clear();
-            }
+        const selectAll = $('selectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
+                if (this.checked) {
+                    classifiedStudents.forEach(c => selectedStudentIds.add(c.student.id));
+                } else {
+                    selectedStudentIds.clear();
+                }
 
-            document.querySelectorAll('.student-item').forEach(item => {
-                const id = parseInt(item.dataset.id);
-                const cb = item.querySelector('input[type="checkbox"]');
-                const isChecked = selectedStudentIds.has(id);
+                document.querySelectorAll('.student-item').forEach(item => {
+                    const id = parseInt(item.dataset.id);
+                    const cb = item.querySelector('input[type="checkbox"]');
+                    const isChecked = selectedStudentIds.has(id);
+                    cb.checked = isChecked;
+                    item.classList.toggle('checked', isChecked);
+                });
 
-                cb.checked = isChecked;
-                item.classList.toggle('checked', isChecked);
+                updateSelectedCount();
+                updateFinalSummary();
+                checkConfirmInput();
+            });
+        }
+
+        const studentList = $('studentList');
+        if (studentList) {
+            studentList.addEventListener('change', function (e) {
+                const cb = e.target.closest('input[type="checkbox"]');
+                if (!cb) return;
+
+                const studentId = parseInt(cb.dataset.id);
+                const item = cb.closest('.student-item');
+
+                if (cb.checked) {
+                    selectedStudentIds.add(studentId);
+                    item.classList.add('checked');
+                } else {
+                    selectedStudentIds.delete(studentId);
+                    item.classList.remove('checked');
+                }
+
+                updateSelectedCount();
+                updateFinalSummary();
+                checkConfirmInput();
             });
 
-            updateSelectedCount();
-            updateFinalSummary();
-            checkConfirmInput();
-        });
+            studentList.addEventListener('click', function (e) {
+                if (e.target.tagName === 'INPUT') return;
+                const item = e.target.closest('.student-item');
+                if (!item) return;
 
-        $('studentList').addEventListener('change', function (e) {
-            const cb = e.target.closest('input[type="checkbox"]');
-            if (!cb) return;
+                const cb = item.querySelector('input[type="checkbox"]');
+                if (cb) {
+                    cb.checked = !cb.checked;
+                    cb.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        }
 
-            const studentId = parseInt(cb.dataset.id);
-            const item = cb.closest('.student-item');
+        const confirmInput = $('confirmInput');
+        if (confirmInput) {
+            confirmInput.addEventListener('input', checkConfirmInput);
+            confirmInput.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' && !$('btnExecute').disabled) {
+                    executePromote();
+                }
+            });
+        }
 
-            if (cb.checked) {
-                selectedStudentIds.add(studentId);
-                item.classList.add('checked');
-            } else {
-                selectedStudentIds.delete(studentId);
-                item.classList.remove('checked');
-            }
-
-            updateSelectedCount();
-            updateFinalSummary();
-            checkConfirmInput();
-        });
-
-        $('studentList').addEventListener('click', function (e) {
-            if (e.target.tagName === 'INPUT') return;
-            const item = e.target.closest('.student-item');
-            if (!item) return;
-
-            const cb = item.querySelector('input[type="checkbox"]');
-            if (cb) {
-                cb.checked = !cb.checked;
-                cb.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-        });
-
-        $('confirmInput').addEventListener('input', checkConfirmInput);
-        $('confirmInput').addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' && !$('btnExecute').disabled) {
-                executePromote();
-            }
-        });
-
-        $('btnExecute').addEventListener('click', executePromote);
+        const btnExecute = $('btnExecute');
+        if (btnExecute) btnExecute.addEventListener('click', executePromote);
     }
 
     // =========================================================
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Promote v2.1 initializing...');
+        console.log('🚀 Admin Promote v3.1 initializing...');
 
         if (!window.FDCSession) {
             console.warn('⚠️ Session helper not loaded, retrying...');
@@ -631,7 +709,10 @@
             await loadAdminInfo();
             await loadExams();
 
-            console.log('✅ Admin Promote v2.1 ready');
+            // ✅ Read URL params AFTER year options loaded
+            setTimeout(readUrlParams, 500);
+
+            console.log('✅ Admin Promote v3.1 ready');
         });
     }
 

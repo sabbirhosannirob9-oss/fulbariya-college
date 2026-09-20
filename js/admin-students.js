@@ -2,17 +2,42 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN STUDENTS MANAGEMENT
  * Location: js/admin-students.js
- * Version: v12 — Session Helper (Dynamic Years)
- * Depends: config.js, supabase.js, auth.js, admin-popup.js v2, session-helper.js
+ * Version: v13.0 — Grouped List + Smart Search + Editable Preview
+ * Depends: config.js, supabase.js, auth.js, admin-popup.js, session-helper.js
+ * 
+ * ✅ Features:
+ *    - Grouped list (Session + Class + Branch + Group)
+ *    - Smart search (session/roll/name auto-detect)
+ *    - Section accordion
+ *    - Section promote button
+ *    - Bulk import (. separator)
+ *    - Editable preview (4th subject dropdown)
+ *    - Subject edit modal
  * =========================================================
  */
 
 (function () {
     "use strict";
 
+    // =========================================================
+    // STATE
+    // =========================================================
+    let allStudents = [];
+    let expandedSections = new Set();
+    let editingStudentId = null;
+    let currentSubjectEditStudentId = null;
+    let allSubjectsData = [];
+    let currentBulkSubjects = {
+        compulsory: [],
+        main: [],
+        fourth: []
+    };
+
+    // =========================================================
+    // SUBJECT STRUCTURE (Document-based)
+    // =========================================================
     const SUBJECT_STRUCTURE = {
         HSC: {
-            globalCompulsory: ['বাংলা', 'English', 'ICT'],
             Science: {
                 type: 'fixed_choice',
                 fixedMain: ['পদার্থবিজ্ঞান', 'রসায়ন'],
@@ -21,43 +46,34 @@
                 fourthPool: ['জীববিজ্ঞান', 'উচ্চতর গণিত', 'কৃষিশিক্ষা', 'পরিসংখ্যান', 'প্রকৌশল অঙ্কন ও ওয়ার্কশপ প্র্যাকটিস', 'ভূগোল', 'মনোবিজ্ঞান'],
                 hasFourth: true
             },
-            Business: {
-                type: 'select_3',
-                mainPool: ['হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা', 'উৎপাদন ব্যবস্থাপনা ও বিপণন', 'অর্থনীতি', 'ফিন্যান্স, ব্যাংকিং ও বিমা', 'পরিসংখ্যান', 'কৃষিশিক্ষা', 'ভূগোল'],
-                mainCount: 3,
-                fourthPool: ['অর্থনীতি', 'কৃষিশিক্ষা', 'পরিসংখ্যান', 'ফিন্যান্স, ব্যাংকিং ও বিমা', 'ভূগোল', 'হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা', 'উৎপাদন ব্যবস্থাপনা ও বিপণন'],
-                hasFourth: true
-            },
             Humanities: {
                 type: 'select_3',
                 mainPool: ['পৌরনীতি ও সুশাসন', 'অর্থনীতি', 'যুক্তিবিদ্যা', 'ইসলামের ইতিহাস ও সংস্কৃতি', 'ইসলাম শিক্ষা', 'ইতিহাস', 'সমাজবিজ্ঞান', 'সমাজকর্ম'],
                 mainCount: 3,
                 fourthPool: ['পৌরনীতি ও সুশাসন', 'অর্থনীতি', 'যুক্তিবিদ্যা', 'ইসলামের ইতিহাস ও সংস্কৃতি', 'ইসলাম শিক্ষা', 'ইতিহাস', 'সমাজবিজ্ঞান', 'সমাজকর্ম', 'কৃষিশিক্ষা', 'পরিসংখ্যান', 'ভূগোল'],
                 hasFourth: true
+            },
+            Business: {
+                type: 'select_3',
+                mainPool: ['হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা', 'উৎপাদন ব্যবস্থাপনা ও বিপণন', 'অর্থনীতি', 'ফিন্যান্স, ব্যাংকিং ও বিমা', 'পরিসংখ্যান', 'কৃষিশিক্ষা', 'ভূগোল'],
+                mainCount: 3,
+                fourthPool: ['হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা', 'উৎপাদন ব্যবস্থাপনা ও বিপণন', 'অর্থনীতি', 'ফিন্যান্স, ব্যাংকিং ও বিমা', 'পরিসংখ্যান', 'কৃষিশিক্ষা', 'ভূগোল'],
+                hasFourth: true
             }
         },
         BM: {
             'BM-General': {
                 type: 'all_fixed',
-                mainFixed: ['বাংলা-১', 'ইংরেজি-১', 'কম্পিউটার অফিস অ্যাপ্লিকেশন-১', 'বিজনেস ম্যাথমেটিক্স অ্যান্ড স্ট্যাটিস্টিকস', 'হিসাববিজ্ঞান নীতি ও প্রয়োগ-১', 'অর্থনীতি ও বাণিজ্যিক ভূগোল', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা-১', 'মার্কেটিং নীতি ও প্রয়োগ-১'],
-                mainCount: 8,
+                mainFixed: [],   // BM-এ সব compulsory
+                mainCount: 0,
                 hasFourth: false
             }
         }
     };
 
-    let allStudents = [];
-    let filteredStudents = [];
-    let currentPage = 1;
-    const PAGE_SIZE = 20;
-    let editingStudentId = null;
-
-    let bulkState = {
-        config: { class_name: '', year: '', session: '', branch: '', group: '', mainSelected: [], fourthSubject: '' },
-        allSubjects: [], compulsorySubjects: [], mainSubjects: [], fourthSubjects: [],
-        students: [], previewValid: false
-    };
-
+    // =========================================================
+    // DOM HELPERS
+    // =========================================================
     const $ = (id) => document.getElementById(id);
 
     function escapeHtml(str) {
@@ -81,6 +97,9 @@
         return '';
     }
 
+    // =========================================================
+    // WAIT FOR SUPABASE
+    // =========================================================
     function waitForSupabase(cb) {
         if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) return cb();
         window.addEventListener('fdc:supabase-ready', cb);
@@ -91,6 +110,9 @@
         }, 500);
     }
 
+    // =========================================================
+    // ADMIN INFO
+    // =========================================================
     async function loadAdminInfo() {
         try {
             const result = await window.FDCAuth.getCurrentAdmin();
@@ -104,6 +126,9 @@
         } catch (e) { console.warn('Admin info error:', e); }
     }
 
+    // =========================================================
+    // LOGOUT
+    // =========================================================
     window.handleLogout = function () {
         window.fdcConfirm(
             'আপনি কি লগআউট করতে চান?',
@@ -117,48 +142,313 @@
     };
 
     // =========================================================
-    // ✅ LOAD YEAR OPTIONS — via Session Helper
+    // LOAD ALL STUDENTS
     // =========================================================
-    async function loadYearOptions() {
-        // Filter year — All Years + dynamic
-        await window.FDCSession.fillYearDropdown('filterYear', {
-            includeAll: true,
-            allLabel: 'All Years'
-        });
+    async function loadAllStudents() {
+        try {
+            const { data, error } = await window.FDC_SUPABASE
+                .from('students')
+                .select('*')
+                .eq('is_active', true)
+                .order('session', { ascending: false })
+                .order('class_name', { ascending: false })
+                .order('roll', { ascending: true });
 
-        // Student modal year — auto current
-        await window.FDCSession.fillYearDropdown('studentYear', {
-            autoSelectCurrent: false
-        });
+            if (error) throw error;
 
-        // Bulk year — auto current
-        await window.FDCSession.fillYearDropdown('bulkYear', {
-            autoSelectCurrent: false
-        });
+            allStudents = data || [];
+            console.log('✅ Loaded students:', allStudents.length);
 
-        // Set defaults
-        const currentYear = window.FDCSession.getCurrentYear();
-        const studentYearEl = $('studentYear');
-        const bulkYearEl = $('bulkYear');
-        if (studentYearEl) studentYearEl.value = currentYear;
-        if (bulkYearEl) bulkYearEl.value = currentYear;
+            updateStats();
+            applyFiltersAndRender();
 
-        // Update session fields
-        const stuSessionEl = $('studentSession');
-        const bulkSessionEl = $('bulkSession');
-        if (stuSessionEl) stuSessionEl.value = getSessionFromYear(currentYear);
-        if (bulkSessionEl) bulkSessionEl.value = getSessionFromYear(currentYear);
-
-        console.log('✅ Year options loaded (dynamic)');
+        } catch (e) {
+            console.error('Load students error:', e);
+            $('sectionsContainer').innerHTML = `
+                <div class="empty-state">
+                    <div class="icon-wrap"><i class="fas fa-exclamation-triangle"></i></div>
+                    <h6>লোড করা যায়নি</h6>
+                    <p>${escapeHtml(e.message)}</p>
+                </div>
+            `;
+        }
     }
 
+    // =========================================================
+    // UPDATE STATS
+    // =========================================================
+    function updateStats() {
+        const total = allStudents.length;
+        const hsc = allStudents.filter(s => s.branch === 'HSC').length;
+        const bm = allStudents.filter(s => s.branch === 'BM').length;
+        const sections = buildSections(allStudents).length;
+
+        $('totalStudents').textContent = total;
+        $('statTotal').textContent = total;
+        $('statHSC').textContent = hsc;
+        $('statBM').textContent = bm;
+        $('statSections').textContent = sections;
+    }
+
+    // =========================================================
+    // BUILD SECTIONS (Session + Class + Branch + Group)
+    // =========================================================
+    function buildSections(students) {
+        const map = new Map();
+
+        students.forEach(s => {
+            const session = getStudentSession(s);
+            const key = [
+                session,
+                s.class_name,
+                s.branch,
+                s.group_name || 'NO-GROUP'
+            ].join('|');
+
+            if (!map.has(key)) {
+                map.set(key, {
+                    key,
+                    session,
+                    class_name: s.class_name,
+                    branch: s.branch,
+                    group_name: s.group_name,
+                    students: []
+                });
+            }
+
+            map.get(key).students.push(s);
+        });
+
+        return Array.from(map.values());
+    }
+
+    // =========================================================
+    // SMART SEARCH PARSER
+    // =========================================================
+    function parseSearch(query) {
+        const q = (query || '').trim();
+        if (!q) return { session: null, roll: null, name: null };
+
+        const terms = q.split(/\s+/).filter(Boolean);
+        const result = { session: null, roll: null, name: null };
+
+        terms.forEach(term => {
+            // Session pattern: 2024-25 or 2024-2025
+            if (/^\d{4}-\d{2,4}$/.test(term)) {
+                result.session = term;
+            }
+            // Pure number → Roll
+            else if (/^\d+$/.test(term)) {
+                result.roll = term;
+            }
+            // Otherwise → Name
+            else {
+                if (!result.name) result.name = term;
+                else result.name += ' ' + term;
+            }
+        });
+
+        return result;
+    }
+
+    // =========================================================
+    // FILTER & RENDER
+    // =========================================================
+    function applyFiltersAndRender() {
+        const fClass = $('filterClass').value;
+        const fBranch = $('filterBranch').value;
+        const fGroup = $('filterGroup').value;
+        const fSort = $('filterSort').value;
+        const searchQuery = $('searchInput').value;
+
+        const search = parseSearch(searchQuery);
+
+        // Filter students
+        let filtered = allStudents.filter(s => {
+            if (fClass && s.class_name !== fClass) return false;
+            if (fBranch && s.branch !== fBranch) return false;
+            if (fGroup && s.group_name !== fGroup) return false;
+
+            const studentSession = getStudentSession(s);
+
+            if (search.session) {
+                if (!studentSession.includes(search.session)) return false;
+            }
+            if (search.roll) {
+                if (!String(s.roll).includes(search.roll)) return false;
+            }
+            if (search.name) {
+                if (!s.name.toLowerCase().includes(search.name.toLowerCase())) return false;
+            }
+
+            return true;
+        });
+
+        // Sort
+        const sections = buildSections(filtered);
+
+        sections.sort((a, b) => {
+            // Session sort
+            if (fSort === 'session_desc') {
+                if (b.session !== a.session) return (b.session || '').localeCompare(a.session || '');
+            } else {
+                if (a.session !== b.session) return (a.session || '').localeCompare(b.session || '');
+            }
+
+            // Class sort (12 first)
+            if (b.class_name !== a.class_name) {
+                return String(b.class_name).localeCompare(String(a.class_name));
+            }
+
+            // Branch sort (HSC first)
+            if (a.branch !== b.branch) {
+                return a.branch === 'HSC' ? -1 : 1;
+            }
+
+            // Group sort
+            return (a.group_name || '').localeCompare(b.group_name || '');
+        });
+
+        renderSections(sections, searchQuery);
+    }
+
+    // =========================================================
+    // RENDER SECTIONS
+    // =========================================================
+    function renderSections(sections, searchQuery) {
+        const container = $('sectionsContainer');
+
+        if (sections.length === 0) {
+            container.innerHTML = `
+                <div class="empty-state">
+                    <div class="icon-wrap"><i class="fas fa-search"></i></div>
+                    <h6>কোনো student পাওয়া যায়নি</h6>
+                    <p>${searchQuery ? 'Search / Filter পরিবর্তন করুন' : '"Add Student" বা "Bulk Import" দিয়ে যোগ করুন'}</p>
+                </div>
+            `;
+            return;
+        }
+
+        const hasSearch = (searchQuery || '').trim().length > 0;
+
+        let html = '';
+        sections.forEach(section => {
+            const isExpanded = hasSearch || expandedSections.has(section.key);
+            html += renderSection(section, isExpanded);
+        });
+
+        container.innerHTML = html;
+    }
+
+    // =========================================================
+    // RENDER ONE SECTION
+    // =========================================================
+    function renderSection(section, isExpanded) {
+        const studentCount = section.students.length;
+        const groupDisplay = getGroupDisplayName(section.group_name);
+        const iconClass = section.branch === 'HSC' ? 'HSC' : 'BM';
+        const iconFa = section.branch === 'HSC' ? 'fa-flask' : 'fa-briefcase';
+
+        const title = `${section.session || '—'} — Class ${section.class_name} — ${section.branch} ${groupDisplay}`;
+        const promoteUrl = `admin-promote.html?class=${encodeURIComponent(section.class_name)}&year=${encodeURIComponent(section.session.split('-')[0] || '')}&branch=${encodeURIComponent(section.branch)}&group=${encodeURIComponent(section.group_name || '')}`;
+
+        let studentsHtml = '';
+        section.students.forEach(s => {
+            studentsHtml += `
+                <div class="student-row" data-student-id="${s.id}">
+                    <span class="student-roll">${escapeHtml(s.roll)}</span>
+                    <span class="student-name">${escapeHtml(s.name)}</span>
+                    <span class="student-actions">
+                        <button class="action-btn view" data-action="view" data-id="${s.id}" title="View">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="action-btn edit" data-action="edit" data-id="${s.id}" title="Edit">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="action-btn subject" data-action="subject" data-id="${s.id}" title="Subjects">
+                            <i class="fas fa-book"></i>
+                        </button>
+                        <button class="action-btn toggle" data-action="toggle" data-id="${s.id}" title="Deactivate">
+                            <i class="fas fa-user-slash"></i>
+                        </button>
+                        <button class="action-btn delete" data-action="delete" data-id="${s.id}" title="Delete">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </span>
+                </div>
+            `;
+        });
+
+        return `
+            <div class="student-section ${isExpanded ? 'expanded' : ''}" data-branch="${escapeHtml(section.branch)}" data-section-key="${escapeHtml(section.key)}">
+                <div class="section-header" data-action="toggle-section">
+                    <div class="section-expand">
+                        <i class="fas fa-chevron-right"></i>
+                    </div>
+                    <div class="section-icon ${iconClass}">
+                        <i class="fas ${iconFa}"></i>
+                    </div>
+                    <div class="section-info">
+                        <div class="section-title">
+                            ${escapeHtml(title)}
+                            <span class="count">${studentCount}</span>
+                        </div>
+                        <div class="section-meta">
+                            <span><i class="fas fa-layer-group"></i> Class ${escapeHtml(section.class_name)}</span>
+                            <span><i class="fas fa-users"></i> ${escapeHtml(groupDisplay)}</span>
+                            <span><i class="fas fa-calendar"></i> ${escapeHtml(section.session || '—')}</span>
+                        </div>
+                    </div>
+                    <div class="section-actions">
+                        <a href="${promoteUrl}" class="btn-section-promote" onclick="event.stopPropagation()">
+                            <i class="fas fa-graduation-cap"></i> <span>Promote</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="section-body">
+                    ${studentsHtml}
+                </div>
+            </div>
+        `;
+    }
+
+    // =========================================================
+    // GROUP DISPLAY NAME
+    // =========================================================
+    function getGroupDisplayName(groupName) {
+        const map = {
+            'Science': 'Science',
+            'Humanities': 'Humanities',
+            'Business': 'Business',
+            'BM-General': 'BM General'
+        };
+        return map[groupName] || groupName || '—';
+    }
+
+    // =========================================================
+    // TOGGLE SECTION
+    // =========================================================
+    function toggleSection(sectionKey) {
+        if (expandedSections.has(sectionKey)) {
+            expandedSections.delete(sectionKey);
+        } else {
+            expandedSections.add(sectionKey);
+        }
+        applyFiltersAndRender();
+    }
+
+    // =========================================================
+    // LOAD GROUPS BY BRANCH
+    // =========================================================
     async function loadGroupsByBranch(branch, targetSelectId) {
         try {
             const { data, error } = await window.FDC_SUPABASE
                 .from('groups').select('*').eq('branch', branch).eq('is_active', true).order('sort_order');
             if (error) throw error;
+
             const select = $(targetSelectId);
             if (!select) return;
+
             select.innerHTML = '<option value="">Select Group</option>';
             (data || []).forEach(g => {
                 select.insertAdjacentHTML('beforeend',
@@ -167,124 +457,23 @@
         } catch (e) { console.error('Load groups error:', e); }
     }
 
-    async function loadAllStudents() {
-        try {
-            const { data, error } = await window.FDC_SUPABASE
-                .from('students').select('*').eq('is_active', true)
-                .order('class_name', { ascending: false }).order('roll', { ascending: true });
-            if (error) throw error;
-            allStudents = data || [];
-            console.log('✅ Loaded students:', allStudents.length);
-            updateStats();
-            applyFilters();
-        } catch (e) {
-            console.error('Load students error:', e);
-            window.fdcError('Student load failed: ' + e.message);
-        }
+    // =========================================================
+    // LOAD YEAR OPTIONS (via Session Helper)
+    // =========================================================
+    async function loadYearOptions() {
+        await window.FDCSession.fillYearDropdown('studentYear', { autoSelectCurrent: false });
+        await window.FDCSession.fillYearDropdown('bulkYear', { autoSelectCurrent: false });
+
+        const currentYear = window.FDCSession.getCurrentYear();
+        if ($('studentYear')) $('studentYear').value = currentYear;
+        if ($('bulkYear')) $('bulkYear').value = currentYear;
+        if ($('studentSession')) $('studentSession').value = getSessionFromYear(currentYear);
+        if ($('bulkSession')) $('bulkSession').value = getSessionFromYear(currentYear);
     }
 
-    function updateStats() {
-        const total = allStudents.length;
-        const hsc = allStudents.filter(s => s.branch === 'HSC').length;
-        const bm = allStudents.filter(s => s.branch === 'BM').length;
-        $('totalStudents').textContent = total;
-        $('statTotal').textContent = total;
-        $('statHSC').textContent = hsc;
-        $('statBM').textContent = bm;
-        $('statActive').textContent = total;
-    }
-
-    function applyFilters() {
-        const fClass = $('filterClass').value;
-        const fYear = $('filterYear').value;
-        const fBranch = $('filterBranch').value;
-        const fGroup = $('filterGroup').value;
-        const search = $('searchInput').value.toLowerCase().trim();
-
-        filteredStudents = allStudents.filter(s => {
-            if (fClass && s.class_name !== fClass) return false;
-            if (fYear && String(s.year) !== String(fYear)) return false;
-            if (fBranch && s.branch !== fBranch) return false;
-            if (fGroup && s.group_name !== fGroup) return false;
-            if (search) {
-                const text = (s.name + ' ' + s.roll).toLowerCase();
-                if (!text.includes(search)) return false;
-            }
-            return true;
-        });
-
-        currentPage = 1;
-        renderStudents();
-    }
-
-    function renderStudents() {
-        const tbody = $('studentTableBody');
-        const pagWrap = $('paginationWrap');
-
-        if (filteredStudents.length === 0) {
-            tbody.innerHTML = `<tr><td colspan="7" style="padding:0;"><div class="empty-state"><div class="icon-wrap"><i class="fas fa-user-graduate"></i></div><h6>কোনো student পাওয়া যায়নি</h6><p>"Add Student" বা "Bulk Import" দিয়ে নতুন যোগ করুন</p></div></td></tr>`;
-            pagWrap.style.display = 'none';
-            return;
-        }
-
-        const totalPages = Math.ceil(filteredStudents.length / PAGE_SIZE);
-        if (currentPage > totalPages) currentPage = totalPages;
-        const start = (currentPage - 1) * PAGE_SIZE;
-        const end = Math.min(start + PAGE_SIZE, filteredStudents.length);
-        const pageItems = filteredStudents.slice(start, end);
-
-        let html = '';
-        pageItems.forEach(s => {
-            const groupClass = s.group_name || 'BM';
-            const branchShort = s.branch === 'BM' ? 'BM' : 'HSC';
-            html += `<tr data-id="${s.id}">
-                <td><input type="checkbox" class="row-checkbox row-select" data-id="${s.id}"></td>
-                <td><span class="cell-roll">${escapeHtml(s.roll)}</span></td>
-                <td><div class="cell-name">${escapeHtml(s.name)}</div><small>Year: ${escapeHtml(s.year)} · Session: ${escapeHtml(s.session || '—')}</small></td>
-                <td>${escapeHtml(s.class_name)}</td>
-                <td><span class="branch-tag ${branchShort}">${branchShort}</span></td>
-                <td><span class="group-tag ${groupClass}">${escapeHtml(s.group_name || '—')}</span></td>
-                <td><div class="action-btns">
-                    <button class="action-btn view" data-action="view" data-id="${s.id}" title="View"><i class="fas fa-eye"></i></button>
-                    <button class="action-btn edit" data-action="edit" data-id="${s.id}" title="Edit"><i class="fas fa-edit"></i></button>
-                    <button class="action-btn subject" data-action="subject" data-id="${s.id}" title="Subjects"><i class="fas fa-book"></i></button>
-                    <button class="action-btn toggle off" data-action="toggle" data-id="${s.id}" title="Deactivate"><i class="fas fa-user-slash"></i></button>
-                    <button class="action-btn delete" data-action="delete" data-id="${s.id}" title="Delete Permanently"><i class="fas fa-trash-alt"></i></button>
-                </div></td>
-            </tr>`;
-        });
-
-        tbody.innerHTML = html;
-        renderPagination(totalPages, start, end);
-        pagWrap.style.display = 'flex';
-    }
-
-    function renderPagination(totalPages, start, end) {
-        $('paginationInfo').textContent = `Showing ${start + 1}–${end} of ${filteredStudents.length}`;
-        const btns = $('paginationBtns');
-        let html = '';
-        html += `<button class="page-btn" data-page="${currentPage - 1}" ${currentPage === 1 ? 'disabled' : ''}><i class="fas fa-chevron-left"></i></button>`;
-
-        const maxBtns = 5;
-        let startPage = Math.max(1, currentPage - 2);
-        let endPage = Math.min(totalPages, startPage + maxBtns - 1);
-        if (endPage - startPage < maxBtns - 1) startPage = Math.max(1, endPage - maxBtns + 1);
-
-        if (startPage > 1) {
-            html += `<button class="page-btn" data-page="1">1</button>`;
-            if (startPage > 2) html += `<button class="page-btn" disabled>...</button>`;
-        }
-        for (let i = startPage; i <= endPage; i++) {
-            html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
-        }
-        if (endPage < totalPages) {
-            if (endPage < totalPages - 1) html += `<button class="page-btn" disabled>...</button>`;
-            html += `<button class="page-btn" data-page="${totalPages}">${totalPages}</button>`;
-        }
-        html += `<button class="page-btn" data-page="${currentPage + 1}" ${currentPage === totalPages ? 'disabled' : ''}><i class="fas fa-chevron-right"></i></button>`;
-        btns.innerHTML = html;
-    }
-
+    // =========================================================
+    // MODAL HELPERS
+    // =========================================================
     function openModal(id) {
         const el = $(id);
         if (el) el.classList.add('show');
@@ -297,6 +486,9 @@
         document.body.style.overflow = '';
     }
 
+    // =========================================================
+    // ADD STUDENT
+    // =========================================================
     function openAddStudentModal() {
         editingStudentId = null;
         $('editStudentId').value = '';
@@ -318,7 +510,10 @@
         openModal('studentModal');
     }
 
-    window.openEditStudentModal = async function (id) {
+    // =========================================================
+    // EDIT STUDENT
+    // =========================================================
+    async function openEditStudentModal(id) {
         try {
             const { data: student, error } = await window.FDC_SUPABASE
                 .from('students').select('*').eq('id', id).single();
@@ -335,14 +530,13 @@
             $('studentRoll').value = student.roll || '';
             $('studentClass').value = student.class_name || '';
 
-            // ✅ Ensure year is in dropdown
             const yearStr = String(student.year || '');
             const yearSelect = $('studentYear');
             const hasYear = Array.from(yearSelect.options).some(o => o.value === yearStr);
             if (!hasYear && yearStr) {
                 yearSelect.insertAdjacentHTML('beforeend', `<option value="${yearStr}">${yearStr}</option>`);
             }
-            $('studentYear').value = yearStr;
+            yearSelect.value = yearStr;
 
             $('studentSession').value = getStudentSession(student);
             $('studentBranch').value = student.branch || '';
@@ -360,8 +554,11 @@
             console.error('Edit student error:', e);
             window.fdcError('Failed to load student: ' + e.message);
         }
-    };
+    }
 
+    // =========================================================
+    // SAVE STUDENT
+    // =========================================================
     async function saveStudent() {
         const name = $('studentName').value.trim();
         const roll = $('studentRoll').value.trim();
@@ -407,7 +604,7 @@
             }
 
             closeModal('studentModal');
-            window.fdcSuccess(editingStudentId ? 'Student সফলভাবে update হয়েছে!' : 'Student সফলভাবে যোগ হয়েছে!');
+            window.fdcSuccess(editingStudentId ? 'Student update হয়েছে!' : 'Student যোগ হয়েছে!');
             await loadAllStudents();
         } catch (e) {
             console.error('Save student error:', e);
@@ -422,9 +619,13 @@
         }
     }
 
-    window.toggleStudent = async function (id) {
+    // =========================================================
+    // TOGGLE STUDENT (Deactivate)
+    // =========================================================
+    async function toggleStudent(id) {
         const s = allStudents.find(x => String(x.id) === String(id));
         if (!s) return window.fdcError('Student পাওয়া যায়নি।');
+
         window.fdcConfirm(
             `"${escapeHtml(s.name)}" (Roll: ${escapeHtml(s.roll)}) কে Deactivate করতে চান?`,
             async function () {
@@ -434,18 +635,21 @@
                     await loadAllStudents();
                 } catch (e) { window.fdcError('Deactivate failed: ' + e.message); }
             },
-            { title: 'Deactivate Student', subtitle: 'Data সংরক্ষিত থাকবে', confirmText: 'হ্যাঁ, Deactivate', cancelText: 'বাতিল', confirmType: 'danger' }
+            { title: 'Deactivate Student', confirmText: 'হ্যাঁ, Deactivate', cancelText: 'বাতিল', confirmType: 'danger' }
         );
-    };
+    }
 
-    window.deleteStudent = async function (id) {
+    // =========================================================
+    // DELETE STUDENT
+    // =========================================================
+    async function deleteStudent(id) {
         const s = allStudents.find(x => String(x.id) === String(id));
         if (!s) return window.fdcError('Student পাওয়া যায়নি।');
 
         window.fdcPromptInput({
             title: '⚠️ PERMANENT DELETE',
             subtitle: `${escapeHtml(s.name)} (Roll: ${escapeHtml(s.roll)})`,
-            message: `এই student এবং তার সব data <strong>চিরতরে</strong> মুছে যাবে:<ul style="margin:10px 0 0 20px;padding:0;color:#991b1b;"><li>Student তথ্য</li><li>Subject assignments</li><li>Results + Result details</li></ul><p style="margin-top:12px;color:#7f1d1d;font-weight:700;">এটি undo করা যাবে না!</p>`,
+            message: `এই student এবং তার সব data <strong>চিরতরে</strong> মুছে যাবে।<p style="margin-top:12px;color:#7f1d1d;font-weight:700;">এটি undo করা যাবে না!</p>`,
             expectedValue: 'DELETE',
             placeholder: 'টাইপ করুন: DELETE',
             confirmText: 'হ্যাঁ, Delete করুন',
@@ -463,7 +667,7 @@
                     await window.FDC_SUPABASE.from('results').delete().eq('student_id', id);
                     const { error } = await window.FDC_SUPABASE.from('students').delete().eq('id', id);
                     if (error) throw error;
-                    window.fdcSuccess(`"${escapeHtml(s.name)}" সফলভাবে delete হয়েছে।`);
+                    window.fdcSuccess(`"${escapeHtml(s.name)}" delete হয়েছে।`);
                     await loadAllStudents();
                 } catch (e) {
                     console.error('Delete error:', e);
@@ -471,9 +675,12 @@
                 }
             }
         });
-    };
+    }
 
-    window.viewStudent = async function (id) {
+    // =========================================================
+    // VIEW STUDENT
+    // =========================================================
+    async function viewStudent(id) {
         const student = allStudents.find(s => String(s.id) === String(id));
         if (!student) return window.fdcError('Student পাওয়া যায়নি।');
 
@@ -494,7 +701,7 @@
 
             const html = `
                 <div style="margin-bottom:16px;">
-                    <div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:700;letter-spacing:0.5px;">Student Info</div>
+                    <div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:700;">Student Info</div>
                     <div style="margin-top:8px;font-size:14px;line-height:1.8;">
                         <div><strong>Name:</strong> ${escapeHtml(student.name)}</div>
                         <div><strong>Roll:</strong> ${escapeHtml(student.roll)}</div>
@@ -506,10 +713,10 @@
                     </div>
                 </div>
                 <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(0,0,0,0.06);">
-                    <div style="font-size:11px;color:#6b7280;text-transform:uppercase;font-weight:700;margin-bottom:8px;">Subjects (${(subs || []).length})</div>
-                    <div style="margin-bottom:12px;"><div style="font-size:12px;color:#0a1655;font-weight:700;margin-bottom:4px;">📌 আবশ্যিক</div>${renderList(compSubs)}</div>
-                    <div style="margin-bottom:12px;"><div style="font-size:12px;color:#0a1655;font-weight:700;margin-bottom:4px;">📚 গ্রুপের</div>${renderList(grpSubs)}</div>
-                    <div><div style="font-size:12px;color:#0a1655;font-weight:700;margin-bottom:4px;">🎯 ঐচ্ছিক</div>${renderList(optSubs)}</div>
+                    <div style="font-size:11px;color:#6b7280;font-weight:700;margin-bottom:8px;">Subjects (${(subs || []).length})</div>
+                    <div style="margin-bottom:12px;"><div style="font-size:12px;color:#0a1655;font-weight:700;">📌 আবশ্যিক</div>${renderList(compSubs)}</div>
+                    <div style="margin-bottom:12px;"><div style="font-size:12px;color:#0a1655;font-weight:700;">📚 গ্রুপের</div>${renderList(grpSubs)}</div>
+                    <div><div style="font-size:12px;color:#0a1655;font-weight:700;">🎯 ঐচ্ছিক</div>${renderList(optSubs)}</div>
                 </div>
             `;
 
@@ -521,18 +728,219 @@
                 buttons: [{ text: 'বন্ধ করুন', type: 'primary', icon: 'fa-times', action: 'close' }]
             });
         } catch (e) { window.fdcError('Load failed: ' + e.message); }
-    };
+    }
+
+    // =========================================================
+    // SUBJECT EDIT MODAL
+    // =========================================================
+    async function openSubjectEditModal(id) {
+        const student = allStudents.find(s => String(s.id) === String(id));
+        if (!student) return window.fdcError('Student পাওয়া যায়নি।');
+
+        currentSubjectEditStudentId = id;
+        $('subjectModalTitle').textContent = 'Subject Management';
+        $('subjectModalSub').textContent = `${student.name} · Roll ${student.roll}`;
+        $('subjectEditBody').innerHTML = '<div style="text-align:center;padding:30px;"><i class="fas fa-spinner fa-spin" style="font-size:24px;color:var(--navy);"></i></div>';
+
+        openModal('subjectEditModal');
+
+        try {
+            // Load subjects for this student's class + branch + group
+            const { data: subjects, error } = await window.FDC_SUPABASE
+                .from('subjects').select('*')
+                .eq('branch', student.branch)
+                .eq('class_name', student.class_name)
+                .eq('is_active', true)
+                .order('subject_type')
+                .order('subject_name')
+                .order('paper_number');
+
+            if (error) throw error;
+
+            // Load student's current subjects
+            const { data: currentSubs } = await window.FDC_SUPABASE
+                .from('student_subjects')
+                .select('subject_id, subject_type')
+                .eq('student_id', id);
+
+            const currentIds = new Set((currentSubs || []).map(s => s.subject_id));
+
+            renderSubjectEditUI(student, subjects || [], currentIds);
+
+        } catch (e) {
+            console.error('Load subjects error:', e);
+            $('subjectEditBody').innerHTML = `<div class="fdc-alert danger">লোড করা যায়নি: ${escapeHtml(e.message)}</div>`;
+        }
+    }
+
+    function renderSubjectEditUI(student, subjects, currentIds) {
+        // Group subjects by book (subject_name)
+        const bookMap = new Map();
+        subjects.forEach(s => {
+            const key = s.subject_name + '|' + (s.group_name || '') + '|' + s.subject_type;
+            if (!bookMap.has(key)) {
+                bookMap.set(key, {
+                    subject_name: s.subject_name,
+                    subject_type: s.subject_type,
+                    group_name: s.group_name,
+                    papers: []
+                });
+            }
+            bookMap.get(key).papers.push(s);
+        });
+
+        const books = Array.from(bookMap.values());
+
+        const compulsory = books.filter(b => b.subject_type === 'compulsory' && !b.group_name);
+        const group = books.filter(b => b.subject_type === 'group');
+        const optional = books.filter(b => b.subject_type === 'optional');
+
+        // Helper: check if book is selected
+        function isBookSelected(book) {
+            return book.papers.some(p => currentIds.has(p.id));
+        }
+
+        let html = '';
+
+        // Compulsory (locked)
+        if (compulsory.length > 0) {
+            html += `
+                <div style="margin-bottom:16px;">
+                    <div style="font-size:12px;font-weight:700;color:#166534;margin-bottom:8px;">
+                        <i class="fas fa-lock"></i> আবশ্যিক বিষয় (Auto)
+                    </div>
+                    <div style="display:grid;gap:6px;">
+                        ${compulsory.map(b => `
+                            <div style="padding:8px 12px;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;font-size:12.5px;font-weight:600;color:#166534;">
+                                ✅ ${escapeHtml(b.subject_name)} (${b.papers.length} paper)
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Group subjects
+        if (group.length > 0) {
+            html += `
+                <div style="margin-bottom:16px;">
+                    <div style="font-size:12px;font-weight:700;color:#0a1655;margin-bottom:8px;">
+                        <i class="fas fa-layer-group"></i> গ্রুপের বিষয়
+                    </div>
+                    <div style="display:grid;gap:6px;">
+                        ${group.map((b, i) => {
+                            const selected = isBookSelected(b);
+                            return `
+                                <label style="display:flex;align-items:center;gap:10px;padding:10px 12px;background:${selected ? '#eff6ff' : '#fafbff'};border:1.5px solid ${selected ? '#3b82f6' : '#e5e7eb'};border-radius:8px;cursor:pointer;transition:0.2s;">
+                                    <input type="checkbox" class="subject-checkbox" data-subject-name="${escapeHtml(b.subject_name)}" data-type="group" ${selected ? 'checked' : ''} style="width:16px;height:16px;accent-color:#0a1655;">
+                                    <span style="font-size:13px;font-weight:600;color:#1f2937;">${escapeHtml(b.subject_name)}</span>
+                                    <span style="font-size:10.5px;color:#6b7280;margin-left:auto;">${b.papers.length} paper</span>
+                                </label>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Optional (4th)
+        if (optional.length > 0) {
+            html += `
+                <div style="margin-bottom:16px;">
+                    <div style="font-size:12px;font-weight:700;color:#92400e;margin-bottom:8px;">
+                        <i class="fas fa-star"></i> ৪র্থ Subject (একটি)
+                    </div>
+                    <select id="subjectOptionalSelect" style="width:100%;padding:10px 14px;border-radius:10px;border:1.5px solid #e5e7eb;background:#fafbff;font-size:13.5px;font-family:inherit;font-weight:600;color:#0a1655;">
+                        <option value="">— Select 4th Subject —</option>
+                        ${optional.map(b => {
+                            const selected = isBookSelected(b);
+                            return `<option value="${escapeHtml(b.subject_name)}" ${selected ? 'selected' : ''}>${escapeHtml(b.subject_name)}</option>`;
+                        }).join('')}
+                    </select>
+                </div>
+            `;
+        }
+
+        $('subjectEditBody').innerHTML = html;
+    }
+
+    async function saveSubjectEdit() {
+        if (!currentSubjectEditStudentId) return;
+
+        const student = allStudents.find(s => String(s.id) === String(currentSubjectEditStudentId));
+        if (!student) return;
+
+        const btn = $('saveSubjectBtn');
+        btn.disabled = true;
+        const original = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+        try {
+            // Get all checked group subjects
+            const checkedGroups = Array.from(document.querySelectorAll('.subject-checkbox[data-type="group"]:checked'))
+                .map(cb => cb.dataset.subjectName);
+            const optional = $('subjectOptionalSelect')?.value || '';
+
+            // Reload subjects to get subject IDs
+            const { data: subjects } = await window.FDC_SUPABASE
+                .from('subjects').select('*')
+                .eq('branch', student.branch)
+                .eq('class_name', student.class_name)
+                .eq('is_active', true);
+
+            // Delete old
+            await window.FDC_SUPABASE.from('student_subjects').delete().eq('student_id', currentSubjectEditStudentId);
+
+            // Build new records
+            const records = [];
+            const addedIds = new Set();
+
+            (subjects || []).forEach(s => {
+                // Compulsory — always
+                if (s.subject_type === 'compulsory' && !s.group_name) {
+                    if (!addedIds.has(s.id)) {
+                        addedIds.add(s.id);
+                        records.push({ student_id: currentSubjectEditStudentId, subject_id: s.id, subject_type: 'compulsory' });
+                    }
+                }
+                // Group
+                else if (s.subject_type === 'group' && checkedGroups.includes(s.subject_name)) {
+                    if (!addedIds.has(s.id)) {
+                        addedIds.add(s.id);
+                        records.push({ student_id: currentSubjectEditStudentId, subject_id: s.id, subject_type: 'group' });
+                    }
+                }
+                // Optional
+                else if (s.subject_type === 'optional' && s.subject_name === optional) {
+                    if (!addedIds.has(s.id)) {
+                        addedIds.add(s.id);
+                        records.push({ student_id: currentSubjectEditStudentId, subject_id: s.id, subject_type: 'optional' });
+                    }
+                }
+            });
+
+            if (records.length > 0) {
+                const { error } = await window.FDC_SUPABASE.from('student_subjects').insert(records);
+                if (error) throw error;
+            }
+
+            closeModal('subjectEditModal');
+            window.fdcSuccess('Subjects update হয়েছে!');
+            await loadAllStudents();
+
+        } catch (e) {
+            console.error('Save subjects error:', e);
+            window.fdcError('Save failed: ' + e.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = original;
+        }
+    }
 
     // =========================================================
     // BULK IMPORT
     // =========================================================
     function resetBulkModal() {
-        bulkState = {
-            config: { class_name: '', year: '', session: '', branch: '', group: '', mainSelected: [], fourthSubject: '' },
-            allSubjects: [], compulsorySubjects: [], mainSubjects: [], fourthSubjects: [],
-            students: [], previewValid: false
-        };
-
         $('bulkClass').value = '';
         const cy = window.FDCSession.getCurrentYear();
         $('bulkYear').value = cy;
@@ -541,8 +949,6 @@
         $('bulkGroup').innerHTML = '<option value="">Select Group</option>';
         $('bulkGroupFieldWrap').style.display = 'none';
         $('bulkData').value = '';
-        $('bulkRangeStart').value = '';
-        $('bulkRangeEnd').value = '';
 
         $('bulkCompulsoryStep').style.display = 'none';
         $('bulkMainStep').style.display = 'none';
@@ -551,320 +957,211 @@
         $('bulkSummary').style.display = 'none';
         $('bulkPreview').style.display = 'none';
         $('saveBulkBtn').disabled = true;
-    }
 
-    function onBulkYearChange() {
-        const year = $('bulkYear').value;
-        bulkState.config.year = year;
-        bulkState.config.session = getSessionFromYear(year);
-        $('bulkSession').value = bulkState.config.session;
-        updateBulkSummary();
-    }
-
-    function onBulkClassChange() {
-        bulkState.config.class_name = $('bulkClass').value;
-        updateBulkSummary();
+        currentBulkSubjects = { compulsory: [], main: [], fourth: [] };
     }
 
     async function onBulkBranchChange() {
         const branch = $('bulkBranch').value;
-        bulkState.config.branch = branch;
         if (branch === 'HSC') {
             $('bulkGroupFieldWrap').style.display = 'block';
-            await loadBulkGroups('HSC');
+            await loadGroupsByBranch('HSC', 'bulkGroup');
+            $('bulkGroup').value = '';
         } else if (branch === 'BM') {
             $('bulkGroupFieldWrap').style.display = 'block';
-            $('bulkGroup').innerHTML = '<option value="BM-General">BM-General</option>';
+            $('bulkGroup').innerHTML = '<option value="BM-General" selected>BM-General</option>';
+            setTimeout(onBulkGroupChange, 100);
         } else {
             $('bulkGroupFieldWrap').style.display = 'none';
-            $('bulkGroup').innerHTML = '<option value="">Select Group</option>';
         }
-        resetBulkSubjectsUI();
+        resetBulkUI();
     }
 
-    async function loadBulkGroups(branch) {
-        try {
-            const { data } = await window.FDC_SUPABASE.from('groups').select('*').eq('branch', branch).eq('is_active', true).order('sort_order');
-            const select = $('bulkGroup');
-            select.innerHTML = '<option value="">Select Group</option>';
-            (data || []).forEach(g => {
-                select.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(g.group_name)}">${escapeHtml(g.display_name)}</option>`);
-            });
-        } catch (e) { console.error('Load groups error:', e); }
+    function resetBulkUI() {
+        $('bulkCompulsoryStep').style.display = 'none';
+        $('bulkMainStep').style.display = 'none';
+        $('bulkFourthStep').style.display = 'none';
+        $('bulkStudentsStep').style.display = 'none';
+        $('bulkPreview').style.display = 'none';
     }
 
     async function onBulkGroupChange() {
         const branch = $('bulkBranch').value;
         const group = $('bulkGroup').value;
         const className = $('bulkClass').value;
-        bulkState.config.group = group;
 
-        if (!branch || !group || !className) { resetBulkSubjectsUI(); return; }
+        if (!branch || !group || !className) { resetBulkUI(); return; }
 
         try {
             const { data: subjects, error } = await window.FDC_SUPABASE
                 .from('subjects').select('*')
                 .eq('branch', branch).eq('class_name', className).eq('is_active', true)
                 .order('subject_name').order('paper_number');
+
             if (error) throw error;
 
-            bulkState.allSubjects = subjects || [];
-            categorizeSubjects(branch, group);
-            renderBulkCompulsory();
-            renderBulkMainSelection(branch, group);
-            renderBulkFourthSubject(branch, group);
+            allSubjectsData = subjects || [];
+
+            // Group by book
+            const bookMap = new Map();
+            allSubjectsData.forEach(s => {
+                const key = s.subject_name + '|' + (s.group_name || '') + '|' + s.subject_type;
+                if (!bookMap.has(key)) {
+                    bookMap.set(key, {
+                        subject_name: s.subject_name,
+                        subject_type: s.subject_type,
+                        group_name: s.group_name,
+                        papers: []
+                    });
+                }
+                bookMap.get(key).papers.push(s);
+            });
+
+            const books = Array.from(bookMap.values());
+            const structure = SUBJECT_STRUCTURE[branch]?.[group];
+
+            currentBulkSubjects.compulsory = books.filter(b => b.subject_type === 'compulsory' && !b.group_name);
+            currentBulkSubjects.main = books.filter(b => b.subject_type === 'group');
+            currentBulkSubjects.fourth = books.filter(b => b.subject_type === 'optional');
+
+            // Render compulsory
+            $('bulkCompulsoryList').innerHTML = currentBulkSubjects.compulsory.map(b =>
+                `<div class="bcb-item"><i class="fas fa-check-circle"></i><span>${escapeHtml(b.subject_name)} (${b.papers.length} paper)</span></div>`
+            ).join('') || '<div style="color:#6b7280;font-size:12px;">কোনো compulsory নেই</div>';
 
             $('bulkCompulsoryStep').style.display = 'block';
-            $('bulkMainStep').style.display = 'block';
-            if (bulkState.config.hasFourth !== false) $('bulkFourthStep').style.display = 'block';
-            $('bulkStudentsStep').style.display = 'block';
-            updateBulkSummary();
-        } catch (e) {
-            console.error('Load subjects error:', e);
-            window.fdcError('Subject load failed: ' + e.message);
-        }
-    }
 
-    function resetBulkSubjectsUI() {
-        $('bulkCompulsoryStep').style.display = 'none';
-        $('bulkMainStep').style.display = 'none';
-        $('bulkFourthStep').style.display = 'none';
-        $('bulkStudentsStep').style.display = 'none';
-        $('bulkSummary').style.display = 'none';
-        $('bulkPreview').style.display = 'none';
-        $('saveBulkBtn').disabled = true;
-        bulkState.config.mainSelected = [];
-        bulkState.config.fourthSubject = '';
-        bulkState.compulsorySubjects = [];
-        bulkState.mainSubjects = [];
-        bulkState.fourthSubjects = [];
-    }
-
-    function categorizeSubjects(branch, group) {
-        const all = bulkState.allSubjects;
-        const structure = SUBJECT_STRUCTURE[branch]?.[group];
-        if (!structure) return;
-
-        const bookMap = new Map();
-        all.forEach(s => {
-            if (!bookMap.has(s.subject_name)) {
-                bookMap.set(s.subject_name, { subject_name: s.subject_name, subject_code: s.subject_code, subject_type: s.subject_type, group_name: s.group_name, papers: [] });
+            // Render main subjects
+            if (structure && structure.type === 'fixed_choice') {
+                $('bulkMainTitle').textContent = 'Main Subjects (Fixed + Choice)';
+                let html = '';
+                structure.fixedMain.forEach(name => {
+                    html += `
+                        <div class="bulk-subject-item fixed">
+                            <input type="checkbox" checked disabled>
+                            <span class="bsi-name">${escapeHtml(name)}</span>
+                            <span class="bsi-badge fixed">Fixed</span>
+                        </div>
+                    `;
+                });
+                structure.choiceMain.forEach(name => {
+                    html += `
+                        <label class="bulk-subject-item" data-subject="${escapeHtml(name)}">
+                            <input type="radio" name="bulkMainRadio" value="${escapeHtml(name)}">
+                            <span class="bsi-name">${escapeHtml(name)}</span>
+                            <span class="bsi-badge choice">Choice</span>
+                        </label>
+                    `;
+                });
+                $('bulkMainList').innerHTML = html;
+                $('bulkMainCounter').textContent = `2 / ${structure.mainCount}`;
+                $('bulkMainStep').style.display = 'block';
+            } else if (structure && structure.type === 'select_3') {
+                $('bulkMainTitle').textContent = 'Main Subjects (৩টি select করুন)';
+                $('bulkMainList').innerHTML = structure.mainPool.map(name => {
+                    const book = currentBulkSubjects.main.find(b => b.subject_name === name);
+                    if (!book) return '';
+                    return `
+                        <label class="bulk-subject-item" data-subject="${escapeHtml(name)}">
+                            <input type="checkbox" name="bulkMainCheck" value="${escapeHtml(name)}">
+                            <span class="bsi-name">${escapeHtml(name)}</span>
+                        </label>
+                    `;
+                }).join('');
+                $('bulkMainCounter').textContent = `0 / ${structure.mainCount}`;
+                $('bulkMainStep').style.display = 'block';
+            } else {
+                $('bulkMainStep').style.display = 'none';
             }
-            bookMap.get(s.subject_name).papers.push(s);
-        });
-        const books = Array.from(bookMap.values());
 
-        bulkState.compulsorySubjects = books.filter(b => b.subject_type === 'compulsory' && !b.group_name);
+            // 4th subject
+            if (structure && structure.hasFourth && currentBulkSubjects.fourth.length > 0) {
+                $('bulkFourthSubject').innerHTML = '<option value="">Select 4th Subject</option>' +
+                    currentBulkSubjects.fourth.map(b => `<option value="${escapeHtml(b.subject_name)}">${escapeHtml(b.subject_name)}</option>`).join('');
+                $('bulkFourthStep').style.display = 'block';
+            } else {
+                $('bulkFourthStep').style.display = 'none';
+            }
 
-        if (branch === 'BM') {
-            bulkState.mainSubjects = books.filter(b => b.subject_type === 'compulsory');
-            bulkState.fourthSubjects = [];
-            bulkState.config.hasFourth = false;
-            return;
-        }
+            $('bulkStudentsStep').style.display = 'block';
 
-        if (branch === 'HSC' && group === 'Science') {
-            const fixedNames = structure.fixedMain;
-            const choiceNames = structure.choiceMain;
-            bulkState.mainSubjects = books.filter(b => fixedNames.includes(b.subject_name) || choiceNames.includes(b.subject_name));
-            bulkState.fourthSubjects = books.filter(b => structure.fourthPool.includes(b.subject_name) && !fixedNames.includes(b.subject_name));
-            bulkState.config.hasFourth = true;
-        } else if (branch === 'HSC' && (group === 'Business' || group === 'Humanities')) {
-            bulkState.mainSubjects = books.filter(b => structure.mainPool.includes(b.subject_name));
-            bulkState.fourthSubjects = books.filter(b => structure.fourthPool.includes(b.subject_name));
-            bulkState.config.hasFourth = true;
+        } catch (e) {
+            console.error('Bulk group change error:', e);
+            window.fdcError('Load failed: ' + e.message);
         }
     }
 
-    function renderBulkCompulsory() {
-        const list = $('bulkCompulsoryList');
-        const books = bulkState.compulsorySubjects;
-        if (books.length === 0) { list.innerHTML = '<div style="color:#6b7280;font-size:12px;">কোনো compulsory subject নেই।</div>'; return; }
-        list.innerHTML = books.map(b => {
-            const paperInfo = b.papers.length > 1 ? `${b.papers.length} papers` : '1 paper';
-            return `<div class="bcb-item"><i class="fas fa-check-circle"></i><span>${escapeHtml(b.subject_name)} <small style="opacity:0.7;">(${paperInfo})</small></span></div>`;
-        }).join('');
-    }
-
-    function renderBulkMainSelection(branch, group) {
-        const structure = SUBJECT_STRUCTURE[branch][group];
-        const list = $('bulkMainList');
-        const title = $('bulkMainTitle');
-        bulkState.config.mainSelected = [];
-
-        if (structure.type === 'fixed_choice') {
-            title.textContent = 'Main Subjects (পদার্থ + রসায়ন fixed, ৩য়টি select করুন)';
-            let html = '';
-            structure.fixedMain.forEach(name => {
-                html += `<div class="bulk-subject-item fixed checked" data-subject="${escapeHtml(name)}"><input type="checkbox" checked disabled><span class="bsi-name">${escapeHtml(name)}</span><span class="bsi-badge fixed">Fixed</span></div>`;
-            });
-            structure.choiceMain.forEach(name => {
-                html += `<label class="bulk-subject-item" data-subject="${escapeHtml(name)}"><input type="radio" name="bulkMainRadio" value="${escapeHtml(name)}"><span class="bsi-name">${escapeHtml(name)}</span><span class="bsi-badge choice">Choice</span></label>`;
-            });
-            list.innerHTML = html;
-
-            list.querySelectorAll('input[name="bulkMainRadio"]').forEach(radio => {
-                radio.addEventListener('change', function () {
-                    bulkState.config.mainSelected = [...structure.fixedMain, this.value];
-                    list.querySelectorAll('.bulk-subject-item').forEach(item => {
-                        if (item.classList.contains('fixed')) return;
-                        const inp = item.querySelector('input');
-                        item.classList.toggle('checked', inp.checked);
-                    });
-                    renderBulkFourthSubject(branch, group);
-                    updateBulkMainCounter(structure.mainCount);
-                    updateBulkSummary();
-                });
-            });
-            updateBulkMainCounter(structure.mainCount);
-        } else if (structure.type === 'select_3') {
-            title.textContent = `Main Subjects (৩টি select করুন)`;
-            list.innerHTML = structure.mainPool.map(name => {
-                const book = bulkState.mainSubjects.find(b => b.subject_name === name);
-                if (!book) return '';
-                return `<label class="bulk-subject-item" data-subject="${escapeHtml(name)}"><input type="checkbox" name="bulkMainCheck" value="${escapeHtml(name)}"><span class="bsi-name">${escapeHtml(name)}</span></label>`;
-            }).join('');
-
-            list.querySelectorAll('input[name="bulkMainCheck"]').forEach(cb => {
-                cb.addEventListener('change', function () {
-                    const checked = Array.from(list.querySelectorAll('input[name="bulkMainCheck"]:checked'));
-                    if (checked.length > structure.mainCount) {
-                        this.checked = false;
-                        window.fdcWarning(`সর্বোচ্চ ${structure.mainCount}টি select করা যাবে।`);
-                        return;
-                    }
-                    bulkState.config.mainSelected = checked.map(c => c.value);
-                    list.querySelectorAll('.bulk-subject-item').forEach(item => {
-                        const inp = item.querySelector('input');
-                        item.classList.toggle('checked', inp.checked);
-                    });
-                    renderBulkFourthSubject(branch, group);
-                    updateBulkMainCounter(structure.mainCount);
-                    updateBulkSummary();
-                });
-            });
-            updateBulkMainCounter(structure.mainCount);
-        } else if (structure.type === 'all_fixed') {
-            title.textContent = 'Main Subjects (সব fixed compulsory)';
-            list.innerHTML = structure.mainFixed.map(name => {
-                return `<div class="bulk-subject-item fixed checked" data-subject="${escapeHtml(name)}"><input type="checkbox" checked disabled><span class="bsi-name">${escapeHtml(name)}</span><span class="bsi-badge fixed">Fixed</span></div>`;
-            }).join('');
-            bulkState.config.mainSelected = [...structure.mainFixed];
-            updateBulkMainCounter(structure.mainCount);
-        }
-    }
-
-    function updateBulkMainCounter(required) {
-        const counter = $('bulkMainCounter');
-        const current = bulkState.config.mainSelected.length;
-        counter.textContent = `${current} / ${required}`;
-        counter.classList.toggle('complete', current === required);
-    }
-
-    function renderBulkFourthSubject(branch, group) {
-        const select = $('bulkFourthSubject');
-        const structure = SUBJECT_STRUCTURE[branch][group];
-
-        if (!structure.hasFourth || structure.type === 'all_fixed') {
-            $('bulkFourthStep').style.display = 'none';
-            bulkState.config.fourthSubject = '';
-            return;
-        }
-
-        const mainSelected = bulkState.config.mainSelected;
-        const available = bulkState.fourthSubjects.filter(b => !mainSelected.includes(b.subject_name));
-
-        select.innerHTML = '<option value="">Select 4th Subject</option>';
-        available.forEach(b => {
-            select.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(b.subject_name)}">${escapeHtml(b.subject_name)}</option>`);
-        });
-
-        const current = select.value;
-        if (current && !available.find(b => b.subject_name === current)) {
-            select.value = '';
-            bulkState.config.fourthSubject = '';
-        }
-        $('bulkFourthStep').style.display = 'block';
-    }
-
-    function onBulkFourthChange() {
-        bulkState.config.fourthSubject = $('bulkFourthSubject').value;
-        updateBulkSummary();
-    }
-
-    function updateBulkSummary() {
-        const cfg = bulkState.config;
-        if (!cfg.group || !cfg.branch) { $('bulkSummary').style.display = 'none'; return; }
-        const structure = SUBJECT_STRUCTURE[cfg.branch]?.[cfg.group];
-        if (!structure) return;
-
-        const mainTotal = cfg.mainSelected.length;
-        const needsFourth = structure.hasFourth !== false;
-        const isComplete = mainTotal === structure.mainCount && (!needsFourth || cfg.fourthSubject);
-
-        let html = `
-            <div><strong>Class:</strong> ${escapeHtml(cfg.class_name || '—')} / <strong>Year:</strong> ${escapeHtml(cfg.year || '—')} / <strong>Session:</strong> ${escapeHtml(cfg.session || '—')}</div>
-            <div><strong>Branch:</strong> ${escapeHtml(cfg.branch || '—')} / <strong>Group:</strong> ${escapeHtml(cfg.group || '—')}</div>
-            <div><strong>📌 Compulsory:</strong> ${bulkState.compulsorySubjects.map(b => escapeHtml(b.subject_name)).join(', ') || '—'}</div>
-            <div><strong>📚 Main Subjects (${mainTotal}):</strong> ${cfg.mainSelected.map(escapeHtml).join(', ') || '—'}</div>
-            ${needsFourth ? `<div><strong>🎯 4th Subject:</strong> ${escapeHtml(cfg.fourthSubject || '—')}</div>` : ''}
-        `;
-
-        html += isComplete
-            ? `<div style="color:#166534;font-weight:700;margin-top:6px;">✅ সব তথ্য পূর্ণ</div>`
-            : `<div style="color:#b45309;font-weight:700;margin-top:6px;">⚠️ কিছু তথ্য বাকি</div>`;
-
-        $('bulkSummaryBody').innerHTML = html;
-        $('bulkSummary').style.display = 'block';
-    }
-
-    function generateBulkRange() {
-        const start = parseInt($('bulkRangeStart').value);
-        const end = parseInt($('bulkRangeEnd').value);
-        if (!start || !end || end < start) return window.fdcWarning('সঠিক roll range দিন।');
-        if (end - start > 500) return window.fdcWarning('সর্বোচ্চ ৫০০ roll generate করা যাবে।');
-        const lines = [];
-        for (let i = start; i <= end; i++) lines.push(`${i}, `);
-        const current = $('bulkData').value.trim();
-        $('bulkData').value = current ? current + '\n' + lines.join('\n') : lines.join('\n');
-        window.fdcSuccess(`${end - start + 1}টি roll generate হয়েছে।`);
-    }
-
+    // =========================================================
+    // PARSE BULK STUDENTS (`.` separator)
+    // =========================================================
     function parseBulkStudents() {
         const raw = $('bulkData').value.trim();
         if (!raw) return [];
+
         const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
         const rows = [];
+
         lines.forEach((line, idx) => {
-            const parts = line.split(/\t|,| {2,}/).map(p => p.trim()).filter(Boolean);
+            let parts = [];
+
+            // Priority: | > . > , (fallback)
+            if (line.includes('|')) {
+                parts = line.split('|').map(p => p.trim());
+            } else if (line.includes('.')) {
+                // Smart dot split — Roll.Name বা Roll.Name.4th
+                // But don't split inside numbers like 12.5 — assume roll/name don't have dots
+                parts = line.split('.').map(p => p.trim()).filter(Boolean);
+            } else {
+                parts = line.split(',').map(p => p.trim()).filter(Boolean);
+            }
+
             if (parts.length >= 1) {
-                rows.push({ line_no: idx + 1, roll: parts[0] || '', name: parts[1] || '', fourth_override: parts[2] || '', row_status: 'pending' });
+                rows.push({
+                    line_no: idx + 1,
+                    roll: parts[0] || '',
+                    name: parts[1] || '',
+                    fourth_override: parts[2] || '',
+                    row_status: 'pending'
+                });
             }
         });
+
         return rows;
     }
 
+    // =========================================================
+    // PREVIEW BULK IMPORT
+    // =========================================================
     async function previewBulkImport() {
-        const cfg = bulkState.config;
-        const structure = SUBJECT_STRUCTURE[cfg.branch]?.[cfg.group];
+        const cfg = {
+            class_name: $('bulkClass').value,
+            year: $('bulkYear').value,
+            session: $('bulkSession').value,
+            branch: $('bulkBranch').value,
+            group: $('bulkGroup').value
+        };
 
-        if (!cfg.class_name || !cfg.year || !cfg.branch || !cfg.group) return window.fdcWarning('Common settings পূরণ করুন।');
-        if (!structure) return window.fdcError('Subject structure পাওয়া যায়নি।');
-        if (cfg.mainSelected.length !== structure.mainCount) return window.fdcWarning(`Main-এ ${structure.mainCount}টি subject select করুন।`);
-        if (structure.hasFourth && !cfg.fourthSubject) return window.fdcWarning('৪র্থ Subject select করুন।');
+        if (!cfg.class_name || !cfg.year || !cfg.branch) {
+            return window.fdcWarning('Common settings পূরণ করুন।');
+        }
+        if (cfg.branch === 'HSC' && !cfg.group) {
+            return window.fdcWarning('Group সিলেক্ট করুন।');
+        }
 
         const students = parseBulkStudents();
         if (students.length === 0) return window.fdcWarning('কোনো student নেই।');
 
+        // Duplicate check within list
         const rollMap = new Map();
         students.forEach(s => {
             if (!s.roll) { s.row_status = 'error'; s.error_msg = 'No roll'; return; }
             if (rollMap.has(s.roll)) {
-                s.row_status = 'error'; s.error_msg = 'Duplicate roll';
-                rollMap.get(s.roll).row_status = 'error'; rollMap.get(s.roll).error_msg = 'Duplicate roll';
+                s.row_status = 'error'; s.error_msg = 'Duplicate';
+                rollMap.get(s.roll).row_status = 'error'; rollMap.get(s.roll).error_msg = 'Duplicate';
             } else rollMap.set(s.roll, s);
         });
 
+        // Check existing in DB
         const rolls = students.map(s => s.roll).filter(r => r);
         if (rolls.length > 0) {
             const { data: existing } = await window.FDC_SUPABASE
@@ -872,20 +1169,15 @@
                 .eq('class_name', cfg.class_name).eq('year', cfg.year).eq('branch', cfg.branch).in('roll', rolls);
             const existingRolls = new Set((existing || []).map(e => e.roll));
             students.forEach(s => {
-                if (existingRolls.has(s.roll) && s.row_status !== 'error') { s.row_status = 'warn'; s.warn_msg = 'DB-তে আছে'; }
+                if (existingRolls.has(s.roll) && s.row_status !== 'error') {
+                    s.row_status = 'warn'; s.warn_msg = 'DB-তে আছে';
+                }
             });
         }
 
-        if (structure.hasFourth) {
-            students.forEach(s => {
-                if (s.fourth_override) {
-                    if (cfg.mainSelected.includes(s.fourth_override)) { s.row_status = 'error'; s.error_msg = `4th subject main-এ আছে`; }
-                } else s.fourth_override = cfg.fourthSubject;
-            });
-        }
-
-        bulkState.students = students;
-        renderBulkPreview(students);
+        // Store globally for save
+        window._bulkPreviewStudents = students;
+        renderBulkPreview(students, cfg);
 
         const hasErrors = students.some(s => s.row_status === 'error');
         $('saveBulkBtn').disabled = hasErrors;
@@ -894,28 +1186,92 @@
             const warnings = students.filter(s => s.row_status === 'warn').length;
             if (warnings > 0) window.fdcWarning(`${warnings}টি student DB-তে আগেই আছে — skip হবে।`);
             else window.fdcSuccess(`${students.length}টি student ready — Save All চাপুন।`);
-        } else window.fdcError('কিছু student-এ error আছে — Preview-তে দেখুন।');
+        } else window.fdcError('কিছু student-এ error আছে।');
     }
 
-    function renderBulkPreview(students) {
-        const cfg = bulkState.config;
+    // =========================================================
+    // RENDER BULK PREVIEW (Editable 4th Subject)
+    // =========================================================
+    function renderBulkPreview(students, cfg) {
         const tbody = $('bulkPreviewBody');
-        tbody.innerHTML = students.map((s, i) => {
+        const structure = SUBJECT_STRUCTURE[cfg.branch]?.[cfg.group];
+        const hasFourth = structure?.hasFourth && currentBulkSubjects.fourth.length > 0;
+
+        let html = '';
+        students.forEach((s, i) => {
             let statusBadge = '<span class="preview-status-badge ok">OK</span>';
             let rowClass = '';
-            if (s.row_status === 'error') { statusBadge = `<span class="preview-status-badge error" title="${escapeHtml(s.error_msg || '')}">Error</span>`; rowClass = 'error'; }
-            else if (s.row_status === 'warn') { statusBadge = `<span class="preview-status-badge warn" title="${escapeHtml(s.warn_msg || '')}">Skip</span>`; rowClass = 'warn'; }
-            return `<tr class="${rowClass}"><td>${i + 1}</td><td>${escapeHtml(s.roll || '—')}</td><td>${escapeHtml(s.name || '—')}</td><td>${escapeHtml(s.fourth_override || cfg.fourthSubject || '—')}</td><td>${statusBadge}</td></tr>`;
-        }).join('');
+
+            if (s.row_status === 'error') {
+                statusBadge = `<span class="preview-status-badge error" title="${escapeHtml(s.error_msg || '')}">Error</span>`;
+                rowClass = 'error';
+            } else if (s.row_status === 'warn') {
+                statusBadge = `<span class="preview-status-badge warn" title="${escapeHtml(s.warn_msg || '')}">Skip</span>`;
+                rowClass = 'warn';
+            }
+
+            let fourthCell = '';
+            if (hasFourth) {
+                const currentValue = s.fourth_override || '';
+                fourthCell = `
+                    <select class="preview-select" data-line-no="${s.line_no}">
+                        <option value="">— Select —</option>
+                        ${currentBulkSubjects.fourth.map(b => 
+                            `<option value="${escapeHtml(b.subject_name)}" ${currentValue === b.subject_name ? 'selected' : ''}>${escapeHtml(b.subject_name)}</option>`
+                        ).join('')}
+                    </select>
+                `;
+            } else {
+                fourthCell = `<span style="color:#9ca3af;font-size:11.5px;">—</span>`;
+            }
+
+            html += `
+                <tr class="${rowClass}">
+                    <td>${i + 1}</td>
+                    <td>${escapeHtml(s.roll || '—')}</td>
+                    <td>${escapeHtml(s.name || '—')}</td>
+                    <td>${fourthCell}</td>
+                    <td>${statusBadge}</td>
+                </tr>
+            `;
+        });
+
+        tbody.innerHTML = html;
+
+        // Attach change events to preview selects
+        tbody.querySelectorAll('.preview-select').forEach(sel => {
+            sel.addEventListener('change', function () {
+                const lineNo = parseInt(this.dataset.lineNo);
+                const student = window._bulkPreviewStudents.find(s => s.line_no === lineNo);
+                if (student) {
+                    student.fourth_override = this.value;
+                }
+            });
+        });
+
         $('bulkPreviewCount').textContent = `(${students.length} students)`;
         $('bulkPreview').style.display = 'block';
     }
 
+    // =========================================================
+    // SAVE BULK IMPORT
+    // =========================================================
     async function saveBulkImport() {
-        const cfg = bulkState.config;
-        const structure = SUBJECT_STRUCTURE[cfg.branch][cfg.group];
-        const students = bulkState.students.filter(s => s.row_status !== 'error' && s.row_status !== 'warn');
+        const cfg = {
+            class_name: $('bulkClass').value,
+            year: $('bulkYear').value,
+            session: $('bulkSession').value,
+            branch: $('bulkBranch').value,
+            group: $('bulkGroup').value
+        };
+
+        const students = (window._bulkPreviewStudents || []).filter(s => s.row_status !== 'error' && s.row_status !== 'warn');
         if (students.length === 0) return window.fdcWarning('কোনো valid student নেই।');
+
+        // Get selected main subjects
+        const selectedMain = Array.from(document.querySelectorAll('input[name="bulkMainCheck"]:checked')).map(cb => cb.value);
+        const radioChoice = document.querySelector('input[name="bulkMainRadio"]:checked')?.value || '';
+        const defaultFourth = $('bulkFourthSubject').value || '';
 
         window.fdcConfirm(
             `${students.length} জন student যোগ করা হবে। নিশ্চিত?`,
@@ -924,7 +1280,9 @@
                 const original = btn.innerHTML;
                 btn.disabled = true;
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
                 try {
+                    // 1. Insert students
                     const studentRecords = students.map(s => ({
                         name: s.name || 'Student ' + s.roll,
                         roll: s.roll,
@@ -936,58 +1294,121 @@
                         is_active: true
                     }));
 
-                    const { data: inserted, error: insErr } = await window.FDC_SUPABASE.from('students').insert(studentRecords).select();
+                    const { data: inserted, error: insErr } = await window.FDC_SUPABASE
+                        .from('students').insert(studentRecords).select();
+
                     if (insErr) throw insErr;
+
+                    // 2. Assign subjects
+                    const structure = SUBJECT_STRUCTURE[cfg.branch]?.[cfg.group];
 
                     for (const stu of (inserted || [])) {
                         const matched = students.find(s => s.roll === stu.roll);
                         if (!matched) continue;
-                        const subjectRecords = buildSubjectRecords(stu.id, cfg, structure, matched.fourth_override || cfg.fourthSubject);
-                        if (subjectRecords.length > 0) await window.FDC_SUPABASE.from('student_subjects').insert(subjectRecords);
+
+                        const records = [];
+                        const addedIds = new Set();
+
+                        // Compulsory — all
+                        currentBulkSubjects.compulsory.forEach(b => {
+                            b.papers.forEach(p => {
+                                if (!addedIds.has(p.id)) {
+                                    addedIds.add(p.id);
+                                    records.push({ student_id: stu.id, subject_id: p.id, subject_type: 'compulsory' });
+                                }
+                            });
+                        });
+
+                        // Main subjects
+                        if (structure?.type === 'fixed_choice') {
+                            // Fixed
+                            structure.fixedMain.forEach(name => {
+                                const book = currentBulkSubjects.main.find(b => b.subject_name === name);
+                                if (book) {
+                                    book.papers.forEach(p => {
+                                        if (!addedIds.has(p.id)) {
+                                            addedIds.add(p.id);
+                                            records.push({ student_id: stu.id, subject_id: p.id, subject_type: 'group' });
+                                        }
+                                    });
+                                }
+                            });
+                            // Choice
+                            if (radioChoice) {
+                                const book = currentBulkSubjects.main.find(b => b.subject_name === radioChoice);
+                                if (book) {
+                                    book.papers.forEach(p => {
+                                        if (!addedIds.has(p.id)) {
+                                            addedIds.add(p.id);
+                                            records.push({ student_id: stu.id, subject_id: p.id, subject_type: 'group' });
+                                        }
+                                    });
+                                }
+                            }
+                        } else if (structure?.type === 'select_3') {
+                            selectedMain.forEach(name => {
+                                const book = currentBulkSubjects.main.find(b => b.subject_name === name);
+                                if (book) {
+                                    book.papers.forEach(p => {
+                                        if (!addedIds.has(p.id)) {
+                                            addedIds.add(p.id);
+                                            records.push({ student_id: stu.id, subject_id: p.id, subject_type: 'group' });
+                                        }
+                                    });
+                                }
+                            });
+                        } else if (structure?.type === 'all_fixed') {
+                            // BM — all compulsory already covered above
+                        }
+
+                        // 4th subject (optional)
+                        const fourthName = matched.fourth_override || defaultFourth;
+                        if (fourthName && structure?.hasFourth) {
+                            const book = currentBulkSubjects.fourth.find(b => b.subject_name === fourthName);
+                            if (book) {
+                                book.papers.forEach(p => {
+                                    if (!addedIds.has(p.id)) {
+                                        addedIds.add(p.id);
+                                        records.push({ student_id: stu.id, subject_id: p.id, subject_type: 'optional' });
+                                    }
+                                });
+                            }
+                        }
+
+                        if (records.length > 0) {
+                            await window.FDC_SUPABASE.from('student_subjects').insert(records);
+                        }
                     }
 
                     closeModal('bulkImportModal');
                     window.fdcSuccess(`${inserted.length} জন student সফলভাবে যোগ হয়েছে!`);
                     await loadAllStudents();
+
                 } catch (e) {
                     console.error('Bulk save error:', e);
                     window.fdcError('Save failed: ' + e.message);
-                } finally { btn.disabled = false; btn.innerHTML = original; }
+                } finally {
+                    btn.disabled = false;
+                    btn.innerHTML = original;
+                }
             },
             { title: 'Bulk Import নিশ্চিত করুন', confirmText: 'হ্যাঁ, Save করুন', cancelText: 'বাতিল', confirmType: 'primary' }
         );
     }
 
-    function buildSubjectRecords(studentId, cfg, structure, fourthSubject) {
-        const records = [];
-        const addedIds = new Set();
-        function addPapers(book, type) {
-            book.papers.forEach(p => {
-                if (addedIds.has(p.id)) return;
-                addedIds.add(p.id);
-                records.push({ student_id: studentId, subject_id: p.id, subject_type: type });
-            });
-        }
-        bulkState.compulsorySubjects.forEach(book => addPapers(book, 'compulsory'));
-        bulkState.mainSubjects.forEach(book => {
-            if (cfg.mainSelected.includes(book.subject_name)) {
-                const type = (cfg.branch === 'BM') ? 'compulsory' : 'group';
-                addPapers(book, type);
-            }
-        });
-        if (fourthSubject && structure.hasFourth) {
-            const fourthBook = bulkState.fourthSubjects.find(b => b.subject_name === fourthSubject);
-            if (fourthBook) addPapers(fourthBook, 'optional');
-        }
-        return records;
-    }
-
+    // =========================================================
+    // EVENT LISTENERS
+    // =========================================================
     function attachEvents() {
+        // Add student
         $('btnAddStudent').addEventListener('click', openAddStudentModal);
+
+        // Modal: student
         $('closeStudentModal').addEventListener('click', () => closeModal('studentModal'));
         $('cancelStudentBtn').addEventListener('click', () => closeModal('studentModal'));
         $('saveStudentBtn').addEventListener('click', saveStudent);
 
+        // Branch change in student modal
         $('studentBranch').addEventListener('change', async function () {
             const branch = this.value;
             if (branch === 'HSC') {
@@ -998,39 +1419,52 @@
             }
         });
 
+        // Year change → session auto
         $('studentYear').addEventListener('change', function () {
             if (!editingStudentId) $('studentSession').value = getSessionFromYear(this.value);
         });
 
-        ['filterClass', 'filterYear', 'filterBranch', 'filterGroup'].forEach(id => {
-            $(id).addEventListener('change', applyFilters);
-        });
-        $('searchInput').addEventListener('input', applyFilters);
-
-        $('studentTableBody').addEventListener('click', function (e) {
-            const btn = e.target.closest('[data-action]');
-            if (!btn) return;
-            const action = btn.dataset.action;
-            const id = btn.dataset.id;
-            if (action === 'view') window.viewStudent(id);
-            else if (action === 'edit') window.openEditStudentModal(id);
-            else if (action === 'subject') window.openEditStudentModal(id);
-            else if (action === 'toggle') window.toggleStudent(id);
-            else if (action === 'delete') window.deleteStudent(id);
+        // Smart search
+        $('searchInput').addEventListener('input', function () {
+            $('searchClear').classList.toggle('show', this.value.length > 0);
+            applyFiltersAndRender();
         });
 
-        $('paginationBtns').addEventListener('click', function (e) {
-            const btn = e.target.closest('[data-page]');
-            if (!btn || btn.disabled) return;
-            currentPage = parseInt(btn.dataset.page);
-            renderStudents();
-            window.scrollTo({ top: 200, behavior: 'smooth' });
+        $('searchClear').addEventListener('click', function () {
+            $('searchInput').value = '';
+            this.classList.remove('show');
+            applyFiltersAndRender();
         });
 
-        $('selectAll').addEventListener('change', function () {
-            document.querySelectorAll('.row-select').forEach(cb => cb.checked = this.checked);
+        // Filters
+        ['filterClass', 'filterBranch', 'filterGroup', 'filterSort'].forEach(id => {
+            $(id).addEventListener('change', applyFiltersAndRender);
         });
 
+        // Section + student actions (delegated)
+        $('sectionsContainer').addEventListener('click', function (e) {
+            const actionEl = e.target.closest('[data-action]');
+            if (actionEl) {
+                const action = actionEl.dataset.action;
+
+                if (action === 'toggle-section') {
+                    const section = actionEl.closest('[data-section-key]');
+                    if (section) toggleSection(section.dataset.sectionKey);
+                    return;
+                }
+
+                const id = actionEl.dataset.id;
+                if (!id) return;
+
+                if (action === 'view') viewStudent(id);
+                else if (action === 'edit') openEditStudentModal(id);
+                else if (action === 'subject') openSubjectEditModal(id);
+                else if (action === 'toggle') toggleStudent(id);
+                else if (action === 'delete') deleteStudent(id);
+            }
+        });
+
+        // Bulk import
         $('btnBulkImport').addEventListener('click', () => {
             resetBulkModal();
             openModal('bulkImportModal');
@@ -1039,30 +1473,67 @@
         $('closeBulkModal').addEventListener('click', () => closeModal('bulkImportModal'));
         $('cancelBulkBtn').addEventListener('click', () => closeModal('bulkImportModal'));
 
-        $('bulkClass').addEventListener('change', onBulkClassChange);
-        $('bulkYear').addEventListener('change', onBulkYearChange);
+        $('bulkClass').addEventListener('change', onBulkGroupChange);
+        $('bulkYear').addEventListener('change', function () {
+            $('bulkSession').value = getSessionFromYear(this.value);
+        });
         $('bulkBranch').addEventListener('change', onBulkBranchChange);
         $('bulkGroup').addEventListener('change', onBulkGroupChange);
-        $('bulkFourthSubject').addEventListener('change', onBulkFourthChange);
 
-        $('btnGenerateRange').addEventListener('click', generateBulkRange);
         $('previewBulkBtn').addEventListener('click', previewBulkImport);
         $('saveBulkBtn').addEventListener('click', saveBulkImport);
 
+        // Subject edit modal
+        $('closeSubjectModal').addEventListener('click', () => closeModal('subjectEditModal'));
+        $('cancelSubjectBtn').addEventListener('click', () => closeModal('subjectEditModal'));
+        $('saveSubjectBtn').addEventListener('click', saveSubjectEdit);
+
+        // View modal
         $('closeViewModal').addEventListener('click', () => closeModal('viewStudentModal'));
         $('closeViewBtn').addEventListener('click', () => closeModal('viewStudentModal'));
 
+        // Backdrop
         document.querySelectorAll('.fdc-modal-overlay').forEach(overlay => {
             overlay.addEventListener('click', function (e) {
-                if (e.target === this) { this.classList.remove('show'); document.body.style.overflow = ''; }
+                if (e.target === this) {
+                    this.classList.remove('show');
+                    document.body.style.overflow = '';
+                }
             });
+        });
+
+        // ESC
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.fdc-modal-overlay.show').forEach(m => m.classList.remove('show'));
+                document.body.style.overflow = '';
+            }
         });
     }
 
-    async function init() {
-        console.log('🚀 Admin Students v12 initializing...');
+    // =========================================================
+    // LOAD GROUPS FOR FILTER
+    // =========================================================
+    async function loadGroupsForFilter() {
+        try {
+            const { data } = await window.FDC_SUPABASE
+                .from('groups').select('*').eq('is_active', true).order('sort_order');
 
-        // Wait for session helper
+            const select = $('filterGroup');
+            select.innerHTML = '<option value="">All Groups</option>';
+            (data || []).forEach(g => {
+                select.insertAdjacentHTML('beforeend',
+                    `<option value="${escapeHtml(g.group_name)}">${escapeHtml(g.display_name)}</option>`);
+            });
+        } catch (e) { console.warn('Load groups for filter:', e); }
+    }
+
+    // =========================================================
+    // INIT
+    // =========================================================
+    async function init() {
+        console.log('🚀 Admin Students v13.0 initializing...');
+
         if (!window.FDCSession) {
             console.warn('⚠️ Session helper not loaded, retrying...');
             setTimeout(init, 300);
@@ -1070,14 +1541,17 @@
         }
 
         await loadYearOptions();
+        await loadGroupsForFilter();
         attachEvents();
 
         waitForSupabase(async function () {
             const admin = await window.FDCAuth.requireAdmin();
             if (!admin) return;
+
             await loadAdminInfo();
             await loadAllStudents();
-            console.log('✅ Admin Students v12 ready');
+
+            console.log('✅ Admin Students v13.0 ready');
         });
     }
 

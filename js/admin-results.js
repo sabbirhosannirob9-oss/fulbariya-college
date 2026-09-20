@@ -2,8 +2,8 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN RESULT ENTRY
  * Location: js/admin-results.js
- * Version: v2.1 — Dynamic Years (Session Helper)
- * Depends: config.js, supabase.js, auth.js, admin-popup.js, gpa-calculator.js, session-helper.js
+ * Version: v3.0 — Document-based Pass Marks + Live Validation
+ * Depends: config.js, supabase.js, auth.js, admin-popup.js, gpa-calculator.js v2
  * =========================================================
  */
 
@@ -63,7 +63,7 @@
     }
 
     // =========================================================
-    // LOAD ADMIN INFO
+    // ADMIN INFO
     // =========================================================
     async function loadAdminInfo() {
         try {
@@ -125,19 +125,26 @@
     }
 
     // =========================================================
-    // ✅ LOAD YEAR OPTIONS — via Session Helper (Dynamic)
+    // LOAD YEAR OPTIONS (dynamic)
     // =========================================================
     async function loadYearOptions() {
-        await window.FDCSession.fillYearDropdown('filterYear', {
-            autoSelectCurrent: false
-        });
-
-        // Set current year as default
-        const cy = window.FDCSession.getCurrentYear();
-        const el = $('filterYear');
-        if (el) el.value = cy;
-
-        console.log('✅ Year options loaded (dynamic)');
+        if (window.FDCSession) {
+            await window.FDCSession.fillYearDropdown('filterYear', { autoSelectCurrent: false });
+            const cy = window.FDCSession.getCurrentYear();
+            if ($('filterYear')) $('filterYear').value = cy;
+        } else {
+            // Fallback
+            const currentYear = new Date().getFullYear();
+            const years = [];
+            for (let i = -2; i <= 2; i++) years.push(currentYear + i);
+            const select = $('filterYear');
+            select.innerHTML = '<option value="">Select Year</option>';
+            years.forEach(y => {
+                select.insertAdjacentHTML('beforeend', `<option value="${y}">${y}</option>`);
+            });
+            select.value = currentYear;
+        }
+        console.log('✅ Year options loaded');
     }
 
     // =========================================================
@@ -508,19 +515,32 @@
     }
 
     // =========================================================
-    // RENDER PAPER HEADERS
+    // ✅ RENDER PAPER HEADERS (with pass marks)
     // =========================================================
     function renderPaperHeaders(book, paper) {
+        const calcPass = (full) => window.FDCGPA.calcPassMark(full);
+
         if (book.assessment_model === 'board_continuous') {
+            const boardFull = paper.cq_marks || 60;
+            const contFull = paper.practical_marks || 40;
             return `
-                <th>Board /${paper.cq_marks || 60}</th>
-                <th>Continuous /${paper.practical_marks || 40}</th>
+                <th>Board /${boardFull} <small style="color:#16a34a;font-weight:700;">(Pass ${calcPass(boardFull)})</small></th>
+                <th>Continuous /${contFull} <small style="color:#16a34a;font-weight:700;">(Pass ${calcPass(contFull)})</small></th>
             `;
         }
         let html = '';
-        if (paper.has_cq) html += `<th>CQ /${paper.cq_marks}</th>`;
-        if (paper.has_mcq) html += `<th>MCQ /${paper.mcq_marks}</th>`;
-        if (paper.has_practical) html += `<th>Practical /${paper.practical_marks}</th>`;
+        if (paper.has_cq) {
+            const full = paper.cq_marks || 0;
+            html += `<th>CQ /${full} <small style="color:#16a34a;font-weight:700;">(${calcPass(full)})</small></th>`;
+        }
+        if (paper.has_mcq) {
+            const full = paper.mcq_marks || 0;
+            html += `<th>MCQ /${full} <small style="color:#16a34a;font-weight:700;">(${calcPass(full)})</small></th>`;
+        }
+        if (paper.has_practical) {
+            const full = paper.practical_marks || 0;
+            html += `<th>Practical /${full} <small style="color:#16a34a;font-weight:700;">(${calcPass(full)})</small></th>`;
+        }
         return html;
     }
 
@@ -569,29 +589,33 @@
     }
 
     // =========================================================
-    // RENDER INPUT
+    // ✅ RENDER INPUT (with pass hint + fail border)
     // =========================================================
     function renderInput(studentId, subjectId, field, value, max, fieldType) {
         const key = studentId + '_' + subjectId;
         const inputId = `input_${key}_${field}`;
         const val = (value !== '' && value !== null && value !== undefined) ? value : '';
         const filled = val !== '' ? 'filled' : '';
+        const passMark = window.FDCGPA.calcPassMark(max);
+        const isFail = (val !== '' && parseFloat(val) < passMark);
 
         return `<td>
             <div class="marks-input-wrap">
                 <input type="number"
-                       class="marks-input ${filled}"
+                       class="marks-input ${filled} ${isFail ? 'fail-border' : ''}"
                        id="${inputId}"
                        data-student-id="${studentId}"
                        data-subject-id="${subjectId}"
                        data-field="${field}"
                        data-max="${max}"
+                       data-pass="${passMark}"
                        data-field-type="${fieldType}"
                        value="${val}"
                        min="0"
                        max="${max}"
                        placeholder="0">
                 <span class="max-hint">/${max}</span>
+                <span class="pass-hint-mini">✓ ${passMark}</span>
             </div>
         </td>`;
     }
@@ -657,7 +681,7 @@
     }
 
     // =========================================================
-    // HANDLE INPUT CHANGE
+    // ✅ HANDLE INPUT CHANGE (with live fail validation)
     // =========================================================
     function handleInputChange(e) {
         const input = e.target;
@@ -665,6 +689,7 @@
         const subjectId = input.dataset.subjectId;
         const field = input.dataset.field;
         const max = parseInt(input.dataset.max) || 0;
+        const passMark = parseInt(input.dataset.pass) || 0;
 
         let value = input.value.trim();
         if (value !== '') {
@@ -688,6 +713,10 @@
         marksData[key][field] = input.value;
 
         input.classList.toggle('filled', input.value !== '');
+
+        // ✅ Live fail validation
+        const isFail = (input.value !== '' && parseFloat(input.value) < passMark);
+        input.classList.toggle('fail-border', isFail);
 
         updatePaperCell(studentId, subjectId);
         updateRowStatus(studentId);
@@ -846,9 +875,7 @@
             const status = getBookFillStatus(book);
             const header = document.querySelector(`.book-section[data-book-idx="${idx}"] .bh-status`);
             if (header) {
-                header.textContent = status.complete
-                    ? '✅ সম্পূর্ণ'
-                    : `${status.filled}/${status.total} filled`;
+                header.textContent = status.complete ? '✅ সম্পূর্ণ' : `${status.filled}/${status.total} filled`;
                 header.classList.toggle('done', status.complete);
             }
         });
@@ -946,7 +973,7 @@
                 marksData = {};
                 document.querySelectorAll('.marks-input').forEach(input => {
                     input.value = '';
-                    input.classList.remove('filled', 'fail', 'error');
+                    input.classList.remove('filled', 'fail', 'error', 'fail-border');
                 });
                 refreshAll();
                 window.fdcSuccess('সব marks clear করা হয়েছে।');
@@ -1038,7 +1065,9 @@
                                     const maxTotal = (paper.cq_marks || 60) + (paper.practical_marks || 40);
                                     const percent = maxTotal > 0 ? (total / maxTotal) * 100 : 0;
                                     const { grade, gp } = window.FDCGPA.percentToGrade(percent);
-                                    const failed = total < maxTotal * 0.33;
+                                    const failed = window.FDCGPA.calculateBMTPaperGPA(
+                                        board, cont, paper.cq_marks || 60, paper.practical_marks || 40
+                                    ).failed;
 
                                     detailsRecords.push({
                                         result_id: resultId,
@@ -1061,18 +1090,17 @@
                                     const pr = parseFloat(m.practical) || 0;
                                     const total = cq + mcq + pr;
 
-                                    const maxTotal = (paper.has_cq ? paper.cq_marks || 0 : 0)
-                                                   + (paper.has_mcq ? paper.mcq_marks || 0 : 0)
-                                                   + (paper.has_practical ? paper.practical_marks || 0 : 0);
-
-                                    const percent = maxTotal > 0 ? (total / maxTotal) * 100 : 0;
-                                    const { grade, gp } = window.FDCGPA.percentToGrade(percent);
-
-                                    let pStatus = 'pass';
-                                    if (paper.has_cq && cq < (paper.cq_marks || 0) * 0.33) pStatus = 'fail';
-                                    else if (paper.has_mcq && mcq < (paper.mcq_marks || 0) * 0.33) pStatus = 'fail';
-                                    else if (paper.has_practical && pr < (paper.practical_marks || 0) * 0.33) pStatus = 'fail';
-                                    else if (total < maxTotal * 0.33) pStatus = 'fail';
+                                    const paperResult = window.FDCGPA.calculatePaperGPA(
+                                        { cq, mcq, practical: pr },
+                                        {
+                                            cq: paper.cq_marks || 0,
+                                            mcq: paper.mcq_marks || 0,
+                                            practical: paper.practical_marks || 0,
+                                            hasCq: paper.has_cq,
+                                            hasMcq: paper.has_mcq,
+                                            hasPractical: paper.has_practical
+                                        }
+                                    );
 
                                     detailsRecords.push({
                                         result_id: resultId,
@@ -1083,9 +1111,9 @@
                                         paper_number: paper.paper_number || 1,
                                         cq_marks: cq, mcq_marks: mcq, practical_marks: pr,
                                         total_marks: total,
-                                        grade: pStatus === 'fail' ? 'F' : grade,
-                                        grade_point: pStatus === 'fail' ? 0 : gp,
-                                        status: pStatus
+                                        grade: paperResult.grade,
+                                        grade_point: paperResult.gp,
+                                        status: paperResult.failed ? 'fail' : 'pass'
                                     });
                                 }
                             });
@@ -1214,11 +1242,17 @@
     // INIT
     // =========================================================
     async function init() {
-        console.log('🚀 Admin Results v2.1 initializing...');
+        console.log('🚀 Admin Results v3.0 initializing...');
 
         if (!window.FDCSession) {
             console.warn('⚠️ Session helper not loaded, retrying...');
             setTimeout(init, 300);
+            return;
+        }
+
+        if (!window.FDCGPA || typeof window.FDCGPA.calcPassMark !== 'function') {
+            console.error('❌ GPA Calculator v2.0 not loaded!');
+            window.fdcError('GPA Calculator আপডেট করা হয়নি।');
             return;
         }
 
@@ -1232,7 +1266,7 @@
             await loadAdminInfo();
             await loadExams();
 
-            console.log('✅ Admin Results v2.1 ready');
+            console.log('✅ Admin Results v3.0 ready');
         });
     }
 

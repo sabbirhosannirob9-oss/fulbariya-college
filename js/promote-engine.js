@@ -2,14 +2,12 @@
  * =========================================================
  * FULBARIYA COLLEGE — PROMOTE ENGINE
  * Location: js/promote-engine.js
- * Version: v2.0 — Session Copy Fix (Academic Session Policy)
- * Purpose: Execute promotion with audit log
+ * Version: v3.0 — Session Copy Fix (Source Student)
  * 
- * ⚠️ SESSION POLICY (Bangladesh HSC):
- *    Session = ভর্তির বছর (Admission Year) — কখনো বদলায় না।
- *    Class 11 (2024-25) → Class 12 (2024-25) — SAME session।
- *    Session সবসময় source student থেকে COPY হবে,
- *    কখনো target year থেকে GENERATE হবে না।
+ * ⚠️ SESSION POLICY:
+ *    Session = ভর্তির বছর — কখনো বদলায় না।
+ *    Session সবসময় SOURCE student থেকে COPY হবে।
+ *    Target year থেকে GENERATE হবে না।
  * =========================================================
  */
 
@@ -28,21 +26,20 @@
             targetClass,
             targetYear,
             sourceBranch,
-            selectedStudents,  // classified students to promote
+            selectedStudents,
             deleteTarget = true,
             adminInfo
         } = options;
 
         const batchId = window.FDCPromoteUtils.generateBatchId();
 
-        // 🎯 Session — Target year থেকে নয়, SOURCE থেকে copy হবে
-        // এটা শুধু log-এর জন্য reference session (মূলত প্রতিটা student-এর নিজের session থাকবে)
+        // 🎯 Reference session (source থেকে)
         const referenceSession = selectedStudents.length > 0
             ? window.FDCPromoteUtils.getStudentSession(selectedStudents[0].student)
             : '';
 
         console.log('🎓 Batch ID:', batchId);
-        console.log('📋 Reference session (source):', referenceSession);
+        console.log('📋 Reference session:', referenceSession);
 
         const result = {
             batchId,
@@ -58,12 +55,12 @@
             onProgress?.('📦 Batch তৈরি হচ্ছে...', 5);
 
             // =========================================================
-            // STEP 1: Backup / Snapshot of target students (before delete)
+            // STEP 1: Snapshot target students (before delete)
             // =========================================================
             let targetStudentsSnapshot = [];
 
             if (deleteTarget) {
-                onProgress?.('🗑️ Target-এর পুরোনো data load করছি...', 10);
+                onProgress?.('🗑️ Target-এর data load করছি...', 10);
 
                 let tq = window.FDC_SUPABASE
                     .from('students')
@@ -80,14 +77,14 @@
                 if (tErr) throw tErr;
 
                 targetStudentsSnapshot = targets || [];
-                console.log('🗑️ Target students to delete:', targetStudentsSnapshot.length);
+                console.log('🗑️ Target to delete:', targetStudentsSnapshot.length);
             }
 
             // =========================================================
-            // STEP 2: Delete target students (if deleteTarget)
+            // STEP 2: Delete target students
             // =========================================================
             if (deleteTarget && targetStudentsSnapshot.length > 0) {
-                onProgress?.('🗑️ Target-এর পুরোনো data delete করছি...', 20);
+                onProgress?.('🗑️ Target delete করছি...', 20);
 
                 const targetIds = targetStudentsSnapshot.map(s => s.id);
 
@@ -97,7 +94,7 @@
                     .delete()
                     .in('student_id', targetIds);
 
-                // 2b. Load + Delete result_details
+                // 2b. Delete result_details
                 const { data: targetResults } = await window.FDC_SUPABASE
                     .from('results')
                     .select('id')
@@ -105,16 +102,8 @@
 
                 if (targetResults && targetResults.length > 0) {
                     const targetResultIds = targetResults.map(r => r.id);
-
-                    await window.FDC_SUPABASE
-                        .from('result_details')
-                        .delete()
-                        .in('result_id', targetResultIds);
-
-                    await window.FDC_SUPABASE
-                        .from('results')
-                        .delete()
-                        .in('id', targetResultIds);
+                    await window.FDC_SUPABASE.from('result_details').delete().in('result_id', targetResultIds);
+                    await window.FDC_SUPABASE.from('results').delete().in('id', targetResultIds);
                 }
 
                 // 2c. Delete students
@@ -130,15 +119,16 @@
             }
 
             // =========================================================
-            // STEP 3: Prepare new students to insert
-            // 🎯 SESSION FIX — buildPromotedStudentRecord use করছি
+            // STEP 3: Prepare new students (session from source)
             // =========================================================
             onProgress?.('📝 নতুন student data তৈরি করছি...', 30);
 
-            const studentsToPromote = selectedStudents.filter(c => c.status === 'pass' || c.userOverride);
+            const studentsToPromote = selectedStudents.filter(c => 
+                c.status === 'pass' || c.userOverride
+            );
 
             const newStudentRecords = studentsToPromote.map(c => {
-                // 🎯 buildPromotedStudentRecord — এটা session source থেকে copy করে
+                // 🎯 buildPromotedStudentRecord — session source থেকে copy
                 return window.FDCPromoteUtils.buildPromotedStudentRecord(
                     c.student,
                     targetClass,
@@ -147,8 +137,7 @@
                 );
             });
 
-            // Debug log
-            console.log('📋 Prepared records:');
+            // Log session verification
             newStudentRecords.forEach(r => {
                 console.log(`   ${r.roll} — Session: ${r.session} (Class ${r.class_name} / Year ${r.year})`);
             });
@@ -166,19 +155,15 @@
             if (insErr) throw insErr;
 
             const insertedMap = new Map();
-            (inserted || []).forEach((s, idx) => {
-                // Match by roll + branch
+            (inserted || []).forEach(s => {
                 const orig = studentsToPromote.find(c =>
-                    c.student.roll === s.roll &&
-                    c.student.branch === s.branch
+                    c.student.roll === s.roll && c.student.branch === s.branch
                 );
-                if (orig) {
-                    insertedMap.set(orig.student.id, s);
-                }
+                if (orig) insertedMap.set(orig.student.id, s);
             });
 
             // =========================================================
-            // STEP 5: Copy subjects (branch-aware)
+            // STEP 5: Copy subjects
             // =========================================================
             onProgress?.('📚 Subjects copy করছি...', 55);
 
@@ -189,7 +174,7 @@
                 const newStu = insertedMap.get(orig.student.id);
 
                 if (!newStu) {
-                    console.warn('⚠️ No inserted student found for:', orig.student.name);
+                    console.warn('⚠️ No inserted student for:', orig.student.name);
                     continue;
                 }
 
@@ -206,7 +191,7 @@
                             .insert(subjectRecords);
 
                         if (subErr) {
-                            console.warn('Subject insert error for', orig.student.name, subErr);
+                            console.warn('Subject insert error:', orig.student.name, subErr);
                         } else {
                             subjectCopyCount += subjectRecords.length;
                         }
@@ -214,15 +199,11 @@
 
                     // Save audit
                     await saveAuditLog(batchId, orig, newStu, options);
-
                     result.promotedCount++;
 
                 } catch (e) {
-                    console.error('Subject copy error for', orig.student.name, e);
-                    result.errors.push({
-                        student: orig.student.name,
-                        error: e.message
-                    });
+                    console.error('Subject copy error:', orig.student.name, e);
+                    result.errors.push({ student: orig.student.name, error: e.message });
                 }
 
                 const pct = 55 + Math.floor((i / studentsToPromote.length) * 30);
@@ -232,18 +213,13 @@
             // =========================================================
             // STEP 6: Delete source students
             // =========================================================
-            onProgress?.('🗑️ Source থেকে old data delete করছি...', 88);
+            onProgress?.('🗑️ Source delete করছি...', 88);
 
             const sourceIds = studentsToPromote.map(c => c.student.id);
 
             if (sourceIds.length > 0) {
-                // Delete subjects
-                await window.FDC_SUPABASE
-                    .from('student_subjects')
-                    .delete()
-                    .in('student_id', sourceIds);
+                await window.FDC_SUPABASE.from('student_subjects').delete().in('student_id', sourceIds);
 
-                // Delete results
                 const { data: sourceResults } = await window.FDC_SUPABASE
                     .from('results')
                     .select('id')
@@ -251,19 +227,10 @@
 
                 if (sourceResults && sourceResults.length > 0) {
                     const sourceResultIds = sourceResults.map(r => r.id);
-
-                    await window.FDC_SUPABASE
-                        .from('result_details')
-                        .delete()
-                        .in('result_id', sourceResultIds);
-
-                    await window.FDC_SUPABASE
-                        .from('results')
-                        .delete()
-                        .in('id', sourceResultIds);
+                    await window.FDC_SUPABASE.from('result_details').delete().in('result_id', sourceResultIds);
+                    await window.FDC_SUPABASE.from('results').delete().in('id', sourceResultIds);
                 }
 
-                // Delete students
                 const { error: delSrcErr } = await window.FDC_SUPABASE
                     .from('students')
                     .delete()
@@ -290,7 +257,7 @@
                 ...options,
                 ...stats,
                 adminInfo,
-                referenceSession  // 🎯 log-এ reference session
+                referenceSession
             });
 
             onProgress?.('✅ সম্পূর্ণ!', 100);
@@ -301,7 +268,6 @@
         } catch (e) {
             console.error('Execute promote error:', e);
 
-            // Log failure
             try {
                 await savePromotionLog(batchId, {
                     ...options,
@@ -331,26 +297,24 @@
         try {
             const oldStu = classifiedStudent.student;
 
-            // Load old subjects
             const { data: oldSubs } = await window.FDC_SUPABASE
                 .from('student_subjects')
                 .select('subject_id, subject_type')
                 .eq('student_id', oldStu.id);
 
-            // Load new subjects
             const { data: newSubs } = await window.FDC_SUPABASE
                 .from('student_subjects')
                 .select('subject_id, subject_type')
                 .eq('student_id', newStudent.id);
 
-            // 🎯 Session verify log
+            // Session verification
             const oldSession = window.FDCPromoteUtils.getStudentSession(oldStu);
             const newSession = window.FDCPromoteUtils.getStudentSession(newStudent);
 
             if (oldSession !== newSession) {
-                console.warn(`⚠️ Session mismatch for ${oldStu.name}: ${oldSession} → ${newSession}`);
+                console.warn(`⚠️ Session mismatch: ${oldStu.name} (${oldSession} → ${newSession})`);
             } else {
-                console.log(`✅ Session preserved for ${oldStu.name}: ${newSession}`);
+                console.log(`✅ Session preserved: ${oldStu.name} (${newSession})`);
             }
 
             await window.FDC_SUPABASE
@@ -381,11 +345,8 @@
     // =========================================================
     async function savePromotionLog(batchId, options) {
         try {
-            // 🎯 Reference session — source থেকে (target year থেকে না)
             const referenceSession = options.referenceSession
-                || window.FDCPromoteUtils.getStudentSession(
-                    options.selectedStudents?.[0]?.student
-                )
+                || window.FDCPromoteUtils.getStudentSession(options.selectedStudents?.[0]?.student)
                 || '';
 
             const logData = {
@@ -397,7 +358,7 @@
                 source_branch: options.sourceBranch,
                 target_class: options.targetClass,
                 target_year: options.targetYear,
-                target_session: referenceSession,  // 🎯 source session
+                target_session: referenceSession,
                 target_branch: options.sourceBranch,
                 total_students: options.total_students || 0,
                 promoted_count: options.promoted_count || 0,
@@ -429,6 +390,6 @@
         savePromotionLog
     };
 
-    console.log('✅ Promote Engine v2.0 loaded — Session Copy Fix applied');
+    console.log('✅ Promote Engine v3.0 loaded — Session Copy Fix');
 
 })();
