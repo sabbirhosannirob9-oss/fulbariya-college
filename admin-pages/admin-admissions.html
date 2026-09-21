@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admission Management | Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --purple: #8b5cf6;
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+    --shadow-lg: 0 12px 40px rgba(10,22,85,0.12);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* ============ HEADER ============ */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.admin-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; }
+.admin-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+.admin-header .user-box { display: flex; align-items: center; gap: 8px; }
+.avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    border: 2px solid rgba(242,210,123,0.4);
+    overflow: hidden;
+}
+.avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; }
+
+/* ============ MAIN ============ */
+.main-wrap { max-width: 1400px; margin: 0 auto; padding: 20px 16px 60px; }
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
+
+/* ============ STATS ============ */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.stat-card {
+    background: #fff;
+    border-radius: 14px;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1.5px solid transparent;
+    transition: 0.25s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
+.stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.stat-card.active {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(10,22,85,0.08);
+}
+.stat-card .sc-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.stat-card .sc-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
+.stat-card .sc-icon.yellow { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #fff; }
+.stat-card .sc-icon.blue { background: linear-gradient(135deg, #3b82f6, #2563eb); color: #fff; }
+.stat-card .sc-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.stat-card .sc-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+.stat-card .sc-info { min-width: 0; }
+.stat-card .sc-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.stat-card .sc-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 4px;
+}
+
+/* ============ MAIN TABS (Level) ============ */
+.main-tabs {
+    background: #fff;
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 12px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+.main-tabs::-webkit-scrollbar { display: none; }
+
+.main-tab {
+    flex: 1;
+    min-width: 120px;
+    padding: 12px 18px;
+    border: none;
+    background: transparent;
+    color: var(--grey);
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-family: inherit;
+    white-space: nowrap;
+}
+.main-tab:hover { color: var(--navy); background: var(--off-white); }
+.main-tab.active {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(10,22,85,0.2);
+}
+.main-tab.active i { color: var(--gold); }
+.main-tab .tab-count {
+    background: rgba(255,255,255,0.25);
+    padding: 1px 8px;
+    border-radius: 50px;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+.main-tab:not(.active) .tab-count {
+    background: rgba(10,22,85,0.08);
+    color: var(--navy);
+}
+
+/* ============ SUB TABS (Group) ============ */
+.sub-tabs {
+    background: #f8f9fc;
+    border-radius: 12px;
+    padding: 5px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border: 1px solid var(--border-light);
+}
+.sub-tabs::-webkit-scrollbar { display: none; }
+
+.sub-tab {
+    padding: 9px 16px;
+    border: none;
+    background: transparent;
+    color: var(--grey);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+.sub-tab:hover { color: var(--navy); background: #fff; }
+.sub-tab.active {
+    background: #fff;
+    color: var(--navy);
+    box-shadow: 0 2px 8px rgba(10,22,85,0.08);
+    font-weight: 700;
+}
+.sub-tab .tab-count {
+    background: rgba(10,22,85,0.08);
+    color: var(--navy);
+    padding: 1px 7px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+}
+.sub-tab.active .tab-count {
+    background: var(--navy);
+    color: var(--gold);
+}
+
+/* ============ TOOLBAR ============ */
+.toolbar {
+    background: #fff;
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 16px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.status-chips {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+.status-chip {
+    padding: 7px 14px;
+    border-radius: 50px;
+    border: 1.5px solid #e5e7eb;
+    background: #fff;
+    color: var(--grey);
+    font-weight: 600;
+    font-size: 12px;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    font-family: inherit;
+}
+.status-chip:hover { border-color: var(--navy); color: var(--navy); }
+.status-chip.active {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border-color: transparent;
+}
+.status-chip .chip-count {
+    background: rgba(10,22,85,0.08);
+    color: var(--navy);
+    padding: 1px 7px;
+    border-radius: 50px;
+    font-size: 10.5px;
+    font-weight: 700;
+}
+.status-chip.active .chip-count {
+    background: rgba(242,210,123,0.3);
+    color: var(--gold);
+}
+
+.search-wrap {
+    position: relative;
+    flex: 1;
+    min-width: 200px;
+}
+.search-wrap i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--grey);
+    font-size: 13px;
+    pointer-events: none;
+}
+.search-input {
+    width: 100%;
+    padding: 10px 14px 10px 40px;
+    border-radius: 50px;
+    border: 1.5px solid #e5e7eb;
+    background: var(--off-white);
+    font-size: 13px;
+    outline: none;
+    transition: 0.25s;
+    color: var(--dark);
+    font-family: inherit;
+}
+.search-input:focus {
+    border-color: var(--navy);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+}
+
+.btn-export {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+    font-family: inherit;
+}
+.btn-export:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(16,185,129,0.4); }
+
+/* ============ APPLICATION CARDS ============ */
+.apps-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 14px;
+}
+
+.app-card {
+    background: #fff;
+    border-radius: 14px;
+    border: 1.5px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: 0.3s;
+    position: relative;
+}
+.app-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+}
+.app-card.status-pending::before { background: linear-gradient(180deg, #fbbf24, #f59e0b); }
+.app-card.status-verified::before { background: linear-gradient(180deg, #3b82f6, #2563eb); }
+.app-card.status-admitted::before { background: linear-gradient(180deg, #10b981, #059669); }
+.app-card.status-cancelled::before { background: linear-gradient(180deg, #9ca3af, #6b7280); }
+
+.app-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: rgba(10,22,85,0.15);
+}
+
+.app-card .ac-top {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px 12px 18px;
+    align-items: flex-start;
+}
+
+.app-card .ac-photo {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    color: var(--gold);
+    font-size: 22px;
+    border: 2px solid #fff;
+    box-shadow: 0 4px 12px rgba(10,22,85,0.15);
+}
+.app-card .ac-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.app-card .ac-info { flex: 1; min-width: 0; }
+
+.app-card .ac-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0 0 3px;
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.app-card .ac-appid {
+    font-family: 'Playfair Display', serif;
+    font-size: 11.5px;
+    color: var(--gold-dark);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.app-card .ac-meta {
+    font-size: 11.5px;
+    color: var(--grey);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.app-card .ac-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+.app-card .ac-meta i { font-size: 10px; color: var(--gold-dark); }
+
+.app-card .ac-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+.app-card .ac-status.pending { background: #fef3c7; color: #92400e; }
+.app-card .ac-status.verified { background: #dbeafe; color: #1e40af; }
+.app-card .ac-status.admitted { background: #d1fae5; color: #065f46; }
+.app-card .ac-status.cancelled { background: #f3f4f6; color: #4b5563; }
+
+.app-card .ac-body {
+    padding: 12px 16px 12px 18px;
+    border-top: 1px dashed var(--border-light);
+}
+
+.app-card .ac-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+    font-size: 11.5px;
+}
+.app-card .acd-item { min-width: 0; }
+.app-card .acd-label {
+    font-size: 9.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 1px;
+}
+.app-card .acd-value {
+    color: var(--dark);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.app-card .ac-actions {
+    display: flex;
+    gap: 6px;
+    padding: 10px 16px 12px 18px;
+    border-top: 1px solid var(--border-light);
+    background: #fafbff;
+}
+
+.ac-btn {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 700;
+    font-size: 11.5px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    font-family: inherit;
+}
+.ac-btn:hover { transform: translateY(-1px); }
+.ac-btn.view { background: #f3e8ff; color: #7c3aed; }
+.ac-btn.view:hover { background: #7c3aed; color: #fff; }
+.ac-btn.verify { background: #dbeafe; color: #1e40af; }
+.ac-btn.verify:hover { background: #2563eb; color: #fff; }
+.ac-btn.admit { background: #d1fae5; color: #065f46; }
+.ac-btn.admit:hover { background: #059669; color: #fff; }
+.ac-btn.cancel { background: #fef2f2; color: #dc2626; }
+.ac-btn.cancel:hover { background: #dc2626; color: #fff; }
+
+/* ============ LOADING & EMPTY ============ */
+.loading-wrap {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--border-light);
+}
+.loading-spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-wrap p { color: var(--grey); font-size: 13.5px; margin: 0; }
+
+.empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    background: #fff;
+    border-radius: 14px;
+    border: 1px solid var(--border-light);
+}
+.empty-state .es-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+.empty-state .es-icon i { font-size: 34px; color: var(--navy); opacity: 0.4; }
+.empty-state h5 { color: #374151; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--grey); margin: 0; }
+
+/* ============ MODAL ============ */
+.fdc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.7);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: fadeIn 0.25s ease;
+}
+.fdc-modal-overlay.show { display: flex; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.fdc-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.fdc-modal.wide { max-width: 900px; }
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.fdc-modal-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    padding: 22px 24px;
+    border-radius: 20px 20px 0 0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+.fdc-modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.fdc-modal-header .mh-left { display: flex; align-items: center; gap: 12px; }
+.fdc-modal-header .mh-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.fdc-modal-header h5 { margin: 0; font-size: 16px; font-weight: 700; }
+.fdc-modal-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+
+.fdc-modal-close {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.fdc-modal-close:hover { background: var(--danger); transform: rotate(90deg); }
+
+.fdc-modal-body { padding: 22px 24px; }
+
+.fdc-form-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #4b5563;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+}
+.fdc-form-label .req { color: var(--danger); }
+
+.fdc-input, .fdc-select, .fdc-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13.5px;
+    transition: 0.25s;
+    outline: none;
+    font-family: inherit;
+}
+.fdc-input:focus, .fdc-select:focus, .fdc-textarea:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+    background: #fff;
+}
+.fdc-textarea { min-height: 100px; resize: vertical; }
+
+.fdc-modal-footer {
+    padding: 16px 24px 22px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border-light);
+    background: #fafbff;
+    position: sticky;
+    bottom: 0;
+}
+
+.btn-primary-grad {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: inherit;
+}
+.btn-primary-grad:hover:not(:disabled) { transform: translateY(-2px); color: #fff; }
+.btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn-success {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(16,185,129,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: inherit;
+}
+.btn-success:hover:not(:disabled) { transform: translateY(-2px); color: #fff; }
+
+.btn-danger {
+    background: linear-gradient(135deg, #ef4444, #dc2626);
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(239,68,68,0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: inherit;
+}
+.btn-danger:hover:not(:disabled) { transform: translateY(-2px); color: #fff; }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid #e5e7eb;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    font-family: inherit;
+}
+.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; color: var(--navy); }
+
+.fdc-alert {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.6;
+}
+.fdc-alert.info { background: #eff6ff; color: #1e40af; border-left: 3px solid #3b82f6; }
+.fdc-alert.warn { background: #fef3c7; color: #92400e; border-left: 3px solid #f59e0b; }
+.fdc-alert.danger { background: #fef2f2; color: #991b1b; border-left: 3px solid #dc2626; }
+.fdc-alert.success { background: #d1fae5; color: #065f46; border-left: 3px solid #10b981; }
+
+/* View modal specific */
+.view-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+@media (max-width: 600px) { .view-grid { grid-template-columns: 1fr; } }
+
+.view-section {
+    margin-bottom: 20px;
+    border-bottom: 1px dashed var(--border-light);
+    padding-bottom: 16px;
+}
+.view-section:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+.view-section h6 {
+    font-size: 12px;
+    color: var(--navy);
+    margin: 0 0 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.view-section h6 i { color: var(--gold-dark); }
+
+.view-field { margin-bottom: 12px; }
+.view-field .vf-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+}
+.view-field .vf-value {
+    font-size: 14px;
+    color: var(--dark);
+    font-weight: 600;
+    word-break: break-word;
+}
+.view-photo {
+    text-align: center;
+    padding: 12px;
+}
+.view-photo img {
+    max-width: 150px;
+    max-height: 180px;
+    border-radius: 12px;
+    border: 3px solid var(--border-light);
+    box-shadow: 0 8px 24px rgba(10,22,85,0.15);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 768px) {
+    .admin-header { padding: 10px 14px; }
+    .main-wrap { padding: 14px 12px 50px; }
+    .page-title { font-size: 17px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .status-chips { overflow-x: auto; padding-bottom: 4px; }
+    .search-wrap { width: 100%; min-width: 0; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-card { padding: 12px 14px; gap: 10px; }
+    .stat-card .sc-icon { width: 38px; height: 38px; font-size: 15px; }
+    .stat-card .sc-value { font-size: 18px; }
+    .apps-container { grid-template-columns: 1fr; gap: 10px; }
+    .btn-export { width: 100%; justify-content: center; }
+    .main-tab { min-width: 100px; padding: 10px 14px; font-size: 12px; }
+    .view-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+    .btn-header span { display: none; }
+    .app-card .ac-actions { flex-wrap: wrap; }
+    .ac-btn { flex: 1 1 45%; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-user-plus"></i></div>
+        <div>
+            <h4>Admission Management</h4>
+            <small>ভর্তি আবেদন ব্যবস্থাপনা</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="avatar-circle" data-admin-avatar>A</div>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+        </a>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+    </div>
+</header>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <h4 class="page-title">
+        <i class="fas fa-clipboard-list"></i> Admission Applications
+    </h4>
+    <p class="page-sub">সব ভর্তি আবেদন যাচাই, অনুমোদন ও ভর্তি সম্পন্ন করুন</p>
+
+    <!-- STATS -->
+    <div class="stats-row" id="statsRow">
+        <div class="stat-card active" data-filter="all">
+            <div class="sc-icon navy"><i class="fas fa-inbox"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statTotal">0</div>
+                <div class="sc-label">Total</div>
+            </div>
+        </div>
+        <div class="stat-card" data-filter="pending">
+            <div class="sc-icon yellow"><i class="fas fa-hourglass-half"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statPending">0</div>
+                <div class="sc-label">Pending</div>
+            </div>
+        </div>
+        <div class="stat-card" data-filter="verified">
+            <div class="sc-icon blue"><i class="fas fa-check-circle"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statVerified">0</div>
+                <div class="sc-label">Verified</div>
+            </div>
+        </div>
+        <div class="stat-card" data-filter="admitted">
+            <div class="sc-icon green"><i class="fas fa-trophy"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statAdmitted">0</div>
+                <div class="sc-label">Admitted</div>
+            </div>
+        </div>
+        <div class="stat-card" data-filter="cancelled">
+            <div class="sc-icon red"><i class="fas fa-ban"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statCancelled">0</div>
+                <div class="sc-label">Cancelled</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN TABS (Level) -->
+    <div class="main-tabs" id="mainTabs">
+        <button class="main-tab active" data-level="all">
+            <i class="fas fa-list"></i> All Levels
+            <span class="tab-count" id="countAll">0</span>
+        </button>
+        <button class="main-tab" data-level="HSC-General">
+            <i class="fas fa-flask"></i> HSC-General
+            <span class="tab-count" id="countHSC">0</span>
+        </button>
+        <button class="main-tab" data-level="HSC-BM">
+            <i class="fas fa-briefcase"></i> HSC-BM
+            <span class="tab-count" id="countBM">0</span>
+        </button>
+    </div>
+
+    <!-- SUB TABS (Group) -->
+    <div class="sub-tabs" id="subTabs">
+        <!-- Dynamic content -->
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+        <div class="status-chips" id="statusChips">
+            <button class="status-chip active" data-status="all">
+                <i class="fas fa-list"></i> All
+                <span class="chip-count" id="chipAll">0</span>
+            </button>
+            <button class="status-chip" data-status="pending">
+                <i class="fas fa-hourglass-half"></i> Pending
+                <span class="chip-count" id="chipPending">0</span>
+            </button>
+            <button class="status-chip" data-status="verified">
+                <i class="fas fa-check"></i> Verified
+                <span class="chip-count" id="chipVerified">0</span>
+            </button>
+            <button class="status-chip" data-status="admitted">
+                <i class="fas fa-trophy"></i> Admitted
+                <span class="chip-count" id="chipAdmitted">0</span>
+            </button>
+            <button class="status-chip" data-status="cancelled">
+                <i class="fas fa-ban"></i> Cancelled
+                <span class="chip-count" id="chipCancelled">0</span>
+            </button>
+        </div>
+
+        <div class="search-wrap">
+            <i class="fas fa-search"></i>
+            <input type="text" class="search-input" id="searchInput" placeholder="নাম / Phone / App ID...">
+        </div>
+
+        <button class="btn-export" id="btnExport">
+            <i class="fas fa-file-csv"></i> Export CSV
+        </button>
+    </div>
+
+    <!-- APPLICATIONS -->
+    <div class="apps-container" id="appsContainer">
+        <div class="loading-wrap">
+            <div class="loading-spinner"></div>
+            <p>Applications লোড হচ্ছে...</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: View Application -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="viewModal">
+    <div class="fdc-modal wide">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-user-circle"></i></div>
+                <div>
+                    <h5 id="viewModalTitle">Application Details</h5>
+                    <small id="viewModalSub">বিস্তারিত তথ্য</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeViewModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="fdc-modal-body" id="viewModalBody">
+            <!-- Dynamic -->
+        </div>
+        <div class="fdc-modal-footer" id="viewModalFooter">
+            <!-- Dynamic -->
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: Verify Application -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="verifyModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon" style="background:rgba(59,130,246,0.2); color:#60a5fa; border-color:rgba(59,130,246,0.4);">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div>
+                    <h5>Verify Application</h5>
+                    <small id="verifyModalSub">আবেদন যাচাই করুন</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeVerifyModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="fdc-modal-body">
+            <div class="fdc-alert info">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Verify করলে কী হবে?</strong><br>
+                    আবেদনের status <strong>Pending → Verified</strong> হবে।<br>
+                    Student-এর Status page-এ দেখা যাবে: "যাচাই সম্পন্ন, কলেজে আসুন"।
+                </div>
+            </div>
+            <div class="fdc-form-label">Admin Notes (Optional)</div>
+            <textarea class="fdc-textarea" id="verifyNotes" placeholder="Student-এর জন্য কোনো নোট..."></textarea>
+        </div>
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="cancelVerifyBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-success" id="confirmVerifyBtn">
+                <i class="fas fa-check"></i> Confirm Verify
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: Admit Application -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="admitModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon" style="background:rgba(16,185,129,0.2); color:#34d399; border-color:rgba(16,185,129,0.4);">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div>
+                    <h5>Mark as Admitted</h5>
+                    <small id="admitModalSub">ভর্তি সম্পন্ন করুন</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeAdmitModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="fdc-modal-body">
+            <div class="fdc-alert success">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Admit করলে কী হবে?</strong><br>
+                    Student-এর status <strong>Verified → Admitted</strong> হবে।<br>
+                    Roll Number assign করুন এবং ভর্তির ফি দিন।
+                </div>
+            </div>
+
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+                <div>
+                    <label class="fdc-form-label">Roll Number <span class="req">*</span></label>
+                    <input type="text" class="fdc-input" id="admitRollNumber" placeholder="যেমন: 1101">
+                </div>
+                <div>
+                    <label class="fdc-form-label">Admission Fee (৳) <span class="req">*</span></label>
+                    <input type="number" class="fdc-input" id="admitFee" placeholder="0" min="0">
+                </div>
+            </div>
+
+            <div class="fdc-form-label">Admin Notes (Optional)</div>
+            <textarea class="fdc-textarea" id="admitNotes" placeholder="Student-এর জন্য কোনো নোট..."></textarea>
+        </div>
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="cancelAdmitBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-success" id="confirmAdmitBtn">
+                <i class="fas fa-trophy"></i> Confirm Admit
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- MODAL: Cancel Application -->
+<!-- ================================================== -->
+<div class="fdc-modal-overlay" id="cancelModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon" style="background:rgba(239,68,68,0.2); color:#f87171; border-color:rgba(239,68,68,0.4);">
+                    <i class="fas fa-ban"></i>
+                </div>
+                <div>
+                    <h5>Cancel Application</h5>
+                    <small id="cancelModalSub">আবেদন বাতিল করুন</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeCancelModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="fdc-modal-body">
+            <div class="fdc-alert danger">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>সতর্কতা:</strong> Cancel করলে Student আর এই আবেদন দেখতে পারবে না। 
+                    Status page-এ "আবেদন বাতিল" দেখাবে।
+                </div>
+            </div>
+            <div class="fdc-form-label">Cancel Reason <span class="req">*</span></label></div>
+            <textarea class="fdc-textarea" id="cancelReason" placeholder="কারণ লিখুন... (যেমন: তথ্য অসম্পূর্ণ, ভুল তথ্য, ইত্যাদি)"></textarea>
+        </div>
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="closeCancelModal2">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-danger" id="confirmCancelBtn">
+                <i class="fas fa-ban"></i> Confirm Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ================================================== -->
+<!-- SCRIPTS -->
+<!-- ================================================== -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin-popup.js?v=2"></script>
+<script src="../js/session-helper.js"></script>
+<script src="../js/admin-admissions.js?v=1"></script>
+
+</body>
+</html>
