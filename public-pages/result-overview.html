@@ -124,7 +124,7 @@ body { background: #fff; margin: 0; color: var(--dark); }
 
 /* ============ MAIN ============ */
 .main-wrap {
-    max-width: 1100px;
+    max-width: 1200px;
     margin: -50px auto 0;
     padding: 0 20px 60px;
     position: relative;
@@ -180,10 +180,6 @@ body { background: #fff; margin: 0; color: var(--dark); }
     background: linear-gradient(135deg, #14b8a6, #0d9488);
     color: #fff;
 }
-.section-head .sh-icon.rose {
-    background: linear-gradient(135deg, #f43f5e, #e11d48);
-    color: #fff;
-}
 .section-head h2 {
     margin: 0;
     font-size: 22px;
@@ -200,353 +196,213 @@ body { background: #fff; margin: 0; color: var(--dark); }
     font-weight: 500;
 }
 
-/* ============ EXAM TABS ============ */
-.exam-tabs {
-    display: flex;
-    gap: 6px;
+/* ============ SUMMARY CARDS ============ */
+.summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
     margin-bottom: 32px;
-    padding: 6px;
-    background: var(--off-white);
-    border-radius: 14px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
 }
-.exam-tabs::-webkit-scrollbar { display: none; }
-.exam-tab {
-    flex: 1;
-    min-width: 110px;
-    padding: 12px 18px;
-    border: none;
-    background: transparent;
-    color: var(--grey);
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-.exam-tab:hover { color: var(--navy); }
-.exam-tab.active {
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(10,22,85,0.25);
-    transform: translateY(-1px);
-}
-.exam-tab i { font-size: 13px; }
-.exam-tab.active i { color: var(--gold); }
-
-/* ============ MAIN STATS ROW ============ */
-.main-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 40px;
-    align-items: center;
-    padding: 20px 0 40px;
-    border-bottom: 1px solid var(--border-light);
-}
-@media (max-width: 640px) {
-    .main-stats { grid-template-columns: 1fr; gap: 24px; }
-}
-
-.main-pie-wrap {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1;
-    max-width: 260px;
-    margin: 0 auto;
-}
-.main-pie-wrap canvas { max-width: 100%; }
-
-.stat-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-.stat-row {
-    display: grid;
-    grid-template-columns: 100px 1fr 60px;
-    gap: 14px;
-    align-items: center;
-    padding: 12px 4px;
-    border-bottom: 1px dashed var(--light-grey);
-    transition: 0.2s;
-}
-.stat-row:last-child { border-bottom: none; }
-.stat-row:hover { padding-left: 8px; }
-.stat-row .stat-label {
-    font-size: 13px;
-    color: var(--grey);
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.4px;
-}
-.stat-row .stat-bar {
-    height: 10px;
-    background: var(--off-white);
-    border-radius: 6px;
-    overflow: hidden;
-}
-.stat-row .stat-bar-fill {
-    height: 100%;
-    border-radius: 6px;
-    transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-    width: 0;
-}
-.stat-row .stat-bar-fill.total { background: linear-gradient(90deg, var(--navy), var(--navy-3)); }
-.stat-row .stat-bar-fill.pass { background: linear-gradient(90deg, #10b981, #059669); }
-.stat-row .stat-bar-fill.fail { background: linear-gradient(90deg, #ef4444, #dc2626); }
-.stat-row .stat-bar-fill.absent { background: linear-gradient(90deg, #f59e0b, #d97706); }
-.stat-row .stat-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 700;
-    text-align: right;
-    color: var(--navy);
-}
-.stat-row.pass .stat-value { color: #059669; }
-.stat-row.fail .stat-value { color: #dc2626; }
-.stat-row.absent .stat-value { color: #d97706; }
-
-/* ============ GROUP CHARTS ROW ============ */
-.group-row-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--grey);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin: 32px 0 20px;
-    text-align: center;
-    position: relative;
-}
-.group-row-title::before,
-.group-row-title::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 40px;
-    height: 1px;
-    background: var(--light-grey);
-}
-.group-row-title::before { left: calc(50% - 80px); }
-.group-row-title::after { right: calc(50% - 80px); }
-
-.group-charts-row {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    padding: 10px 0 20px;
-}
-@media (max-width: 768px) {
-    .group-charts-row { grid-template-columns: repeat(2, 1fr); gap: 16px; }
-}
-@media (max-width: 420px) {
-    .group-charts-row { grid-template-columns: 1fr; }
-}
-
-/* Scrollable row for Honours (11 items) */
-.group-charts-scroll {
-    display: flex;
-    gap: 20px;
-    padding: 10px 4px 20px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(10,22,85,0.2) transparent;
-}
-.group-charts-scroll::-webkit-scrollbar { height: 6px; }
-.group-charts-scroll::-webkit-scrollbar-track { background: transparent; }
-.group-charts-scroll::-webkit-scrollbar-thumb {
-    background: rgba(10,22,85,0.15);
-    border-radius: 3px;
-}
-.group-charts-scroll .group-pie-item {
-    flex: 0 0 160px;
-    scroll-snap-align: start;
-}
-
-.group-pie-item {
-    text-align: center;
-    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-    cursor: default;
-}
-.group-pie-item:hover { transform: translateY(-4px); }
-
-.group-pie-item .gp-title {
-    font-size: 13.5px;
-    font-weight: 700;
-    color: var(--navy);
-    margin-bottom: 6px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-height: 36px;
-    line-height: 1.15;
-}
-.group-pie-item .gp-title i { font-size: 13px; }
-.group-pie-item .gp-title i.science    { color: #1e40af; }
-.group-pie-item .gp-title i.humanities { color: #92400e; }
-.group-pie-item .gp-title i.business   { color: #166534; }
-.group-pie-item .gp-title i.bm         { color: #6b21a8; }
-.group-pie-item .gp-title i.purple     { color: #7c3aed; }
-.group-pie-item .gp-title i.teal       { color: #0d9488; }
-.group-pie-item .gp-title i.rose       { color: #e11d48; }
-
-.group-pie-item .gp-pie {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 1;
-    max-width: 160px;
-    margin: 0 auto;
-}
-.group-pie-item .gp-pie canvas { max-width: 100%; }
-
-.group-pie-item .gp-sub {
-    font-size: 11px;
-    color: var(--grey);
-    margin-top: 8px;
-    font-weight: 600;
-}
-
-.group-pie-item.empty .gp-pie {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0.4;
-}
-.group-pie-item.empty .gp-pie i { font-size: 42px; color: var(--grey); }
-
-/* ============ YEAR SELECTOR ============ */
-.year-selector {
+.summary-card {
+    background: linear-gradient(135deg, #fafbff, #fff);
+    border: 1.5px solid var(--border-light);
+    border-radius: 16px;
+    padding: 18px 16px;
     display: flex;
     align-items: center;
     gap: 12px;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 0;
+    transform: translateY(20px);
+}
+.summary-card.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+.summary-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--navy);
+    box-shadow: 0 8px 30px rgba(10,22,85,0.12);
+}
+.summary-card .sc-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    margin-bottom: 32px;
-    padding: 16px;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+.summary-card .sc-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
+.summary-card .sc-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.summary-card .sc-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+.summary-card .sc-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.summary-card .sc-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
+.summary-card .sc-info { min-width: 0; }
+.summary-card .sc-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+}
+.summary-card .sc-label {
+    font-size: 11px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 5px;
+}
+
+/* ============ FILTER ============ */
+.filter-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    padding: 14px;
     background: var(--off-white);
     border-radius: 14px;
-    flex-wrap: wrap;
 }
-.year-selector label {
-    font-size: 12px;
+.filter-bar .fb-item {
+    flex: 1;
+    min-width: 150px;
+}
+.filter-bar label {
+    font-size: 10.5px;
     color: var(--grey);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.6px;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    letter-spacing: 0.4px;
+    display: block;
+    margin-bottom: 5px;
 }
-.year-selector select {
-    padding: 10px 20px;
+.filter-bar select {
+    width: 100%;
+    padding: 10px 14px;
     border-radius: 10px;
-    border: 2px solid var(--light-grey);
+    border: 1.5px solid var(--light-grey);
     background: #fff;
-    font-size: 15px;
+    font-size: 13px;
     font-family: inherit;
-    font-weight: 700;
+    font-weight: 600;
     color: var(--navy);
     outline: none;
-    cursor: pointer;
     transition: 0.25s;
-    min-width: 140px;
+    cursor: pointer;
 }
-.year-selector select:focus {
+.filter-bar select:focus {
     border-color: var(--navy);
     box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
 }
 
-/* ============ BAR COMPARISON ============ */
-.bar-compare-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--grey);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin: 40px 0 24px;
-    text-align: center;
+/* ============ CHART CARD ============ */
+.chart-card {
+    margin-bottom: 32px;
+}
+.chart-card:last-child { margin-bottom: 0; }
+.chart-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    padding-left: 14px;
     position: relative;
 }
-.bar-compare-title::before,
-.bar-compare-title::after {
+.chart-card-title::before {
     content: '';
     position: absolute;
-    top: 50%;
-    width: 40px;
-    height: 1px;
-    background: var(--light-grey);
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 4px; height: 24px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--navy), var(--gold));
 }
-.bar-compare-title::before { left: calc(50% - 90px); }
-.bar-compare-title::after { right: calc(50% - 90px); }
-
-.bar-compare {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-    padding: 10px 0 20px;
-}
-.bar-compare-item {
-    display: grid;
-    grid-template-columns: 140px 1fr 70px;
-    gap: 16px;
-    align-items: center;
-}
-@media (max-width: 480px) {
-    .bar-compare-item { grid-template-columns: 100px 1fr 55px; gap: 10px; }
-}
-.bar-compare-item .bc-label {
-    font-size: 13px;
+.chart-card-title h6 {
+    margin: 0;
+    font-size: 15px;
     font-weight: 700;
     color: var(--navy);
-    display: flex;
-    align-items: center;
-    gap: 6px;
 }
-.bar-compare-item .bc-label i { font-size: 13px; }
-.bar-compare-item .bc-bar {
-    height: 26px;
-    background: var(--off-white);
-    border-radius: 8px;
-    overflow: hidden;
-    position: relative;
-}
-.bar-compare-item .bc-bar-fill {
-    height: 100%;
-    border-radius: 8px;
-    transition: width 1.6s cubic-bezier(0.16, 1, 0.3, 1);
-    width: 0;
-    background: linear-gradient(90deg, var(--navy), var(--navy-3));
-    box-shadow: 0 2px 8px rgba(10,22,85,0.15);
-}
-.bar-compare-item .bc-value {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    font-weight: 700;
-    color: var(--navy);
-    text-align: right;
-}
-.bar-compare-item .bc-value small {
+.chart-card-title small {
     display: block;
-    font-size: 10px;
     color: var(--grey);
-    font-weight: 600;
-    font-family: 'Hind Siliguri', sans-serif;
-    margin-top: -2px;
+    font-size: 11.5px;
+    font-weight: 500;
+    margin-top: 2px;
+}
+.chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 380px;
+}
+@media (max-width: 768px) {
+    .chart-wrap { height: 300px; }
+}
+
+/* ============ LEVEL SECTIONS ============ */
+.level-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+@media (min-width: 992px) {
+    .level-grid.two-col {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+.level-card {
+    background: #fff;
+    border: 1.5px solid var(--border-light);
+    border-radius: 18px;
+    padding: 20px 18px;
+    transition: 0.3s;
+}
+.level-card:hover {
+    border-color: var(--navy);
+    box-shadow: 0 8px 30px rgba(10,22,85,0.10);
+}
+.level-card .lc-head {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+}
+.level-card .lc-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+.level-card .lc-icon.hsc { background: linear-gradient(135deg, #3b82f6, #1e40af); color: #fff; }
+.level-card .lc-icon.degree { background: linear-gradient(135deg, #8b5cf6, #6b21a8); color: #fff; }
+.level-card .lc-icon.honours { background: linear-gradient(135deg, #14b8a6, #0d9488); color: #fff; }
+.level-card .lc-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0;
+}
+.level-card .lc-sub {
+    font-size: 11px;
+    color: var(--grey);
+    margin: 0;
+}
+.level-chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 280px;
 }
 
 /* ============ TABLE ============ */
 .table-clean {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 40px;
+    margin-top: 8px;
     font-size: 13px;
 }
 .table-clean thead th {
@@ -558,27 +414,73 @@ body { background: #fff; margin: 0; color: var(--dark); }
     text-transform: uppercase;
     letter-spacing: 0.6px;
     border-bottom: 2px solid var(--light-grey);
+    white-space: nowrap;
 }
 .table-clean thead th:not(:first-child) { text-align: center; }
 .table-clean tbody td {
     padding: 14px 10px;
     border-bottom: 1px solid var(--border-light);
-    font-size: 14px;
+    font-size: 13.5px;
 }
-.table-clean tbody td:first-child {
-    font-weight: 700;
-    color: var(--navy);
-}
+.table-clean tbody td:first-child { font-weight: 700; color: var(--navy); }
 .table-clean tbody td:not(:first-child) {
     text-align: center;
     font-family: 'Playfair Display', serif;
     font-weight: 700;
-    font-size: 15px;
+    font-size: 14.5px;
 }
 .table-clean tbody td.pass-col { color: #059669; }
 .table-clean tbody td.fail-col { color: #dc2626; }
 .table-clean tbody td.absent-col { color: #d97706; }
 .table-clean tbody tr:last-child td { border-bottom: none; }
+.table-clean tbody tr:hover { background: #fafbff; }
+
+.level-badge {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 50px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    font-family: 'Hind Siliguri', sans-serif;
+}
+.level-badge.HSC { background: #dbeafe; color: #1e40af; }
+.level-badge.Degree { background: #f3e8ff; color: #6b21a8; }
+.level-badge.Honours { background: #ccfbf1; color: #115e59; }
+
+.pass-rate-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 90px;
+}
+.pass-rate-bar .track {
+    flex: 1;
+    height: 6px;
+    background: #f3f4f6;
+    border-radius: 50px;
+    overflow: hidden;
+    min-width: 45px;
+}
+.pass-rate-bar .fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #059669);
+    border-radius: 50px;
+    transition: width 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    width: 0;
+}
+.pass-rate-bar .fill.low {
+    background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+.pass-rate-bar .text {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: var(--navy);
+    min-width: 38px;
+    text-align: right;
+    font-family: 'Playfair Display', serif;
+}
 
 /* ============ LOADING ============ */
 .loading-wrap {
@@ -599,29 +501,29 @@ body { background: #fff; margin: 0; color: var(--dark); }
 /* ============ EMPTY ============ */
 .empty-state {
     text-align: center;
-    padding: 60px 20px;
+    padding: 50px 20px;
 }
 .empty-state .es-icon {
-    width: 80px; height: 80px;
+    width: 76px; height: 76px;
     border-radius: 50%;
     background: var(--off-white);
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 32px;
+    font-size: 30px;
     color: var(--grey);
-    margin-bottom: 16px;
+    margin-bottom: 14px;
     opacity: 0.7;
 }
 .empty-state h6 {
     color: var(--navy);
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
     margin: 0 0 6px;
 }
-.empty-state p { color: var(--grey); font-size: 13px; margin: 0; }
+.empty-state p { color: var(--grey); font-size: 12.5px; margin: 0; }
 
-/* ============ REVEAL ============ */
+/* ============ REVEAL ON SCROLL ============ */
 .reveal-on-scroll {
     opacity: 0;
     transform: translateY(40px);
@@ -648,23 +550,21 @@ body { background: #fff; margin: 0; color: var(--dark); }
     .section { padding: 24px 20px; border-radius: 18px; }
     .section-head h2 { font-size: 18px; }
     .section-head .sh-icon { width: 46px; height: 46px; font-size: 19px; }
-    .exam-tab { min-width: 95px; padding: 10px 14px; font-size: 12px; }
-    .exam-tab i { display: none; }
-    .stat-row { grid-template-columns: 80px 1fr 50px; gap: 10px; }
-    .stat-row .stat-label { font-size: 11.5px; }
-    .stat-row .stat-value { font-size: 18px; }
-    .bar-compare-item { grid-template-columns: 100px 1fr 55px; gap: 10px; }
-    .bar-compare-item .bc-value { font-size: 16px; }
+    .summary-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .summary-card { padding: 14px 12px; gap: 10px; }
+    .summary-card .sc-icon { width: 38px; height: 38px; font-size: 15px; }
+    .summary-card .sc-value { font-size: 20px; }
+    .chart-wrap { height: 300px; }
+    .level-chart-wrap { height: 240px; }
+    .table-clean { font-size: 12px; }
+    .table-clean thead th, .table-clean tbody td { padding: 10px 6px; }
 }
-
 @media (max-width: 480px) {
     .btn-header span { display: none; }
     .hero { padding: 40px 16px 70px; }
-    .exam-tabs { padding: 4px; gap: 4px; }
-    .exam-tab { min-width: 80px; padding: 10px 10px; font-size: 11.5px; }
     .section { padding: 20px 16px; }
-    .section-head h2 { font-size: 16px; }
-    .main-pie-wrap { max-width: 220px; }
+    .summary-grid { grid-template-columns: 1fr 1fr; }
+    .chart-wrap { height: 260px; }
 }
 </style>
 </head>
@@ -673,7 +573,7 @@ body { background: #fff; margin: 0; color: var(--dark); }
 <!-- HEADER -->
 <header class="pub-header">
     <div class="brand">
-        <div class="brand-icon"><i class="fas fa-chart-pie"></i></div>
+        <div class="brand-icon"><i class="fas fa-chart-bar"></i></div>
         <div>
             <h4>Result Overview</h4>
             <small>Fulbariya College</small>
@@ -688,220 +588,179 @@ body { background: #fff; margin: 0; color: var(--dark); }
 
 <!-- HERO -->
 <section class="hero">
-    <h1>Result <span class="highlight">Overview</span></h1>
-    <p>HSC, Degree ও Honours — সকল পরীক্ষার ফলাফলের সামগ্রিক চিত্র</p>
+    <h1>Board Result <span class="highlight">Overview</span></h1>
+    <p>HSC, Degree ও Honours — বোর্ড ফাইনাল পরীক্ষার ফলাফলের সামগ্রিক চিত্র</p>
 </section>
 
 <!-- MAIN -->
 <div class="main-wrap">
 
-    <!-- ============================================================ -->
-    <!-- SECTION 1: HSC Internal -->
-    <!-- ============================================================ -->
+    <!-- SECTION 1: SUMMARY + OVERALL CHART -->
     <div class="section reveal-on-scroll">
         <div class="section-head">
-            <div class="sh-icon"><i class="fas fa-clipboard-check"></i></div>
+            <div class="sh-icon"><i class="fas fa-chart-line"></i></div>
             <div>
-                <h2>HSC অভ্যন্তরীণ পরীক্ষা</h2>
-                <small>Internal Exams — প্রতিটি পরীক্ষার সর্বশেষ ফলাফল</small>
+                <h2>সারসংক্ষেপ</h2>
+                <small>সব level একসাথে — Pass/Fail হার</small>
             </div>
         </div>
 
-        <div class="exam-tabs" id="internalExamTabs">
-            <button class="exam-tab" data-exam="1st Terminal"><i class="fas fa-file-alt"></i> ১ম সাময়িক</button>
-            <button class="exam-tab" data-exam="2nd Terminal"><i class="fas fa-file-alt"></i> ২য় সাময়িক</button>
-            <button class="exam-tab" data-exam="Test"><i class="fas fa-file-alt"></i> টেস্ট</button>
-            <button class="exam-tab" data-exam="Final"><i class="fas fa-file-alt"></i> ফাইনাল</button>
-        </div>
-
-        <div id="internalLoading" class="loading-wrap">
-            <div class="spinner-fdc"></div>
-            <p>লোড হচ্ছে...</p>
-        </div>
-
-        <div id="internalContent" style="display:none;">
-            <div class="main-stats">
-                <div class="main-pie-wrap">
-                    <canvas id="internalOverallChart"></canvas>
+        <!-- Summary Cards -->
+        <div class="summary-grid" id="summaryGrid">
+            <div class="summary-card">
+                <div class="sc-icon navy"><i class="fas fa-users"></i></div>
+                <div class="sc-info">
+                    <div class="sc-value" id="statTotal">0</div>
+                    <div class="sc-label">Total</div>
                 </div>
-                <div class="stat-list" id="internalStatList"></div>
             </div>
-
-            <h6 class="group-row-title">শাখা অনুযায়ী ফলাফল</h6>
-            <div class="group-charts-row" id="internalGroupCharts"></div>
-
-            <table class="table-clean">
-                <thead>
-                    <tr>
-                        <th>শাখা</th>
-                        <th>মোট</th>
-                        <th>পাস</th>
-                        <th>ফেল</th>
-                        <th>অনুপস্থিত</th>
-                        <th>পাসের হার</th>
-                    </tr>
-                </thead>
-                <tbody id="internalTableBody"></tbody>
-            </table>
+            <div class="summary-card">
+                <div class="sc-icon green"><i class="fas fa-check-circle"></i></div>
+                <div class="sc-info">
+                    <div class="sc-value" id="statPassed">0</div>
+                    <div class="sc-label">Passed</div>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="sc-icon red"><i class="fas fa-times-circle"></i></div>
+                <div class="sc-info">
+                    <div class="sc-value" id="statFailed">0</div>
+                    <div class="sc-label">Failed</div>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="sc-icon gold"><i class="fas fa-percentage"></i></div>
+                <div class="sc-info">
+                    <div class="sc-value" id="statRate">0%</div>
+                    <div class="sc-label">Pass Rate</div>
+                </div>
+            </div>
+            <div class="summary-card">
+                <div class="sc-icon purple"><i class="fas fa-user-times"></i></div>
+                <div class="sc-info">
+                    <div class="sc-value" id="statAbsent">0</div>
+                    <div class="sc-label">Absent</div>
+                </div>
+            </div>
         </div>
 
-        <div id="internalEmpty" class="empty-state" style="display:none;">
-            <div class="es-icon"><i class="fas fa-inbox"></i></div>
-            <h6>এই পরীক্ষার ফলাফল এখনো প্রকাশ হয়নি</h6>
-            <p>অন্য পরীক্ষা সিলেক্ট করুন</p>
+        <!-- Filter -->
+        <div class="filter-bar">
+            <div class="fb-item">
+                <label>Exam Level</label>
+                <select id="filterLevel">
+                    <option value="">All Levels</option>
+                    <option value="HSC">HSC</option>
+                    <option value="Degree">Degree</option>
+                    <option value="Honours">Honours</option>
+                </select>
+            </div>
+            <div class="fb-item">
+                <label>Year</label>
+                <select id="filterYear">
+                    <option value="">All Years</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Year-wise Chart -->
+        <div class="chart-card">
+            <div class="chart-card-title">
+                <div>
+                    <h6>📈 Year-wise Pass / Fail</h6>
+                    <small>বছর অনুযায়ী Pass (সবুজ) + Fail (লাল) সংখ্যা</small>
+                </div>
+            </div>
+            <div class="chart-wrap">
+                <canvas id="chartYearWise"></canvas>
+            </div>
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SECTION 2: HSC Board Final -->
-    <!-- ============================================================ -->
+    <!-- SECTION 2: LEVEL-WISE CHARTS -->
     <div class="section reveal-on-scroll">
         <div class="section-head">
-            <div class="sh-icon gold"><i class="fas fa-graduation-cap"></i></div>
+            <div class="sh-icon gold"><i class="fas fa-layer-group"></i></div>
             <div>
-                <h2>HSC বোর্ড ফাইনাল পরীক্ষা</h2>
-                <small>Board Final — বছর অনুযায়ী শাখাভিত্তিক ফলাফল</small>
+                <h2>Level অনুযায়ী ফলাফল</h2>
+                <small>HSC · Degree · Honours — Pass Rate তুলনা</small>
             </div>
         </div>
 
-        <div class="year-selector">
-            <label for="hscBoardYear"><i class="fas fa-calendar"></i> বছর</label>
-            <select id="hscBoardYear"><option value="">লোড হচ্ছে...</option></select>
-        </div>
+        <div class="level-grid">
+            <div class="level-card">
+                <div class="lc-head">
+                    <div class="lc-icon hsc"><i class="fas fa-flask"></i></div>
+                    <div>
+                        <p class="lc-title">HSC</p>
+                        <p class="lc-sub">Science · Business · Humanities · BM</p>
+                    </div>
+                </div>
+                <div class="level-chart-wrap">
+                    <canvas id="chartHSC"></canvas>
+                </div>
+            </div>
 
-        <div id="hscBoardLoading" class="loading-wrap" style="display:none;">
-            <div class="spinner-fdc"></div>
-            <p>লোড হচ্ছে...</p>
-        </div>
+            <div class="level-card">
+                <div class="lc-head">
+                    <div class="lc-icon degree"><i class="fas fa-user-graduate"></i></div>
+                    <div>
+                        <p class="lc-title">Degree (Pass Course)</p>
+                        <p class="lc-sub">B.A · B.S.S · B.B.S · B.Sc</p>
+                    </div>
+                </div>
+                <div class="level-chart-wrap">
+                    <canvas id="chartDegree"></canvas>
+                </div>
+            </div>
 
-        <div id="hscBoardContent" style="display:none;">
-            <h6 class="group-row-title">শাখা অনুযায়ী ফলাফল</h6>
-            <div class="group-charts-row" id="hscBoardGroupCharts"></div>
-
-            <h6 class="bar-compare-title">শাখাভিত্তিক তুলনা</h6>
-            <div class="bar-compare" id="hscBoardBarCompare"></div>
-
-            <table class="table-clean">
-                <thead>
-                    <tr>
-                        <th>শাখা</th>
-                        <th>মোট</th>
-                        <th>পাস</th>
-                        <th>ফেল</th>
-                        <th>অনুপস্থিত</th>
-                        <th>পাসের হার</th>
-                    </tr>
-                </thead>
-                <tbody id="hscBoardTableBody"></tbody>
-            </table>
-        </div>
-
-        <div id="hscBoardEmpty" class="empty-state" style="display:none;">
-            <div class="es-icon"><i class="fas fa-search"></i></div>
-            <h6>এই বছরের কোনো ফলাফল পাওয়া যায়নি</h6>
-            <p>অন্য বছর সিলেক্ট করুন</p>
+            <div class="level-card" style="grid-column: 1 / -1;">
+                <div class="lc-head">
+                    <div class="lc-icon honours"><i class="fas fa-award"></i></div>
+                    <div>
+                        <p class="lc-title">Honours</p>
+                        <p class="lc-sub">৭টা department — pass rate তুলনা</p>
+                    </div>
+                </div>
+                <div class="level-chart-wrap">
+                    <canvas id="chartHonours"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- ============================================================ -->
-    <!-- SECTION 3: Degree Board Final -->
-    <!-- ============================================================ -->
+    <!-- SECTION 3: TABLE -->
     <div class="section reveal-on-scroll">
         <div class="section-head">
-            <div class="sh-icon purple"><i class="fas fa-user-graduate"></i></div>
+            <div class="sh-icon purple"><i class="fas fa-list"></i></div>
             <div>
-                <h2>ডিগ্রি (পাস কোর্স) বোর্ড ফাইনাল</h2>
-                <small>Degree Final — বছর অনুযায়ী কোর্সভিত্তিক ফলাফল</small>
+                <h2>বিস্তারিত ফলাফল</h2>
+                <small>সব board final exam-এর তথ্য</small>
             </div>
         </div>
 
-        <div class="year-selector">
-            <label for="degreeBoardYear"><i class="fas fa-calendar"></i> বছর</label>
-            <select id="degreeBoardYear"><option value="">লোড হচ্ছে...</option></select>
-        </div>
-
-        <div id="degreeBoardLoading" class="loading-wrap" style="display:none;">
-            <div class="spinner-fdc"></div>
-            <p>লোড হচ্ছে...</p>
-        </div>
-
-        <div id="degreeBoardContent" style="display:none;">
-            <h6 class="group-row-title">কোর্স অনুযায়ী ফলাফল</h6>
-            <div class="group-charts-row" id="degreeBoardGroupCharts"></div>
-
-            <h6 class="bar-compare-title">কোর্সভিত্তিক তুলনা</h6>
-            <div class="bar-compare" id="degreeBoardBarCompare"></div>
-
+        <div style="overflow-x:auto;">
             <table class="table-clean">
                 <thead>
                     <tr>
-                        <th>কোর্স</th>
-                        <th>মোট</th>
-                        <th>পাস</th>
-                        <th>ফেল</th>
-                        <th>অনুপস্থিত</th>
-                        <th>পাসের হার</th>
+                        <th>Level</th>
+                        <th>Year</th>
+                        <th>Group / Dept</th>
+                        <th>Total</th>
+                        <th>Passed</th>
+                        <th>Failed</th>
+                        <th>Absent</th>
+                        <th>Pass Rate</th>
                     </tr>
                 </thead>
-                <tbody id="degreeBoardTableBody"></tbody>
-            </table>
-        </div>
-
-        <div id="degreeBoardEmpty" class="empty-state" style="display:none;">
-            <div class="es-icon"><i class="fas fa-search"></i></div>
-            <h6>এই বছরের কোনো ফলাফল পাওয়া যায়নি</h6>
-            <p>অন্য বছর সিলেক্ট করুন</p>
-        </div>
-    </div>
-
-    <!-- ============================================================ -->
-    <!-- SECTION 4: Honours Board Final -->
-    <!-- ============================================================ -->
-    <div class="section reveal-on-scroll">
-        <div class="section-head">
-            <div class="sh-icon teal"><i class="fas fa-award"></i></div>
-            <div>
-                <h2>অনার্স (স্নাতক সম্মান) বোর্ড ফাইনাল</h2>
-                <small>Honours Final — বছর অনুযায়ী বিভাগভিত্তিক ফলাফল</small>
-            </div>
-        </div>
-
-        <div class="year-selector">
-            <label for="honoursBoardYear"><i class="fas fa-calendar"></i> বছর</label>
-            <select id="honoursBoardYear"><option value="">লোড হচ্ছে...</option></select>
-        </div>
-
-        <div id="honoursBoardLoading" class="loading-wrap" style="display:none;">
-            <div class="spinner-fdc"></div>
-            <p>লোড হচ্ছে...</p>
-        </div>
-
-        <div id="honoursBoardContent" style="display:none;">
-            <h6 class="group-row-title">বিভাগ অনুযায়ী ফলাফল (স্লাইড করুন →)</h6>
-            <div class="group-charts-scroll" id="honoursBoardGroupCharts"></div>
-
-            <h6 class="bar-compare-title">বিভাগভিত্তিক তুলনা</h6>
-            <div class="bar-compare" id="honoursBoardBarCompare"></div>
-
-            <table class="table-clean">
-                <thead>
+                <tbody id="tableBody">
                     <tr>
-                        <th>বিভাগ</th>
-                        <th>মোট</th>
-                        <th>পাস</th>
-                        <th>ফেল</th>
-                        <th>অনুপস্থিত</th>
-                        <th>পাসের হার</th>
+                        <td colspan="8" style="text-align:center; padding:30px;">
+                            <div class="spinner-fdc" style="margin:0 auto;"></div>
+                        </td>
                     </tr>
-                </thead>
-                <tbody id="honoursBoardTableBody"></tbody>
+                </tbody>
             </table>
-        </div>
-
-        <div id="honoursBoardEmpty" class="empty-state" style="display:none;">
-            <div class="es-icon"><i class="fas fa-search"></i></div>
-            <h6>এই বছরের কোনো ফলাফল পাওয়া যায়নি</h6>
-            <p>অন্য বছর সিলেক্ট করুন</p>
         </div>
     </div>
 
@@ -909,7 +768,7 @@ body { background: #fff; margin: 0; color: var(--dark); }
 
 <!-- FOOTER -->
 <div class="pub-footer">
-    <p><i class="fas fa-graduation-cap"></i> Fulbariya College · Result Overview</p>
+    <p><i class="fas fa-graduation-cap"></i> Fulbariya College · Board Result Overview</p>
 </div>
 
 <!-- SCRIPTS -->
@@ -917,7 +776,7 @@ body { background: #fff; margin: 0; color: var(--dark); }
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/config.js"></script>
 <script src="../js/supabase.js"></script>
-<script src="../js/result-overview.js"></script>
+<script src="../js/result-overview.js?v=2"></script>
 
 </body>
 </html>
