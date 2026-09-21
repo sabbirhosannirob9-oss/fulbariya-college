@@ -2,21 +2,18 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v2.6.0
+ * Version: v2.7.0
  * Purpose: PWA Install + Offline Caching
  *
- * Changes v2.6.0:
- *   - Admin Results v3.0 (Document-based pass marks)
- *   - Admin Promote v3.1 (URL params for section)
- *   - Admin Students v13 (Grouped List)
- *   - Admin Subjects v4 (Section-based UI)
- *   - GPA Calculator v2 (Document-based pass rule)
- *   - Promote Utils v4 (Individual Component Pass)
- *   - Session Helper dynamic year system
+ * Changes v2.7.0:
+ *   - Result Overview (Public) v2 — Board Final bar charts
+ *   - Result Details v4 — Simplified combined marksheet
+ *   - Admin Result Overview v1 — Board result CRUD
+ *   - Legacy: Admin Students v13, Subjects v4, Results v3
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v2.6.0';
+const CACHE_VERSION = 'fdc-v2.7.0';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -60,7 +57,8 @@ const STATIC_ASSETS = [
     '/js/notice-board.js',
     '/js/gallery.js',
     '/js/results.js?v=2',
-    '/js/result-details.js?v=2',
+    '/js/result-details.js?v=4',
+    '/js/result-overview.js?v=2',
 
     // ==================== JS — Student ====================
     '/js/student.js',
@@ -88,6 +86,7 @@ const STATIC_ASSETS = [
     '/js/admin-settings.js',
     '/js/admin-profile.js',
     '/js/admin-board-final.js',
+    '/js/admin-result-overview.js?v=1',
 
     // ==================== JS — Class / Exam Routine ====================
     '/js/admin-class-routine.js?v=4',
@@ -152,6 +151,7 @@ const STATIC_ASSETS = [
     '/admin-pages/admin-settings.html',
     '/admin-pages/admin-profile.html',
     '/admin-pages/admin-board-final.html',
+    '/admin-pages/admin-result-overview.html',
 
     // Class Routine
     '/admin-pages/admin-class-routine.html',
