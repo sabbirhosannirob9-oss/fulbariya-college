@@ -2,28 +2,20 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMISSION FORM LOGIC
  * Location: js/admission.js
- * Version: v4.0 — Group_name Fixed
+ * Version: v6.0 — Location Dropdowns + Auto Session
  * 
  * ✅ Supports:
  *    - HSC-General (Science/Business/Humanities)
  *    - HSC-BM / BMT (CAS/DTB/HRD)
  * 
- * ✅ Changes in v4.0:
+ * ✅ Changes in v6.0:
+ *    - Division → District → Upazila cascade dropdowns
+ *    - Uses window.FDC_BD_LOCATIONS
  *    - group_name column-এ সব group/trade save হয়
  *    - admin_notes-এ trade string আর রাখা হয় না
- *    - Admin panel-এ filter সহজ
- * 
- * ✅ Features:
- *    - Auto-compress images (600px, 75% quality)
- *    - Cloudinary upload
- *    - Form validation (real-time)
- *    - Preview before submit
- *    - Edit/Back from preview
- *    - Auto Application ID
- *    - PDF download
- *    - Success modal
- *    - Draft auto-save (localStorage)
- *    - Multi-form auto-detection
+ *    - Session auto-derive from Admission Date
+ *    - Dropdown auto-populate (current + last 3 years)
+ *    - Override allowed (Student can change)
  * =========================================================
  */
 
@@ -81,21 +73,6 @@
     }
 
     // =========================================================
-    // WAIT FOR SUPABASE
-    // =========================================================
-    function waitForSupabase(cb) {
-        if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) return cb();
-        window.addEventListener('fdc:supabase-ready', cb, { once: true });
-        let n = 0;
-        const i = setInterval(() => {
-            if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) {
-                clearInterval(i); cb();
-            }
-            if (++n > 40) clearInterval(i);
-        }, 500);
-    }
-
-    // =========================================================
     // ERROR HELPERS
     // =========================================================
     function showError(fieldId) {
@@ -118,13 +95,135 @@
     }
 
     // =========================================================
+    // LOCATION DROPDOWNS
+    // =========================================================
+    function setupLocationDropdowns() {
+        const divSel = $('division');
+        const distSel = $('district');
+        const upzSel = $('upazila');
+
+        if (!divSel || !distSel || !upzSel) return;
+
+        const LOCATIONS = window.FDC_BD_LOCATIONS || {};
+        const divisions = Object.keys(LOCATIONS).sort();
+
+        divSel.innerHTML = '<option value="">Select Division</option>' +
+            divisions.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+
+        divSel.addEventListener('change', function () {
+            const division = this.value;
+            distSel.innerHTML = '<option value="">Select District</option>';
+            upzSel.innerHTML = '<option value="">Select Upazila</option>';
+
+            if (!division || !LOCATIONS[division]) return;
+
+            const districts = Object.keys(LOCATIONS[division]).sort();
+            distSel.innerHTML = '<option value="">Select District</option>' +
+                districts.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+
+            hideError('division');
+            hideError('district');
+        });
+
+        distSel.addEventListener('change', function () {
+            const division = divSel.value;
+            const district = this.value;
+
+            upzSel.innerHTML = '<option value="">Select Upazila</option>';
+
+            if (!division || !district || !LOCATIONS[division] || !LOCATIONS[division][district]) return;
+
+            const upazilas = LOCATIONS[division][district].sort();
+            upzSel.innerHTML = '<option value="">Select Upazila</option>' +
+                upazilas.map(u => `<option value="${escapeHtml(u)}">${escapeHtml(u)}</option>`).join('');
+
+            hideError('district');
+        });
+
+        upzSel.addEventListener('change', function () {
+            if (this.value) hideError('upazila');
+        });
+    }
+
+    // =========================================================
+    // SESSION AUTO-DERIVE
+    // =========================================================
+    function getSessionFromDate(dateStr) {
+        if (!dateStr) return '';
+        try {
+            const date = new Date(dateStr);
+            if (isNaN(date.getTime())) return '';
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            let admissionYear;
+            if (month >= 1 && month <= 6) {
+                admissionYear = year;
+            } else {
+                admissionYear = year + 1;
+            }
+            return `${admissionYear}-${admissionYear + 1}`;
+        } catch (e) {
+            return '';
+        }
+    }
+
+    function populateSessions() {
+        const sel = $('admission_session');
+        if (!sel) return;
+        const now = new Date();
+        const currentYear = now.getFullYear();
+        const sessions = [];
+        for (let i = 0; i < 4; i++) {
+            const year = currentYear - i;
+            sessions.push(`${year}-${year + 1}`);
+        }
+        sel.innerHTML = '<option value="">Select Session</option>' +
+            sessions.map(s => `<option value="${s}">${s}</option>`).join('');
+        const currentSession = `${currentYear}-${currentYear + 1}`;
+        if (sessions.includes(currentSession)) sel.value = currentSession;
+    }
+
+    function setupSessionAutoUpdate() {
+        const dateInput = $('admission_date');
+        const sessionSel = $('admission_session');
+        const hint = $('sessionAutoHint');
+        if (!dateInput || !sessionSel) return;
+
+        dateInput.addEventListener('change', function () {
+            const dateVal = this.value;
+            if (!dateVal) return;
+            const autoSession = getSessionFromDate(dateVal);
+            if (!autoSession) return;
+            const hasOption = Array.from(sessionSel.options).some(o => o.value === autoSession);
+            if (!hasOption) {
+                const opt = document.createElement('option');
+                opt.value = autoSession;
+                opt.textContent = autoSession;
+                sessionSel.appendChild(opt);
+            }
+            sessionSel.value = autoSession;
+            if (hint) {
+                hint.innerHTML = `<i class="fas fa-magic"></i> Auto-selected: <strong>${autoSession}</strong> (তারিখ থেকে)`;
+                hint.style.display = 'block';
+                hint.style.opacity = '1';
+                setTimeout(() => { if (hint) hint.style.opacity = '0.7'; }, 3000);
+            }
+        });
+
+        sessionSel.addEventListener('change', function () {
+            if (hint && this.value) {
+                hint.innerHTML = `<i class="fas fa-check-circle"></i> Manually selected: <strong>${this.value}</strong>`;
+            }
+        });
+    }
+
+    // =========================================================
     // IMAGE COMPRESSION
     // =========================================================
     async function compressImage(file) {
         return new Promise((resolve, reject) => {
             const originalKB = Math.round(file.size / 1024);
             console.log(`📷 Original: ${originalKB} KB`);
-
             const reader = new FileReader();
 
             reader.onload = function (e) {
@@ -132,7 +231,6 @@
                 img.onload = function () {
                     let width = img.width;
                     let height = img.height;
-
                     if (width > IMG_MAX_DIMENSION || height > IMG_MAX_DIMENSION) {
                         if (width > height) {
                             height = Math.round((height * IMG_MAX_DIMENSION) / width);
@@ -142,28 +240,18 @@
                             height = IMG_MAX_DIMENSION;
                         }
                     }
-
                     const canvas = document.createElement('canvas');
                     canvas.width = width;
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-
                     canvas.toBlob(
                         function (blob) {
-                            if (!blob) {
-                                reject(new Error('Image compression failed'));
-                                return;
-                            }
+                            if (!blob) { reject(new Error('Image compression failed')); return; }
                             const newKB = Math.round(blob.size / 1024);
                             const savings = Math.round((1 - blob.size / file.size) * 100);
                             console.log(`✅ Compressed: ${newKB} KB (${savings}% saved) — ${width}x${height}`);
-
-                            const newFile = new File(
-                                [blob],
-                                file.name.replace(/\.[^.]+$/, '.jpg'),
-                                { type: 'image/jpeg' }
-                            );
+                            const newFile = new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
                             resolve(newFile);
                         },
                         'image/jpeg',
@@ -173,7 +261,6 @@
                 img.onerror = () => reject(new Error('Image load failed'));
                 img.src = e.target.result;
             };
-
             reader.onerror = () => reject(new Error('File read failed'));
             reader.readAsDataURL(file);
         });
@@ -187,24 +274,18 @@
         formData.append('file', file);
         formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
         formData.append('folder', 'admission_photos');
-
-        const response = await fetch(CLOUDINARY_UPLOAD_URL, {
-            method: 'POST',
-            body: formData
-        });
-
+        const response = await fetch(CLOUDINARY_UPLOAD_URL, { method: 'POST', body: formData });
         if (!response.ok) {
             const err = await response.json().catch(() => ({}));
             throw new Error(err.error?.message || 'Cloudinary upload failed');
         }
-
         const data = await response.json();
         console.log('☁️ Cloudinary URL:', data.secure_url);
         return data.secure_url;
     }
 
     // =========================================================
-    // PHOTO INPUT HANDLER
+    // PHOTO INPUT
     // =========================================================
     function setupPhotoInput() {
         const input = $('photo_input');
@@ -213,40 +294,28 @@
         input.addEventListener('change', async function (e) {
             const file = e.target.files[0];
             if (!file) return;
-
             if (!file.type.startsWith('image/')) {
                 window.fdcError('শুধু image file দিন (JPG/PNG/WebP)');
                 input.value = '';
                 return;
             }
-
             if (file.size > 20 * 1024 * 1024) {
                 window.fdcError('ছবি ২০ MB-এর চেয়ে বড় হতে পারবে না');
                 input.value = '';
                 return;
             }
-
             const originalKB = Math.round(file.size / 1024);
             $('photoFileName').textContent = `${file.name} (${originalKB} KB)`;
             hideError('photo');
-
-            $('photoPreview').innerHTML = `
-                <div style="padding:20px;color:var(--grey);font-size:13px;">
-                    <i class="fas fa-spinner fa-spin"></i> Compressing...
-                </div>
-            `;
-
+            $('photoPreview').innerHTML = `<div style="padding:20px;color:var(--grey);font-size:13px;"><i class="fas fa-spinner fa-spin"></i> Compressing...</div>`;
             try {
                 const compressed = await compressImage(file);
                 uploadedPhotoFile = compressed;
-
                 const url = URL.createObjectURL(compressed);
                 const newKB = Math.round(compressed.size / 1024);
                 $('photoFileName').textContent = `${compressed.name} (${newKB} KB)`;
                 $('photoPreview').innerHTML = `<img src="${url}" alt="Preview">`;
-
                 triggerDraftSave();
-
             } catch (err) {
                 console.error('Compress error:', err);
                 window.fdcError('ছবি compress করা যায়নি: ' + err.message);
@@ -262,25 +331,12 @@
     // =========================================================
     function getGroupSubjects(group) {
         if (!group) return [];
-
-        // HSC-BM (BMT) — Trade-based
         const bmTrades = {
             'Computerized Accounting System': ['Computerized Accounting System'],
             'Digital Technology in Business': ['Digital Technology in Business'],
             'Human Resource Development': ['Human Resource Development']
         };
         if (bmTrades[group]) return bmTrades[group];
-
-        // Degree subjects
-        const degreeMap = {
-            'B.A (Pass)': ['বাংলা', 'English', 'ইতিহাস', 'দর্শন', 'রাষ্ট্রবিজ্ঞান'],
-            'B.S.S (Pass)': ['অর্থনীতি', 'রাষ্ট্রবিজ্ঞান', 'সমাজবিজ্ঞান', 'ইসলামের ইতিহাস'],
-            'B.B.S (Pass)': ['হিসাববিজ্ঞান', 'ব্যবস্থাপনা', 'ফিন্যান্স', 'মার্কেটিং'],
-            'B.Sc (Pass)': ['পদার্থবিজ্ঞান', 'রসায়ন', 'গণিত', 'প্রাণিবিদ্যা', 'উদ্ভিদবিদ্যা']
-        };
-        if (degreeMap[group]) return degreeMap[group];
-
-        // HSC-General groups
         const generalMap = {
             'Science': ['পদার্থবিজ্ঞান', 'রসায়ন', 'জীববিজ্ঞান বা উচ্চতর গণিত'],
             'Business': ['হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা', 'উৎপাদন ব্যবস্থাপনা ও বিপণন'],
@@ -289,21 +345,10 @@
         return generalMap[group] || [];
     }
 
-    // =========================================================
-    // 4TH SUBJECT POOL
-    // =========================================================
     function getFourthSubjectPool(group) {
         if (!group) return [];
-
-        // BM (BMT) — no 4th subject
         const bmTrades = ['Computerized Accounting System', 'Digital Technology in Business', 'Human Resource Development'];
         if (bmTrades.includes(group)) return [];
-
-        // Degree — no 4th subject
-        const degreeSubjects = ['B.A (Pass)', 'B.S.S (Pass)', 'B.B.S (Pass)', 'B.Sc (Pass)'];
-        if (degreeSubjects.includes(group)) return [];
-
-        // HSC-General 4th pool
         const map = {
             'Science': ['জীববিজ্ঞান', 'উচ্চতর গণিত', 'কৃষিশিক্ষা', 'পরিসংখ্যান', 'প্রকৌশল অঙ্কন ও ওয়ার্কশপ প্র্যাকটিস', 'ভূগোল', 'মনোবিজ্ঞান'],
             'Business': ['হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা', 'উৎপাদন ব্যবস্থাপনা ও বিপণন', 'অর্থনীতি', 'ফিন্যান্স, ব্যাংকিং ও বিমা', 'পরিসংখ্যান', 'কৃষিশিক্ষা', 'ভূগোল'],
@@ -312,13 +357,9 @@
         return map[group] || [];
     }
 
-    // =========================================================
-    // GROUP/TRADE CHANGE HANDLER
-    // =========================================================
     function setupGroupChange() {
         const groupSel = $('group_name') || $('department');
         if (!groupSel) return;
-
         groupSel.addEventListener('change', function () {
             const group = this.value;
             if (!group) {
@@ -326,7 +367,6 @@
                 if ($('fourthSubjectWrap')) $('fourthSubjectWrap').style.display = 'none';
                 return;
             }
-
             const subjects = getGroupSubjects(group);
             if ($('groupSubjectsList')) {
                 $('groupSubjectsList').innerHTML = subjects.map(s =>
@@ -334,7 +374,6 @@
                 ).join('');
                 $('groupSubjectsWrap').style.display = 'block';
             }
-
             const fourthPool = getFourthSubjectPool(group);
             if ($('optional_subject') && $('fourthSubjectWrap')) {
                 if (fourthPool.length > 0) {
@@ -388,9 +427,7 @@
         ];
 
         const groupFieldId = $('group_name') ? 'group_name' : ($('department') ? 'department' : null);
-        if (groupFieldId) {
-            required.push({ id: groupFieldId, label: 'Group/Trade/Department' });
-        }
+        if (groupFieldId) required.push({ id: groupFieldId, label: 'Group/Trade/Department' });
 
         required.forEach(item => {
             const el = $(item.id);
@@ -478,7 +515,6 @@
 
         return {
             application_type: FORM_TYPE,
-            
             name_en: ($('name_en')?.value || '').trim(),
             name_bn: ($('name_bn')?.value || '').trim(),
             gender: ($('gender')?.value || '').trim(),
@@ -489,7 +525,6 @@
             blood_group: ($('blood_group')?.value || '').trim(),
             uid_number: ($('uid_number')?.value || '').trim() || null,
             nid_number: ($('nid_number')?.value || '').trim() || null,
-            
             village: ($('village')?.value || '').trim(),
             union_name: ($('union_name')?.value || '').trim(),
             post_office: ($('post_office')?.value || '').trim(),
@@ -497,7 +532,6 @@
             division: ($('division')?.value || '').trim(),
             district: ($('district')?.value || '').trim(),
             upazila: ($('upazila')?.value || '').trim(),
-            
             father_name_en: ($('father_name_en')?.value || '').trim() || null,
             father_name_bn: ($('father_name_bn')?.value || '').trim() || null,
             mother_name_en: ($('mother_name_en')?.value || '').trim() || null,
@@ -511,7 +545,6 @@
             guardian_name: ($('guardian_name')?.value || '').trim() || null,
             guardian_relation: ($('guardian_relation')?.value || '').trim() || null,
             guardian_phone: ($('guardian_phone')?.value || '').trim() || null,
-            
             admission_date: ($('admission_date')?.value || '') || null,
             admission_session: session,
             admission_form_no: null,
@@ -522,7 +555,6 @@
             compulsory_subjects: compulsory,
             optional_subject: optionalSub || null,
             admin_notes: null,
-            
             prev_exam_name: ($('prev_exam_name')?.value || '').trim(),
             prev_school_name: ($('prev_school_name')?.value || '').trim(),
             prev_result: ($('prev_result')?.value || '').trim(),
@@ -539,7 +571,6 @@
         try {
             const { data, error } = await window.FDC_SUPABASE
                 .rpc('generate_application_id', { app_type: FORM_TYPE });
-
             if (error) throw error;
             return data || generateFallbackId();
         } catch (e) {
@@ -580,16 +611,10 @@
             subjectTagHtml += `<span class="preview-subject-tag" style="background:#fef3c7;color:#92400e;border-color:#fde68a;">৪র্থ: ${escapeHtml(data.optional_subject)}</span>`;
         }
 
-        // Group/Trade/Department display
         let groupLabel = 'Group';
         let groupValue = data.group_name;
-        if (FORM_TYPE === 'HSC-BM') { 
-            groupLabel = 'Trade'; 
-            groupValue = data.group_name || '—'; 
-        } else if (FORM_TYPE === 'Honours') { 
-            groupLabel = 'Department'; 
-            groupValue = data.department; 
-        }
+        if (FORM_TYPE === 'HSC-BM') { groupLabel = 'Trade'; groupValue = data.group_name || '—'; }
+        else if (FORM_TYPE === 'Honours') { groupLabel = 'Department'; groupValue = data.department; }
 
         const html = `
             <div class="preview-section">
@@ -722,7 +747,6 @@
             console.log('✅ Application saved:', data);
 
             clearDraft();
-
             overlay.classList.remove('show');
             document.body.style.overflow = '';
 
@@ -754,7 +778,6 @@
                 window.fdcWarning('Copy করা যায়নি — manually লিখে নিন');
             });
         });
-
         $('downloadPdfBtn')?.addEventListener('click', downloadPdf);
     }
 
@@ -827,7 +850,6 @@
                 doc.setFontSize(8);
                 doc.setFont('helvetica', 'normal');
                 doc.text(label, xPos, y);
-
                 doc.setTextColor(31, 41, 55);
                 doc.setFontSize(10);
                 doc.setFont('helvetica', 'bold');
@@ -886,10 +908,7 @@
                 doc.setTextColor(255, 255, 255);
                 doc.setFontSize(8);
                 doc.setFont('helvetica', 'normal');
-                doc.text(
-                    `Fulbariya College | Application ID: ${applicationId}`,
-                    105, 293, { align: 'center' }
-                );
+                doc.text(`Fulbariya College | Application ID: ${applicationId}`, 105, 293, { align: 'center' });
             }
 
             doc.save(`Admission_${applicationId}.pdf`);
@@ -923,16 +942,13 @@
         try {
             const raw = localStorage.getItem(getDraftKey());
             if (!raw) return false;
-
             const draft = JSON.parse(raw);
             if (!draft || !draft._savedAt) return false;
-
             const age = Date.now() - draft._savedAt;
             if (age > 24 * 60 * 60 * 1000) {
                 localStorage.removeItem(getDraftKey());
                 return false;
             }
-
             Object.keys(draft).forEach(key => {
                 if (key.startsWith('_')) return;
                 const el = $(key);
@@ -940,7 +956,6 @@
                     el.value = draft[key];
                 }
             });
-
             const groupSel = $('group_name') || $('department');
             if (groupSel && groupSel.value) {
                 groupSel.dispatchEvent(new Event('change'));
@@ -948,10 +963,8 @@
                     $('optional_subject').value = draft.optional_subject;
                 }
             }
-
             console.log('📂 Draft loaded');
             return true;
-
         } catch (e) {
             console.warn('Draft load failed:', e);
             return false;
@@ -975,7 +988,6 @@
             el.addEventListener('input', triggerDraftSave);
             el.addEventListener('change', triggerDraftSave);
         });
-
         const raw = localStorage.getItem(getDraftKey());
         if (raw) {
             try {
@@ -1003,7 +1015,7 @@
     // INIT
     // =========================================================
     function init() {
-        console.log('🚀 Admission Form v4.0 loading...');
+        console.log('🚀 Admission Form v6.0 loading...');
         console.log('📋 Form Type:', FORM_TYPE);
 
         const yearEl = $('year');
@@ -1013,6 +1025,9 @@
         setupGroupChange();
         setupSuccessActions();
         setupDraftAutoSave();
+        populateSessions();
+        setupSessionAutoUpdate();
+        setupLocationDropdowns();
 
         const form = $('admissionForm');
         if (form) form.addEventListener('submit', submitForm);
@@ -1038,7 +1053,7 @@
             }
         });
 
-        console.log('✅ Admission Form v4.0 ready');
+        console.log('✅ Admission Form v6.0 ready');
     }
 
     if (document.readyState === 'loading') {
