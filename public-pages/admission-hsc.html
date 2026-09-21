@@ -32,7 +32,7 @@
 * { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 
-/* ============ COLLEGE HEADER ============ */
+/* COLLEGE HEADER */
 .college-header {
     background: linear-gradient(135deg, #0a6b3d, #0d8a4f);
     color: #fff;
@@ -55,32 +55,12 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     padding: 4px;
     border: 2px solid #f2d27b;
 }
-.college-header .ch-logo img {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-}
+.college-header .ch-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
 .college-header .ch-info { flex: 1; min-width: 0; }
-.college-header .ch-name-bn {
-    font-size: 17px;
-    font-weight: 700;
-    margin: 0;
-    line-height: 1.2;
-}
-.college-header .ch-name-en {
-    font-size: 11px;
-    opacity: 0.9;
-    margin: 2px 0 0;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-.college-header .ch-eiin {
-    font-size: 10px;
-    opacity: 0.85;
-    margin: 2px 0 0;
-}
+.college-header .ch-name-bn { font-size: 17px; font-weight: 700; margin: 0; line-height: 1.2; }
+.college-header .ch-name-en { font-size: 11px; opacity: 0.9; margin: 2px 0 0; letter-spacing: 1px; text-transform: uppercase; }
+.college-header .ch-eiin { font-size: 10px; opacity: 0.85; margin: 2px 0 0; }
 
-/* ============ PAGE TITLE ============ */
 .page-title-bar {
     background: #fff;
     padding: 16px 20px;
@@ -99,14 +79,8 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     font-family: 'Playfair Display', serif;
 }
 
-/* ============ MAIN CONTAINER ============ */
-.form-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px 15px 80px;
-}
+.form-container { max-width: 900px; margin: 0 auto; padding: 20px 15px 80px; }
 
-/* ============ SECTION ============ */
 .form-section {
     background: #fff;
     border-radius: 12px;
@@ -114,7 +88,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     margin-bottom: 20px;
     box-shadow: var(--shadow-sm);
 }
-
 .section-header {
     background: linear-gradient(90deg, #06b6d4, #0891b2);
     color: #fff;
@@ -124,29 +97,11 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     font-weight: 700;
     letter-spacing: 0.5px;
 }
-.section-header.navy {
-    background: linear-gradient(90deg, var(--navy), var(--navy-2));
-}
+.section-body { padding: 20px 22px; }
 
-/* ============ FORM FIELDS ============ */
-.section-body {
-    padding: 20px 22px;
-}
-
-.form-group {
-    margin-bottom: 18px;
-}
-.form-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 6px;
-}
-.form-group label .req {
-    color: var(--danger);
-    margin-left: 3px;
-}
+.form-group { margin-bottom: 18px; }
+.form-group label { display: block; font-size: 14px; font-weight: 600; color: var(--dark); margin-bottom: 6px; }
+.form-group label .req { color: var(--danger); margin-left: 3px; }
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="tel"],
@@ -165,35 +120,17 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     transition: 0.2s;
     color: var(--dark);
 }
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
     border-color: var(--navy);
     background: #fff;
     box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
 }
 .form-group input::placeholder { color: #9ca3af; }
-.form-group input.error,
-.form-group select.error {
-    border-color: var(--danger);
-    background: #fef2f2;
-}
-
-.form-group .error-msg {
-    color: var(--danger);
-    font-size: 12px;
-    margin-top: 4px;
-    display: none;
-}
+.form-group input.error, .form-group select.error { border-color: var(--danger); background: #fef2f2; }
+.form-group .error-msg { color: var(--danger); font-size: 12px; margin-top: 4px; display: none; }
 .form-group .error-msg.show { display: block; }
+.form-group .hint { color: var(--grey); font-size: 11.5px; margin-top: 4px; }
 
-.form-group .hint {
-    color: var(--grey);
-    font-size: 11.5px;
-    margin-top: 4px;
-}
-
-/* File input */
 .file-input-wrap {
     border: 1.5px solid var(--border);
     border-radius: 8px;
@@ -205,10 +142,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     cursor: pointer;
     transition: 0.2s;
 }
-.file-input-wrap:hover {
-    border-color: var(--navy);
-    background: #f5f7ff;
-}
+.file-input-wrap:hover { border-color: var(--navy); background: #f5f7ff; }
 .file-input-wrap input[type="file"] { display: none; }
 .file-input-wrap .file-btn {
     background: linear-gradient(135deg, var(--navy), var(--navy-2));
@@ -219,44 +153,15 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     font-weight: 600;
     cursor: pointer;
 }
-.file-input-wrap .file-name {
-    color: var(--grey);
-    font-size: 13px;
-    flex: 1;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
+.file-input-wrap .file-name { color: var(--grey); font-size: 13px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-/* Photo preview */
-.photo-preview {
-    margin-top: 10px;
-    text-align: center;
-}
-.photo-preview img {
-    max-width: 120px;
-    max-height: 120px;
-    border-radius: 8px;
-    border: 2px solid var(--border);
-    object-fit: cover;
-}
+.photo-preview { margin-top: 10px; text-align: center; }
+.photo-preview img { max-width: 120px; max-height: 120px; border-radius: 8px; border: 2px solid var(--border); object-fit: cover; }
 
-/* Rows */
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-.form-row-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 15px;
-}
-@media (max-width: 640px) {
-    .form-row, .form-row-3 { grid-template-columns: 1fr; }
-}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.form-row-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; }
+@media (max-width: 640px) { .form-row, .form-row-3 { grid-template-columns: 1fr; } }
 
-/* Subject locked */
 .subject-locked {
     background: #f0fdf4;
     border: 1.5px solid #86efac;
@@ -271,7 +176,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 }
 .subject-locked i { color: #16a34a; }
 
-/* Submit */
 .submit-section {
     background: #fff;
     border-radius: 12px;
@@ -295,13 +199,9 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     align-items: center;
     gap: 10px;
 }
-.submit-btn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
-}
+.submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4); }
 .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-/* Footer */
 .form-footer {
     background: #1f2937;
     color: rgba(255,255,255,0.85);
@@ -312,9 +212,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     margin-top: 20px;
 }
 .form-footer .footer-link { color: var(--gold); text-decoration: none; }
-.form-footer .footer-link:hover { text-decoration: underline; }
 
-/* ============ LOADING OVERLAY ============ */
 .loading-overlay {
     position: fixed;
     inset: 0;
@@ -329,8 +227,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 }
 .loading-overlay.show { display: flex; }
 .loading-overlay .spinner {
-    width: 60px;
-    height: 60px;
+    width: 60px; height: 60px;
     border: 5px solid rgba(255,255,255,0.2);
     border-top-color: var(--gold);
     border-radius: 50%;
@@ -341,7 +238,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 .loading-overlay h3 { font-size: 18px; margin: 0 0 8px; }
 .loading-overlay p { font-size: 14px; opacity: 0.85; margin: 0; }
 
-/* ============ PREVIEW MODAL ============ */
+/* PREVIEW MODAL */
 .preview-modal-overlay {
     position: fixed;
     inset: 0;
@@ -355,7 +252,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     overflow-y: auto;
 }
 .preview-modal-overlay.show { display: flex; }
-
 .preview-modal {
     background: #fff;
     border-radius: 20px;
@@ -367,7 +263,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     box-shadow: 0 30px 80px rgba(0,0,0,0.4);
     animation: modalPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
-
 .preview-header {
     background: linear-gradient(135deg, #06b6d4, #0891b2);
     color: #fff;
@@ -377,8 +272,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     flex-shrink: 0;
 }
 .preview-header .ph-icon {
-    width: 60px;
-    height: 60px;
+    width: 60px; height: 60px;
     border-radius: 50%;
     background: rgba(255,255,255,0.2);
     display: inline-flex;
@@ -387,23 +281,9 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     font-size: 26px;
     margin-bottom: 10px;
 }
-.preview-header h2 {
-    font-size: 22px;
-    margin: 0 0 5px;
-    font-weight: 700;
-}
-.preview-header p {
-    font-size: 13px;
-    margin: 0;
-    opacity: 0.9;
-}
-
-.preview-body {
-    padding: 25px 30px;
-    overflow-y: auto;
-    flex: 1;
-}
-
+.preview-header h2 { font-size: 22px; margin: 0 0 5px; font-weight: 700; }
+.preview-header p { font-size: 13px; margin: 0; opacity: 0.9; }
+.preview-body { padding: 25px 30px; overflow-y: auto; flex: 1; }
 .preview-section {
     margin-bottom: 25px;
     border: 1px solid var(--border);
@@ -411,7 +291,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     overflow: hidden;
 }
 .preview-section:last-child { margin-bottom: 0; }
-
 .preview-section-title {
     background: linear-gradient(90deg, #f0fdf4, #dcfce7);
     color: #166534;
@@ -424,53 +303,19 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     border-bottom: 1px solid #bbf7d0;
 }
 .preview-section-title i { color: #16a34a; }
-
 .preview-section-content {
     padding: 16px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
 }
-@media (max-width: 600px) {
-    .preview-section-content { grid-template-columns: 1fr; }
-}
-
+@media (max-width: 600px) { .preview-section-content { grid-template-columns: 1fr; } }
 .preview-field { min-width: 0; }
-.preview-field .pf-label {
-    font-size: 10.5px;
-    color: var(--grey);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 3px;
-}
-.preview-field .pf-value {
-    font-size: 14px;
-    color: var(--dark);
-    font-weight: 600;
-    word-break: break-word;
-}
-
-.preview-photo {
-    grid-column: 1 / -1;
-    text-align: center;
-    padding-top: 10px;
-}
-.preview-photo img {
-    max-width: 140px;
-    max-height: 140px;
-    border-radius: 12px;
-    border: 3px solid var(--border);
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-}
-
-.preview-subjects {
-    grid-column: 1 / -1;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    padding-top: 5px;
-}
+.preview-field .pf-label { font-size: 10.5px; color: var(--grey); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.preview-field .pf-value { font-size: 14px; color: var(--dark); font-weight: 600; word-break: break-word; }
+.preview-photo { grid-column: 1 / -1; text-align: center; padding-top: 10px; }
+.preview-photo img { max-width: 140px; max-height: 140px; border-radius: 12px; border: 3px solid var(--border); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+.preview-subjects { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; padding-top: 5px; }
 .preview-subject-tag {
     background: #f0fdf4;
     color: #166534;
@@ -480,7 +325,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     font-size: 12px;
     font-weight: 600;
 }
-
 .preview-footer {
     padding: 18px 25px;
     background: #fafbff;
@@ -505,41 +349,20 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     gap: 8px;
     font-family: inherit;
 }
-.btn-back {
-    background: #fff;
-    color: var(--dark);
-    border: 1.5px solid var(--border) !important;
-}
-.btn-back:hover {
-    border-color: var(--navy) !important;
-    background: #f5f7ff;
-}
-.btn-confirm {
-    background: linear-gradient(135deg, #10b981, #059669);
-    color: #fff;
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
-}
-.btn-confirm:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
-}
-
+.btn-back { background: #fff; color: var(--dark); border: 1.5px solid var(--border) !important; }
+.btn-back:hover { border-color: var(--navy) !important; background: #f5f7ff; }
+.btn-confirm { background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3); }
+.btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); }
 @media (max-width: 600px) {
     .preview-modal { border-radius: 16px; }
     .preview-header { padding: 20px; }
     .preview-header h2 { font-size: 18px; }
     .preview-body { padding: 18px; }
-    .preview-footer {
-        padding: 14px 18px;
-        flex-direction: column-reverse;
-    }
-    .preview-footer button {
-        width: 100%;
-        justify-content: center;
-    }
+    .preview-footer { padding: 14px 18px; flex-direction: column-reverse; }
+    .preview-footer button { width: 100%; justify-content: center; }
 }
 
-/* ============ SUCCESS MODAL ============ */
+/* SUCCESS MODAL */
 .success-modal-overlay {
     position: fixed;
     inset: 0;
@@ -575,8 +398,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     border-radius: 20px 20px 0 0;
 }
 .success-header .sh-icon {
-    width: 70px;
-    height: 70px;
+    width: 70px; height: 70px;
     border-radius: 50%;
     background: rgba(255,255,255,0.2);
     display: inline-flex;
@@ -596,8 +418,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     margin: 15px 0;
 }
 .app-id-box .aid-label {
-    font-size: 11px;
-    color: #1e40af;
+    font-size: 11px; color: #1e40af;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -640,8 +461,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     margin-top: 20px;
     flex-wrap: wrap;
 }
-.success-actions button,
-.success-actions a {
+.success-actions button, .success-actions a {
     flex: 1;
     min-width: 140px;
     padding: 12px 20px;
@@ -657,25 +477,11 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     gap: 8px;
     text-decoration: none;
 }
-.btn-download-pdf {
-    background: linear-gradient(135deg, var(--gold), var(--gold-2));
-    color: var(--navy);
-}
-.btn-check-status {
-    background: linear-gradient(135deg, var(--navy), var(--navy-2));
-    color: #fff;
-}
-.btn-home {
-    background: #f3f4f6;
-    color: var(--dark);
-    border: 1.5px solid var(--border);
-}
-.success-actions button:hover,
-.success-actions a:hover {
-    transform: translateY(-2px);
-}
+.btn-download-pdf { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.btn-check-status { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: #fff; }
+.btn-home { background: #f3f4f6; color: var(--dark); border: 1.5px solid var(--border); }
+.success-actions button:hover, .success-actions a:hover { transform: translateY(-2px); }
 
-/* Responsive */
 @media (max-width: 640px) {
     .college-header { padding: 10px 14px; gap: 10px; }
     .college-header .ch-logo { width: 45px; height: 45px; }
@@ -791,17 +597,16 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                         <div class="error-msg" id="err_blood_group">Blood Group সিলেক্ট করুন</div>
                     </div>
                     <div class="form-group">
-                        <label>Unique ID No <span class="req">*</span></label>
-                        <input type="text" id="uid_number" placeholder="Enter UID Number" autocomplete="off">
-                        <div class="error-msg" id="err_uid_number">UID দিন</div>
+                        <label>Unique ID No</label>
+                        <input type="text" id="uid_number" placeholder="Enter UID Number (Optional)" autocomplete="off">
+                        <div class="hint">SSC Admit Card-এ দেখুন (না থাকলে ফাঁকা রাখুন)</div>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>National ID No <span class="req">*</span></label>
-                        <input type="text" id="nid_number" placeholder="Enter NID Number" autocomplete="off">
-                        <div class="error-msg" id="err_nid_number">NID দিন</div>
+                        <label>National ID No</label>
+                        <input type="text" id="nid_number" placeholder="Enter NID Number (Optional)" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label>Upload Image <span class="req">*</span></label>
@@ -854,26 +659,22 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                         <label>Division <span class="req">*</span></label>
                         <select id="division">
                             <option value="">Select Division</option>
-                            <option value="Dhaka">Dhaka</option>
-                            <option value="Chattogram">Chattogram</option>
-                            <option value="Rajshahi">Rajshahi</option>
-                            <option value="Khulna">Khulna</option>
-                            <option value="Barishal">Barishal</option>
-                            <option value="Sylhet">Sylhet</option>
-                            <option value="Rangpur">Rangpur</option>
-                            <option value="Mymensingh">Mymensingh</option>
                         </select>
                         <div class="error-msg" id="err_division">Division সিলেক্ট করুন</div>
                     </div>
                     <div class="form-group">
                         <label>District <span class="req">*</span></label>
-                        <input type="text" id="district" placeholder="Enter District" autocomplete="off">
-                        <div class="error-msg" id="err_district">District দিন</div>
+                        <select id="district">
+                            <option value="">Select District</option>
+                        </select>
+                        <div class="error-msg" id="err_district">District সিলেক্ট করুন</div>
                     </div>
                     <div class="form-group">
                         <label>Upazila <span class="req">*</span></label>
-                        <input type="text" id="upazila" placeholder="Enter Upazila" autocomplete="off">
-                        <div class="error-msg" id="err_upazila">Upazila দিন</div>
+                        <select id="upazila">
+                            <option value="">Select Upazila</option>
+                        </select>
+                        <div class="error-msg" id="err_upazila">Upazila সিলেক্ট করুন</div>
                     </div>
                 </div>
             </div>
@@ -978,10 +779,8 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                         <label>Admission Session <span class="req">*</span></label>
                         <select id="admission_session">
                             <option value="">Select Session</option>
-                            <option value="2024-2025">2024-2025</option>
-                            <option value="2025-2026">2025-2026</option>
-                            <option value="2026-2027">2026-2027</option>
                         </select>
+                        <div class="hint" id="sessionAutoHint" style="display:none;color:#10b981;"></div>
                         <div class="error-msg" id="err_admission_session">Session সিলেক্ট করুন</div>
                     </div>
                 </div>
@@ -1124,7 +923,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     Online Admission System · Developed by <span class="footer-link">FDC IT Team</span>
 </div>
 
-<!-- LOADING OVERLAY -->
+<!-- LOADING -->
 <div class="loading-overlay" id="loadingOverlay">
     <div class="spinner"></div>
     <h3 id="loadingTitle">Submitting...</h3>
@@ -1139,11 +938,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
             <h2>আপনার আবেদন পরীক্ষা করুন</h2>
             <p>Submit করার আগে সব তথ্য ভালোভাবে যাচাই করুন</p>
         </div>
-
-        <div class="preview-body" id="previewBody">
-            <!-- Dynamic content -->
-        </div>
-
+        <div class="preview-body" id="previewBody"></div>
         <div class="preview-footer">
             <button type="button" class="btn-back" id="btnBackToEdit">
                 <i class="fas fa-arrow-left"></i> Edit করুন
@@ -1171,12 +966,10 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                     <i class="fas fa-copy"></i> Copy ID
                 </button>
             </div>
-
             <div class="success-warning">
                 <strong>⚠️ গুরুত্বপূর্ণ:</strong> এই Application ID সংরক্ষণ করুন। 
                 এটি দিয়ে আপনি যেকোনো সময় আবেদনের অবস্থা জানতে পারবেন।
             </div>
-
             <div class="success-actions">
                 <button class="btn-download-pdf" id="downloadPdfBtn">
                     <i class="fas fa-file-pdf"></i> PDF Download
@@ -1199,5 +992,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 <script src="../../js/supabase.js"></script>
 <script src="../../js/bd-locations.js?v=1"></script>
 <script src="../../js/admission.js?v=6"></script>
+
 </body>
 </html>

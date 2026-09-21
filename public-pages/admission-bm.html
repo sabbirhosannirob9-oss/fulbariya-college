@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admission Form (HSC-BM) | ফুলবাড়ীয়া কলেজ</title>
-<meta name="description" content="ফুলবাড়ীয়া কলেজ - HSC-BM ভর্তি আবেদন ফরম">
+<meta name="description" content="ফুলবাড়ীয়া কলেজ - HSC-BM / BMT ভর্তি আবেদন ফরম">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -32,7 +32,7 @@
 * { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 
-/* HEADER */
+/* COLLEGE HEADER */
 .college-header {
     background: linear-gradient(135deg, #0a6b3d, #0d8a4f);
     color: #fff;
@@ -187,6 +187,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     display: flex;
     align-items: flex-start;
     gap: 10px;
+    line-height: 1.6;
 }
 .trade-highlight i { font-size: 18px; margin-top: 2px; }
 
@@ -513,7 +514,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- COLLEGE HEADER -->
 <div class="college-header">
     <div class="ch-logo">
         <img src="../../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-graduation-cap\' style=\'font-size:24px;color:#0a6b3d;\'></i>';">
@@ -611,17 +612,16 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                         <div class="error-msg" id="err_blood_group">Blood Group সিলেক্ট করুন</div>
                     </div>
                     <div class="form-group">
-                        <label>Unique ID No <span class="req">*</span></label>
-                        <input type="text" id="uid_number" placeholder="Enter UID Number" autocomplete="off">
-                        <div class="error-msg" id="err_uid_number">UID দিন</div>
+                        <label>Unique ID No</label>
+                        <input type="text" id="uid_number" placeholder="Enter UID Number (Optional)" autocomplete="off">
+                        <div class="hint">SSC Admit Card-এ দেখুন (না থাকলে ফাঁকা রাখুন)</div>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label>National ID No <span class="req">*</span></label>
-                        <input type="text" id="nid_number" placeholder="Enter NID Number" autocomplete="off">
-                        <div class="error-msg" id="err_nid_number">NID দিন</div>
+                        <label>National ID No</label>
+                        <input type="text" id="nid_number" placeholder="Enter NID Number (Optional)" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label>Upload Image <span class="req">*</span></label>
@@ -674,26 +674,22 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                         <label>Division <span class="req">*</span></label>
                         <select id="division">
                             <option value="">Select Division</option>
-                            <option value="Dhaka">Dhaka</option>
-                            <option value="Chattogram">Chattogram</option>
-                            <option value="Rajshahi">Rajshahi</option>
-                            <option value="Khulna">Khulna</option>
-                            <option value="Barishal">Barishal</option>
-                            <option value="Sylhet">Sylhet</option>
-                            <option value="Rangpur">Rangpur</option>
-                            <option value="Mymensingh">Mymensingh</option>
                         </select>
                         <div class="error-msg" id="err_division">Division সিলেক্ট করুন</div>
                     </div>
                     <div class="form-group">
                         <label>District <span class="req">*</span></label>
-                        <input type="text" id="district" placeholder="Enter District" autocomplete="off">
-                        <div class="error-msg" id="err_district">District দিন</div>
+                        <select id="district">
+                            <option value="">Select District</option>
+                        </select>
+                        <div class="error-msg" id="err_district">District সিলেক্ট করুন</div>
                     </div>
                     <div class="form-group">
                         <label>Upazila <span class="req">*</span></label>
-                        <input type="text" id="upazila" placeholder="Enter Upazila" autocomplete="off">
-                        <div class="error-msg" id="err_upazila">Upazila দিন</div>
+                        <select id="upazila">
+                            <option value="">Select Upazila</option>
+                        </select>
+                        <div class="error-msg" id="err_upazila">Upazila সিলেক্ট করুন</div>
                     </div>
                 </div>
             </div>
@@ -783,7 +779,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
             </div>
         </div>
 
-        <!-- SECTION 4: Admission Information (BM specific) -->
+        <!-- SECTION 4: Admission Information -->
         <div class="form-section">
             <div class="section-header">Admission Information</div>
             <div class="section-body">
@@ -798,10 +794,8 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                         <label>Admission Session <span class="req">*</span></label>
                         <select id="admission_session">
                             <option value="">Select Session</option>
-                            <option value="2024-2025">2024-2025</option>
-                            <option value="2025-2026">2025-2026</option>
-                            <option value="2026-2027">2026-2027</option>
                         </select>
+                        <div class="hint" id="sessionAutoHint" style="display:none;color:#10b981;"></div>
                         <div class="error-msg" id="err_admission_session">Session সিলেক্ট করুন</div>
                     </div>
                 </div>
@@ -829,7 +823,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                     </div>
                 </div>
 
-                <!-- Trade Highlight -->
                 <div class="trade-highlight">
                     <i class="fas fa-info-circle"></i>
                     <div>
@@ -837,7 +830,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                     </div>
                 </div>
 
-                <!-- Compulsory Subjects (8 fixed) -->
                 <div class="form-group">
                     <label>Compulsory Subjects (৮টি — Auto)</label>
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;">
@@ -852,7 +844,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                     </div>
                 </div>
 
-                <!-- Trade Subject (Auto-populated) -->
                 <div id="groupSubjectsWrap" style="display:none;">
                     <div class="form-group">
                         <label>Trade Subject (Auto)</label>
@@ -1018,5 +1009,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 <script src="../../js/supabase.js"></script>
 <script src="../../js/bd-locations.js?v=1"></script>
 <script src="../../js/admission.js?v=6"></script>
+
 </body>
 </html>
