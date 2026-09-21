@@ -2,20 +2,18 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMISSION FORM LOGIC
  * Location: js/admission.js
- * Version: v6.0 — Location Dropdowns + Auto Session
+ * Version: v6.0 — Location Dropdowns + Auto Session + Compact PDF
  * 
- * ✅ Supports:
- *    - HSC-General (Science/Business/Humanities)
- *    - HSC-BM / BMT (CAS/DTB/HRD)
- * 
- * ✅ Changes in v6.0:
+ * ✅ Features:
+ *    - HSC-General + HSC-BM support
  *    - Division → District → Upazila cascade dropdowns
- *    - Uses window.FDC_BD_LOCATIONS
- *    - group_name column-এ সব group/trade save হয়
- *    - admin_notes-এ trade string আর রাখা হয় না
- *    - Session auto-derive from Admission Date
- *    - Dropdown auto-populate (current + last 3 years)
- *    - Override allowed (Student can change)
+ *    - Auto Session (with override)
+ *    - Auto Image Compression (600px, 75%)
+ *    - Cloudinary Upload
+ *    - Preview before submit
+ *    - Auto Application ID
+ *    - PDF Download (single-page, photo top-right)
+ *    - Draft auto-save
  * =========================================================
  */
 
@@ -782,9 +780,9 @@
     }
 
     // =========================================================
-    // PDF GENERATION
+    // PDF GENERATION (COMPACT — Single Page)
     // =========================================================
-    function downloadPdf() {
+    async function downloadPdf() {
         try {
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
@@ -797,119 +795,196 @@
 
             const { formData, applicationId } = submission;
 
+            // ============ HEADER (0-26mm) ============
             doc.setFillColor(10, 22, 85);
-            doc.rect(0, 0, 210, 32, 'F');
+            doc.rect(0, 0, 210, 26, 'F');
+
+            doc.setFillColor(212, 175, 55);
+            doc.rect(0, 26, 210, 1.2, 'F');
 
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(20);
+            doc.setFontSize(18);
             doc.setFont('helvetica', 'bold');
-            doc.text('Fulbariya College', 105, 12, { align: 'center' });
+            doc.text('FULBARIYA COLLEGE', 105, 10, { align: 'center' });
+
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Fulbariya, Mymensingh', 105, 16, { align: 'center' });
 
             doc.setFontSize(11);
-            doc.setFont('helvetica', 'normal');
-            doc.text('Fulbariya, Mymensingh', 105, 19, { align: 'center' });
-
-            doc.setFontSize(13);
             doc.setFont('helvetica', 'bold');
-            doc.text('ADMISSION APPLICATION', 105, 27, { align: 'center' });
+            doc.text('ADMISSION APPLICATION', 105, 23, { align: 'center' });
 
+            // ============ APPLICATION ID + PHOTO (28-51mm) ============
             doc.setFillColor(239, 246, 255);
-            doc.rect(15, 40, 180, 16, 'F');
+            doc.rect(15, 29, 135, 22, 'F');
             doc.setDrawColor(59, 130, 246);
-            doc.setLineWidth(0.5);
-            doc.rect(15, 40, 180, 16);
+            doc.setLineWidth(0.4);
+            doc.rect(15, 29, 135, 22);
 
             doc.setTextColor(10, 22, 85);
-            doc.setFontSize(10);
+            doc.setFontSize(8);
             doc.setFont('helvetica', 'bold');
-            doc.text('Application ID:', 20, 46);
+            doc.text('Application ID:', 18, 35);
             doc.setTextColor(220, 38, 38);
             doc.setFontSize(13);
-            doc.text(applicationId, 20, 53);
+            doc.text(applicationId, 18, 43);
 
             doc.setTextColor(107, 114, 128);
-            doc.setFontSize(8);
+            doc.setFontSize(7);
             doc.setFont('helvetica', 'normal');
-            doc.text('Submitted: ' + new Date().toLocaleString('en-GB'), 195, 53, { align: 'right' });
+            doc.text('Submitted: ' + new Date().toLocaleString('en-GB'), 18, 49);
 
-            let y = 66;
+            // PHOTO (top-right corner)
+            if (formData.photo_url) {
+                try {
+                    const img = await fetch(formData.photo_url);
+                    const blob = await img.blob();
+                    const reader = new FileReader();
+                    const base64 = await new Promise((resolve, reject) => {
+                        reader.onload = () => resolve(reader.result);
+                        reader.onerror = reject;
+                        reader.readAsDataURL(blob);
+                    });
+                    doc.setDrawColor(10, 22, 85);
+                    doc.setLineWidth(0.5);
+                    doc.rect(155, 29, 40, 32);
+                    doc.addImage(base64, 'JPEG', 155.5, 29.5, 39, 31);
+                } catch (e) {
+                    console.warn('Photo embed failed:', e);
+                    doc.setDrawColor(200, 200, 200);
+                    doc.setLineWidth(0.3);
+                    doc.rect(155, 29, 40, 32);
+                    doc.setTextColor(150, 150, 150);
+                    doc.setFontSize(8);
+                    doc.text('No Photo', 175, 46, { align: 'center' });
+                }
+            } else {
+                doc.setDrawColor(200, 200, 200);
+                doc.setLineWidth(0.3);
+                doc.rect(155, 29, 40, 32);
+                doc.setTextColor(150, 150, 150);
+                doc.setFontSize(8);
+                doc.text('No Photo', 175, 46, { align: 'center' });
+            }
+
+            // ============ HELPERS ============
+            let y = 55;
 
             function addSection(title) {
-                if (y > 265) { doc.addPage(); y = 20; }
                 doc.setFillColor(6, 182, 212);
-                doc.rect(15, y, 180, 8, 'F');
+                doc.rect(15, y, 180, 6, 'F');
                 doc.setTextColor(255, 255, 255);
-                doc.setFontSize(11);
+                doc.setFontSize(9);
                 doc.setFont('helvetica', 'bold');
-                doc.text(title, 18, y + 5.5);
-                y += 12;
+                doc.text(title, 18, y + 4.2);
+                y += 8;
             }
 
             function addField(label, value, xPos) {
                 doc.setTextColor(107, 114, 128);
-                doc.setFontSize(8);
+                doc.setFontSize(7);
                 doc.setFont('helvetica', 'normal');
                 doc.text(label, xPos, y);
                 doc.setTextColor(31, 41, 55);
-                doc.setFontSize(10);
+                doc.setFontSize(9);
                 doc.setFont('helvetica', 'bold');
                 const val = value ? String(value) : '—';
-                doc.text(val.substring(0, 40), xPos, y + 5);
+                doc.text(val.substring(0, 38), xPos, y + 4);
             }
 
             function addRow(field1, val1, field2, val2) {
-                if (y > 275) { doc.addPage(); y = 20; }
                 addField(field1, val1, 18);
                 if (field2) addField(field2, val2, 108);
-                y += 11;
+                y += 8.5;
             }
 
-            addSection('Student Information');
+            // STUDENT INFORMATION
+            addSection('STUDENT INFORMATION');
             addRow('Name (English)', formData.name_en, 'Name (Bangla)', formData.name_bn);
             addRow('Gender', formData.gender, 'Phone', formData.phone);
             addRow('Email', formData.email, 'Birth Date', formData.birth_date);
             addRow('Religion', formData.religion, 'Blood Group', formData.blood_group);
             addRow('UID', formData.uid_number, 'NID', formData.nid_number);
-            y += 3;
+            y += 1;
 
-            addSection('Address');
+            // ADDRESS
+            addSection('ADDRESS');
             addRow('Village', formData.village, 'Union', formData.union_name);
             addRow('Post Office', formData.post_office, 'Post Code', formData.post_code);
             addRow('Division', formData.division, 'District', formData.district);
             addRow('Upazila', formData.upazila, '', '');
-            y += 3;
+            y += 1;
 
-            addSection('Parent Information');
+            // PARENT INFORMATION
+            addSection('PARENT INFORMATION');
             addRow("Father's Name (EN)", formData.father_name_en, "Father's Name (BN)", formData.father_name_bn);
             addRow("Mother's Name (EN)", formData.mother_name_en, "Mother's Name (BN)", formData.mother_name_bn);
             addRow("Father's Phone", formData.father_phone, "Mother's Phone", formData.mother_phone);
-            y += 3;
+            if (formData.guardian_name) {
+                addRow('Guardian', formData.guardian_name, 'Guardian Phone', formData.guardian_phone);
+            }
+            y += 1;
 
-            addSection('Admission Information');
+            // ADMISSION INFORMATION
+            addSection('ADMISSION INFORMATION');
             addRow('Admission Date', formData.admission_date, 'Session', formData.admission_session);
             addRow('Class', formData.class_name, 'Branch', formData.branch);
+
             let gLabel = 'Group';
             let gValue = formData.group_name;
             if (formData.branch === 'BM') { gLabel = 'Trade'; gValue = formData.group_name || '—'; }
-            else if (formData.branch === 'Honours') { gLabel = 'Department'; gValue = formData.department; }
             addRow(gLabel, gValue, '4th Subject', formData.optional_subject);
-            y += 3;
 
-            addSection('Previous Exam Result');
+            if (formData.compulsory_subjects && formData.compulsory_subjects.length > 0) {
+                doc.setTextColor(107, 114, 128);
+                doc.setFontSize(7);
+                doc.setFont('helvetica', 'normal');
+                doc.text('Subjects:', 18, y);
+                y += 4;
+
+                const subjectsText = formData.compulsory_subjects.join(' · ');
+                doc.setTextColor(31, 41, 55);
+                doc.setFontSize(8);
+                doc.setFont('helvetica', 'bold');
+                const lines = doc.splitTextToSize(subjectsText, 175);
+                doc.text(lines, 18, y);
+                y += lines.length * 3.5 + 1;
+            }
+            y += 1;
+
+            // PREVIOUS EXAM RESULT
+            addSection('PREVIOUS EXAM RESULT');
             addRow('Exam Name', formData.prev_exam_name, 'School', formData.prev_school_name);
             addRow('Result', formData.prev_result, 'Passing Year', formData.prev_passing_year);
             addRow('Board', formData.prev_board, 'Roll No', formData.prev_roll_no);
+            y += 3;
 
-            const totalPages = doc.getNumberOfPages();
-            for (let i = 1; i <= totalPages; i++) {
-                doc.setPage(i);
-                doc.setFillColor(31, 41, 55);
-                doc.rect(0, 287, 210, 10, 'F');
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(8);
-                doc.setFont('helvetica', 'normal');
-                doc.text(`Fulbariya College | Application ID: ${applicationId}`, 105, 293, { align: 'center' });
-            }
+            // STATUS BOX
+            doc.setFillColor(254, 243, 199);
+            doc.rect(70, y, 70, 12, 'F');
+            doc.setDrawColor(217, 119, 6);
+            doc.setLineWidth(0.5);
+            doc.rect(70, y, 70, 12);
+
+            doc.setTextColor(146, 64, 14);
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.text('STATUS', 105, y + 4.5, { align: 'center' });
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('PENDING', 105, y + 10, { align: 'center' });
+
+            // FOOTER
+            doc.setFillColor(31, 41, 55);
+            doc.rect(0, 287, 210, 10, 'F');
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(7.5);
+            doc.setFont('helvetica', 'normal');
+            doc.text(
+                `Fulbariya College | Application ID: ${applicationId}`,
+                105, 293, { align: 'center' }
+            );
 
             doc.save(`Admission_${applicationId}.pdf`);
             console.log('✅ PDF downloaded');
