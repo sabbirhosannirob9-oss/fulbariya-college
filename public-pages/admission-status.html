@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Application Status | ফুলবাড়ীয়া কলেজ</title>
+<meta name="description" content="ফুলবাড়ীয়া কলেজ - ভর্তি আবেদনের অবস্থা জানুন">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --border: #e5e7eb;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --info: #3b82f6;
+    --shadow-sm: 0 2px 10px rgba(10,22,85,0.06);
+    --shadow-md: 0 8px 30px rgba(10,22,85,0.10);
+    --shadow-lg: 0 20px 60px rgba(10,22,85,0.15);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
+
+/* ============ HEADER ============ */
+.college-header {
+    background: linear-gradient(135deg, #0a6b3d, #0d8a4f);
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.college-header .ch-logo {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    padding: 4px;
+    border: 2px solid #f2d27b;
+}
+.college-header .ch-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.college-header .ch-info { flex: 1; min-width: 0; }
+.college-header .ch-name-bn { font-size: 17px; font-weight: 700; margin: 0; line-height: 1.2; }
+.college-header .ch-name-en { font-size: 11px; opacity: 0.9; margin: 2px 0 0; letter-spacing: 1px; text-transform: uppercase; }
+.college-header .ch-eiin { font-size: 10px; opacity: 0.85; margin: 2px 0 0; }
+
+/* ============ PAGE TITLE ============ */
+.page-title-bar {
+    background: #fff;
+    padding: 16px 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.page-title-bar h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+}
+
+/* ============ HERO ============ */
+.page-hero {
+    background: linear-gradient(135deg, #0a1655, #1a237e);
+    color: #fff;
+    padding: 40px 20px 70px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+.page-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(242,210,123,0.15), transparent 65%);
+    border-radius: 50%;
+}
+.page-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.page-hero .hero-content { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; }
+.hero-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 20px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(242,210,123,0.3);
+    animation: iconFloat 3s ease-in-out infinite;
+}
+@keyframes iconFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-6px); }
+}
+.page-hero h1 {
+    font-size: clamp(24px, 5vw, 34px);
+    font-weight: 700;
+    margin-bottom: 10px;
+    font-family: 'Playfair Display', serif;
+}
+.page-hero h1 span { color: var(--gold); }
+.page-hero p { font-size: 14px; opacity: 0.9; margin: 0; }
+
+/* ============ MAIN ============ */
+.main-wrap {
+    max-width: 800px;
+    margin: -40px auto 60px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 2;
+}
+
+/* ============ SEARCH CARD ============ */
+.search-card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 30px 28px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+}
+.search-card h3 {
+    font-size: 17px;
+    color: var(--navy);
+    margin: 0 0 6px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.search-card h3 i { color: var(--gold-dark); }
+.search-card .sub {
+    font-size: 12.5px;
+    color: var(--grey);
+    margin: 0 0 22px;
+}
+
+.form-group { margin-bottom: 18px; }
+.form-group label {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 6px;
+}
+.form-group label .req { color: var(--danger); margin-left: 3px; }
+.form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fafbff;
+    outline: none;
+    transition: 0.2s;
+    color: var(--dark);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.form-group input:focus {
+    border-color: var(--navy);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+}
+.form-group input::placeholder {
+    text-transform: none;
+    letter-spacing: 0;
+    color: #9ca3af;
+}
+.form-group input.error {
+    border-color: var(--danger);
+    background: #fef2f2;
+}
+.form-group .hint {
+    font-size: 11.5px;
+    color: var(--grey);
+    margin-top: 4px;
+}
+
+.btn-search {
+    width: 100%;
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    color: #fff;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-family: inherit;
+}
+.btn-search:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+}
+.btn-search:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ============ ERROR ALERT ============ */
+.error-alert {
+    background: #fef2f2;
+    border-left: 4px solid var(--danger);
+    color: #991b1b;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    margin-top: 20px;
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.6;
+}
+.error-alert.show { display: flex; }
+.error-alert i { font-size: 18px; margin-top: 1px; flex-shrink: 0; }
+
+/* ============ LOADING ============ */
+.loading-inline {
+    text-align: center;
+    padding: 40px 20px;
+    display: none;
+}
+.loading-inline.show { display: block; }
+.loading-inline .spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 14px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-inline p { font-size: 13.5px; color: var(--grey); margin: 0; }
+
+/* ============ RESULT CARD ============ */
+.result-card {
+    background: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    margin-top: 24px;
+    display: none;
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.result-card.show { display: block; }
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.result-header {
+    padding: 25px 28px;
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.result-header.pending {
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+}
+.result-header.verified {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+}
+.result-header.admitted {
+    background: linear-gradient(135deg, #10b981, #059669);
+}
+.result-header.cancelled {
+    background: linear-gradient(135deg, #6b7280, #4b5563);
+}
+.result-header::after {
+    content: '';
+    position: absolute;
+    top: -50%; right: -10%;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+    border-radius: 50%;
+}
+.result-header .rh-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.result-header .rh-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.3);
+}
+.result-header .rh-info { flex: 1; min-width: 0; }
+.result-header .rh-status {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.9;
+    margin-bottom: 4px;
+}
+.result-header h2 {
+    font-size: 20px;
+    margin: 0 0 4px;
+    font-weight: 700;
+}
+.result-header .rh-appid {
+    font-size: 13px;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 1px;
+    opacity: 0.95;
+}
+
+/* ============ RESULT BODY ============ */
+.result-body { padding: 25px 28px; }
+
+.result-section {
+    margin-bottom: 20px;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 18px;
+}
+.result-section:last-child { margin-bottom: 0; border-bottom: none; padding-bottom: 0; }
+
+.result-section h4 {
+    font-size: 13px;
+    color: var(--navy);
+    margin: 0 0 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.result-section h4 i { color: var(--gold-dark); }
+
+.result-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+@media (max-width: 600px) {
+    .result-grid { grid-template-columns: 1fr; }
+}
+
+.result-field { min-width: 0; }
+.result-field .rf-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+.result-field .rf-value {
+    font-size: 14px;
+    color: var(--dark);
+    font-weight: 600;
+    word-break: break-word;
+}
+
+/* ============ STATUS MESSAGE BOXES ============ */
+.status-message-box {
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.status-message-box.pending-box {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 2px solid #f59e0b;
+}
+.status-message-box.verified-box {
+    background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+    border: 2px solid #3b82f6;
+}
+.status-message-box.admitted-box {
+    background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+    border: 2px solid #10b981;
+}
+.status-message-box.cancelled-box {
+    background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    border: 2px solid #6b7280;
+}
+
+.status-message-box .smb-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+.status-message-box.pending-box .smb-icon { color: #d97706; }
+.status-message-box.verified-box .smb-icon { color: #2563eb; }
+.status-message-box.admitted-box .smb-icon { color: #059669; }
+.status-message-box.cancelled-box .smb-icon { color: #6b7280; }
+
+.status-message-box .smb-content { flex: 1; min-width: 0; }
+.status-message-box .smb-content h3 {
+    font-size: 16px;
+    margin: 0 0 8px;
+    font-weight: 700;
+}
+.status-message-box.pending-box h3 { color: #92400e; }
+.status-message-box.verified-box h3 { color: #1e40af; }
+.status-message-box.admitted-box h3 { color: #065f46; }
+.status-message-box.cancelled-box h3 { color: #374151; }
+
+.status-message-box .smb-content p {
+    font-size: 13.5px;
+    color: var(--dark);
+    margin: 0;
+    line-height: 1.7;
+}
+
+.status-message-box .smb-checklist {
+    background: rgba(255,255,255,0.6);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-top: 12px;
+    font-size: 13px;
+}
+.status-message-box .smb-checklist strong {
+    display: block;
+    margin-bottom: 6px;
+    color: #1e40af;
+}
+.status-message-box .smb-checklist ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+.status-message-box .smb-checklist ul li {
+    padding: 3px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+}
+.status-message-box .smb-checklist ul li::before {
+    content: '✓';
+    color: #10b981;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.status-message-box .smb-highlight {
+    background: rgba(255,255,255,0.7);
+    border-radius: 10px;
+    padding: 14px 18px;
+    margin-top: 12px;
+    text-align: center;
+}
+.status-message-box .smb-highlight .smbh-label {
+    font-size: 11px;
+    color: #065f46;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+.status-message-box .smb-highlight .smbh-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #065f46;
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 2px;
+}
+
+.status-message-box .smb-contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+    font-size: 12.5px;
+    color: var(--grey);
+}
+.status-message-box .smb-contact div {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.status-message-box .smb-contact i { color: var(--gold-dark); }
+
+@media (max-width: 600px) {
+    .status-message-box {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .status-message-box .smb-checklist ul li { justify-content: center; }
+    .status-message-box .smb-contact { justify-content: center; }
+}
+
+/* ============ TIMELINE ============ */
+.timeline { padding: 10px 0; }
+.timeline-item {
+    display: flex;
+    gap: 14px;
+    padding: 12px 0;
+    position: relative;
+}
+.timeline-item:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    left: 17px;
+    top: 42px;
+    bottom: -12px;
+    width: 2px;
+    background: var(--border);
+}
+.timeline-item.done::before {
+    background: var(--success);
+}
+.timeline-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #f3f4f6;
+    color: var(--grey);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+}
+.timeline-item.done .timeline-icon {
+    background: var(--success);
+    color: #fff;
+}
+.timeline-content { flex: 1; min-width: 0; padding-top: 4px; }
+.timeline-content h5 {
+    font-size: 13.5px;
+    color: var(--navy);
+    margin: 0 0 2px;
+    font-weight: 700;
+}
+.timeline-content p {
+    font-size: 12px;
+    color: var(--grey);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ============ ACTIONS ============ */
+.result-actions {
+    padding: 18px 28px 25px;
+    border-top: 1px solid var(--border);
+    background: #fafbff;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+.result-actions button,
+.result-actions a {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+    font-family: inherit;
+}
+.btn-download-pdf {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+}
+.btn-new-search {
+    background: #fff;
+    color: var(--dark);
+    border: 1.5px solid var(--border) !important;
+}
+.btn-home {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+}
+.result-actions button:hover,
+.result-actions a:hover {
+    transform: translateY(-2px);
+}
+
+/* ============ INFO BOX ============ */
+.info-box {
+    background: #eff6ff;
+    border-left: 4px solid #3b82f6;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 13px;
+    color: #1e40af;
+    margin-top: 20px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    line-height: 1.6;
+}
+.info-box i { font-size: 18px; margin-top: 1px; flex-shrink: 0; }
+.info-box strong { color: #1e3a8a; }
+
+/* ============ FOOTER ============ */
+.form-footer {
+    background: #1f2937;
+    color: rgba(255,255,255,0.85);
+    padding: 20px;
+    text-align: center;
+    font-size: 12.5px;
+    line-height: 1.7;
+    margin-top: 40px;
+}
+.form-footer .footer-link { color: var(--gold); text-decoration: none; }
+.form-footer .footer-link:hover { text-decoration: underline; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 640px) {
+    .college-header { padding: 10px 14px; gap: 10px; }
+    .college-header .ch-logo { width: 45px; height: 45px; }
+    .college-header .ch-name-bn { font-size: 15px; }
+    .college-header .ch-name-en { font-size: 10px; }
+    .page-hero { padding: 30px 16px 60px; }
+    .hero-icon { width: 55px; height: 55px; font-size: 24px; }
+    .page-hero h1 { font-size: 22px; }
+    .main-wrap { padding: 0 14px; margin-top: -30px; }
+    .search-card { padding: 22px 20px; }
+    .result-header { padding: 20px; }
+    .result-header .rh-icon { width: 50px; height: 50px; font-size: 22px; }
+    .result-header h2 { font-size: 17px; }
+    .result-body { padding: 20px; }
+    .result-actions { padding: 15px 20px 20px; flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="college-header">
+    <div class="ch-logo">
+        <img src="../../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-graduation-cap\' style=\'font-size:24px;color:#0a6b3d;\'></i>';">
+    </div>
+    <div class="ch-info">
+        <h1 class="ch-name-bn">ফুলবাড়ীয়া কলেজ</h1>
+        <p class="ch-name-en">Fulbariya College, Mymensingh</p>
+        <p class="ch-eiin">EIIN: XXXXXX</p>
+    </div>
+</div>
+
+<!-- HERO -->
+<section class="page-hero">
+    <div class="hero-content">
+        <div class="hero-icon"><i class="fas fa-search"></i></div>
+        <h1>আবেদনের <span>অবস্থা জানুন</span></h1>
+        <p>Application ID এবং Phone নম্বর দিয়ে আপনার আবেদনের বর্তমান অবস্থা চেক করুন</p>
+    </div>
+</section>
+
+<!-- MAIN -->
+<div class="main-wrap">
+
+    <!-- SEARCH CARD -->
+    <div class="search-card">
+        <h3><i class="fas fa-key"></i> আপনার তথ্য দিন</h3>
+        <p class="sub">আবেদনের সময় দেওয়া তথ্যগুলো সঠিকভাবে পূরণ করুন</p>
+
+        <div class="form-group">
+            <label>Application ID <span class="req">*</span></label>
+            <input type="text" id="inputAppId" placeholder="যেমন: FDC-2026-HSC-0001" autocomplete="off">
+            <div class="hint">আবেদনের সময় যে Application ID পেয়েছিলেন সেটা লিখুন</div>
+        </div>
+
+        <div class="form-group">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" id="inputPhone" placeholder="01XXXXXXXXX" maxlength="11" autocomplete="off">
+            <div class="hint">আবেদনে দেওয়া মোবাইল নম্বর</div>
+        </div>
+
+        <button class="btn-search" id="btnSearch">
+            <i class="fas fa-search"></i> আবেদনের অবস্থা দেখুন
+        </button>
+
+        <div class="error-alert" id="errorAlert">
+            <i class="fas fa-exclamation-triangle"></i>
+            <div id="errorText"></div>
+        </div>
+    </div>
+
+    <!-- LOADING -->
+    <div class="loading-inline" id="loadingInline">
+        <div class="spinner"></div>
+        <p>খোঁজা হচ্ছে...</p>
+    </div>
+
+    <!-- RESULT CARD -->
+    <div class="result-card" id="resultCard">
+        <div class="result-header" id="resultHeader">
+            <div class="rh-content">
+                <div class="rh-icon" id="rhIcon"><i class="fas fa-hourglass-half"></i></div>
+                <div class="rh-info">
+                    <div class="rh-status" id="rhStatus">PENDING</div>
+                    <h2 id="rhTitle">আবেদন যাচাই করা হচ্ছে</h2>
+                    <div class="rh-appid" id="rhAppId">FDC-2026-HSC-0001</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="result-body" id="resultBody">
+            <!-- Dynamic -->
+        </div>
+
+        <div class="result-actions" id="resultActions">
+            <!-- Dynamic -->
+        </div>
+    </div>
+
+    <!-- INFO BOX -->
+    <div class="info-box">
+        <i class="fas fa-info-circle"></i>
+        <div>
+            <strong>সমস্যা হচ্ছে?</strong> যদি Application ID বা Phone নম্বর ভুলে যান, 
+            কলেজ অফিসে যোগাযোগ করুন: <strong>০৮৭২০৫০৫৬৮</strong>
+        </div>
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="form-footer">
+    © <span id="year"></span> <strong>ফুলবাড়ীয়া কলেজ</strong>, ফুলবাড়ীয়া, ময়মনসিংহ<br>
+    Online Admission System · Developed by <span class="footer-link">FDC IT Team</span>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/supabase.js"></script>
+<script src="../../js/admission-status.js?v=2"></script>
+
+</body>
+</html>

@@ -1,0 +1,1203 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admission Form (HSC-General) | ফুলবাড়ীয়া কলেজ</title>
+<meta name="description" content="ফুলবাড়ীয়া কলেজ - HSC-General ভর্তি আবেদন ফরম">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --navy-3: #0d47a1;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --border: #e5e7eb;
+    --success: #10b981;
+    --danger: #ef4444;
+    --shadow-sm: 0 2px 10px rgba(10,22,85,0.06);
+    --shadow-md: 0 8px 30px rgba(10,22,85,0.10);
+    --shadow-lg: 0 20px 60px rgba(10,22,85,0.15);
+}
+
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
+
+/* ============ COLLEGE HEADER ============ */
+.college-header {
+    background: linear-gradient(135deg, #0a6b3d, #0d8a4f);
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.college-header .ch-logo {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+    padding: 4px;
+    border: 2px solid #f2d27b;
+}
+.college-header .ch-logo img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+.college-header .ch-info { flex: 1; min-width: 0; }
+.college-header .ch-name-bn {
+    font-size: 17px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.2;
+}
+.college-header .ch-name-en {
+    font-size: 11px;
+    opacity: 0.9;
+    margin: 2px 0 0;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.college-header .ch-eiin {
+    font-size: 10px;
+    opacity: 0.85;
+    margin: 2px 0 0;
+}
+
+/* ============ PAGE TITLE ============ */
+.page-title-bar {
+    background: #fff;
+    padding: 16px 20px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.page-title-bar h1 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+}
+
+/* ============ MAIN CONTAINER ============ */
+.form-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 15px 80px;
+}
+
+/* ============ SECTION ============ */
+.form-section {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+}
+
+.section-header {
+    background: linear-gradient(90deg, #06b6d4, #0891b2);
+    color: #fff;
+    padding: 14px 20px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.section-header.navy {
+    background: linear-gradient(90deg, var(--navy), var(--navy-2));
+}
+
+/* ============ FORM FIELDS ============ */
+.section-body {
+    padding: 20px 22px;
+}
+
+.form-group {
+    margin-bottom: 18px;
+}
+.form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark);
+    margin-bottom: 6px;
+}
+.form-group label .req {
+    color: var(--danger);
+    margin-left: 3px;
+}
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fafbff;
+    outline: none;
+    transition: 0.2s;
+    color: var(--dark);
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: var(--navy);
+    background: #fff;
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.06);
+}
+.form-group input::placeholder { color: #9ca3af; }
+.form-group input.error,
+.form-group select.error {
+    border-color: var(--danger);
+    background: #fef2f2;
+}
+
+.form-group .error-msg {
+    color: var(--danger);
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
+.form-group .error-msg.show { display: block; }
+
+.form-group .hint {
+    color: var(--grey);
+    font-size: 11.5px;
+    margin-top: 4px;
+}
+
+/* File input */
+.file-input-wrap {
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    background: #fafbff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.file-input-wrap:hover {
+    border-color: var(--navy);
+    background: #f5f7ff;
+}
+.file-input-wrap input[type="file"] { display: none; }
+.file-input-wrap .file-btn {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.file-input-wrap .file-name {
+    color: var(--grey);
+    font-size: 13px;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Photo preview */
+.photo-preview {
+    margin-top: 10px;
+    text-align: center;
+}
+.photo-preview img {
+    max-width: 120px;
+    max-height: 120px;
+    border-radius: 8px;
+    border: 2px solid var(--border);
+    object-fit: cover;
+}
+
+/* Rows */
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+.form-row-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+@media (max-width: 640px) {
+    .form-row, .form-row-3 { grid-template-columns: 1fr; }
+}
+
+/* Subject locked */
+.subject-locked {
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #166534;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.subject-locked i { color: #16a34a; }
+
+/* Submit */
+.submit-section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 25px 22px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    margin-top: 10px;
+}
+.submit-btn {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    color: #fff;
+    border: none;
+    padding: 14px 60px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 6px 20px rgba(6, 182, 212, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+}
+.submit-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Footer */
+.form-footer {
+    background: #1f2937;
+    color: rgba(255,255,255,0.85);
+    padding: 20px;
+    text-align: center;
+    font-size: 12.5px;
+    line-height: 1.7;
+    margin-top: 20px;
+}
+.form-footer .footer-link { color: var(--gold); text-decoration: none; }
+.form-footer .footer-link:hover { text-decoration: underline; }
+
+/* ============ LOADING OVERLAY ============ */
+.loading-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.85);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: #fff;
+}
+.loading-overlay.show { display: flex; }
+.loading-overlay .spinner {
+    width: 60px;
+    height: 60px;
+    border: 5px solid rgba(255,255,255,0.2);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 20px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-overlay h3 { font-size: 18px; margin: 0 0 8px; }
+.loading-overlay p { font-size: 14px; opacity: 0.85; margin: 0; }
+
+/* ============ PREVIEW MODAL ============ */
+.preview-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+.preview-modal-overlay.show { display: flex; }
+
+.preview-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 800px;
+    width: 100%;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    animation: modalPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.preview-header {
+    background: linear-gradient(135deg, #06b6d4, #0891b2);
+    color: #fff;
+    padding: 25px 30px;
+    border-radius: 20px 20px 0 0;
+    text-align: center;
+    flex-shrink: 0;
+}
+.preview-header .ph-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+.preview-header h2 {
+    font-size: 22px;
+    margin: 0 0 5px;
+    font-weight: 700;
+}
+.preview-header p {
+    font-size: 13px;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.preview-body {
+    padding: 25px 30px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.preview-section {
+    margin-bottom: 25px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+.preview-section:last-child { margin-bottom: 0; }
+
+.preview-section-title {
+    background: linear-gradient(90deg, #f0fdf4, #dcfce7);
+    color: #166534;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid #bbf7d0;
+}
+.preview-section-title i { color: #16a34a; }
+
+.preview-section-content {
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+@media (max-width: 600px) {
+    .preview-section-content { grid-template-columns: 1fr; }
+}
+
+.preview-field { min-width: 0; }
+.preview-field .pf-label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+.preview-field .pf-value {
+    font-size: 14px;
+    color: var(--dark);
+    font-weight: 600;
+    word-break: break-word;
+}
+
+.preview-photo {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding-top: 10px;
+}
+.preview-photo img {
+    max-width: 140px;
+    max-height: 140px;
+    border-radius: 12px;
+    border: 3px solid var(--border);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.preview-subjects {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    padding-top: 5px;
+}
+.preview-subject-tag {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #86efac;
+    padding: 4px 10px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.preview-footer {
+    padding: 18px 25px;
+    background: #fafbff;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    border-radius: 0 0 20px 20px;
+    flex-shrink: 0;
+}
+.preview-footer button {
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: inherit;
+}
+.btn-back {
+    background: #fff;
+    color: var(--dark);
+    border: 1.5px solid var(--border) !important;
+}
+.btn-back:hover {
+    border-color: var(--navy) !important;
+    background: #f5f7ff;
+}
+.btn-confirm {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+}
+.btn-confirm:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+}
+
+@media (max-width: 600px) {
+    .preview-modal { border-radius: 16px; }
+    .preview-header { padding: 20px; }
+    .preview-header h2 { font-size: 18px; }
+    .preview-body { padding: 18px; }
+    .preview-footer {
+        padding: 14px 18px;
+        flex-direction: column-reverse;
+    }
+    .preview-footer button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ============ SUCCESS MODAL ============ */
+.success-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.75);
+    backdrop-filter: blur(8px);
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+.success-modal-overlay.show { display: flex; }
+.success-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 0;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    animation: modalPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes modalPop {
+    from { opacity: 0; transform: scale(0.8) translateY(30px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.success-header {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    padding: 30px 25px;
+    text-align: center;
+    border-radius: 20px 20px 0 0;
+}
+.success-header .sh-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    margin-bottom: 12px;
+}
+.success-header h2 { font-size: 22px; margin: 0 0 6px; font-weight: 700; }
+.success-header p { font-size: 14px; margin: 0; opacity: 0.9; }
+.success-body { padding: 25px; text-align: center; }
+.app-id-box {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    border: 2px dashed #3b82f6;
+    border-radius: 12px;
+    padding: 18px;
+    margin: 15px 0;
+}
+.app-id-box .aid-label {
+    font-size: 11px;
+    color: #1e40af;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+.app-id-box .aid-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+    font-family: 'Playfair Display', serif;
+    letter-spacing: 1px;
+    word-break: break-all;
+}
+.app-id-box .aid-copy {
+    margin-top: 10px;
+    background: #3b82f6;
+    color: #fff;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+.app-id-box .aid-copy:hover { background: #2563eb; }
+.success-warning {
+    background: #fef3c7;
+    border-left: 4px solid #f59e0b;
+    padding: 12px 15px;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #92400e;
+    text-align: left;
+    margin: 15px 0;
+}
+.success-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+.success-actions button,
+.success-actions a {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+}
+.btn-download-pdf {
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+}
+.btn-check-status {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+}
+.btn-home {
+    background: #f3f4f6;
+    color: var(--dark);
+    border: 1.5px solid var(--border);
+}
+.success-actions button:hover,
+.success-actions a:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .college-header { padding: 10px 14px; gap: 10px; }
+    .college-header .ch-logo { width: 45px; height: 45px; }
+    .college-header .ch-name-bn { font-size: 15px; }
+    .college-header .ch-name-en { font-size: 10px; }
+    .page-title-bar { padding: 12px 14px; }
+    .page-title-bar h1 { font-size: 16px; }
+    .form-container { padding: 14px 10px 60px; }
+    .section-header { font-size: 16px; padding: 12px 16px; }
+    .section-body { padding: 16px 14px; }
+    .form-group label { font-size: 13px; }
+    .submit-btn { padding: 12px 40px; font-size: 15px; width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- COLLEGE HEADER -->
+<div class="college-header">
+    <div class="ch-logo">
+        <img src="../../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\'fas fa-graduation-cap\' style=\'font-size:24px;color:#0a6b3d;\'></i>';">
+    </div>
+    <div class="ch-info">
+        <h1 class="ch-name-bn">ফুলবাড়ীয়া কলেজ</h1>
+        <p class="ch-name-en">Fulbariya College, Mymensingh</p>
+        <p class="ch-eiin">EIIN: XXXXXX</p>
+    </div>
+</div>
+
+<!-- PAGE TITLE -->
+<div class="page-title-bar">
+    <h1>Admission Form (HSC-General)</h1>
+</div>
+
+<!-- MAIN FORM -->
+<div class="form-container">
+    <form id="admissionForm" enctype="multipart/form-data">
+
+        <!-- SECTION 1: Student Information -->
+        <div class="form-section">
+            <div class="section-header">Student Information</div>
+            <div class="section-body">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Student Name (in English) <span class="req">*</span></label>
+                        <input type="text" id="name_en" placeholder="Enter Student Name in English" autocomplete="off">
+                        <div class="error-msg" id="err_name_en">নাম দিন (English)</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Student Name (in Bangla) <span class="req">*</span></label>
+                        <input type="text" id="name_bn" placeholder="শিক্ষার্থীর নাম লিখুন (বাংলায়)" autocomplete="off">
+                        <div class="error-msg" id="err_name_bn">নাম দিন (বাংলা)</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Gender <span class="req">*</span></label>
+                        <select id="gender">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male (ছেলে)</option>
+                            <option value="Female">Female (মেয়ে)</option>
+                            <option value="Other">Other (অন্য)</option>
+                        </select>
+                        <div class="error-msg" id="err_gender">Gender সিলেক্ট করুন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone <span class="req">*</span></label>
+                        <input type="tel" id="phone" placeholder="01XXXXXXXXX" maxlength="11" autocomplete="off">
+                        <div class="error-msg" id="err_phone">সঠিক মোবাইল নম্বর দিন (১১ ডিজিট)</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="example@email.com" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Birth Date <span class="req">*</span></label>
+                        <input type="date" id="birth_date">
+                        <div class="error-msg" id="err_birth_date">জন্ম তারিখ দিন</div>
+                    </div>
+                </div>
+
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label>Religion <span class="req">*</span></label>
+                        <select id="religion">
+                            <option value="">Select Religion</option>
+                            <option value="Islam">Islam (ইসলাম)</option>
+                            <option value="Hinduism">Hinduism (হিন্দু)</option>
+                            <option value="Buddhism">Buddhism (বৌদ্ধ)</option>
+                            <option value="Christianity">Christianity (খ্রিস্টান)</option>
+                            <option value="Other">Other (অন্য)</option>
+                        </select>
+                        <div class="error-msg" id="err_religion">Religion সিলেক্ট করুন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Blood Group <span class="req">*</span></label>
+                        <select id="blood_group">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                        <div class="error-msg" id="err_blood_group">Blood Group সিলেক্ট করুন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Unique ID No <span class="req">*</span></label>
+                        <input type="text" id="uid_number" placeholder="Enter UID Number" autocomplete="off">
+                        <div class="error-msg" id="err_uid_number">UID দিন</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>National ID No <span class="req">*</span></label>
+                        <input type="text" id="nid_number" placeholder="Enter NID Number" autocomplete="off">
+                        <div class="error-msg" id="err_nid_number">NID দিন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Upload Image <span class="req">*</span></label>
+                        <label class="file-input-wrap" for="photo_input">
+                            <span class="file-btn">Choose File</span>
+                            <span class="file-name" id="photoFileName">No file chosen</span>
+                            <input type="file" id="photo_input" accept="image/jpeg,image/jpg,image/png,image/webp">
+                        </label>
+                        <div class="hint">যেকোনো সাইজ দিন — auto-compress হবে (max 600px)</div>
+                        <div class="error-msg" id="err_photo">ছবি আপলোড করুন</div>
+                        <div class="photo-preview" id="photoPreview"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 2: Address -->
+        <div class="form-section">
+            <div class="section-header">Address</div>
+            <div class="section-body">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Village <span class="req">*</span></label>
+                        <input type="text" id="village" placeholder="Enter Village" autocomplete="off">
+                        <div class="error-msg" id="err_village">গ্রামের নাম দিন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Union <span class="req">*</span></label>
+                        <input type="text" id="union_name" placeholder="Enter Union" autocomplete="off">
+                        <div class="error-msg" id="err_union_name">ইউনিয়নের নাম দিন</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Post Office <span class="req">*</span></label>
+                        <input type="text" id="post_office" placeholder="Enter Post Office" autocomplete="off">
+                        <div class="error-msg" id="err_post_office">পোস্ট অফিসের নাম দিন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Post Code <span class="req">*</span></label>
+                        <input type="text" id="post_code" placeholder="Enter Post Code" maxlength="4" autocomplete="off">
+                        <div class="error-msg" id="err_post_code">পোস্ট কোড দিন</div>
+                    </div>
+                </div>
+
+                <div class="form-row-3">
+                    <div class="form-group">
+                        <label>Division <span class="req">*</span></label>
+                        <select id="division">
+                            <option value="">Select Division</option>
+                            <option value="Dhaka">Dhaka</option>
+                            <option value="Chattogram">Chattogram</option>
+                            <option value="Rajshahi">Rajshahi</option>
+                            <option value="Khulna">Khulna</option>
+                            <option value="Barishal">Barishal</option>
+                            <option value="Sylhet">Sylhet</option>
+                            <option value="Rangpur">Rangpur</option>
+                            <option value="Mymensingh">Mymensingh</option>
+                        </select>
+                        <div class="error-msg" id="err_division">Division সিলেক্ট করুন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>District <span class="req">*</span></label>
+                        <input type="text" id="district" placeholder="Enter District" autocomplete="off">
+                        <div class="error-msg" id="err_district">District দিন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Upazila <span class="req">*</span></label>
+                        <input type="text" id="upazila" placeholder="Enter Upazila" autocomplete="off">
+                        <div class="error-msg" id="err_upazila">Upazila দিন</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: Parent Information -->
+        <div class="form-section">
+            <div class="section-header">Parent Information</div>
+            <div class="section-body">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Father's Name in English <span class="req">*</span></label>
+                        <input type="text" id="father_name_en" placeholder="Enter Father Name" autocomplete="off">
+                        <div class="error-msg" id="err_father_name_en">বাবার নাম দিন (English)</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Father's Name in Bangla <span class="req">*</span></label>
+                        <input type="text" id="father_name_bn" placeholder="পিতার নাম লিখুন (বাংলায়)" autocomplete="off">
+                        <div class="error-msg" id="err_father_name_bn">বাবার নাম দিন (বাংলা)</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Mother's Name in English <span class="req">*</span></label>
+                        <input type="text" id="mother_name_en" placeholder="Enter Mother Name" autocomplete="off">
+                        <div class="error-msg" id="err_mother_name_en">মায়ের নাম দিন (English)</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Mother's Name in Bangla <span class="req">*</span></label>
+                        <input type="text" id="mother_name_bn" placeholder="মাতার নাম লিখুন (বাংলায়)" autocomplete="off">
+                        <div class="error-msg" id="err_mother_name_bn">মায়ের নাম দিন (বাংলা)</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Father's Phone <span class="req">*</span></label>
+                        <input type="tel" id="father_phone" placeholder="01XXXXXXXXX" maxlength="11" autocomplete="off">
+                        <div class="error-msg" id="err_father_phone">বাবার মোবাইল নম্বর দিন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Mother's Phone <span class="req">*</span></label>
+                        <input type="tel" id="mother_phone" placeholder="01XXXXXXXXX" maxlength="11" autocomplete="off">
+                        <div class="error-msg" id="err_mother_phone">মায়ের মোবাইল নম্বর দিন</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Father's Occupation</label>
+                        <input type="text" id="father_occupation" placeholder="Enter Father Occupation" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Mother's Occupation</label>
+                        <input type="text" id="mother_occupation" placeholder="Enter Mother Occupation" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Father's NID</label>
+                        <input type="text" id="father_nid" placeholder="Enter Father NID" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Mother's NID</label>
+                        <input type="text" id="mother_nid" placeholder="Enter Mother NID" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name of Guardian</label>
+                        <input type="text" id="guardian_name" placeholder="Name of Guardian (if applicable)" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>Relation of Guardian</label>
+                        <input type="text" id="guardian_relation" placeholder="Relation (e.g., Uncle, Brother)" autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number of Guardian</label>
+                    <input type="tel" id="guardian_phone" placeholder="01XXXXXXXXX" maxlength="11" autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 4: Admission Information -->
+        <div class="form-section">
+            <div class="section-header">Admission Information</div>
+            <div class="section-body">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Admission Date <span class="req">*</span></label>
+                        <input type="date" id="admission_date">
+                        <div class="error-msg" id="err_admission_date">ভর্তির তারিখ দিন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Admission Session <span class="req">*</span></label>
+                        <select id="admission_session">
+                            <option value="">Select Session</option>
+                            <option value="2024-2025">2024-2025</option>
+                            <option value="2025-2026">2025-2026</option>
+                            <option value="2026-2027">2026-2027</option>
+                        </select>
+                        <div class="error-msg" id="err_admission_session">Session সিলেক্ট করুন</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Admission Form No</label>
+                    <input type="text" id="admission_form_no" placeholder="Auto-generated" readonly style="background:#f0f4f8;font-weight:700;color:var(--navy);">
+                    <div class="hint">Form submit করলে অটো তৈরি হবে</div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Class <span class="req">*</span></label>
+                        <input type="text" id="class_name" value="HSC" readonly style="background:#f0f4f8;font-weight:700;color:var(--navy);">
+                    </div>
+                    <div class="form-group">
+                        <label>Group <span class="req">*</span></label>
+                        <select id="group_name">
+                            <option value="">Select Group</option>
+                            <option value="Science">Science (বিজ্ঞান)</option>
+                            <option value="Business">Business (ব্যবসায় শিক্ষা)</option>
+                            <option value="Humanities">Humanities (মানবিক)</option>
+                        </select>
+                        <div class="error-msg" id="err_group_name">Group সিলেক্ট করুন</div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Compulsory Subjects (Auto)</label>
+                    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;">
+                        <div class="subject-locked"><i class="fas fa-lock"></i> বাংলা</div>
+                        <div class="subject-locked"><i class="fas fa-lock"></i> English</div>
+                        <div class="subject-locked"><i class="fas fa-lock"></i> ICT</div>
+                    </div>
+                </div>
+
+                <div id="groupSubjectsWrap" style="display:none;">
+                    <div class="form-group">
+                        <label>Group Subjects (Auto)</label>
+                        <div id="groupSubjectsList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;"></div>
+                    </div>
+                </div>
+
+                <div id="fourthSubjectWrap" style="display:none;">
+                    <div class="form-group">
+                        <label>4th Subject (Optional) <span class="req">*</span></label>
+                        <select id="optional_subject">
+                            <option value="">Select 4th Subject</option>
+                        </select>
+                        <div class="error-msg" id="err_optional_subject">4th Subject সিলেক্ট করুন</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 5: Previous Exam Result -->
+        <div class="form-section">
+            <div class="section-header">Previous Exam Result</div>
+            <div class="section-body">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Name of Exam <span class="req">*</span></label>
+                        <input type="text" id="prev_exam_name" placeholder="e.g., SSC, Dakhil" autocomplete="off">
+                        <div class="error-msg" id="err_prev_exam_name">পরীক্ষার নাম দিন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Previous School Name <span class="req">*</span></label>
+                        <input type="text" id="prev_school_name" placeholder="Enter Your Previous School Name" autocomplete="off">
+                        <div class="error-msg" id="err_prev_school_name">স্কুলের নাম দিন</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Result <span class="req">*</span></label>
+                        <select id="prev_result">
+                            <option value="">Select Your Result</option>
+                            <option value="Passed">Passed</option>
+                            <option value="A+">A+</option>
+                            <option value="A">A</option>
+                            <option value="A-">A-</option>
+                            <option value="B">B</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                        </select>
+                        <div class="error-msg" id="err_prev_result">Result সিলেক্ট করুন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Passing Year <span class="req">*</span></label>
+                        <input type="text" id="prev_passing_year" placeholder="e.g., 2024" maxlength="4" autocomplete="off">
+                        <div class="error-msg" id="err_prev_passing_year">পাশের সাল দিন</div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Board <span class="req">*</span></label>
+                        <select id="prev_board">
+                            <option value="">Select Your Board</option>
+                            <option value="Dhaka">Dhaka</option>
+                            <option value="Chattogram">Chattogram</option>
+                            <option value="Rajshahi">Rajshahi</option>
+                            <option value="Khulna">Khulna</option>
+                            <option value="Barishal">Barishal</option>
+                            <option value="Sylhet">Sylhet</option>
+                            <option value="Dinajpur">Dinajpur</option>
+                            <option value="Mymensingh">Mymensingh</option>
+                            <option value="Madrasah">Madrasah</option>
+                            <option value="Technical">Technical</option>
+                        </select>
+                        <div class="error-msg" id="err_prev_board">Board সিলেক্ট করুন</div>
+                    </div>
+                    <div class="form-group">
+                        <label>Roll No <span class="req">*</span></label>
+                        <input type="text" id="prev_roll_no" placeholder="Enter Roll No" autocomplete="off">
+                        <div class="error-msg" id="err_prev_roll_no">Roll No দিন</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBMIT -->
+        <div class="submit-section">
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <i class="fas fa-eye"></i> Preview & Submit
+            </button>
+            <p style="margin:15px 0 0;font-size:12.5px;color:var(--grey);">
+                <i class="fas fa-info-circle"></i> 
+                Submit করার আগে সব তথ্য preview-তে দেখে যাচাই করুন
+            </p>
+        </div>
+
+    </form>
+</div>
+
+<!-- FOOTER -->
+<div class="form-footer">
+    © <span id="year"></span> <strong>ফুলবাড়ীয়া কলেজ</strong>, ফুলবাড়ীয়া, ময়মনসিংহ<br>
+    Online Admission System · Developed by <span class="footer-link">FDC IT Team</span>
+</div>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <h3 id="loadingTitle">Submitting...</h3>
+    <p id="loadingSub">অনুগ্রহ করে অপেক্ষা করুন</p>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div class="preview-modal-overlay" id="previewModal">
+    <div class="preview-modal">
+        <div class="preview-header">
+            <div class="ph-icon"><i class="fas fa-clipboard-check"></i></div>
+            <h2>আপনার আবেদন পরীক্ষা করুন</h2>
+            <p>Submit করার আগে সব তথ্য ভালোভাবে যাচাই করুন</p>
+        </div>
+
+        <div class="preview-body" id="previewBody">
+            <!-- Dynamic content -->
+        </div>
+
+        <div class="preview-footer">
+            <button type="button" class="btn-back" id="btnBackToEdit">
+                <i class="fas fa-arrow-left"></i> Edit করুন
+            </button>
+            <button type="button" class="btn-confirm" id="btnConfirmSubmit">
+                <i class="fas fa-check"></i> Confirm & Submit
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- SUCCESS MODAL -->
+<div class="success-modal-overlay" id="successModal">
+    <div class="success-modal">
+        <div class="success-header">
+            <div class="sh-icon"><i class="fas fa-check"></i></div>
+            <h2>আবেদন সফল হয়েছে!</h2>
+            <p>আপনার ভর্তি আবেদন জমা হয়েছে</p>
+        </div>
+        <div class="success-body">
+            <div class="app-id-box">
+                <div class="aid-label">Your Application ID</div>
+                <div class="aid-value" id="finalAppId">FDC-2026-HSC-0001</div>
+                <button class="aid-copy" id="copyAppIdBtn">
+                    <i class="fas fa-copy"></i> Copy ID
+                </button>
+            </div>
+
+            <div class="success-warning">
+                <strong>⚠️ গুরুত্বপূর্ণ:</strong> এই Application ID সংরক্ষণ করুন। 
+                এটি দিয়ে আপনি যেকোনো সময় আবেদনের অবস্থা জানতে পারবেন।
+            </div>
+
+            <div class="success-actions">
+                <button class="btn-download-pdf" id="downloadPdfBtn">
+                    <i class="fas fa-file-pdf"></i> PDF Download
+                </button>
+                <a href="admission-status.html" class="btn-check-status">
+                    <i class="fas fa-search"></i> Check Status
+                </a>
+                <a href="../../index.html" class="btn-home">
+                    <i class="fas fa-home"></i> Home
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SCRIPTS -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="../../js/config.js"></script>
+<script src="../../js/supabase.js"></script>
+<script src="../../js/admission.js?v=4"></script>
+
+</body>
+</html>
