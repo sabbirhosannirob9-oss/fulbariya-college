@@ -2,14 +2,18 @@
  * =========================================================
  * FULBARIYA COLLEGE — PUBLIC RESULT OVERVIEW
  * Location: js/result-overview.js
+ * Version: v2.0 — Board Final Exam Only + Bar Charts
  * 
  * Features:
- *   • HSC Internal (4 exams, group pies)
- *   • HSC Board (year filter, group pies)
- *   • Degree Board (year filter, course pies)
- *   • Honours Board (year filter, dept pies — scrollable)
- *   • Scroll-triggered animation: charts fill 0 → actual
- *   • Enhanced animations: pulse, glow, fade-slide
+ *   • Summary cards (Total / Passed / Failed / Rate / Absent)
+ *   • Filter: Level + Year
+ *   • Year-wise stacked bar chart (Pass+Fail)
+ *   • Level-wise bar charts:
+ *     - HSC group-wise
+ *     - Degree subject-wise
+ *     - Honours dept-wise (৭টা)
+ *   • Full results table
+ *   • Smart animations: count-up, staggered bars, scroll reveal
  * =========================================================
  */
 
@@ -19,62 +23,69 @@
     // =========================================================
     // STATE
     // =========================================================
-    let internalData = {
-        '1st Terminal': { overall: null, groups: {}, year: null },
-        '2nd Terminal': { overall: null, groups: {}, year: null },
-        'Test': { overall: null, groups: {}, year: null },
-        'Final': { overall: null, groups: {}, year: null }
+    let allResults = [];
+    let filteredResults = [];
+    const charts = {
+        yearWise: null,
+        hsc: null,
+        degree: null,
+        honours: null
     };
-    let currentInternalExam = '1st Terminal';
-    const charts = {};
     const animatedCharts = new Set();
+    const countedValues = new Set();
 
     // =========================================================
     // CONSTANTS
     // =========================================================
     const COLORS = {
-        pass: '#10b981',
-        fail: '#ef4444',
-        absent: '#f59e0b',
-        navy: '#0a1655'
+        pass: { bg: 'rgba(16, 185, 129, 0.9)', border: '#059669' },
+        fail: { bg: 'rgba(239, 68, 68, 0.9)', border: '#dc2626' },
+        navy: '#0a1655',
+        navy2: '#1a237e',
+        gold: '#d4af37'
     };
 
     const HSC_GROUPS = [
-        { key: 'Science',    label: 'বিজ্ঞান',       icon: 'fas fa-flask',     cssClass: 'science' },
-        { key: 'Humanities', label: 'মানবিক',         icon: 'fas fa-book',      cssClass: 'humanities' },
-        { key: 'Business',   label: 'ব্যবসায় শিক্ষা', icon: 'fas fa-briefcase', cssClass: 'business' },
-        { key: 'BM-General', label: 'বিএম',           icon: 'fas fa-industry',  cssClass: 'bm' }
+        { key: 'Science', label: 'বিজ্ঞান', color: '#3b82f6' },
+        { key: 'Business', label: 'ব্যবসায় শিক্ষা', color: '#10b981' },
+        { key: 'Humanities', label: 'মানবিক', color: '#f59e0b' },
+        { key: 'BM', label: 'বিএম', color: '#8b5cf6' }
     ];
 
-    const DEGREE_COURSES = [
-        { key: 'B.A (Pass)',   label: 'বি.এ (পাস)',    icon: 'fas fa-book',      cssClass: 'humanities' },
-        { key: 'B.S.S (Pass)', label: 'বি.এস.এস (পাস)', icon: 'fas fa-users',     cssClass: 'science' },
-        { key: 'B.B.S (Pass)', label: 'বি.বি.এস (পাস)', icon: 'fas fa-briefcase', cssClass: 'business' },
-        { key: 'B.Sc (Pass)',  label: 'বি.এস.সি (পাস)', icon: 'fas fa-flask',     cssClass: 'science' }
+    const DEGREE_SUBJECTS = [
+        { key: 'B.A (Pass)', label: 'বি.এ (পাস)', color: '#3b82f6' },
+        { key: 'B.S.S (Pass)', label: 'বি.এস.এস (পাস)', color: '#10b981' },
+        { key: 'B.B.S (Pass)', label: 'বি.বি.এস (পাস)', color: '#f59e0b' },
+        { key: 'B.Sc (Pass)', label: 'বি.এস.সি (পাস)', color: '#8b5cf6' }
     ];
 
-    // Honours — 7 subjects (Fulbariya College)
     const HONOURS_DEPTS = [
-        { key: 'Accounting',        label: 'হিসাববিজ্ঞান',   icon: 'fas fa-calculator', cssClass: 'business' },
-        { key: 'Management',        label: 'ব্যবস্থাপনা',     icon: 'fas fa-user-tie',   cssClass: 'business' },
-        { key: 'Political Science', label: 'রাষ্ট্রবিজ্ঞান',  icon: 'fas fa-gavel',      cssClass: 'humanities' },
-        { key: 'Bangla',            label: 'বাংলা',          icon: 'fas fa-language',   cssClass: 'humanities' },
-        { key: 'Philosophy',        label: 'দর্শন',           icon: 'fas fa-brain',      cssClass: 'humanities' },
-        { key: 'Zoology',           label: 'প্রাণিবিদ্যা',    icon: 'fas fa-paw',        cssClass: 'science' },
-        { key: 'English',           label: 'ইংরেজি',         icon: 'fas fa-book-open',  cssClass: 'humanities' }
+        { key: 'Bangla', label: 'বাংলা', color: '#ef4444' },
+        { key: 'English', label: 'ইংরেজি', color: '#3b82f6' },
+        { key: 'History', label: 'ইতিহাস', color: '#f59e0b' },
+        { key: 'Political Science', label: 'রাষ্ট্রবিজ্ঞান', color: '#10b981' },
+        { key: 'Philosophy', label: 'দর্শন', color: '#8b5cf6' },
+        { key: 'Islamic History', label: 'ইসলামের ইতিহাস', color: '#14b8a6' },
+        { key: 'Economics', label: 'অর্থনীতি', color: '#f97316' }
     ];
 
-    const DB_GROUP_KEYS = {
-        'Science':    ['Science'],
-        'Humanities': ['Humanities'],
-        'Business':   ['Business', 'Business Studies'],
-        'BM-General': ['BM-General', 'BM']
+    // DB key aliases (multiple possible names)
+    const DB_ALIASES = {
+        'Business': ['Business', 'Business Studies'],
+        'BM': ['BM', 'BM-General']
     };
 
     // =========================================================
     // HELPERS
     // =========================================================
     const $ = (id) => document.getElementById(id);
+
+    function escapeHtml(str) {
+        if (str === null || str === undefined) return '';
+        return String(str)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
 
     function waitForSupabase(cb) {
         if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) return cb();
@@ -88,7 +99,7 @@
         }, 500);
     }
 
-    function calcPassRate(passed, total) {
+    function calcRate(passed, total) {
         if (!total || total <= 0) return 0;
         return Math.round((passed / total) * 1000) / 10;
     }
@@ -96,13 +107,18 @@
     function destroyChart(key) {
         if (charts[key]) {
             try { charts[key].destroy(); } catch (e) {}
-            delete charts[key];
+            charts[key] = null;
             animatedCharts.delete(key);
         }
     }
 
+    function matchKeys(entityKey, dbKeys) {
+        if (DB_ALIASES[entityKey]) return DB_ALIASES[entityKey];
+        return [entityKey];
+    }
+
     // =========================================================
-    // ENHANCED CHART.JS DEFAULTS
+    // CHART.JS DEFAULTS
     // =========================================================
     function setChartDefaults() {
         if (typeof Chart === 'undefined') return;
@@ -112,9 +128,9 @@
         Chart.defaults.color = '#374151';
         Chart.defaults.plugins.legend.labels.usePointStyle = true;
         Chart.defaults.plugins.legend.labels.boxWidth = 10;
-        Chart.defaults.plugins.legend.labels.padding = 12;
+        Chart.defaults.plugins.legend.labels.padding = 14;
         Chart.defaults.plugins.legend.labels.font = {
-            family: "'Hind Siliguri', sans-serif", size: 11, weight: '600'
+            family: "'Hind Siliguri', sans-serif", size: 11.5, weight: '600'
         };
         Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(10, 22, 85, 0.95)';
         Chart.defaults.plugins.tooltip.padding = 12;
@@ -127,12 +143,8 @@
         };
         Chart.defaults.responsive = true;
         Chart.defaults.maintainAspectRatio = false;
-
-        // Enhanced animations
-        Chart.defaults.animation.duration = 1400;
+        Chart.defaults.animation.duration = 1200;
         Chart.defaults.animation.easing = 'easeOutQuart';
-        Chart.defaults.animations.colors.duration = 1000;
-        Chart.defaults.animations.numbers.duration = 1400;
     }
 
     // =========================================================
@@ -141,671 +153,483 @@
     function setupScrollReveal() {
         if (!('IntersectionObserver' in window)) {
             document.querySelectorAll('.reveal-on-scroll').forEach(el => el.classList.add('in-view'));
+            document.querySelectorAll('.summary-card').forEach(el => el.classList.add('revealed'));
             return;
         }
-        const observer = new IntersectionObserver((entries) => {
+
+        const obs = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('in-view');
-                    observer.unobserve(entry.target);
+                    obs.unobserve(entry.target);
                 }
             });
         }, { threshold: 0.05, rootMargin: '0px 0px -60px 0px' });
 
-        document.querySelectorAll('.reveal-on-scroll').forEach(el => observer.observe(el));
+        document.querySelectorAll('.reveal-on-scroll').forEach(el => obs.observe(el));
     }
 
     // =========================================================
-    // CHART ANIMATION ON SCROLL
+    // COUNT-UP ANIMATION
     // =========================================================
-    function setupChartScrollAnimation() {
-        if (!('IntersectionObserver' in window)) {
-            Object.keys(charts).forEach(key => animateChart(key));
+    function countUp(el, target, duration) {
+        if (!el) return;
+        if (countedValues.has(el.id)) {
+            el.textContent = target;
             return;
         }
+        countedValues.add(el.id);
 
-        const observer = new IntersectionObserver((entries) => {
+        const start = 0;
+        const startTime = performance.now();
+        const diff = target - start;
+
+        function step(now) {
+            const elapsed = now - startTime;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const val = Math.floor(start + diff * eased);
+            el.textContent = val.toLocaleString();
+            if (progress < 1) requestAnimationFrame(step);
+            else el.textContent = target.toLocaleString();
+        }
+        requestAnimationFrame(step);
+    }
+
+    // =========================================================
+    // CHART SCROLL ANIMATION
+    // =========================================================
+    function setupChartScrollAnimation() {
+        if (!('IntersectionObserver' in window)) return;
+
+        const obs = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     const canvas = entry.target;
-                    const chartKey = canvas.dataset.chartKey;
-                    if (chartKey) {
-                        animateChart(chartKey);
-                        observer.unobserve(canvas);
+                    const key = canvas.dataset.chartKey;
+                    if (key) {
+                        animateChart(key);
+                        obs.unobserve(canvas);
                     }
                 }
             });
-        }, { threshold: 0.2, rootMargin: '0px 0px -40px 0px' });
+        }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-        document.querySelectorAll('canvas[data-chart-key]').forEach(canvas => {
-            observer.observe(canvas);
-        });
+        document.querySelectorAll('canvas[data-chart-key]').forEach(c => obs.observe(c));
     }
 
     function animateChart(key) {
         const chart = charts[key];
         if (!chart || animatedCharts.has(key)) return;
-
-        const targetData = chart.options.plugins?.fdc?.targetData;
-        if (!targetData) return;
-
         animatedCharts.add(key);
 
-        // Pulse animation on canvas parent
-        const canvas = document.getElementById(key);
-        if (canvas && canvas.parentElement) {
-            canvas.parentElement.classList.add('chart-pulse');
-            setTimeout(() => {
-                canvas.parentElement.classList.remove('chart-pulse');
-            }, 1500);
-        }
+        const targets = chart.data.datasets.map(ds => ds.data.slice());
 
-        // Start from 0 and animate to target
-        chart.data.datasets[0].data = targetData.map(() => 0);
+        // Set to 0
+        chart.data.datasets.forEach(ds => {
+            ds.data = ds.data.map(() => 0);
+        });
         chart.update('none');
 
+        // Animate back
         setTimeout(() => {
-            chart.data.datasets[0].data = targetData;
+            chart.data.datasets.forEach((ds, i) => {
+                ds.data = targets[i];
+            });
             chart.update();
-        }, 150);
+        }, 200);
     }
 
     // =========================================================
-    // DRAW: Pie Chart with enhanced animation
+    // LOAD DATA FROM SUPABASE
     // =========================================================
-    function drawPie(canvasId, stats, options) {
-        options = options || {};
-        const canvas = document.getElementById(canvasId);
+    async function loadData() {
+        try {
+            const { data, error } = await window.FDC_SUPABASE
+                .from('board_final_result')
+                .select('*')
+                .order('year', { ascending: false })
+                .order('exam_name')
+                .order('group_or_dept');
+
+            if (error) throw error;
+            allResults = data || [];
+            console.log('✅ Loaded board results:', allResults.length);
+
+            populateYearFilter();
+            applyFilterAndRender();
+
+        } catch (e) {
+            console.error('Load error:', e);
+            $('tableBody').innerHTML = `
+                <tr><td colspan="8" style="text-align:center; color:#dc2626; padding:30px;">
+                    <i class="fas fa-exclamation-triangle"></i> লোড করা যায়নি: ${escapeHtml(e.message)}
+                </td></tr>
+            `;
+        }
+    }
+
+    function populateYearFilter() {
+        const years = [...new Set(allResults.map(r => r.year))].sort((a, b) => b - a);
+        const sel = $('filterYear');
+        if (!sel) return;
+        sel.innerHTML = '<option value="">All Years</option>' +
+            years.map(y => `<option value="${y}">${y}</option>`).join('');
+    }
+
+    // =========================================================
+    // FILTER
+    // =========================================================
+    function applyFilterAndRender() {
+        const level = $('filterLevel')?.value || '';
+        const year = $('filterYear')?.value || '';
+
+        filteredResults = allResults.filter(r => {
+            if (level && r.exam_name !== level) return false;
+            if (year && String(r.year) !== String(year)) return false;
+            return true;
+        });
+
+        renderSummary();
+        renderTable();
+        renderAllCharts();
+    }
+
+    // =========================================================
+    // RENDER SUMMARY
+    // =========================================================
+    function renderSummary() {
+        const total = filteredResults.reduce((s, r) => s + (r.total_student || 0), 0);
+        const passed = filteredResults.reduce((s, r) => s + (r.passed || 0), 0);
+        const failed = filteredResults.reduce((s, r) => s + (r.failed || 0), 0);
+        const absent = filteredResults.reduce((s, r) => s + (r.absentee || 0), 0);
+        const appeared = passed + failed;
+        const rate = calcRate(passed, appeared);
+
+        countUp($('statTotal'), total, 1400);
+        countUp($('statPassed'), passed, 1400);
+        countUp($('statFailed'), failed, 1400);
+        countUp($('statAbsent'), absent, 1400);
+
+        // Rate is %
+        const rateEl = $('statRate');
+        if (rateEl) {
+            if (countedValues.has('statRate')) {
+                rateEl.textContent = rate.toFixed(1) + '%';
+            } else {
+                countedValues.add('statRate');
+                const startTime = performance.now();
+                function step(now) {
+                    const elapsed = now - startTime;
+                    const progress = Math.min(elapsed / 1400, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    rateEl.textContent = (rate * eased).toFixed(1) + '%';
+                    if (progress < 1) requestAnimationFrame(step);
+                    else rateEl.textContent = rate.toFixed(1) + '%';
+                }
+                requestAnimationFrame(step);
+            }
+        }
+
+        // Reveal cards
+        document.querySelectorAll('.summary-card').forEach((card, i) => {
+            setTimeout(() => card.classList.add('revealed'), i * 80);
+        });
+    }
+
+    // =========================================================
+    // RENDER TABLE
+    // =========================================================
+    function renderTable() {
+        const tbody = $('tableBody');
+        if (!tbody) return;
+
+        if (filteredResults.length === 0) {
+            tbody.innerHTML = `
+                <tr><td colspan="8">
+                    <div class="empty-state">
+                        <div class="es-icon"><i class="fas fa-inbox"></i></div>
+                        <h6>কোনো result পাওয়া যায়নি</h6>
+                        <p>Filter পরিবর্তন করুন</p>
+                    </div>
+                </td></tr>
+            `;
+            return;
+        }
+
+        let html = '';
+        filteredResults.forEach(r => {
+            const appeared = (r.passed || 0) + (r.failed || 0);
+            const rate = calcRate(r.passed, appeared);
+            const lowClass = rate < 50 ? 'low' : '';
+
+            html += `
+                <tr>
+                    <td><span class="level-badge ${escapeHtml(r.exam_name)}">${escapeHtml(r.exam_name)}</span></td>
+                    <td>${escapeHtml(r.year)}</td>
+                    <td>${escapeHtml(r.group_or_dept)}</td>
+                    <td>${(r.total_student || 0).toLocaleString()}</td>
+                    <td class="pass-col">${(r.passed || 0).toLocaleString()}</td>
+                    <td class="fail-col">${(r.failed || 0).toLocaleString()}</td>
+                    <td class="absent-col">${(r.absentee || 0).toLocaleString()}</td>
+                    <td>
+                        <div class="pass-rate-bar">
+                            <div class="track">
+                                <div class="fill ${lowClass}" data-width="${rate}"></div>
+                            </div>
+                            <span class="text">${rate.toFixed(1)}%</span>
+                        </div>
+                    </td>
+                </tr>
+            `;
+        });
+
+        tbody.innerHTML = html;
+
+        // Animate pass-rate bars
+        setTimeout(() => {
+            tbody.querySelectorAll('.fill').forEach((el, i) => {
+                const w = el.dataset.width;
+                setTimeout(() => { el.style.width = w + '%'; }, i * 30);
+            });
+        }, 100);
+    }
+
+    // =========================================================
+    // CHART 1: Year-wise stacked bar
+    // =========================================================
+    function renderYearWiseChart() {
+        destroyChart('yearWise');
+        const canvas = $('chartYearWise');
         if (!canvas) return;
+        canvas.dataset.chartKey = 'yearWise';
 
-        destroyChart(canvasId);
+        const yearMap = new Map();
+        filteredResults.forEach(r => {
+            const y = r.year;
+            if (!yearMap.has(y)) yearMap.set(y, { passed: 0, failed: 0 });
+            const obj = yearMap.get(y);
+            obj.passed += r.passed || 0;
+            obj.failed += r.failed || 0;
+        });
 
-        const hasFail = stats.failed > 0;
-        const hasAbsent = stats.absent > 0;
+        const years = Array.from(yearMap.keys()).sort((a, b) => a - b);
+        const passedData = years.map(y => yearMap.get(y).passed);
+        const failedData = years.map(y => yearMap.get(y).failed);
 
-        let labels = ['Pass'];
-        let values = [stats.passed];
-        let colors = [COLORS.pass];
+        if (years.length === 0) {
+            charts.yearWise = emptyChart(canvas, 'কোনো data নেই');
+            return;
+        }
 
-        if (hasFail) { labels.push('Fail'); values.push(stats.failed); colors.push(COLORS.fail); }
-        if (hasAbsent) { labels.push('Absent'); values.push(stats.absent); colors.push(COLORS.absent); }
-
-        const passRate = calcPassRate(stats.passed, stats.total);
-        const isLarge = options.isLarge || false;
-        const centerFontSize = isLarge ? 38 : 22;
-
-        canvas.dataset.chartKey = canvasId;
-
-        charts[canvasId] = new Chart(canvas, {
-            type: 'doughnut',
+        charts.yearWise = new Chart(canvas, {
+            type: 'bar',
             data: {
-                labels,
-                datasets: [{
-                    data: values.map(() => 0),
-                    backgroundColor: colors,
-                    borderColor: '#fff',
-                    borderWidth: isLarge ? 6 : 3,
-                    hoverBorderColor: '#fff',
-                    hoverOffset: isLarge ? 18 : 10,
-                    spacing: 3
-                }]
+                labels: years.map(String),
+                datasets: [
+                    {
+                        label: 'Passed',
+                        data: passedData,
+                        backgroundColor: COLORS.pass.bg,
+                        borderColor: COLORS.pass.border,
+                        borderWidth: 1.5,
+                        borderRadius: 8,
+                        borderSkipped: false,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.75
+                    },
+                    {
+                        label: 'Failed',
+                        data: failedData,
+                        backgroundColor: COLORS.fail.bg,
+                        borderColor: COLORS.fail.border,
+                        borderWidth: 1.5,
+                        borderRadius: 8,
+                        borderSkipped: false,
+                        barPercentage: 0.6,
+                        categoryPercentage: 0.75
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                cutout: isLarge ? '72%' : '68%',
-                animation: {
-                    animateRotate: true,
-                    animateScale: true,
-                    duration: 1600,
-                    easing: 'easeOutQuart'
-                },
-                transitions: {
-                    active: {
-                        animation: {
-                            duration: 400
-                        }
-                    }
-                },
+                animation: { duration: 1400, easing: 'easeOutQuart' },
                 plugins: {
-                    legend: {
-                        display: false,
-                        position: 'bottom'
-                    },
+                    legend: { position: 'top' },
                     tooltip: {
                         callbacks: {
-                            label: (ctx) => {
-                                const total = values.reduce((a, b) => a + b, 0);
-                                const pct = total > 0 ? Math.round((ctx.parsed / total) * 1000) / 10 : 0;
-                                return ` ${ctx.label}: ${ctx.parsed} (${pct}%)`;
+                            afterBody: (items) => {
+                                if (!items.length) return '';
+                                const idx = items[0].dataIndex;
+                                const total = passedData[idx] + failedData[idx];
+                                const rate = calcRate(passedData[idx], total);
+                                return `\nTotal: ${total}\nPass Rate: ${rate}%`;
                             }
                         }
+                    }
+                },
+                scales: {
+                    x: {
+                        stacked: true,
+                        grid: { display: false },
+                        ticks: { font: { size: 12, weight: '700' }, color: '#0a1655' }
                     },
-                    fdc: { targetData: values }
-                }
-            },
-            plugins: [{
-                id: 'centerText_' + canvasId,
-                afterDraw: (chart) => {
-                    const { ctx, chartArea } = chart;
-                    if (!chartArea) return;
-                    const cx = (chartArea.left + chartArea.right) / 2;
-                    const cy = (chartArea.top + chartArea.bottom) / 2;
-                    ctx.save();
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-
-                    // Glowing effect for large chart
-                    if (isLarge) {
-                        ctx.shadowColor = 'rgba(10, 22, 85, 0.15)';
-                        ctx.shadowBlur = 8;
+                    y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: { font: { size: 11 }, color: '#6b7280' }
                     }
-
-                    ctx.font = `700 ${centerFontSize}px 'Playfair Display', serif`;
-                    ctx.fillStyle = COLORS.navy;
-                    ctx.fillText(passRate + '%', cx, cy - (isLarge ? 6 : 0));
-
-                    if (isLarge) {
-                        ctx.shadowBlur = 0;
-                        ctx.font = "700 11px 'Hind Siliguri', sans-serif";
-                        ctx.fillStyle = '#6b7280';
-                        ctx.fillText('PASS RATE', cx, cy + 24);
-                    }
-                    ctx.restore();
                 }
-            }]
-        });
-    }
-
-    // =========================================================
-    // RENDER: Group Charts Grid (with stagger animation)
-    // =========================================================
-    function renderGroupCharts(containerId, entities, groupsData, dbKeysMap, prefix) {
-        const container = $(containerId);
-        if (!container) return;
-        container.innerHTML = '';
-
-        entities.forEach((entity, idx) => {
-            let stats = { total: 0, passed: 0, failed: 0, absent: 0 };
-            const keys = (dbKeysMap && dbKeysMap[entity.key]) || [entity.key];
-
-            keys.forEach(k => {
-                if (groupsData[k]) {
-                    stats.total += groupsData[k].total || 0;
-                    stats.passed += groupsData[k].passed || 0;
-                    stats.failed += groupsData[k].failed || 0;
-                    stats.absent += groupsData[k].absent || 0;
-                }
-            });
-
-            const hasData = stats.total > 0;
-            const item = document.createElement('div');
-            item.className = 'group-pie-item' + (hasData ? '' : ' empty');
-            item.style.animationDelay = (idx * 80) + 'ms';
-
-            if (!hasData) {
-                item.innerHTML = `
-                    <div class="gp-title">
-                        <i class="${entity.icon} ${entity.cssClass}"></i> ${entity.label}
-                    </div>
-                    <div class="gp-pie"><i class="fas fa-inbox"></i></div>
-                    <div class="gp-sub">Data নেই</div>
-                `;
-                container.appendChild(item);
-                return;
             }
-
-            const passRate = calcPassRate(stats.passed, stats.total);
-            item.innerHTML = `
-                <div class="gp-title">
-                    <i class="${entity.icon} ${entity.cssClass}"></i> ${entity.label}
-                </div>
-                <div class="gp-pie">
-                    <canvas id="${prefix}_${idx}"></canvas>
-                </div>
-                <div class="gp-sub">${stats.passed}/${stats.total} • ${passRate}%</div>
-            `;
-            container.appendChild(item);
-
-            requestAnimationFrame(() => {
-                drawPie(`${prefix}_${idx}`, stats, { isLarge: false });
-            });
         });
     }
 
     // =========================================================
-    // RENDER: Bar Compare (with enhanced animation)
+    // CHART 2-4: Level-wise bar (% pass rate)
     // =========================================================
-    function renderBarCompare(containerId, entities, groupsData, dbKeysMap) {
-        const container = $(containerId);
-        if (!container) return;
+    function renderLevelChart(chartKey, canvasId, entities, levelName) {
+        destroyChart(chartKey);
+        const canvas = $(canvasId);
+        if (!canvas) return;
+        canvas.dataset.chartKey = chartKey;
 
-        const items = entities.map(entity => {
-            const keys = (dbKeysMap && dbKeysMap[entity.key]) || [entity.key];
-            let stats = { total: 0, passed: 0, failed: 0, absent: 0 };
-            keys.forEach(k => {
-                if (groupsData[k]) {
-                    stats.total += groupsData[k].total || 0;
-                    stats.passed += groupsData[k].passed || 0;
-                    stats.failed += groupsData[k].failed || 0;
-                    stats.absent += groupsData[k].absent || 0;
-                }
-            });
-            return { entity, stats };
-        }).filter(i => i.stats.total > 0);
+        const levelData = filteredResults.filter(r => r.exam_name === levelName);
 
-        if (!items.length) {
-            container.innerHTML = '<p style="text-align:center;color:var(--grey);padding:20px;">কোনো data নেই</p>';
+        if (levelData.length === 0) {
+            charts[chartKey] = emptyChart(canvas, `${levelName} data নেই`);
             return;
         }
 
-        const maxVal = Math.max(...items.map(i => i.stats.total));
+        const labels = [];
+        const rates = [];
+        const colors = [];
+        const tooltips = [];
 
-        container.innerHTML = items.map(({ entity, stats }, idx) => {
-            const pct = maxVal > 0 ? Math.round((stats.total / maxVal) * 100) : 0;
-            const passRate = calcPassRate(stats.passed, stats.total);
-            return `
-                <div class="bar-compare-item" style="animation-delay:${idx * 100}ms;">
-                    <div class="bc-label">
-                        <i class="${entity.icon} ${entity.cssClass}"></i> ${entity.label}
-                    </div>
-                    <div class="bc-bar">
-                        <div class="bc-bar-fill" data-width="${pct}"></div>
-                    </div>
-                    <div class="bc-value">
-                        ${stats.total}
-                        <small>${passRate}% pass</small>
-                    </div>
-                </div>
-            `;
-        }).join('');
-
-        const barObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    container.querySelectorAll('.bc-bar-fill').forEach((el, i) => {
-                        const w = el.dataset.width;
-                        setTimeout(() => {
-                            el.style.width = w + '%';
-                        }, i * 120);
-                    });
-                    barObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-
-        barObserver.observe(container);
-    }
-
-    // =========================================================
-    // RENDER: Table
-    // =========================================================
-    function renderTable(tbodyId, entities, groupsData, dbKeysMap) {
-        const tbody = $(tbodyId);
-        if (!tbody) return;
-
-        const rows = entities.map(entity => {
-            const keys = (dbKeysMap && dbKeysMap[entity.key]) || [entity.key];
-            let stats = { total: 0, passed: 0, failed: 0, absent: 0 };
+        entities.forEach(ent => {
+            const keys = matchKeys(ent.key, DB_ALIASES);
+            let passed = 0, failed = 0, total = 0;
             keys.forEach(k => {
-                if (groupsData[k]) {
-                    stats.total += groupsData[k].total || 0;
-                    stats.passed += groupsData[k].passed || 0;
-                    stats.failed += groupsData[k].failed || 0;
-                    stats.absent += groupsData[k].absent || 0;
-                }
-            });
-            if (stats.total === 0) return '';
-            const rate = calcPassRate(stats.passed, stats.total);
-            return `
-                <tr>
-                    <td>${entity.label}</td>
-                    <td>${stats.total}</td>
-                    <td class="pass-col">${stats.passed}</td>
-                    <td class="fail-col">${stats.failed}</td>
-                    <td class="absent-col">${stats.absent}</td>
-                    <td>${rate}%</td>
-                </tr>
-            `;
-        }).filter(Boolean);
-
-        tbody.innerHTML = rows.length
-            ? rows.join('')
-            : '<tr><td colspan="6" style="text-align:center;color:var(--grey);padding:20px;">কোনো data নেই</td></tr>';
-    }
-
-    // =========================================================
-    // SECTION 1: HSC INTERNAL
-    // =========================================================
-    async function loadInternalData() {
-        try {
-            const supabase = window.FDC_SUPABASE;
-
-            const { data: exams } = await supabase
-                .from('exams')
-                .select('id, exam_name, display_name, exam_order')
-                .eq('is_active', true)
-                .order('exam_order');
-
-            const { data: yearRows } = await supabase
-                .from('results')
-                .select('exam_id, year, students!inner(branch)')
-                .eq('is_published', true)
-                .eq('students.branch', 'HSC');
-
-            const latestYear = {};
-            (yearRows || []).forEach(r => {
-                if (!latestYear[r.exam_id] || r.year > latestYear[r.exam_id]) {
-                    latestYear[r.exam_id] = r.year;
-                }
-            });
-
-            const promises = (exams || []).map(async (exam) => {
-                const latest = latestYear[exam.id];
-                if (!latest) {
-                    internalData[exam.exam_name] = { overall: null, groups: {}, year: null };
-                    return;
-                }
-
-                const { data: results } = await supabase
-                    .from('results')
-                    .select('id, student_id, gpa, students!inner(group_name, branch)')
-                    .eq('is_published', true)
-                    .eq('exam_id', exam.id)
-                    .eq('year', latest)
-                    .eq('students.branch', 'HSC');
-
-                const resultIds = (results || []).map(r => r.id);
-                const absentMap = {};
-
-                if (resultIds.length > 0) {
-                    const { data: details } = await supabase
-                        .from('result_details')
-                        .select('result_id, status')
-                        .in('result_id', resultIds);
-
-                    (details || []).forEach(d => {
-                        if (d.status === 'absent') {
-                            absentMap[d.result_id] = (absentMap[d.result_id] || 0) + 1;
-                        }
-                    });
-                }
-
-                const overall = { total: 0, passed: 0, failed: 0, absent: 0 };
-                const groups = {};
-                HSC_GROUPS.forEach(g => groups[g.key] = { total: 0, passed: 0, failed: 0, absent: 0 });
-
-                (results || []).forEach(r => {
-                    const groupName = r.students?.group_name;
-                    const gpa = Number(r.gpa) || 0;
-                    const absentCnt = absentMap[r.id] || 0;
-
-                    let status;
-                    if (absentCnt >= 1) status = 'absent';
-                    else if (gpa >= 2.00) status = 'passed';
-                    else status = 'failed';
-
-                    overall.total++;
-                    overall[status]++;
-                    if (groupName && groups[groupName]) {
-                        groups[groupName].total++;
-                        groups[groupName][status]++;
+                levelData.forEach(r => {
+                    if (r.group_or_dept === k) {
+                        passed += r.passed || 0;
+                        failed += r.failed || 0;
+                        total += r.total_student || 0;
                     }
                 });
-
-                internalData[exam.exam_name] = { overall, groups, year: latest };
             });
+            const appeared = passed + failed;
+            const rate = calcRate(passed, appeared);
+            labels.push(ent.label);
+            rates.push(rate);
+            colors.push(ent.color + 'dd');
+            tooltips.push({ passed, failed, total, rate });
+        });
 
-            await Promise.all(promises);
-            renderInternalExam(currentInternalExam);
-
-        } catch (e) {
-            console.error('Load internal error:', e);
-            $('internalLoading').style.display = 'none';
-            $('internalEmpty').style.display = 'block';
-        }
+        charts[chartKey] = new Chart(canvas, {
+            type: 'bar',
+            data: {
+                labels,
+                datasets: [{
+                    label: 'Pass Rate %',
+                    data: rates,
+                    backgroundColor: colors,
+                    borderColor: colors.map(c => c.replace('dd', '')),
+                    borderWidth: 1.5,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    barPercentage: 0.7,
+                    categoryPercentage: 0.8
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                animation: { duration: 1400, easing: 'easeOutQuart' },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: (ctx) => ` Pass Rate: ${ctx.parsed.x}%`,
+                            afterLabel: (ctx) => {
+                                const t = tooltips[ctx.dataIndex];
+                                return [
+                                    `Total: ${t.total}`,
+                                    `Passed: ${t.passed}`,
+                                    `Failed: ${t.failed}`
+                                ];
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        max: 100,
+                        grid: { color: 'rgba(0,0,0,0.05)' },
+                        ticks: { callback: v => v + '%', font: { size: 11 }, color: '#6b7280' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11.5, weight: '700' }, color: '#0a1655' }
+                    }
+                }
+            }
+        });
     }
 
-    function renderInternalExam(examName) {
-        currentInternalExam = examName;
-        document.querySelectorAll('.exam-tab').forEach(tab => {
-            tab.classList.toggle('active', tab.dataset.exam === examName);
+    function emptyChart(canvas, msg) {
+        return new Chart(canvas, {
+            type: 'bar',
+            data: { labels: [], datasets: [] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: msg,
+                        color: '#9ca3af',
+                        font: { family: "'Hind Siliguri', sans-serif", size: 13, weight: '600' }
+                    }
+                },
+                scales: { x: { display: false }, y: { display: false } }
+            }
         });
+    }
 
-        const data = internalData[examName];
-        $('internalLoading').style.display = 'none';
-
-        if (!data || !data.overall || data.overall.total === 0) {
-            $('internalContent').style.display = 'none';
-            $('internalEmpty').style.display = 'block';
-            return;
-        }
-
-        $('internalEmpty').style.display = 'none';
-        $('internalContent').style.display = 'block';
-
-        requestAnimationFrame(() => {
-            drawPie('internalOverallChart', data.overall, { isLarge: true });
-        });
-
-        renderInternalStats(data.overall);
-        renderGroupCharts('internalGroupCharts', HSC_GROUPS, data.groups, DB_GROUP_KEYS, 'internalGroup');
-        renderTable('internalTableBody', HSC_GROUPS, data.groups, DB_GROUP_KEYS);
+    function renderAllCharts() {
+        renderYearWiseChart();
+        renderLevelChart('hsc', 'chartHSC', HSC_GROUPS, 'HSC');
+        renderLevelChart('degree', 'chartDegree', DEGREE_SUBJECTS, 'Degree');
+        renderLevelChart('honours', 'chartHonours', HONOURS_DEPTS, 'Honours');
 
         setTimeout(setupChartScrollAnimation, 100);
     }
 
-    function renderInternalStats(overall) {
-        const list = $('internalStatList');
-        if (!list) return;
-
-        const max = overall.total || 1;
-        const items = [
-            { key: 'total',  label: 'Total',  value: overall.total,  cls: 'total' },
-            { key: 'passed', label: 'Pass',   value: overall.passed, cls: 'pass' },
-            { key: 'failed', label: 'Fail',   value: overall.failed, cls: 'fail' },
-            { key: 'absent', label: 'Absent', value: overall.absent, cls: 'absent' }
-        ];
-
-        list.innerHTML = items.map(it => {
-            const pct = Math.round((it.value / max) * 100);
-            return `
-                <div class="stat-row ${it.cls}">
-                    <span class="stat-label">${it.label}</span>
-                    <div class="stat-bar">
-                        <div class="stat-bar-fill ${it.cls}" data-width="${pct}"></div>
-                    </div>
-                    <span class="stat-value">${it.value}</span>
-                </div>
-            `;
-        }).join('');
-
-        const statObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    list.querySelectorAll('.stat-bar-fill').forEach((el, i) => {
-                        const w = el.dataset.width;
-                        setTimeout(() => { el.style.width = w + '%'; }, i * 100);
-                    });
-                    statObserver.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.15 });
-
-        statObserver.observe(list);
-    }
-
     // =========================================================
-    // SECTION 2/3/4: BOARD FINAL (Generic)
+    // EVENT LISTENERS
     // =========================================================
-    async function loadBoardYears(examName, selectId, emptyId) {
-        try {
-            const { data } = await window.FDC_SUPABASE
-                .from('board_final_result')
-                .select('year')
-                .eq('exam_name', examName)
-                .order('year', { ascending: false });
-
-            const years = [...new Set((data || []).map(r => r.year))];
-            const sel = $(selectId);
-            if (!sel) return;
-
-            sel.innerHTML = '';
-
-            if (years.length === 0) {
-                sel.innerHTML = '<option value="">কোনো data নেই</option>';
-                $(emptyId).style.display = 'block';
-                return;
-            }
-
-            years.forEach(y => {
-                const opt = document.createElement('option');
-                opt.value = y;
-                opt.textContent = y;
-                sel.appendChild(opt);
-            });
-
-            return sel.value;
-        } catch (e) {
-            console.error('Load years error:', examName, e);
-        }
-    }
-
-    async function loadBoardData(examName, year, entities, dbKeysMap, prefix) {
-        const loadingId = prefix + 'Loading';
-        const contentId = prefix + 'Content';
-        const emptyId = prefix + 'Empty';
-        const chartsId = prefix + 'GroupCharts';
-        const barId = prefix + 'BarCompare';
-        const tableId = prefix + 'TableBody';
-
-        $(loadingId).style.display = 'block';
-        $(contentId).style.display = 'none';
-        $(emptyId).style.display = 'none';
-
-        try {
-            if (!year) {
-                $(loadingId).style.display = 'none';
-                $(emptyId).style.display = 'block';
-                return;
-            }
-
-            const { data } = await window.FDC_SUPABASE
-                .from('board_final_result')
-                .select('*')
-                .eq('year', year)
-                .eq('exam_name', examName)
-                .order('group_or_dept');
-
-            $(loadingId).style.display = 'none';
-
-            if (!data || data.length === 0) {
-                $(emptyId).style.display = 'block';
-                return;
-            }
-
-            const byGroup = {};
-            data.forEach(r => {
-                byGroup[r.group_or_dept] = {
-                    total: r.total_student || 0,
-                    passed: r.passed || 0,
-                    failed: r.failed || 0,
-                    absent: r.absentee || 0
-                };
-            });
-
-            $(contentId).style.display = 'block';
-
-            renderGroupCharts(chartsId, entities, byGroup, dbKeysMap, prefix + 'Group');
-            renderBarCompare(barId, entities, byGroup, dbKeysMap);
-            renderTable(tableId, entities, byGroup, dbKeysMap);
-
-            setTimeout(setupChartScrollAnimation, 100);
-
-        } catch (e) {
-            console.error('Load board error:', e);
-            $(loadingId).style.display = 'none';
-            $(emptyId).style.display = 'block';
-        }
-    }
-
-    // =========================================================
-    // SETUP EVENT LISTENERS
-    // =========================================================
-    function setupExamTabs() {
-        document.querySelectorAll('.exam-tab').forEach(tab => {
-            tab.addEventListener('click', function () {
-                const exam = this.dataset.exam;
-                if (exam === currentInternalExam) return;
-                Object.keys(charts).forEach(k => {
-                    if (k.startsWith('internalGroup') || k === 'internalOverallChart') {
-                        animatedCharts.delete(k);
-                    }
-                });
-                renderInternalExam(exam);
-            });
-        });
-
-        const first = document.querySelector('.exam-tab[data-exam="1st Terminal"]');
-        if (first) first.classList.add('active');
-    }
-
-    function setupBoardListeners() {
-        const hscSel = $('hscBoardYear');
-        if (hscSel) {
-            hscSel.addEventListener('change', function () {
-                Object.keys(charts).forEach(k => {
-                    if (k.startsWith('hscBoard')) animatedCharts.delete(k);
-                });
-                loadBoardData('HSC', this.value, HSC_GROUPS, DB_GROUP_KEYS, 'hscBoard');
-            });
-        }
-
-        const degSel = $('degreeBoardYear');
-        if (degSel) {
-            degSel.addEventListener('change', function () {
-                Object.keys(charts).forEach(k => {
-                    if (k.startsWith('degreeBoard')) animatedCharts.delete(k);
-                });
-                loadBoardData('Degree', this.value, DEGREE_COURSES, null, 'degreeBoard');
-            });
-        }
-
-        const honSel = $('honoursBoardYear');
-        if (honSel) {
-            honSel.addEventListener('change', function () {
-                Object.keys(charts).forEach(k => {
-                    if (k.startsWith('honoursBoard')) animatedCharts.delete(k);
-                });
-                loadBoardData('Honours', this.value, HONOURS_DEPTS, null, 'honoursBoard');
-            });
-        }
+    function attachEvents() {
+        $('filterLevel')?.addEventListener('change', applyFilterAndRender);
+        $('filterYear')?.addEventListener('change', applyFilterAndRender);
     }
 
     // =========================================================
     // INIT
     // =========================================================
     function init() {
-        console.log('🚀 Result Overview initializing...');
-
+        console.log('🚀 Result Overview v2.0 initializing...');
         setChartDefaults();
         setupScrollReveal();
-        setupExamTabs();
-        setupBoardListeners();
+        attachEvents();
 
         waitForSupabase(async function () {
-            await loadInternalData();
-
-            const hscYear = await loadBoardYears('HSC', 'hscBoardYear', 'hscBoardEmpty');
-            if (hscYear) await loadBoardData('HSC', hscYear, HSC_GROUPS, DB_GROUP_KEYS, 'hscBoard');
-
-            const degYear = await loadBoardYears('Degree', 'degreeBoardYear', 'degreeBoardEmpty');
-            if (degYear) await loadBoardData('Degree', degYear, DEGREE_COURSES, null, 'degreeBoard');
-
-            const honYear = await loadBoardYears('Honours', 'honoursBoardYear', 'honoursBoardEmpty');
-            if (honYear) await loadBoardData('Honours', honYear, HONOURS_DEPTS, null, 'honoursBoard');
-
-            console.log('✅ Result Overview ready');
+            await loadData();
+            console.log('✅ Result Overview v2.0 ready');
         });
     }
 
