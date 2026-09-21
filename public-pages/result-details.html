@@ -86,7 +86,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; }
 
 /* ============ MAIN ============ */
-.main-wrap { max-width: 1100px; margin: 0 auto; padding: 20px 16px 60px; }
+.main-wrap { max-width: 800px; margin: 0 auto; padding: 20px 16px 60px; }
 
 /* ============ LOADING / EMPTY ============ */
 .loading-area {
@@ -127,7 +127,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .empty-state p { font-size: 13px; color: var(--grey); margin: 0 0 20px; }
 
 /* ================================================================ */
-/*              RESULT SHEET — OFFICIAL TRANSCRIPT                  */
+/*              RESULT SHEET — SIMPLIFIED TRANSCRIPT                */
 /* ================================================================ */
 
 .result-area { display: none; }
@@ -274,134 +274,80 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .section-title i { color: var(--gold-dark); }
 
-/* ============ MARKS TABLE ============ */
+/* ============ MARKS TABLE (Simplified) ============ */
 .marks-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 12.5px;
+    font-size: 14px;
     margin-bottom: 8px;
 }
 .marks-table thead th {
     background: var(--navy);
     color: #fff;
-    padding: 10px 8px;
+    padding: 12px 14px;
     text-align: center;
-    font-size: 10.5px;
+    font-size: 11px;
     font-weight: 700;
-    letter-spacing: 0.3px;
+    letter-spacing: 0.5px;
     text-transform: uppercase;
     border-right: 1px solid rgba(255,255,255,0.1);
 }
 .marks-table thead th:first-child {
     text-align: left;
-    padding-left: 14px;
-    width: 45%;
+    width: 75%;
 }
-.marks-table thead th:last-child { border-right: none; }
+.marks-table thead th:last-child {
+    border-right: none;
+    width: 25%;
+}
 
 .marks-table tbody tr {
     border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
 }
-.marks-table tbody tr.paper-row {
-    background: #fff;
-}
-.marks-table tbody tr.paper-row:hover {
+.marks-table tbody tr:last-child { border-bottom: none; }
+.marks-table tbody tr:hover {
     background: #fafbff;
-}
-.marks-table tbody tr.combined-row {
-    background: #f0f4f8;
-    border-top: 2px solid var(--navy);
-}
-.marks-table tbody tr.combined-row td {
-    font-weight: 700;
-    color: var(--navy);
 }
 
 .marks-table tbody td {
-    padding: 8px 8px;
+    padding: 14px 14px;
     text-align: center;
     vertical-align: middle;
-    border-right: 1px solid #f3f4f6;
 }
-.marks-table tbody td:first-child {
-    text-align: left;
-    padding-left: 14px;
+
+/* Subject name cell */
+.subject-name-cell {
+    text-align: left !important;
+    padding-left: 18px !important;
     font-weight: 600;
-    color: var(--dark);
-}
-.marks-table tbody td:last-child { border-right: none; }
-
-/* Book Header Row */
-.marks-table tbody tr.book-header {
-    background: linear-gradient(90deg, rgba(10,22,85,0.04), transparent);
-    border-bottom: 1px solid var(--navy);
-}
-.marks-table tbody tr.book-header td {
-    padding: 10px 14px;
-    font-size: 13px;
-    font-weight: 700;
     color: var(--navy);
-    text-align: left;
-    border-right: none;
+    font-size: 14px;
 }
 
-.book-header-content {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-.book-header-content i { color: var(--gold-dark); }
-.book-header-content .bh-code {
-    background: rgba(10,22,85,0.08);
+/* ৪র্থ subject tag */
+.fourth-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
     color: var(--navy);
-    font-family: 'Courier New', monospace;
-    font-size: 10.5px;
-    padding: 1px 6px;
-    border-radius: 4px;
+    font-size: 10px;
     font-weight: 700;
-}
-
-/* Paper Row */
-.paper-label {
-    padding-left: 28px !important;
-    color: var(--grey);
-    font-weight: 500;
-    font-size: 12px;
-    position: relative;
-}
-.paper-label::before {
-    content: '↳';
-    position: absolute;
-    left: 14px;
-    color: var(--gold-dark);
-    font-weight: 700;
-}
-
-/* Marks Cells */
-.marks-cell {
-    font-weight: 600;
-    color: var(--dark);
-    font-size: 12.5px;
-}
-.marks-cell.empty { color: #cbd5e1; }
-
-.total-cell {
-    font-weight: 700;
-    color: var(--navy);
-    font-family: 'Playfair Display', serif;
-    font-size: 13.5px;
+    padding: 2px 8px;
+    border-radius: 50px;
+    margin-left: 6px;
+    letter-spacing: 0.3px;
+    vertical-align: middle;
 }
 
 /* Grade Badge */
 .grade-badge {
     display: inline-block;
-    padding: 3px 9px;
-    border-radius: 6px;
-    font-size: 11px;
+    padding: 5px 14px;
+    border-radius: 8px;
+    font-size: 13px;
     font-weight: 700;
-    min-width: 32px;
-    letter-spacing: 0.3px;
+    min-width: 45px;
+    letter-spacing: 0.5px;
 }
 .grade-badge.Aplus { background: #dcfce7; color: #166534; }
 .grade-badge.A { background: #d1fae5; color: #065f46; }
@@ -411,83 +357,23 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .grade-badge.D { background: #fecaca; color: #991b1b; }
 .grade-badge.F { background: #7f1d1d; color: #fff; }
 
-/* GP Cell */
-.gp-cell {
-    font-weight: 700;
-    font-family: 'Playfair Display', serif;
-    font-size: 12.5px;
-    color: var(--navy);
-}
-.gp-cell.high { color: #059669; }
-.gp-cell.mid { color: #d97706; }
-.gp-cell.low { color: #dc2626; }
-
 /* ============ RESULT SUMMARY ============ */
 .result-summary {
-    padding: 20px 28px;
+    padding: 24px 28px;
     background: #fafbff;
     border-top: 3px double var(--navy);
-    border-bottom: 3px double var(--navy);
     position: relative;
     z-index: 1;
 }
-.summary-title {
-    font-size: 13px;
-    font-weight: 700;
-    color: var(--navy);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.summary-title i { color: var(--gold-dark); }
 
-.summary-breakdown {
-    background: #fff;
-    border-radius: 10px;
-    padding: 14px 18px;
-    border: 1px solid var(--border);
-    margin-bottom: 16px;
-}
-.sb-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 6px 0;
-    font-size: 12.5px;
-    border-bottom: 1px dashed #f0f2f5;
-}
-.sb-row:last-child { border-bottom: none; }
-.sb-row.highlight {
-    border-top: 1px solid var(--navy);
-    border-bottom: none;
-    padding-top: 10px;
-    margin-top: 6px;
-    font-weight: 700;
-    color: var(--navy);
-    font-size: 13.5px;
-}
-.sb-label { color: var(--dark); }
-.sb-value {
-    font-family: 'Playfair Display', serif;
-    font-weight: 700;
-    color: var(--navy);
-    font-size: 13px;
-}
-.sb-value.high { color: #059669; }
-
-/* Final Result Box */
 .final-box {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 12px;
-    margin-top: 16px;
 }
 .fb-item {
     text-align: center;
-    padding: 16px 12px;
+    padding: 18px 12px;
     border-radius: 12px;
     background: #fff;
     border: 2px solid var(--border);
@@ -509,16 +395,16 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     border-color: #dc2626;
 }
 .fb-label {
-    font-size: 10.5px;
+    font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.8px;
     opacity: 0.85;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
 }
 .fb-value {
     font-family: 'Playfair Display', serif;
-    font-size: 26px;
+    font-size: 30px;
     font-weight: 700;
     line-height: 1;
 }
@@ -527,12 +413,13 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .fb-item.grade .fb-label { color: rgba(10,22,85,0.7); }
 .fb-item.grade .fb-value { color: var(--navy); }
 .fb-item.status .fb-label { color: rgba(255,255,255,0.85); }
-.fb-item.status .fb-value { color: #fff; font-size: 22px; }
+.fb-item.status .fb-value { color: #fff; font-size: 24px; }
 
 /* ============ FOOTER ============ */
 .sheet-footer {
     padding: 20px 28px;
     background: #fafbff;
+    border-top: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
@@ -614,21 +501,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .btn-action.secondary:hover { border-color: var(--navy); background: #f5f7ff; }
 .btn-action i { font-size: 14px; }
 
-/* ============ ERROR ALERT ============ */
-.error-alert {
-    background: #fef2f2;
-    border-left: 4px solid var(--danger);
-    color: #991b1b;
-    padding: 16px 20px;
-    border-radius: 12px;
-    font-size: 13.5px;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: flex-start;
-    gap: 10px;
-}
-.error-alert i { font-size: 18px; margin-top: 1px; }
-
 /* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
     .main-wrap { padding: 14px 10px 50px; }
@@ -638,16 +510,14 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     .student-info { padding: 16px; grid-template-columns: 1fr 1fr; }
     .section { padding: 14px 16px; }
     .section-title { font-size: 11.5px; padding: 6px 10px; }
-    .marks-table { font-size: 11px; }
-    .marks-table thead th { padding: 8px 4px; font-size: 9.5px; }
-    .marks-table tbody td { padding: 6px 4px; }
-    .marks-table thead th:first-child,
-    .marks-table tbody td:first-child { padding-left: 8px; }
-    .paper-label { padding-left: 16px !important; }
-    .paper-label::before { left: 6px; }
+    .marks-table { font-size: 13px; }
+    .marks-table thead th { padding: 10px 8px; font-size: 10px; }
+    .marks-table tbody td { padding: 12px 8px; }
+    .subject-name-cell { padding-left: 12px !important; font-size: 13px; }
+    .grade-badge { padding: 4px 10px; font-size: 12px; min-width: 38px; }
     .result-summary { padding: 16px; }
     .final-box { grid-template-columns: 1fr; gap: 8px; }
-    .fb-value { font-size: 22px; }
+    .fb-value { font-size: 24px; }
     .sheet-footer { padding: 16px; flex-direction: column; align-items: stretch; }
     .signature { min-width: auto; }
     .action-buttons { padding: 14px; }
@@ -664,13 +534,11 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 /*                    PRINT STYLES — OFFICIAL TRANSCRIPT                    */
 /* ======================================================================== */
 @media print {
-    /* Page setup */
     @page {
         size: A4 portrait;
         margin: 10mm 8mm;
     }
 
-    /* Reset */
     * {
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
@@ -684,14 +552,12 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         font-size: 11pt !important;
     }
 
-    /* Hide non-printable elements */
     .public-header,
     .action-buttons,
     .error-alert,
     .loading-area,
     .empty-state { display: none !important; }
 
-    /* Main container reset */
     .main-wrap {
         padding: 0 !important;
         max-width: none !important;
@@ -700,7 +566,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
     .result-area { display: block !important; }
 
-    /* Sheet wrapper */
     .sheet-wrapper {
         box-shadow: none !important;
         border-radius: 0 !important;
@@ -714,7 +579,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         background-size: 300px !important;
     }
 
-    /* Header — keep on first page */
     .sheet-header {
         page-break-inside: avoid;
         page-break-after: avoid;
@@ -729,7 +593,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     .sheet-header .sh-title { font-size: 11pt !important; padding-top: 6px !important; margin-top: 6px !important; }
     .sheet-header .sh-exam { font-size: 9pt !important; }
 
-    /* Student info */
     .student-info {
         page-break-inside: avoid;
         page-break-after: avoid;
@@ -739,15 +602,11 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     .si-item .si-label { font-size: 8pt !important; }
     .si-item .si-value { font-size: 10pt !important; }
 
-    /* Sections */
     .section {
         padding: 10px 18px !important;
         page-break-inside: auto;
     }
-    .section + .section {
-        padding-top: 0 !important;
-        page-break-before: auto;
-    }
+    .section + .section { padding-top: 0 !important; }
     .section-title {
         page-break-after: avoid;
         font-size: 10pt !important;
@@ -755,18 +614,15 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         margin-bottom: 8px !important;
     }
 
-    /* Tables */
     .marks-table {
         page-break-inside: auto;
-        font-size: 9.5pt !important;
+        font-size: 10pt !important;
         width: 100% !important;
     }
-    .marks-table thead {
-        display: table-header-group;
-    }
+    .marks-table thead { display: table-header-group; }
     .marks-table thead th {
-        font-size: 8.5pt !important;
-        padding: 6px 4px !important;
+        font-size: 9pt !important;
+        padding: 8px 10px !important;
         background: #0a1655 !important;
         color: #fff !important;
     }
@@ -774,61 +630,33 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
         page-break-inside: avoid;
         page-break-after: auto;
     }
-    .marks-table tbody tr.book-header {
-        page-break-after: avoid;
-        page-break-inside: avoid;
-    }
-    .marks-table tbody tr.combined-row {
-        page-break-inside: avoid;
-        page-break-before: avoid;
-    }
     .marks-table tbody td {
-        padding: 5px 4px !important;
-        font-size: 9pt !important;
+        padding: 10px !important;
+        font-size: 10pt !important;
     }
+    .subject-name-cell { font-size: 10.5pt !important; }
 
-    /* Paper label */
-    .paper-label {
-        padding-left: 18px !important;
-        font-size: 9pt !important;
-    }
-
-    /* Grade badges */
     .grade-badge {
-        padding: 2px 6px !important;
-        font-size: 8.5pt !important;
+        padding: 3px 10px !important;
+        font-size: 10pt !important;
         border: 1px solid rgba(0,0,0,0.1) !important;
     }
 
-    /* Total cell */
-    .total-cell { font-size: 10pt !important; }
-    .gp-cell { font-size: 9.5pt !important; }
-    .marks-cell { font-size: 9pt !important; }
-
-    /* Result summary */
     .result-summary {
         page-break-inside: avoid;
         page-break-before: auto;
-        padding: 14px 18px !important;
+        padding: 16px 18px !important;
     }
-    .summary-title { font-size: 10.5pt !important; margin-bottom: 10px !important; }
-    .summary-breakdown { padding: 10px 14px !important; margin-bottom: 12px !important; }
-    .sb-row { font-size: 9.5pt !important; padding: 4px 0 !important; }
-    .sb-value { font-size: 10pt !important; }
-    .sb-row.highlight { font-size: 10.5pt !important; }
 
-    /* Final box */
     .final-box {
         gap: 8px !important;
         page-break-inside: avoid;
-        margin-top: 10px !important;
     }
-    .fb-item { padding: 10px 8px !important; }
-    .fb-label { font-size: 8pt !important; }
-    .fb-value { font-size: 18pt !important; }
-    .fb-item.status .fb-value { font-size: 15pt !important; }
+    .fb-item { padding: 12px 8px !important; }
+    .fb-label { font-size: 8.5pt !important; }
+    .fb-value { font-size: 20pt !important; }
+    .fb-item.status .fb-value { font-size: 16pt !important; }
 
-    /* Footer */
     .sheet-footer {
         page-break-inside: avoid;
         padding: 14px 18px !important;
@@ -837,11 +665,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     .signature .sig-line { font-size: 9pt !important; }
     .signature .sig-sub { font-size: 8pt !important; }
 
-    /* Page break helpers */
-    .page-break { page-break-after: always; }
-    .no-page-break { page-break-inside: avoid; }
-
-    /* Remove hover effects */
     .marks-table tbody tr:hover { background: transparent !important; }
 }
 </style>
@@ -910,7 +733,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/config.js"></script>
 <script src="../js/supabase.js"></script>
 <script src="../js/admin-popup.js"></script>
-<script src="../js/result-details.js?v=3"></script>
+<script src="../js/result-details.js?v=4"></script>
 
 </body>
 </html>
