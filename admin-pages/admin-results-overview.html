@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result Overview (Admin) - Fulbariya College</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy: #0a1655;
+    --navy-2: #1a237e;
+    --gold: #f2d27b;
+    --gold-2: #d4af37;
+    --gold-dark: #b8941f;
+    --off-white: #f8f9fc;
+    --grey: #6b7280;
+    --dark: #1f2937;
+    --success: #10b981;
+    --danger: #ef4444;
+    --warning: #f59e0b;
+    --border-light: rgba(0,0,0,0.04);
+    --shadow-sm: 0 1px 3px rgba(10,22,85,0.06);
+    --shadow-md: 0 4px 16px rgba(10,22,85,0.08);
+}
+* { font-family: 'Hind Siliguri', sans-serif; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { background: var(--off-white); margin: 0; color: var(--dark); }
+
+/* HEADER */
+.admin-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 20px rgba(10,22,85,0.2);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.admin-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.admin-header .brand { display: flex; align-items: center; gap: 12px; }
+.admin-header .brand-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.admin-header h4 { margin: 0; font-size: 16px; font-weight: 700; }
+.admin-header small { font-size: 10.5px; opacity: 0.85; display: block; margin-top: 2px; }
+.admin-header .user-box { display: flex; align-items: center; gap: 8px; }
+.avatar-circle {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--gold), var(--gold-2));
+    color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px;
+    border: 2px solid rgba(242,210,123,0.4);
+    overflow: hidden;
+}
+.avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+.btn-header {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-header:hover { background: rgba(255,255,255,0.25); color: #fff; }
+
+/* MAIN */
+.main-wrap { max-width: 1400px; margin: 0 auto; padding: 20px 16px 60px; }
+
+.page-title {
+    color: var(--navy);
+    font-weight: 700;
+    font-size: 20px;
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.page-title i { color: var(--gold-dark); }
+.page-sub { color: var(--grey); font-size: 12.5px; margin-bottom: 18px; }
+
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+}
+.toolbar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.btn-primary-grad {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    transition: 0.3s;
+    box-shadow: 0 4px 16px rgba(10,22,85,0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.btn-primary-grad:hover:not(:disabled) { transform: translateY(-2px); color: #fff; }
+.btn-primary-grad:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn-primary-grad i { color: var(--gold); }
+
+.btn-secondary {
+    background: #fff;
+    color: var(--navy);
+    border: 1.5px solid #e5e7eb;
+    padding: 10px 18px;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+}
+.btn-secondary:hover { border-color: var(--navy); background: #f5f7ff; color: var(--navy); }
+
+/* STATS */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+}
+.stat-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    transition: 0.25s;
+}
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.stat-card .sc-icon {
+    width: 48px; height: 48px;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+.stat-card .sc-icon.navy { background: linear-gradient(135deg, var(--navy), var(--navy-2)); color: var(--gold); }
+.stat-card .sc-icon.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.stat-card .sc-icon.red { background: linear-gradient(135deg, #ef4444, #dc2626); color: #fff; }
+.stat-card .sc-icon.gold { background: linear-gradient(135deg, var(--gold), var(--gold-2)); color: var(--navy); }
+.stat-card .sc-icon.purple { background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: #fff; }
+.stat-card .sc-info { min-width: 0; }
+.stat-card .sc-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+    line-height: 1;
+    font-family: 'Playfair Display', serif;
+}
+.stat-card .sc-label {
+    font-size: 11px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 5px;
+}
+
+/* FILTER */
+.filter-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 16px 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 18px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    align-items: end;
+}
+.filter-card label {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+    margin-bottom: 5px;
+}
+.filter-card select {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13px;
+    outline: none;
+    font-family: inherit;
+    font-weight: 600;
+    color: var(--navy);
+}
+.filter-card select:focus { border-color: var(--navy); background: #fff; }
+
+/* CHART */
+.chart-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    margin-bottom: 18px;
+}
+.chart-card-header {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, #fafbff, #fff);
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+}
+.chart-card-header::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, var(--navy), var(--navy-2));
+}
+.chart-card-header .cch-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+}
+.chart-card-header h6 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--navy);
+}
+.chart-card-header small {
+    display: block;
+    font-size: 11px;
+    color: var(--grey);
+    font-weight: 500;
+    margin-top: 2px;
+}
+.chart-card-body { padding: 16px 18px 20px; }
+.chart-canvas-wrap {
+    position: relative;
+    width: 100%;
+    height: 340px;
+}
+@media (max-width: 768px) {
+    .chart-canvas-wrap { height: 280px; }
+}
+
+/* TABLE */
+.table-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+.table-card-header {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.table-card-header h6 { margin: 0; font-size: 14px; font-weight: 700; }
+.table-card-header .tch-count {
+    background: rgba(242,210,123,0.2);
+    color: var(--gold);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+.table-responsive { overflow-x: auto; }
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+.data-table th {
+    background: #fafbff;
+    padding: 11px 12px;
+    text-align: left;
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 11.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 1.5px solid #e5e7eb;
+    white-space: nowrap;
+}
+.data-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border-light);
+    vertical-align: middle;
+}
+.data-table tbody tr:hover { background: #f5f7ff; }
+.data-table tbody tr:last-child td { border-bottom: none; }
+
+.level-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 50px;
+    font-size: 10.5px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.level-badge.HSC { background: #dbeafe; color: #1e40af; }
+.level-badge.Degree { background: #fef3c7; color: #92400e; }
+.level-badge.Honours { background: #f3e8ff; color: #6b21a8; }
+
+.pass-rate-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 100px;
+}
+.pass-rate-bar .prb-track {
+    flex: 1;
+    height: 6px;
+    background: #f3f4f6;
+    border-radius: 50px;
+    overflow: hidden;
+    min-width: 50px;
+}
+.pass-rate-bar .prb-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #059669);
+    border-radius: 50px;
+    transition: width 0.4s;
+}
+.pass-rate-bar .prb-fill.low { background: linear-gradient(90deg, #ef4444, #dc2626); }
+.pass-rate-bar .prb-text {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--navy);
+    min-width: 40px;
+    text-align: right;
+}
+
+.row-actions { display: flex; gap: 5px; }
+.row-action-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    border: none;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.row-action-btn:hover { transform: scale(1.1); }
+.row-action-btn.edit { background: #e3f2fd; color: #1565c0; }
+.row-action-btn.delete { background: #fef2f2; color: #dc2626; }
+
+/* LOADING / EMPTY */
+.loading-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 60px 20px;
+    text-align: center;
+    border: 1px solid var(--border-light);
+}
+.loading-spinner {
+    width: 44px;
+    height: 44px;
+    border: 4px solid rgba(10,22,85,0.1);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading-card p { color: var(--grey); font-size: 13.5px; margin: 0; }
+
+.empty-state { padding: 40px 20px; text-align: center; }
+.empty-state .es-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, rgba(10,22,85,0.06), rgba(13,71,161,0.04));
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+.empty-state .es-icon i { font-size: 30px; color: var(--navy); opacity: 0.35; }
+.empty-state h6 { color: #374151; font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+.empty-state p { font-size: 12.5px; color: var(--grey); margin: 0; }
+
+/* MODAL */
+.fdc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(6, 29, 54, 0.7);
+    backdrop-filter: blur(6px);
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+.fdc-modal-overlay.show { display: flex; }
+.fdc-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 620px;
+    width: 100%;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.4);
+    animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.fdc-modal-header {
+    background: linear-gradient(135deg, var(--navy), var(--navy-2));
+    padding: 22px 24px;
+    border-radius: 20px 20px 0 0;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+.fdc-modal-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.fdc-modal-header .mh-left { display: flex; align-items: center; gap: 12px; }
+.fdc-modal-header .mh-icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    background: rgba(242,210,123,0.15);
+    color: var(--gold);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 1px solid rgba(242,210,123,0.3);
+}
+.fdc-modal-header h5 { margin: 0; font-size: 16px; font-weight: 700; color: #fff; }
+.fdc-modal-header small { font-size: 11px; opacity: 0.85; display: block; margin-top: 2px; }
+.fdc-modal-close {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: none;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+.fdc-modal-close:hover { background: var(--danger); transform: rotate(90deg); }
+.fdc-modal-body { padding: 22px 24px; }
+.fdc-form-label {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #4b5563;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    display: block;
+}
+.fdc-form-label .req { color: var(--danger); }
+.fdc-input, .fdc-select {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1.5px solid #e5e7eb;
+    background: #fafbff;
+    font-size: 13.5px;
+    outline: none;
+    font-family: inherit;
+    font-weight: 500;
+}
+.fdc-input:focus, .fdc-select:focus {
+    border-color: var(--navy);
+    box-shadow: 0 0 0 4px rgba(10,22,85,0.08);
+    background: #fff;
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+.form-row.full { grid-template-columns: 1fr; }
+@media (max-width: 576px) { .form-row { grid-template-columns: 1fr; } }
+.fdc-modal-footer {
+    padding: 16px 24px 22px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--border-light);
+    background: #fafbff;
+    position: sticky;
+    bottom: 0;
+}
+.fdc-alert {
+    padding: 12px 16px;
+    border-radius: 10px;
+    font-size: 12.5px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+.fdc-alert.info { background: #eff6ff; color: #1e40af; border-left: 3px solid #3b82f6; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .main-wrap { padding: 14px 12px 50px; }
+    .page-title { font-size: 17px; }
+    .toolbar { flex-direction: column; align-items: stretch; }
+    .toolbar-actions { justify-content: center; }
+    .filter-card { grid-template-columns: 1fr 1fr; }
+    .stats-row { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .stat-card { padding: 14px; gap: 10px; }
+    .stat-card .sc-icon { width: 40px; height: 40px; font-size: 16px; }
+    .stat-card .sc-value { font-size: 20px; }
+}
+@media (max-width: 480px) {
+    .btn-header span { display: none; }
+    .filter-card { grid-template-columns: 1fr; }
+    .toolbar-actions button { font-size: 11.5px; padding: 8px 14px; }
+}
+</style>
+</head>
+<body>
+
+<header class="admin-header">
+    <div class="brand">
+        <div class="brand-icon"><i class="fas fa-chart-bar"></i></div>
+        <div>
+            <h4>Result Overview</h4>
+            <small>Board Result Management</small>
+        </div>
+    </div>
+    <div class="user-box">
+        <div class="avatar-circle" data-admin-avatar>A</div>
+        <a href="admin-dashboard.html" class="btn-header">
+            <i class="fas fa-arrow-left"></i> <span>Dashboard</span>
+        </a>
+        <button class="btn-header" onclick="handleLogout()">
+            <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+        </button>
+    </div>
+</header>
+
+<div class="main-wrap">
+
+    <div class="toolbar">
+        <div>
+            <h4 class="page-title">
+                <i class="fas fa-chart-line"></i> Board Result Overview
+            </h4>
+            <p class="page-sub">HSC · Degree · Honours — Manage & Analyze</p>
+        </div>
+        <div class="toolbar-actions">
+            <button class="btn-secondary" id="btnRefresh">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+            <button class="btn-primary-grad" id="btnAddResult">
+                <i class="fas fa-plus-circle"></i> Add Result
+            </button>
+        </div>
+    </div>
+
+    <div class="stats-row">
+        <div class="stat-card">
+            <div class="sc-icon navy"><i class="fas fa-users"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statTotal">0</div>
+                <div class="sc-label">Total</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="sc-icon green"><i class="fas fa-check-circle"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statPassed">0</div>
+                <div class="sc-label">Passed</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="sc-icon red"><i class="fas fa-times-circle"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statFailed">0</div>
+                <div class="sc-label">Failed</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="sc-icon gold"><i class="fas fa-percentage"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statRate">0%</div>
+                <div class="sc-label">Pass Rate</div>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="sc-icon purple"><i class="fas fa-user-times"></i></div>
+            <div class="sc-info">
+                <div class="sc-value" id="statAbsent">0</div>
+                <div class="sc-label">Absent</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="filter-card">
+        <div>
+            <label>Exam Level</label>
+            <select id="filterLevel">
+                <option value="">All Levels</option>
+                <option value="HSC">HSC</option>
+                <option value="Degree">Degree</option>
+                <option value="Honours">Honours</option>
+            </select>
+        </div>
+        <div>
+            <label>Year</label>
+            <select id="filterYear">
+                <option value="">All Years</option>
+            </select>
+        </div>
+        <div>
+            <label>Group / Department</label>
+            <select id="filterGroup">
+                <option value="">All Groups</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="chart-card">
+        <div class="chart-card-header">
+            <div class="cch-icon"><i class="fas fa-chart-bar"></i></div>
+            <div>
+                <h6>📈 Year-wise Result Overview</h6>
+                <small>প্রতি বছরের Pass (সবুজ) + Fail (লাল)</small>
+            </div>
+        </div>
+        <div class="chart-card-body">
+            <div class="chart-canvas-wrap">
+                <canvas id="chartYearWise"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-card-header">
+            <div style="display:flex; align-items:center; gap:10px;">
+                <i class="fas fa-list"></i>
+                <h6>All Board Results</h6>
+            </div>
+            <span class="tch-count" id="tableCount">0</span>
+        </div>
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Level</th>
+                        <th>Year</th>
+                        <th>Group / Dept</th>
+                        <th>Total</th>
+                        <th>Passed</th>
+                        <th>Failed</th>
+                        <th>Absent</th>
+                        <th>Pass Rate</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsTableBody">
+                    <tr>
+                        <td colspan="10" style="text-align:center; padding:40px;">
+                            <div class="loading-spinner" style="margin:0 auto 12px;"></div>
+                            <p style="color:var(--grey); font-size:13px; margin:0;">লোড হচ্ছে...</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="fdc-modal-overlay" id="resultModal">
+    <div class="fdc-modal">
+        <div class="fdc-modal-header">
+            <div class="mh-left">
+                <div class="mh-icon"><i class="fas fa-plus-circle" id="resultModalIcon"></i></div>
+                <div>
+                    <h5 id="resultModalTitle">Add Board Result</h5>
+                    <small id="resultModalSub">Board exam-এর result যোগ করুন</small>
+                </div>
+            </div>
+            <button class="fdc-modal-close" id="closeResultModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="fdc-modal-body">
+            <input type="hidden" id="editResultId" value="">
+
+            <div class="form-row">
+                <div>
+                    <label class="fdc-form-label">Exam Name <span class="req">*</span></label>
+                    <select class="fdc-select" id="resultExamName">
+                        <option value="">Select</option>
+                        <option value="HSC">HSC</option>
+                        <option value="Degree">Degree</option>
+                        <option value="Honours">Honours</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="fdc-form-label">Year <span class="req">*</span></label>
+                    <input type="number" class="fdc-input" id="resultYear" placeholder="যেমন: 2024" min="2000" max="2100">
+                </div>
+            </div>
+
+            <div class="form-row full">
+                <div>
+                    <label class="fdc-form-label">Group / Department <span class="req">*</span></label>
+                    <input type="text" class="fdc-input" id="resultGroup" placeholder="যেমন: Science / Bangla / B.A (Pass)">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label class="fdc-form-label">Total Students <span class="req">*</span></label>
+                    <input type="number" class="fdc-input" id="resultTotal" placeholder="0" min="0">
+                </div>
+                <div>
+                    <label class="fdc-form-label">Absentee</label>
+                    <input type="number" class="fdc-input" id="resultAbsent" placeholder="0" min="0">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div>
+                    <label class="fdc-form-label">Passed <span class="req">*</span></label>
+                    <input type="number" class="fdc-input" id="resultPassed" placeholder="0" min="0">
+                </div>
+                <div>
+                    <label class="fdc-form-label">Failed <span class="req">*</span></label>
+                    <input type="number" class="fdc-input" id="resultFailed" placeholder="0" min="0">
+                </div>
+            </div>
+
+            <div class="fdc-alert info">
+                <i class="fas fa-info-circle"></i>
+                <div>Passed + Failed + Absentee = Total Students (auto-check হবে)</div>
+            </div>
+        </div>
+
+        <div class="fdc-modal-footer">
+            <button class="btn-secondary" id="cancelResultBtn">
+                <i class="fas fa-times"></i> Cancel
+            </button>
+            <button class="btn-primary-grad" id="saveResultBtn">
+                <i class="fas fa-save"></i> Save Result
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="../js/config.js"></script>
+<script src="../js/supabase.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/admin-popup.js?v=2"></script>
+<script src="../js/session-helper.js"></script>
+<script src="../js/admin-result-overview.js?v=1"></script>
+
+</body>
+</html>
