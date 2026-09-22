@@ -236,27 +236,18 @@ img { max-width: 100%; display: block; }
 .sk-welcome-wrap .sk-btn { display: inline-block; width: 170px; height: 44px; border-radius: 50px; }
 
 .sk-counter-glass {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
-    border: 1px solid rgba(242, 210, 123, 0.4);
-    padding: 40px 50px;
+    background: transparent;
+    border: 1.5px solid rgba(242, 210, 123, 0.55);
+    border-radius: 16px;
+    padding: 28px 44px;
     display: flex;
     align-items: center;
-    gap: 30px;
-    min-height: 200px;
-    max-width: 780px;
+    justify-content: center;
+    gap: 24px;
+    min-height: auto;
+    max-width: fit-content;
     margin: 0 auto;
     position: relative;
-}
-.sk-counter-glass::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 5px;
-    background: var(--gold);
-    border-radius: 20px 0 0 20px;
 }
 .sk-counter-glass .sk-counter-icon { width: 78px; height: 78px; border-radius: 20px; flex-shrink: 0; }
 .sk-counter-glass .sk-counter-info { flex: 1; display: flex; flex-direction: column; gap: 12px; }
@@ -1101,27 +1092,21 @@ img { max-width: 100%; display: block; }
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    gap: 30px;
-    padding: 40px 50px;
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
-    border: 1px solid rgba(242, 210, 123, 0.4);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    justify-content: center;
+    gap: 24px;
+    padding: 28px 44px;
+    background: transparent;
+    border-radius: 16px;
+    border: 1.5px solid rgba(242, 210, 123, 0.55);
+    box-shadow: none;
     position: relative;
-    overflow: hidden;
-    text-align: left;
-    min-height: 200px;
-}
-.counter-glass::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 5px;
-    background: var(--gold);
-    border-radius: 20px 0 0 20px;
+    overflow: visible;
+    text-align: center;
+    min-height: auto;
+    max-width: fit-content;
+    margin: 0 auto;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 .counter-fm-icon {
     flex-shrink: 0;
