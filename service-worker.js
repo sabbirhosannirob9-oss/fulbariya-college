@@ -2,24 +2,22 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v2.9.2
+ * Version: v3.0.1
  * Purpose: PWA Install + Offline Caching
  *
- * Changes v2.9.2:
- *   - Admin Admissions v2.1 (PDF button conditional)
- *   - Legacy: v2.9.1 Subject Pools, v2.8.0 Admission System, v2.7.0 Result Overview
+ * Changes v3.0.1:
+ *   - admission-print.js v1.1 (bulk support)
+ *   - admin-admissions.js v3.1 (bulk print button)
+ *   - Legacy: v3.0.0 jsPDF removal, v2.9.x Admission System
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v2.9.2';
+const CACHE_VERSION = 'fdc-v3.0.1';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
 const DYNAMIC_CACHE_LIMIT = 60;
 
-// =========================================================
-// STATIC ASSETS — Pre-cache on install
-// =========================================================
 const STATIC_ASSETS = [
     // ==================== Core ====================
     '/',
@@ -47,8 +45,6 @@ const STATIC_ASSETS = [
     '/js/auth.js',
     '/js/app.js',
     '/js/scroll-restore.js',
-
-    // ✅ Session Helper (central year system)
     '/js/session-helper.js',
 
     // ==================== JS — Public ====================
@@ -110,9 +106,10 @@ const STATIC_ASSETS = [
     // ==================== JS — Admission System ====================
     '/js/bd-locations.js?v=1',
     '/js/subject-pools.js?v=1',
-    '/js/admission.js?v=7.1',
+    '/js/admission.js?v=8.0',
+    '/js/admission-print.js?v=1.1',
     '/js/admission-status.js?v=3',
-    '/js/admin-admissions.js?v=2.1',
+    '/js/admin-admissions.js?v=3.1',
 
     // ==================== Public Pages ====================
     '/public-pages/results.html',
@@ -134,14 +131,11 @@ const STATIC_ASSETS = [
     '/public-pages/admission-hsc.html',
     '/public-pages/admission-bm.html',
     '/public-pages/admission-status.html',
+    '/public-pages/admission-print.html',
 
-    // Academic Hub (Calendar only)
+    // Academic Hub
     '/public-pages/academic-hub.html',
-
-    // Class Routine Board
     '/public-pages/class-routine.html',
-
-    // Exam Routine Board
     '/public-pages/exam-routine.html',
 
     // ==================== Admin Pages ====================
@@ -162,24 +156,16 @@ const STATIC_ASSETS = [
     '/admin-pages/admin-profile.html',
     '/admin-pages/admin-board-final.html',
     '/admin-pages/admin-result-overview.html',
-
-    // Admission Admin
     '/admin-pages/admin-admissions.html',
-
-    // Class Routine
     '/admin-pages/admin-class-routine.html',
-
-    // Exam Routine
     '/admin-pages/admin-exam-routine.html',
-
-    // Promote Pages
     '/admin-pages/admin-promote.html',
     '/admin-pages/admin-promote-history.html',
     '/admin-pages/admin-promote-settings.html'
 ];
 
 // =========================================================
-// INSTALL — Pre-cache static assets
+// INSTALL
 // =========================================================
 self.addEventListener('install', function (event) {
     console.log('[SW] Installing v' + CACHE_VERSION + '...');
@@ -213,7 +199,7 @@ self.addEventListener('install', function (event) {
 });
 
 // =========================================================
-// ACTIVATE — Clean old caches
+// ACTIVATE
 // =========================================================
 self.addEventListener('activate', function (event) {
     console.log('[SW] Activating v' + CACHE_VERSION + '...');
@@ -238,7 +224,7 @@ self.addEventListener('activate', function (event) {
 });
 
 // =========================================================
-// HELPER — Trim dynamic cache
+// HELPERS
 // =========================================================
 function trimCache(cacheName, maxItems) {
     caches.open(cacheName).then(function (cache) {
@@ -252,16 +238,13 @@ function trimCache(cacheName, maxItems) {
     });
 }
 
-// =========================================================
-// HELPER — Check if HTML request
-// =========================================================
 function isHtmlRequest(request) {
     const accept = request.headers.get('accept') || '';
     return accept.includes('text/html');
 }
 
 // =========================================================
-// FETCH — Smart caching strategy
+// FETCH
 // =========================================================
 self.addEventListener('fetch', function (event) {
     const request = event.request;
@@ -270,9 +253,6 @@ self.addEventListener('fetch', function (event) {
     if (request.method !== 'GET') return;
     if (!url.protocol.startsWith('http')) return;
 
-    // =====================================================
-    // External APIs — Network first
-    // =====================================================
     if (
         url.hostname.includes('supabase.co') ||
         url.hostname.includes('cloudinary.com') ||
@@ -297,14 +277,8 @@ self.addEventListener('fetch', function (event) {
         return;
     }
 
-    // =====================================================
-    // Same-origin only
-    // =====================================================
     if (url.origin !== location.origin) return;
 
-    // =====================================================
-    // HTML pages — NETWORK-FIRST
-    // =====================================================
     if (isHtmlRequest(request)) {
         event.respondWith(
             fetch(request)
@@ -328,9 +302,6 @@ self.addEventListener('fetch', function (event) {
         return;
     }
 
-    // =====================================================
-    // JS / CSS / Images — STALE-WHILE-REVALIDATE
-    // =====================================================
     event.respondWith(
         caches.match(request).then(function (cached) {
             const fetchPromise = fetch(request)
@@ -354,7 +325,7 @@ self.addEventListener('fetch', function (event) {
 });
 
 // =========================================================
-// MESSAGE — Manual cache control
+// MESSAGE
 // =========================================================
 self.addEventListener('message', function (event) {
     if (!event.data) return;
