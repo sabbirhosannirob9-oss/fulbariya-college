@@ -2,15 +2,14 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMIN ADMISSION MANAGEMENT
  * Location: js/admin-admissions.js
- * Version: v3.1 — Bulk Print added
+ * Version: v3.2 — Active default filter + Group tabs polish
  * 
- * ✅ Features:
- *    - Load all applications
- *    - Main tabs / Sub tabs / Status chips / Search / Stats
- *    - View / Verify / Admit / Cancel actions
- *    - Export CSV
- *    - Single Print + Bulk Print (Print to PDF)
- *    - Print button only in Admitted/Cancelled cards
+ * ✅ Changes from v3.1:
+ *    - Default status = "Active" (Pending + Verified + Admitted)
+ *    - Cancelled applications hidden by default
+ *    - New "Active" status chip
+ *    - Stats card click → Active default
+ *    - All chip → shows everything (including cancelled)
  * =========================================================
  */
 
@@ -27,7 +26,7 @@
 
     let currentLevel = 'all';
     let currentGroup = 'all';
-    let currentStatus = 'all';
+    let currentStatus = 'active';   // ✅ CHANGED: 'all' → 'active'
     let currentSearch = '';
 
     let actionApplicationId = null;
@@ -76,6 +75,19 @@
             }
             if (++n > 40) clearInterval(i);
         }, 500);
+    }
+
+    // =========================================================
+    // ✅ STATUS MATCHING (Active = pending + verified + admitted)
+    // =========================================================
+    function matchesStatus(app, status) {
+        const s = (app.status || 'pending').toLowerCase();
+
+        if (status === 'all') return true;
+        if (status === 'active') {
+            return s === 'pending' || s === 'verified' || s === 'admitted';
+        }
+        return s === status;
     }
 
     // =========================================================
@@ -151,6 +163,9 @@
         const verified = allApplications.filter(a => a.status === 'verified').length;
         const admitted = allApplications.filter(a => a.status === 'admitted').length;
         const cancelled = allApplications.filter(a => a.status === 'cancelled').length;
+
+        // Total card → Active (pending + verified + admitted)
+        const active = pending + verified + admitted;
 
         $('statTotal').textContent = total;
         $('statPending').textContent = pending;
@@ -238,12 +253,17 @@
         const verified = levelApps.filter(a => a.status === 'verified').length;
         const admitted = levelApps.filter(a => a.status === 'admitted').length;
         const cancelled = levelApps.filter(a => a.status === 'cancelled').length;
+        const active = pending + verified + admitted;
 
         $('chipAll').textContent = total;
         $('chipPending').textContent = pending;
         $('chipVerified').textContent = verified;
         $('chipAdmitted').textContent = admitted;
         $('chipCancelled').textContent = cancelled;
+
+        // Update Active chip if exists
+        const activeChip = $('chipActive');
+        if (activeChip) activeChip.textContent = active;
     }
 
     function getFilteredByLevelAndGroup() {
@@ -256,7 +276,7 @@
 
     function applyFiltersAndRender() {
         filteredApplications = getFilteredByLevelAndGroup().filter(a => {
-            if (currentStatus !== 'all' && a.status !== currentStatus) return false;
+            if (!matchesStatus(a, currentStatus)) return false;
 
             if (currentSearch) {
                 const q = currentSearch.toLowerCase();
@@ -453,7 +473,7 @@
     }
 
     // =========================================================
-    // BULK PRINT VIEW (v3.1)
+    // BULK PRINT VIEW
     // =========================================================
     function handleBulkPrint() {
         if (filteredApplications.length === 0) {
@@ -985,7 +1005,7 @@
     // INIT
     // =========================================================
     function init() {
-        console.log('🚀 Admin Admissions v3.1 initializing...');
+        console.log('🚀 Admin Admissions v3.2 initializing...');
 
         attachEvents();
 
@@ -996,7 +1016,7 @@
             await loadAdminInfo();
             await loadApplications();
 
-            console.log('✅ Admin Admissions v3.1 ready');
+            console.log('✅ Admin Admissions v3.2 ready');
         });
     }
 
