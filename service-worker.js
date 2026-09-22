@@ -2,17 +2,17 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v3.0.1
+ * Version: v3.0.2
  * Purpose: PWA Install + Offline Caching
  *
- * Changes v3.0.1:
+ * Changes v3.0.2:
+ *   - admission-status.js v3.0 (Print to PDF)
  *   - admission-print.js v1.1 (bulk support)
- *   - admin-admissions.js v3.1 (bulk print button)
  *   - Legacy: v3.0.0 jsPDF removal, v2.9.x Admission System
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v3.0.1';
+const CACHE_VERSION = 'fdc-v3.0.2';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -108,7 +108,7 @@ const STATIC_ASSETS = [
     '/js/subject-pools.js?v=1',
     '/js/admission.js?v=8.0',
     '/js/admission-print.js?v=1.1',
-    '/js/admission-status.js?v=3',
+    '/js/admission-status.js?v=3.0',
     '/js/admin-admissions.js?v=3.1',
 
     // ==================== Public Pages ====================
