@@ -2,18 +2,16 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v2.7.0
+ * Version: v2.9.2
  * Purpose: PWA Install + Offline Caching
  *
- * Changes v2.7.0:
- *   - Result Overview (Public) v2 — Board Final bar charts
- *   - Result Details v4 — Simplified combined marksheet
- *   - Admin Result Overview v1 — Board result CRUD
- *   - Legacy: Admin Students v13, Subjects v4, Results v3
+ * Changes v2.9.2:
+ *   - Admin Admissions v2.1 (PDF button conditional)
+ *   - Legacy: v2.9.1 Subject Pools, v2.8.0 Admission System, v2.7.0 Result Overview
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v2.7.0';
+const CACHE_VERSION = 'fdc-v2.9.2';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -109,6 +107,13 @@ const STATIC_ASSETS = [
     '/js/exam-routine.js?v=2',
     '/js/academic-hub.js?v=3',
 
+    // ==================== JS — Admission System ====================
+    '/js/bd-locations.js?v=1',
+    '/js/subject-pools.js?v=1',
+    '/js/admission.js?v=7.1',
+    '/js/admission-status.js?v=3',
+    '/js/admin-admissions.js?v=2.1',
+
     // ==================== Public Pages ====================
     '/public-pages/results.html',
     '/public-pages/result-details.html',
@@ -124,6 +129,11 @@ const STATIC_ASSETS = [
     '/public-pages/about.html',
     '/public-pages/admission.html',
     '/public-pages/academics.html',
+
+    // Admission Pages
+    '/public-pages/admission-hsc.html',
+    '/public-pages/admission-bm.html',
+    '/public-pages/admission-status.html',
 
     // Academic Hub (Calendar only)
     '/public-pages/academic-hub.html',
@@ -152,6 +162,9 @@ const STATIC_ASSETS = [
     '/admin-pages/admin-profile.html',
     '/admin-pages/admin-board-final.html',
     '/admin-pages/admin-result-overview.html',
+
+    // Admission Admin
+    '/admin-pages/admin-admissions.html',
 
     // Class Routine
     '/admin-pages/admin-class-routine.html',
