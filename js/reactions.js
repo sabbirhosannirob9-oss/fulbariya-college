@@ -2,25 +2,19 @@
  * =========================================================
  * FULBARIYA COLLEGE — CONTENT REACTIONS
  * Location: js/reactions.js
- * Version: v1.0 — Facebook-style reactions for News & Gallery
+ * Version: v1.1 — Facebook-style reactions for News & Gallery
  * 
- * Features:
- *   - 3 reaction types: love, care, sad
- *   - Anonymous (browser-based fingerprint)
- *   - Toggle on/off
- *   - Change between reactions
- *   - Real-time count update
- *   - Hover picker (desktop)
- *   - Long-press picker (mobile)
+ * Fixes in v1.1:
+ *   - Idempotent mount (prevents duplicate bars)
+ *   - Single document-level outside-click listener
+ *   - Proper cleanup on re-mount
+ *   - All cards now receive reactions (not just first)
  * =========================================================
  */
 
 (function () {
     "use strict";
 
-    // =========================================================
-    // CONFIG
-    // =========================================================
     const REACTIONS = {
         love: { icon: '❤️', label: 'Love', color: '#ef4444' },
         care: { icon: '🥰', label: 'Care', color: '#f59e0b' },
@@ -30,13 +24,12 @@
     const VISITOR_KEY = 'fdc_visitor_fingerprint';
 
     // =========================================================
-    // VISITOR FINGERPRINT (Anonymous)
+    // VISITOR FINGERPRINT
     // =========================================================
     function getVisitorFingerprint() {
         try {
             let fp = localStorage.getItem(VISITOR_KEY);
             if (!fp) {
-                // Generate random UUID
                 if (typeof crypto !== 'undefined' && crypto.randomUUID) {
                     fp = crypto.randomUUID();
                 } else {
@@ -46,7 +39,6 @@
             }
             return fp;
         } catch (e) {
-            // Fallback: session-only
             if (!window._fdc_fp) {
                 window._fdc_fp = 'fdc_sess_' + Date.now() + '_' + Math.random().toString(36).substring(2, 15);
             }
@@ -139,7 +131,6 @@
         const fp = getVisitorFingerprint();
 
         try {
-            // Check existing
             const { data: existing } = await window.FDC_SUPABASE
                 .from('content_reactions')
                 .select('id, reaction_type')
@@ -149,28 +140,23 @@
                 .maybeSingle();
 
             if (existing) {
-                // Same reaction → toggle off (delete)
                 if (existing.reaction_type === reactionType) {
                     const { error } = await window.FDC_SUPABASE
                         .from('content_reactions')
                         .delete()
                         .eq('id', existing.id);
-
                     if (error) throw error;
                     return { action: 'removed', reaction: null };
                 }
 
-                // Different reaction → update
                 const { error } = await window.FDC_SUPABASE
                     .from('content_reactions')
                     .update({ reaction_type: reactionType, updated_at: new Date().toISOString() })
                     .eq('id', existing.id);
-
                 if (error) throw error;
                 return { action: 'changed', reaction: reactionType };
             }
 
-            // No existing → insert
             const { error } = await window.FDC_SUPABASE
                 .from('content_reactions')
                 .insert({
@@ -179,7 +165,6 @@
                     reaction_type: reactionType,
                     visitor_fingerprint: fp
                 });
-
             if (error) throw error;
             return { action: 'added', reaction: reactionType };
         } catch (e) {
@@ -189,32 +174,29 @@
     }
 
     // =========================================================
-    // BUILD REACTION UI (for News/Gallery card)
+    // BUILD REACTION UI
     // =========================================================
-    function buildReactionUI(contentType, contentId, counts, myReaction) {
-        const c = counts || { love: 0, care: 0, sad: 0, total: 0 };
-        const my = myReaction || null;
-
-        // Build counts display
-        let countHTML = '';
+    function buildCountsHTML(c) {
+        c = c || { love: 0, care: 0, sad: 0, total: 0 };
+        let html = '';
         let hasAny = false;
 
         if (c.love > 0) {
-            countHTML += `<span class="rc-count-item" data-type="love">
+            html += `<span class="rc-count-item" data-type="love">
                 <span class="rc-count-icon">❤️</span>
                 <span class="rc-count-num">${c.love}</span>
             </span>`;
             hasAny = true;
         }
         if (c.care > 0) {
-            countHTML += `<span class="rc-count-item" data-type="care">
+            html += `<span class="rc-count-item" data-type="care">
                 <span class="rc-count-icon">🥰</span>
                 <span class="rc-count-num">${c.care}</span>
             </span>`;
             hasAny = true;
         }
         if (c.sad > 0) {
-            countHTML += `<span class="rc-count-item" data-type="sad">
+            html += `<span class="rc-count-item" data-type="sad">
                 <span class="rc-count-icon">😢</span>
                 <span class="rc-count-num">${c.sad}</span>
             </span>`;
@@ -222,16 +204,21 @@
         }
 
         if (!hasAny) {
-            countHTML = '<span class="rc-count-empty">প্রথম reaction দিন</span>';
+            html = '<span class="rc-count-empty">প্রথম reaction দিন</span>';
         }
+        return html;
+    }
 
-        // Build button state
+    function buildReactionUI(contentType, contentId, counts, myReaction) {
+        const c = counts || { love: 0, care: 0, sad: 0, total: 0 };
+        const my = myReaction || null;
+
+        const countHTML = buildCountsHTML(c);
         const activeReaction = my ? REACTIONS[my] : null;
         const btnIcon = activeReaction ? activeReaction.icon : '👍';
         const btnLabel = activeReaction ? activeReaction.label : 'React';
         const btnActiveClass = activeReaction ? 'rc-btn-active rc-btn-' + my : '';
 
-        // Build picker
         const pickerHTML = Object.keys(REACTIONS).map(key => {
             const r = REACTIONS[key];
             const isActive = my === key;
@@ -272,46 +259,19 @@
         const c = counts || { love: 0, care: 0, sad: 0, total: 0 };
         const my = myReaction || null;
 
-        // Update counts
         const countsEl = barEl.querySelector('.rc-counts');
-        let countHTML = '';
-        let hasAny = false;
+        if (countsEl) countsEl.innerHTML = buildCountsHTML(c);
 
-        if (c.love > 0) {
-            countHTML += `<span class="rc-count-item" data-type="love">
-                <span class="rc-count-icon">❤️</span>
-                <span class="rc-count-num">${c.love}</span>
-            </span>`;
-            hasAny = true;
-        }
-        if (c.care > 0) {
-            countHTML += `<span class="rc-count-item" data-type="care">
-                <span class="rc-count-icon">🥰</span>
-                <span class="rc-count-num">${c.care}</span>
-            </span>`;
-            hasAny = true;
-        }
-        if (c.sad > 0) {
-            countHTML += `<span class="rc-count-item" data-type="sad">
-                <span class="rc-count-icon">😢</span>
-                <span class="rc-count-num">${c.sad}</span>
-            </span>`;
-            hasAny = true;
-        }
-
-        if (!hasAny) {
-            countHTML = '<span class="rc-count-empty">প্রথম reaction দিন</span>';
-        }
-        countsEl.innerHTML = countHTML;
-
-        // Update trigger button
         const trigger = barEl.querySelector('.rc-trigger');
-        const activeReaction = my ? REACTIONS[my] : null;
-        trigger.querySelector('.rc-trigger-icon').textContent = activeReaction ? activeReaction.icon : '👍';
-        trigger.querySelector('.rc-trigger-label').textContent = activeReaction ? activeReaction.label : 'React';
-        trigger.className = 'rc-trigger' + (activeReaction ? ' rc-btn-active rc-btn-' + my : '');
+        if (trigger) {
+            const activeReaction = my ? REACTIONS[my] : null;
+            const iconEl = trigger.querySelector('.rc-trigger-icon');
+            const labelEl = trigger.querySelector('.rc-trigger-label');
+            if (iconEl) iconEl.textContent = activeReaction ? activeReaction.icon : '👍';
+            if (labelEl) labelEl.textContent = activeReaction ? activeReaction.label : 'React';
+            trigger.className = 'rc-trigger' + (activeReaction ? ' rc-btn-active rc-btn-' + my : '');
+        }
 
-        // Update picker active state
         barEl.querySelectorAll('.rc-picker-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.reaction === my);
         });
@@ -320,13 +280,38 @@
     }
 
     // =========================================================
+    // GLOBAL OUTSIDE-CLICK + SCROLL HANDLER (single instance)
+    // =========================================================
+    let globalHandlersAttached = false;
+
+    function attachGlobalHandlers() {
+        if (globalHandlersAttached) return;
+        globalHandlersAttached = true;
+
+        document.addEventListener('click', (e) => {
+            document.querySelectorAll('.rc-picker.show').forEach(picker => {
+                const bar = picker.closest('.reactions-bar');
+                if (!bar || !bar.contains(e.target)) {
+                    picker.classList.remove('show');
+                }
+            });
+        });
+
+        window.addEventListener('scroll', () => {
+            document.querySelectorAll('.rc-picker.show').forEach(p => p.classList.remove('show'));
+        }, { passive: true });
+    }
+
+    // =========================================================
     // ATTACH EVENTS TO A REACTION BAR
     // =========================================================
     function attachBarEvents(barEl) {
-        const contentType = barEl.dataset.contentType;
-        const contentId = parseInt(barEl.dataset.contentId);
+        if (barEl.dataset.eventsBound === '1') return;
+        barEl.dataset.eventsBound = '1';
+
         const trigger = barEl.querySelector('.rc-trigger');
         const picker = barEl.querySelector('.rc-picker');
+        if (!trigger || !picker) return;
 
         // Prevent parent link click
         barEl.addEventListener('click', (e) => {
@@ -334,14 +319,12 @@
             e.preventDefault();
         });
 
-        // Desktop: hover shows picker
-        let hoverTimer = null;
+        // Desktop hover
         trigger.addEventListener('mouseenter', () => {
-            clearTimeout(hoverTimer);
             picker.classList.add('show');
         });
 
-        // Mobile: long-press shows picker
+        // Mobile long-press + tap
         let longPressTimer = null;
         let didLongPress = false;
 
@@ -359,11 +342,9 @@
             if (didLongPress) {
                 e.preventDefault();
             } else {
-                // Short tap: if user already reacted → toggle off; else → default love? No, show picker.
                 if (barEl.dataset.myReaction) {
                     handleReactionClick(barEl, barEl.dataset.myReaction);
                 } else {
-                    // First tap → show picker
                     picker.classList.add('show');
                 }
             }
@@ -373,7 +354,7 @@
             clearTimeout(longPressTimer);
         });
 
-        // Handle picker button clicks
+        // Picker button clicks
         picker.querySelectorAll('.rc-picker-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -383,18 +364,6 @@
                 handleReactionClick(barEl, reaction);
             });
         });
-
-        // Close picker on outside click
-        document.addEventListener('click', (e) => {
-            if (!barEl.contains(e.target)) {
-                picker.classList.remove('show');
-            }
-        });
-
-        // Close on scroll (mobile)
-        window.addEventListener('scroll', () => {
-            picker.classList.remove('show');
-        }, { passive: true });
     }
 
     // =========================================================
@@ -404,20 +373,17 @@
         const contentType = barEl.dataset.contentType;
         const contentId = parseInt(barEl.dataset.contentId);
 
-        // Optimistic UI: pulse animation
         barEl.classList.add('rc-loading');
 
         try {
             const result = await setReaction(contentType, contentId, reactionType);
             console.log('Reaction result:', result);
 
-            // Fetch fresh counts
             const counts = await fetchCounts(contentType, [contentId]);
             const my = await fetchMyReactions(contentType, [contentId]);
 
             updateUI(barEl, counts[contentId], my[contentId]);
 
-            // Success pulse
             barEl.classList.add('rc-success');
             setTimeout(() => barEl.classList.remove('rc-success'), 500);
 
@@ -431,7 +397,7 @@
     }
 
     // =========================================================
-    // MOUNT REACTIONS ON CARDS
+    // MOUNT REACTIONS (idempotent — safe to call multiple times)
     // =========================================================
     async function mountReactions(containerSelector, contentType) {
         const container = document.querySelector(containerSelector);
@@ -440,29 +406,48 @@
         const cards = container.querySelectorAll('[data-react-id]');
         if (cards.length === 0) return;
 
-        const contentIds = Array.from(cards).map(c => parseInt(c.dataset.reactId));
-        const uniqueIds = [...new Set(contentIds)];
+        attachGlobalHandlers();
 
-        // Fetch counts + my reactions in parallel
+        // ✅ Collect only cards that haven't been mounted yet
+        const pendingCards = [];
+        const uniqueIds = new Set();
+
+        cards.forEach(card => {
+            const mountTarget = card.querySelector('[data-reactions-mount]');
+            if (!mountTarget) return;
+            // ✅ Skip if already mounted
+            if (mountTarget.dataset.mounted === '1') return;
+            pendingCards.push(card);
+            uniqueIds.add(parseInt(card.dataset.reactId));
+        });
+
+        if (pendingCards.length === 0) {
+            console.log(`⏭️ Reactions already mounted (${contentType})`);
+            return;
+        }
+
+        const idsArray = [...uniqueIds];
+
         const [counts, myReactions] = await Promise.all([
-            fetchCounts(contentType, uniqueIds),
-            fetchMyReactions(contentType, uniqueIds)
+            fetchCounts(contentType, idsArray),
+            fetchMyReactions(contentType, idsArray)
         ]);
 
-        // Mount UI on each card
-        cards.forEach(card => {
+        // ✅ Mount UI on ALL pending cards (not just first)
+        pendingCards.forEach(card => {
             const id = parseInt(card.dataset.reactId);
             const mountTarget = card.querySelector('[data-reactions-mount]');
             if (!mountTarget) return;
 
             const html = buildReactionUI(contentType, id, counts[id], myReactions[id]);
             mountTarget.innerHTML = html;
+            mountTarget.dataset.mounted = '1';
 
             const barEl = mountTarget.querySelector('.reactions-bar');
-            attachBarEvents(barEl);
+            if (barEl) attachBarEvents(barEl);
         });
 
-        console.log(`✅ Reactions mounted: ${cards.length} (${contentType})`);
+        console.log(`✅ Reactions mounted: ${pendingCards.length} new cards (${contentType})`);
     }
 
     // =========================================================
@@ -477,6 +462,6 @@
         REACTIONS
     };
 
-    console.log('✅ Reactions module loaded');
+    console.log('✅ Reactions module v1.1 loaded');
 
 })();
