@@ -2,18 +2,18 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMISSION PRINT VIEW
  * Location: js/admission-print.js
- * Version: v1.0
- * Purpose: Print-friendly HTML view of admission application
- *          Replaces jsPDF with browser native Print to PDF
+ * Version: v1.1 — Single + Bulk support
+ * Purpose: Print-friendly HTML (replaces jsPDF)
+ * 
+ * Usage:
+ *   Single: admission-print.html?id=FDC-2026-HSC-0001&mode=admin
+ *   Bulk:   admission-print.html?ids=FDC-...0001,FDC-...0002&mode=admin
  * =========================================================
  */
 
 (function () {
     "use strict";
 
-    // =========================================================
-    // COLLEGE INFO (Inline)
-    // =========================================================
     const COLLEGE = {
         name_bn: 'ফুলবাড়ীয়া কলেজ',
         name_en: 'FULBARIYA COLLEGE',
@@ -45,9 +45,8 @@
         cancelled: 'CANCELLED'
     };
 
-    // =========================================================
-    // HELPERS
-    // =========================================================
+    const MAX_BULK = 100;
+
     function escapeHtml(str) {
         if (str === null || str === undefined) return '';
         return String(str)
@@ -95,9 +94,6 @@
         return escapeHtml(v);
     }
 
-    // =========================================================
-    // WAIT FOR SUPABASE
-    // =========================================================
     function waitForSupabase(cb) {
         if (window.FDC_SUPABASE_READY && window.FDC_SUPABASE) return cb();
         window.addEventListener('fdc:supabase-ready', cb, { once: true });
@@ -110,9 +106,6 @@
         }, 500);
     }
 
-    // =========================================================
-    // FETCH APPLICATION
-    // =========================================================
     async function fetchApplication(appId) {
         const supabase = window.FDC_SUPABASE;
         if (!supabase) throw new Error('Supabase not ready');
@@ -124,14 +117,28 @@
             .maybeSingle();
 
         if (error) throw error;
-        if (!data) throw new Error('Application not found');
+        if (!data) throw new Error('Application not found: ' + appId);
         return data;
     }
 
-    // =========================================================
-    // BUILD HTML
-    // =========================================================
-    function buildPrintView(app, mode) {
+    async function fetchBulkApplications(appIds) {
+        const supabase = window.FDC_SUPABASE;
+        if (!supabase) throw new Error('Supabase not ready');
+
+        const { data, error } = await supabase
+            .from('admission_applications')
+            .select('*')
+            .in('application_id', appIds);
+
+        if (error) throw error;
+        if (!data || data.length === 0) throw new Error('No applications found');
+
+        const map = {};
+        data.forEach(a => { map[a.application_id] = a; });
+        return appIds.map(id => map[id]).filter(Boolean);
+    }
+
+    function buildPrintPage(app, mode, pageInfo) {
         const isAdmin = mode === 'admin';
         const status = (app.status || 'pending').toLowerCase();
         const statusLabel = STATUS_LABELS[status] || 'PENDING';
@@ -139,12 +146,10 @@
         const levelLabel = app.application_type === 'HSC-BM' ? 'HSC-BM (BMT)' : 'HSC-General';
         const groupLabel = app.application_type === 'HSC-BM' ? 'Trade' : 'Group';
 
-        // Photo
         const photoHtml = app.photo_url
             ? `<img src="${escapeHtml(app.photo_url)}" alt="Photo" onerror="this.parentElement.innerHTML='<div class=\\'no-photo\\'>No Photo</div>'">`
             : `<div class="no-photo">No Photo</div>`;
 
-        // Subjects
         let subjectTags = '';
         if (Array.isArray(app.compulsory_subjects) && app.compulsory_subjects.length) {
             subjectTags = app.compulsory_subjects.map(s =>
@@ -156,18 +161,15 @@
         }
         if (!subjectTags) subjectTags = '<span class="field value muted">—</span>';
 
-        // Instructions
-        const instructionsHtml = INSTRUCTIONS.map((instr, i) =>
+        const instructionsHtml = INSTRUCTIONS.map((instr) =>
             `<li>${escapeHtml(instr)}</li>`
         ).join('');
 
-        // Admin checklist
         const checklistHtml = ADMIN_CHECKLIST.map(item => {
             const checked = (status === 'verified' || status === 'admitted') ? '✓' : '';
             return `<div class="check-item"><span class="checkbox">${checked}</span><span>${escapeHtml(item)}</span></div>`;
         }).join('');
 
-        // Roll + Fee box
         const rollFeeHtml = (status === 'admitted' && (app.roll_number || app.admission_fee))
             ? `<div class="roll-fee-box">
                 <div><div class="rb-label">ROLL NUMBER</div><div class="rb-value">${val(app.roll_number)}</div></div>
@@ -175,7 +177,6 @@
             </div>`
             : '';
 
-        // Signature section
         const signatureHtml = `
             <div class="signature-row">
                 <div class="sig-item">
@@ -191,10 +192,12 @@
             </div>
         `;
 
-        // Admin ribbon
         const adminRibbon = isAdmin
             ? '<div class="admin-copy-ribbon">⚠ OFFICE COPY — NOT FOR STUDENT</div>'
             : '';
+
+        const pageNum = pageInfo ? pageInfo.current : 1;
+        const totalPages = pageInfo ? pageInfo.total : 1;
 
         return `
         <div class="a4-page ${isAdmin ? 'admin-mode' : ''}">
@@ -205,7 +208,6 @@
             <div class="page-inner">
                 ${adminRibbon}
 
-                <!-- HEADER -->
                 <div class="print-header">
                     <div class="logo-wrap">
                         <img src="${COLLEGE.logo}" alt="Logo" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-graduation-cap\\' style=\\'font-size:24pt;color:#0a1655;\\'></i>'">
@@ -222,7 +224,6 @@
                     </div>
                 </div>
 
-                <!-- APP ID + PHOTO -->
                 <div class="info-row">
                     <div class="app-id-box">
                         <div class="label">APPLICATION ID</div>
@@ -233,7 +234,6 @@
                     <div class="photo-box">${photoHtml}</div>
                 </div>
 
-                <!-- 01 STUDENT INFORMATION -->
                 <div class="section">
                     <div class="section-head">
                         <span class="section-num">01</span>
@@ -259,7 +259,6 @@
                     </div>
                 </div>
 
-                <!-- 02 ADDRESS -->
                 <div class="section">
                     <div class="section-head">
                         <span class="section-num">02</span>
@@ -281,7 +280,6 @@
                     </div>
                 </div>
 
-                <!-- 03 PARENT INFORMATION -->
                 <div class="section">
                     <div class="section-head">
                         <span class="section-num">03</span>
@@ -304,7 +302,6 @@
                     </div>
                 </div>
 
-                <!-- 04 ADMISSION DETAILS -->
                 <div class="section">
                     <div class="section-head">
                         <span class="section-num">04</span>
@@ -325,7 +322,6 @@
                     </div>
                 </div>
 
-                <!-- 05 SUBJECTS -->
                 <div class="section">
                     <div class="section-head">
                         <span class="section-num">05</span>
@@ -339,7 +335,6 @@
                     </div>
                 </div>
 
-                <!-- 06 PREVIOUS EXAM -->
                 <div class="section">
                     <div class="section-head">
                         <span class="section-num">06</span>
@@ -378,24 +373,31 @@
 
                 ${signatureHtml}
 
-                <!-- FOOTER -->
                 <div class="print-footer">
                     <span>${val(app.application_id)}${isAdmin ? ' · ADMIN COPY' : ''}</span>
                     <span class="website">${escapeHtml(COLLEGE.website)}</span>
-                    <span>Page 1 of 1</span>
+                    <span>Page ${pageNum} of ${totalPages}</span>
                 </div>
             </div>
         </div>
         `;
     }
 
-    // =========================================================
-    // RENDER
-    // =========================================================
-    function render(app, mode) {
-        const html = buildPrintView(app, mode);
+    function renderSingle(app, mode) {
+        const html = buildPrintPage(app, mode, { current: 1, total: 1 });
         document.getElementById('printRoot').innerHTML = html;
         document.getElementById('printRoot').style.display = 'block';
+    }
+
+    function renderBulk(apps, mode) {
+        const total = apps.length;
+        let html = '';
+        apps.forEach((app, i) => {
+            html += buildPrintPage(app, mode, { current: i + 1, total: total });
+        });
+        document.getElementById('printRoot').innerHTML = html;
+        document.getElementById('printRoot').style.display = 'block';
+        document.title = `${total} Applications | Print - Fulbariya College`;
     }
 
     function showError(msg) {
@@ -412,21 +414,13 @@
         document.getElementById('loadingOverlay').classList.add('hide');
     }
 
-    // =========================================================
-    // AUTO PRINT
-    // =========================================================
     function setupAutoPrint() {
         const autoPrint = getParam('auto');
         if (autoPrint === '1') {
-            setTimeout(() => {
-                window.print();
-            }, 800);
+            setTimeout(() => window.print(), 1000);
         }
     }
 
-    // =========================================================
-    // SETUP PRINT BUTTON
-    // =========================================================
     function setupPrintButton() {
         const btn = document.getElementById('printBtn');
         if (btn) {
@@ -434,41 +428,66 @@
         }
     }
 
-    // =========================================================
-    // INIT
-    // =========================================================
     async function init() {
-        console.log('🚀 Admission Print View v1.0 loading...');
+        console.log('🚀 Admission Print View v1.1 loading...');
 
-        const appId = getParam('id');
-        const mode = getParam('mode') || 'student'; // 'student' | 'admin'
+        const singleId = getParam('id');
+        const bulkIds = getParam('ids');
+        const mode = getParam('mode') || 'student';
 
-        if (!appId) {
-            showError('Application ID missing in URL. Example: ?id=FDC-2026-HSC-0001');
+        if (!singleId && !bulkIds) {
+            showError('Application ID missing. Use ?id=... or ?ids=...');
             return;
         }
 
-        console.log('📋 App ID:', appId, '| Mode:', mode);
+        const isBulk = !!bulkIds;
 
         try {
-            // Wait for Supabase
             await new Promise(resolve => waitForSupabase(resolve));
 
-            // Fetch data
-            const app = await fetchApplication(appId);
-            console.log('✅ Application loaded:', app.application_id);
+            if (isBulk) {
+                const ids = bulkIds.split(',').map(s => s.trim()).filter(Boolean);
 
-            // Render
-            render(app, mode);
-            hideLoader();
-            showToolbar();
-            setupPrintButton();
+                if (ids.length === 0) {
+                    showError('No valid application IDs found in ?ids=');
+                    return;
+                }
 
-            // Auto print if ?auto=1
-            setupAutoPrint();
+                if (ids.length > MAX_BULK) {
+                    showError(`Too many applications. Maximum ${MAX_BULK} allowed per bulk print.`);
+                    return;
+                }
 
-            // Update title
-            document.title = `${app.application_id} | Print - Fulbariya College`;
+                console.log('📋 Bulk mode:', ids.length, 'applications | Mode:', mode);
+
+                const apps = await fetchBulkApplications(ids);
+                console.log('✅ Loaded:', apps.length, 'applications');
+
+                if (apps.length === 0) {
+                    showError('কোনো application পাওয়া যায়নি।');
+                    return;
+                }
+
+                renderBulk(apps, mode);
+                hideLoader();
+                showToolbar();
+                setupPrintButton();
+                setupAutoPrint();
+
+            } else {
+                console.log('📋 Single mode:', singleId, '| Mode:', mode);
+
+                const app = await fetchApplication(singleId);
+                console.log('✅ Application loaded:', app.application_id);
+
+                renderSingle(app, mode);
+                hideLoader();
+                showToolbar();
+                setupPrintButton();
+                setupAutoPrint();
+
+                document.title = `${app.application_id} | Print - Fulbariya College`;
+            }
 
         } catch (err) {
             console.error('❌ Error:', err);
@@ -482,5 +501,5 @@
         init();
     }
 
-    console.log('✅ Admission Print View v1.0 loaded');
+    console.log('✅ Admission Print View v1.1 loaded');
 })();
