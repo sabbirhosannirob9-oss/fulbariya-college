@@ -176,6 +176,113 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 }
 .subject-locked i { color: #16a34a; }
 
+/* SUBJECT SELECTION UI */
+.subject-section {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 18px;
+    margin: 16px 0;
+}
+.subject-section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e2e8f0;
+    font-weight: 700;
+    color: var(--navy);
+    font-size: 15px;
+}
+.subject-section-header i { color: var(--gold-2); font-size: 18px; }
+.subject-counter {
+    margin-left: auto;
+    background: linear-gradient(135deg, #0a1655, #1a237e);
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-size: 12px;
+    font-weight: 700;
+    transition: all 0.3s ease;
+}
+.subject-counter.complete {
+    background: linear-gradient(135deg, #10b981, #059669);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+.fixed-subjects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+.fixed-subject-tag {
+    background: linear-gradient(135deg, #0a1655, #1a237e);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 8px rgba(10, 22, 85, 0.15);
+}
+.fixed-subject-tag i { color: var(--gold); font-size: 12px; }
+.choice-subjects {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px;
+}
+.subject-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #fff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+}
+.subject-checkbox:hover {
+    border-color: var(--navy);
+    background: #f0f4ff;
+    transform: translateY(-1px);
+}
+.subject-checkbox.checked {
+    background: linear-gradient(135deg, #0a1655, #1a237e);
+    border-color: var(--gold);
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(10, 22, 85, 0.2);
+}
+.subject-checkbox.checked .subject-name { color: #fff; }
+.subject-checkbox.checked .subject-code { color: var(--gold); }
+.subject-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--gold-2);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.subject-checkbox .subject-info { flex: 1; min-width: 0; }
+.subject-checkbox .subject-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1f2937;
+    display: block;
+    line-height: 1.3;
+}
+.subject-checkbox .subject-code {
+    font-size: 10.5px;
+    color: var(--grey);
+    font-weight: 500;
+    display: block;
+    margin-top: 2px;
+    letter-spacing: 0.3px;
+}
+
 .submit-section {
     background: #fff;
     border-radius: 12px;
@@ -238,7 +345,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 .loading-overlay h3 { font-size: 18px; margin: 0 0 8px; }
 .loading-overlay p { font-size: 14px; opacity: 0.85; margin: 0; }
 
-/* PREVIEW MODAL */
 .preview-modal-overlay {
     position: fixed;
     inset: 0;
@@ -362,7 +468,6 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     .preview-footer button { width: 100%; justify-content: center; }
 }
 
-/* SUCCESS MODAL */
 .success-modal-overlay {
     position: fixed;
     inset: 0;
@@ -494,6 +599,9 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     .section-body { padding: 16px 14px; }
     .form-group label { font-size: 13px; }
     .submit-btn { padding: 12px 40px; font-size: 15px; width: 100%; }
+    .choice-subjects { grid-template-columns: 1fr; }
+    .subject-section-header { font-size: 13.5px; flex-wrap: wrap; }
+    .subject-counter { font-size: 11px; padding: 3px 10px; }
 }
 </style>
 </head>
@@ -507,7 +615,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
     <div class="ch-info">
         <h1 class="ch-name-bn">ফুলবাড়ীয়া কলেজ</h1>
         <p class="ch-name-en">Fulbariya College, Mymensingh</p>
-        <p class="ch-eiin">EIIN: XXXXXX</p>
+        <p class="ch-eiin">EIIN: 111516</p>
     </div>
 </div>
 
@@ -808,6 +916,7 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                     </div>
                 </div>
 
+                <!-- Compulsory Subjects (Auto) -->
                 <div class="form-group">
                     <label>Compulsory Subjects (Auto)</label>
                     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;">
@@ -817,13 +926,25 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                     </div>
                 </div>
 
-                <div id="groupSubjectsWrap" style="display:none;">
-                    <div class="form-group">
-                        <label>Group Subjects (Auto)</label>
-                        <div id="groupSubjectsList" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;"></div>
+                <!-- Main Group Subjects -->
+                <div id="mainSubjectsWrap" style="display:none;">
+                    <div class="subject-section">
+                        <div class="subject-section-header">
+                            <i class="fas fa-book-open"></i>
+                            <span>Main Group Subjects</span>
+                            <span class="subject-counter" id="mainSubjectCounter">0 / 3 selected</span>
+                        </div>
+
+                        <div id="fixedSubjectsList" class="fixed-subjects"></div>
+                        <div id="choiceSubjectsList" class="choice-subjects"></div>
+
+                        <div class="error-msg" id="err_main_subjects">
+                            নির্দিষ্ট সংখ্যক subject select করুন
+                        </div>
                     </div>
                 </div>
 
+                <!-- 4th Subject -->
                 <div id="fourthSubjectWrap" style="display:none;">
                     <div class="form-group">
                         <label>4th Subject (Optional) <span class="req">*</span></label>
@@ -831,8 +952,12 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
                             <option value="">Select 4th Subject</option>
                         </select>
                         <div class="error-msg" id="err_optional_subject">4th Subject সিলেক্ট করুন</div>
+                        <div class="hint">
+                            <i class="fas fa-info-circle"></i> Main group-এ select করা subject 4th-এ দেখাবে না
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
 
@@ -991,7 +1116,8 @@ body { background: #f0f2f7; margin: 0; color: var(--dark); line-height: 1.6; }
 <script src="../../js/config.js"></script>
 <script src="../../js/supabase.js"></script>
 <script src="../../js/bd-locations.js?v=1"></script>
-<script src="../../js/admission.js?v=6"></script>
+<script src="../../js/subject-pools.js?v=1"></script>
+<script src="../../js/admission.js?v=7.1"></script>
 
 </body>
 </html>
