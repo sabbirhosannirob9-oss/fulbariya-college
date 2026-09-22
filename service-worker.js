@@ -2,8 +2,12 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v3.0.3
+ * Version: v3.0.4
  * Purpose: PWA Install + Offline Caching
+ *
+ * Changes v3.0.4:
+ *   - Removed reactions.js entry (reaction system removed)
+ *   - admin-admissions.js bumped to v3.2 (Active default filter)
  *
  * Changes v3.0.3:
  *   - reactions.js v1.1 added (Facebook-style News & Gallery reactions)
@@ -15,7 +19,7 @@
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v3.0.3';
+const CACHE_VERSION = 'fdc-v3.0.4';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -56,9 +60,6 @@ const STATIC_ASSETS = [
     '/js/results.js?v=2',
     '/js/result-details.js?v=4',
     '/js/result-overview.js?v=2',
-
-    // ==================== JS — Reactions (NEW v3.0.3) ====================
-    '/js/reactions.js?v=1.1',
 
     // ==================== JS — Student ====================
     '/js/student.js',
@@ -115,7 +116,7 @@ const STATIC_ASSETS = [
     '/js/admission.js?v=8.0',
     '/js/admission-print.js?v=1.1',
     '/js/admission-status.js?v=3.0',
-    '/js/admin-admissions.js?v=3.1',
+    '/js/admin-admissions.js?v=3.2',
 
     // ==================== Public Pages ====================
     '/public-pages/results.html',
