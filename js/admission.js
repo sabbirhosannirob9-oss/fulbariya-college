@@ -2,16 +2,14 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMISSION FORM LOGIC
  * Location: js/admission.js
- * Version: v7.1 — Subject Pools + Bengali PDF + Professional Design
+ * Version: v8.0 — Print to PDF (jsPDF removed)
  * 
  * ✅ Features:
  *    - HSC-General + HSC-BM support
  *    - Multi-select checkbox for group subjects
  *    - Fixed + Choice subjects per group
  *    - 4th Subject with dynamic exclusion filter
- *    - Bengali font embed for PDF
- *    - Professional PDF design (logo, watermark, border, sections)
- *    - Inline PDF config (no external dependency)
+ *    - Print to PDF via admission-print.html
  *    - Division → District → Upazila cascade
  *    - Auto Session
  *    - Image Compression + Cloudinary
@@ -35,41 +33,9 @@
     const DRAFT_KEY_PREFIX = 'fdc_admission_draft_';
     const DRAFT_AUTO_SAVE_MS = 3000;
 
-    const BENGALI_FONT_URL = '../../assets/fonts/NotoSansBengali.ttf';
-    const BENGALI_FONT_NAME = 'NotoSansBengali';
+    const PRINT_URL = 'admission-print.html';
 
     const FORM_TYPE = detectFormType();
-
-    // =========================================================
-    // PDF CONFIG (Inline — no external file)
-    // =========================================================
-    const PDF_CFG = {
-        college: {
-            name_bn: 'ফুলবাড়ীয়া কলেজ',
-            name_en: 'FULBARIYA COLLEGE',
-            location_bn: 'ফুলবাড়ীয়া, ময়মনসিংহ',
-            location_en: 'Fulbariya, Mymensingh',
-            eiin: '111516',
-            established: '1972',
-            website: 'fulbariya-college.pages.dev',
-            help_phone: '0872050568'
-        },
-        logo: {
-            url: 'https://fulbariya-college.pages.dev/assets/images/logo1.png'
-        },
-        status: {
-            pending:  { label: 'PENDING',  color: [245, 158, 11], bg: [254, 243, 199], text: [146, 64, 14] },
-            verified: { label: 'VERIFIED', color: [59, 130, 246], bg: [219, 234, 254], text: [30, 64, 175] },
-            admitted: { label: 'ADMITTED', color: [16, 185, 129], bg: [209, 250, 229], text: [6, 95, 70] },
-            cancelled:{ label: 'CANCELLED',color: [239, 68, 68],  bg: [254, 226, 226], text: [153, 27, 27] }
-        },
-        instructions: [
-            'এই Application ID সংরক্ষণ করুন — ভর্তির সময় প্রয়োজন হবে',
-            'এই কপি প্রিন্ট করে সাথে আনুন',
-            'মূল কাগজপত্র (SSC সার্টিফিকেট, NID, মার্কশিট) আনুন',
-            'Status চেক করুন: fulbariya-college.pages.dev'
-        ]
-    };
 
     // =========================================================
     // STATE
@@ -78,9 +44,6 @@
     let uploadedPhotoFile = null;
     let draftSaveTimer = null;
     let formTouched = false;
-
-    let _bengaliFontLoaded = false;
-    let _bengaliFontPromise = null;
 
     const $ = (id) => document.getElementById(id);
 
@@ -97,7 +60,7 @@
     }
 
     // =========================================================
-    // ESCAPE HTML
+    // HELPERS
     // =========================================================
     function escapeHtml(str) {
         if (str === null || str === undefined) return '';
@@ -106,9 +69,6 @@
             .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
-    // =========================================================
-    // ERROR HELPERS
-    // =========================================================
     function showError(fieldId) {
         const errEl = $('err_' + fieldId);
         const fieldEl = $(fieldId);
@@ -126,68 +86,6 @@
     function hideAllErrors() {
         document.querySelectorAll('.error-msg.show').forEach(el => el.classList.remove('show'));
         document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
-    }
-
-    // =========================================================
-    // BENGALI FONT LOADER
-    // =========================================================
-    async function loadBengaliFont(doc) {
-        if (_bengaliFontLoaded) return true;
-
-        if (!_bengaliFontPromise) {
-            _bengaliFontPromise = fetch(BENGALI_FONT_URL)
-                .then(res => {
-                    if (!res.ok) throw new Error('Font fetch failed: ' + res.status);
-                    return res.arrayBuffer();
-                })
-                .then(buf => {
-                    let binary = '';
-                    const bytes = new Uint8Array(buf);
-                    const chunkSize = 0x8000;
-                    for (let i = 0; i < bytes.length; i += chunkSize) {
-                        binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
-                    }
-                    return btoa(binary);
-                })
-                .catch(err => {
-                    console.warn('⚠️ Bengali font load failed:', err);
-                    return null;
-                });
-        }
-
-        const base64 = await _bengaliFontPromise;
-        if (!base64) {
-            console.warn('⚠️ Bengali text will not render properly (font missing)');
-            return false;
-        }
-
-        try {
-            doc.addFileToVFS('NotoSansBengali.ttf', base64);
-            doc.addFont('NotoSansBengali.ttf', BENGALI_FONT_NAME, 'normal');
-            doc.addFont('NotoSansBengali.ttf', BENGALI_FONT_NAME, 'bold');
-            _bengaliFontLoaded = true;
-            console.log('✅ Bengali font loaded:', BENGALI_FONT_NAME);
-            return true;
-        } catch (e) {
-            console.error('❌ Font registration failed:', e);
-            return false;
-        }
-    }
-
-    function hasBengali(text) {
-        return /[\u0980-\u09FF]/.test(String(text || ''));
-    }
-
-    function setEnglishFont(doc, style) {
-        doc.setFont('helvetica', style || 'normal');
-    }
-
-    function setBengaliFont(doc) {
-        if (_bengaliFontLoaded) {
-            doc.setFont(BENGALI_FONT_NAME, 'normal');
-            return true;
-        }
-        return false;
     }
 
     // =========================================================
@@ -613,8 +511,8 @@
         required.forEach(item => {
             const el = $(item.id);
             if (!el) return;
-            const val = (el.value || '').trim();
-            if (!val) {
+            const v = (el.value || '').trim();
+            if (!v) {
                 showError(item.id);
                 errors.push(item.label);
             }
@@ -708,11 +606,13 @@
         let compulsory = [];
 
         if (FORM_TYPE === 'HSC-BM') {
-            compulsory = POOLS?.BM?.compulsory?.map(s => s.name) || [
-                'বাংলা', 'English', 'ICT', 'Mathematics',
-                'Accounting', 'Business Organization & Management',
-                'Finance, Banking & Insurance', 'Production Management & Marketing'
-            ];
+            compulsory = (POOLS && POOLS.BM && POOLS.BM.compulsory)
+                ? POOLS.BM.compulsory.map(s => s.name)
+                : [
+                    'বাংলা', 'English', 'ICT', 'Mathematics',
+                    'Accounting', 'Business Organization & Management',
+                    'Finance, Banking & Insurance', 'Production Management & Marketing'
+                ];
             if (groupName) compulsory.push(groupName);
         } else {
             compulsory = ['Bangla', 'English', 'ICT'];
@@ -982,7 +882,7 @@
     }
 
     // =========================================================
-    // SUCCESS ACTIONS
+    // SUCCESS ACTIONS — Print to PDF
     // =========================================================
     function setupSuccessActions() {
         $('copyAppIdBtn')?.addEventListener('click', function () {
@@ -995,434 +895,33 @@
                 window.fdcWarning('Copy করা যায়নি');
             });
         });
-        $('downloadPdfBtn')?.addEventListener('click', downloadPdf);
+
+        // Print to PDF (replaces old downloadPdf)
+        $('downloadPdfBtn')?.addEventListener('click', openPrintView);
     }
 
     // =========================================================
-    // PDF GENERATION v7.1 — Professional Design
+    // OPEN PRINT VIEW (v8.0)
     // =========================================================
-    async function downloadPdf() {
-        try {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
+    function openPrintView() {
+        const submission = window._lastSubmission;
+        if (!submission || !submission.applicationId) {
+            window.fdcError('তথ্য পাওয়া যায়নি');
+            return;
+        }
 
-            const submission = window._lastSubmission;
-            if (!submission) {
-                window.fdcError('তথ্য পাওয়া যায়নি');
-                return;
-            }
+        const appId = submission.applicationId;
+        const url = `${PRINT_URL}?id=${encodeURIComponent(appId)}&auto=1`;
 
-            const { formData, applicationId } = submission;
+        console.log('🖨️ Opening print view:', url);
 
-            await loadBengaliFont(doc);
+        const win = window.open(url, '_blank');
 
-            // =====================================================
-            // PAGE SETUP
-            // =====================================================
-            const pageW = 210;
-            const pageH = 297;
-            const margin = 12;
-            const contentW = pageW - (margin * 2);
-
-            // =====================================================
-            // WATERMARK
-            // =====================================================
-            doc.setTextColor(240, 242, 247);
-            doc.setFontSize(48);
-            doc.setFont('helvetica', 'bold');
-            doc.text('FULBARIYA', 105, 130, { align: 'center', angle: 45 });
-            doc.text('COLLEGE', 105, 175, { align: 'center', angle: 45 });
-            doc.setFontSize(14);
-            doc.text('ADMISSION 2026', 105, 210, { align: 'center', angle: 45 });
-
-            // =====================================================
-            // OUTER BORDER
-            // =====================================================
-            doc.setDrawColor(10, 22, 85);
-            doc.setLineWidth(0.8);
-            doc.rect(6, 6, pageW - 12, pageH - 12);
-            doc.setDrawColor(212, 175, 55);
-            doc.setLineWidth(0.3);
-            doc.rect(8, 8, pageW - 16, pageH - 16);
-
-            // =====================================================
-            // HEADER BANNER
-            // =====================================================
-            const headerY = 10;
-            const headerH = 34;
-
-            doc.setFillColor(10, 22, 85);
-            doc.rect(margin, headerY, contentW, headerH, 'F');
-
-            doc.setFillColor(212, 175, 55);
-            doc.rect(margin, headerY + headerH, contentW, 1.2, 'F');
-
-            // Logo
-            try {
-                const logoImg = new Image();
-                logoImg.crossOrigin = 'Anonymous';
-                const logoPromise = new Promise((resolve) => {
-                    logoImg.onload = () => resolve(true);
-                    logoImg.onerror = () => resolve(false);
-                    logoImg.src = PDF_CFG.logo.url;
-                    setTimeout(() => resolve(false), 2000);
-                });
-                const logoOk = await logoPromise;
-                if (logoOk) {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = logoImg.width;
-                    canvas.height = logoImg.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(logoImg, 0, 0);
-                    const logoData = canvas.toDataURL('image/png');
-                    doc.addImage(logoData, 'PNG', margin + 4, headerY + 5, 22, 22);
-                }
-            } catch (e) {
-                console.warn('Logo load failed:', e);
-            }
-
-            // Header text
-            doc.setTextColor(255, 255, 255);
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(17);
-            doc.text(PDF_CFG.college.name_en, 105, headerY + 11, { align: 'center' });
-
-            if (_bengaliFontLoaded) {
-                doc.setFont(BENGALI_FONT_NAME, 'normal');
-                doc.setFontSize(12);
-                doc.text(PDF_CFG.college.name_bn, 105, headerY + 17, { align: 'center' });
-                doc.setFont('helvetica', 'normal');
-            }
-
-            doc.setFontSize(8);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(242, 210, 123);
-            doc.text(
-                PDF_CFG.college.location_en + ' · EIIN: ' + PDF_CFG.college.eiin + ' · Est. ' + PDF_CFG.college.established,
-                105, headerY + 23, { align: 'center' }
+        if (!win || win.closed || typeof win.closed === 'undefined') {
+            window.fdcWarning(
+                'Print view খুলতে পারছি না। Pop-up blocker বন্ধ করুন অথবা এই লিংকে যান:<br><br>' +
+                `<a href="${url}" target="_blank" style="color:#0a1655;font-weight:700;word-break:break-all;">Print view খুলুন</a>`
             );
-
-            doc.setFontSize(9);
-            doc.setFont('helvetica', 'bold');
-            doc.setTextColor(255, 255, 255);
-            doc.text('ONLINE ADMISSION APPLICATION', 105, headerY + 30, { align: 'center' });
-
-            // =====================================================
-            // APP ID + PHOTO ROW
-            // =====================================================
-            const rowY = headerY + headerH + 4;
-            const rowH = 28;
-
-            doc.setFillColor(239, 246, 255);
-            doc.rect(margin, rowY, 138, rowH, 'F');
-            doc.setDrawColor(59, 130, 246);
-            doc.setLineWidth(0.4);
-            doc.rect(margin, rowY, 138, rowH);
-
-            doc.setTextColor(30, 64, 175);
-            doc.setFontSize(7);
-            doc.setFont('helvetica', 'bold');
-            doc.text('APPLICATION ID', margin + 4, rowY + 5);
-
-            doc.setTextColor(220, 38, 38);
-            doc.setFontSize(14);
-            doc.setFont('helvetica', 'bold');
-            doc.text(applicationId, margin + 4, rowY + 13);
-
-            doc.setTextColor(107, 114, 128);
-            doc.setFontSize(6.5);
-            doc.setFont('helvetica', 'normal');
-            doc.text('Submitted: ' + new Date().toLocaleString('en-GB'), margin + 4, rowY + 18);
-
-            // Status badge
-            const st = PDF_CFG.status.pending;
-            doc.setFillColor(st.bg[0], st.bg[1], st.bg[2]);
-            doc.rect(margin + 4, rowY + 20, 40, 6, 'F');
-            doc.setDrawColor(st.color[0], st.color[1], st.color[2]);
-            doc.setLineWidth(0.3);
-            doc.rect(margin + 4, rowY + 20, 40, 6);
-            doc.setTextColor(st.text[0], st.text[1], st.text[2]);
-            doc.setFontSize(8);
-            doc.setFont('helvetica', 'bold');
-            doc.text('STATUS: ' + st.label, margin + 24, rowY + 24, { align: 'center' });
-
-            // Photo
-            if (formData.photo_url) {
-                try {
-                    const img = await fetch(formData.photo_url);
-                    const blob = await img.blob();
-                    const reader = new FileReader();
-                    const base64 = await new Promise((resolve, reject) => {
-                        reader.onload = () => resolve(reader.result);
-                        reader.onerror = reject;
-                        reader.readAsDataURL(blob);
-                    });
-                    doc.setDrawColor(10, 22, 85);
-                    doc.setLineWidth(0.6);
-                    doc.rect(margin + 141, rowY, 44, rowH);
-                    doc.addImage(base64, 'JPEG', margin + 142, rowY + 1, 42, rowH - 2);
-                } catch (e) {
-                    doc.setDrawColor(200, 200, 200);
-                    doc.setLineWidth(0.3);
-                    doc.rect(margin + 141, rowY, 44, rowH);
-                    doc.setTextColor(150, 150, 150);
-                    doc.setFontSize(8);
-                    doc.text('No Photo', margin + 163, rowY + 15, { align: 'center' });
-                }
-            } else {
-                doc.setDrawColor(200, 200, 200);
-                doc.setLineWidth(0.3);
-                doc.rect(margin + 141, rowY, 44, rowH);
-                doc.setTextColor(150, 150, 150);
-                doc.setFontSize(8);
-                doc.text('No Photo', margin + 163, rowY + 15, { align: 'center' });
-            }
-
-            // =====================================================
-            // SECTION RENDERER
-            // =====================================================
-            let y = rowY + rowH + 4;
-            let sectionNum = 1;
-
-            function drawSectionHeader(title) {
-                if (y > 250) {
-                    doc.addPage();
-                    y = 20;
-                }
-                const num = String(sectionNum).padStart(2, '0');
-                sectionNum++;
-
-                doc.setFillColor(10, 22, 85);
-                doc.rect(margin, y, contentW, 7, 'F');
-
-                doc.setFillColor(212, 175, 55);
-                doc.rect(margin, y + 7, contentW, 0.6, 'F');
-
-                doc.setFillColor(212, 175, 55);
-                doc.circle(margin + 5, y + 3.5, 3.2, 'F');
-                doc.setTextColor(10, 22, 85);
-                doc.setFontSize(7);
-                doc.setFont('helvetica', 'bold');
-                doc.text(num, margin + 5, y + 4.5, { align: 'center' });
-
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'bold');
-                doc.text(title, margin + 12, y + 4.5);
-
-                y += 10;
-            }
-
-            function drawRow(label, value, x, width) {
-                doc.setTextColor(107, 114, 128);
-                doc.setFontSize(6.5);
-                doc.setFont('helvetica', 'bold');
-                doc.text(String(label).toUpperCase(), x, y);
-
-                const val = (value === null || value === undefined || value === '') ? '—' : String(value);
-                doc.setTextColor(31, 41, 55);
-
-                if (hasBengali(val)) {
-                    if (setBengaliFont(doc)) {
-                        doc.setFontSize(10);
-                        const lines = doc.splitTextToSize(val, width - 2);
-                        doc.text(lines[0] || '—', x, y + 4.5);
-                        setEnglishFont(doc, 'bold');
-                    } else {
-                        doc.setFont('helvetica', 'bold');
-                        doc.setFontSize(9);
-                        doc.text('[Bangla]', x, y + 4.5);
-                    }
-                } else {
-                    doc.setFont('helvetica', 'bold');
-                    doc.setFontSize(9.5);
-                    const lines = doc.splitTextToSize(val, width - 2);
-                    doc.text(lines[0] || '—', x, y + 4.5);
-                }
-            }
-
-            function drawRowFull(label, value) {
-                drawRow(label, value, margin + 3, contentW - 6);
-                y += 9;
-            }
-
-            function drawRowPair(l1, v1, l2, v2) {
-                const halfW = contentW / 2;
-                drawRow(l1, v1, margin + 3, halfW - 5);
-                drawRow(l2, v2, margin + halfW + 3, halfW - 5);
-                y += 9;
-            }
-
-            // SECTION 01
-            drawSectionHeader('STUDENT INFORMATION');
-            drawRowPair('Name (English)', formData.name_en, 'নাম (বাংলা)', formData.name_bn);
-            drawRowPair('Gender', formData.gender, 'Phone', formData.phone);
-            drawRowPair('Birth Date', formData.birth_date, 'Religion', formData.religion);
-            drawRowPair('Blood Group', formData.blood_group, 'UID', formData.uid_number);
-            y += 1;
-
-            // SECTION 02
-            drawSectionHeader('ADDRESS');
-            drawRowPair('Village', formData.village, 'Union', formData.union_name);
-            drawRowPair('Upazila', formData.upazila, 'District', formData.district);
-            drawRowPair('Post Office', formData.post_office, 'Post Code', formData.post_code);
-            y += 1;
-
-            // SECTION 03
-            drawSectionHeader('PARENT INFORMATION');
-            drawRowPair('পিতার নাম', formData.father_name_bn, 'মাতার নাম', formData.mother_name_bn);
-            drawRowPair("Father's Phone", formData.father_phone, "Mother's Phone", formData.mother_phone);
-            if (formData.guardian_name) {
-                drawRowPair('Guardian', formData.guardian_name, 'Guardian Phone', formData.guardian_phone);
-            }
-            y += 1;
-
-            // SECTION 04
-            drawSectionHeader('ADMISSION DETAILS');
-            drawRowPair('Class', formData.class_name, 'Branch', formData.branch);
-
-            let gLabel = 'Group';
-            let gValue = formData.group_name;
-            if (formData.branch === 'BM') gLabel = 'Trade';
-            drawRowPair(gLabel, gValue, '4th Subject', formData.optional_subject);
-
-            drawRowFull('Admission Date · Session', 
-                (formData.admission_date || '—') + ' · ' + (formData.admission_session || '—'));
-            y += 1;
-
-            // SECTION 05
-            drawSectionHeader('SUBJECTS');
-
-            if (formData.compulsory_subjects && formData.compulsory_subjects.length > 0) {
-                const subjectsText = formData.compulsory_subjects.join('  ·  ');
-                
-                doc.setTextColor(107, 114, 128);
-                doc.setFontSize(6.5);
-                doc.setFont('helvetica', 'bold');
-                doc.text('SELECTED SUBJECTS', margin + 3, y);
-                y += 4;
-
-                doc.setTextColor(31, 41, 55);
-
-                if (hasBengali(subjectsText)) {
-                    if (setBengaliFont(doc)) {
-                        doc.setFontSize(9.5);
-                        const lines = doc.splitTextToSize(subjectsText, contentW - 6);
-                        doc.text(lines, margin + 3, y);
-                        y += lines.length * 4 + 2;
-                        setEnglishFont(doc, 'bold');
-                    } else {
-                        doc.setFont('helvetica', 'bold');
-                        doc.setFontSize(9);
-                        doc.text('[Bangla subjects]', margin + 3, y);
-                        y += 5;
-                    }
-                } else {
-                    doc.setFont('helvetica', 'bold');
-                    doc.setFontSize(9.5);
-                    const lines = doc.splitTextToSize(subjectsText, contentW - 6);
-                    doc.text(lines, margin + 3, y);
-                    y += lines.length * 4 + 2;
-                }
-            }
-            y += 2;
-
-            // SECTION 06
-            drawSectionHeader('PREVIOUS EXAM RESULT');
-            drawRowPair('Exam Name', formData.prev_exam_name, 'Roll No', formData.prev_roll_no);
-            drawRowPair('Result', formData.prev_result, 'Passing Year', formData.prev_passing_year);
-            drawRowPair('Board', formData.prev_board, 'School', formData.prev_school_name);
-            y += 2;
-
-            // INSTRUCTIONS BOX
-            if (y > 235) {
-                doc.addPage();
-                y = 20;
-            }
-
-            const instrH = 30;
-            doc.setFillColor(254, 252, 232);
-            doc.rect(margin, y, contentW, instrH, 'F');
-            doc.setDrawColor(245, 158, 11);
-            doc.setLineWidth(0.5);
-            doc.rect(margin, y, contentW, instrH);
-
-            doc.setFillColor(245, 158, 11);
-            doc.rect(margin, y, 2, instrH, 'F');
-
-            doc.setTextColor(146, 64, 14);
-            doc.setFontSize(9);
-            doc.setFont('helvetica', 'bold');
-            doc.text('IMPORTANT INSTRUCTIONS', margin + 6, y + 6);
-
-            doc.setFontSize(8);
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(120, 53, 15);
-
-            const instrs = PDF_CFG.instructions;
-            let iy = y + 11;
-            instrs.forEach((instr, i) => {
-                doc.text((i + 1) + '.', margin + 6, iy);
-                if (hasBengali(instr) && _bengaliFontLoaded) {
-                    doc.setFont(BENGALI_FONT_NAME, 'normal');
-                    doc.setFontSize(8);
-                    const lines = doc.splitTextToSize(instr, contentW - 15);
-                    doc.text(lines[0], margin + 10, iy);
-                    doc.setFont('helvetica', 'normal');
-                    doc.setFontSize(8);
-                } else {
-                    doc.text(instr, margin + 10, iy);
-                }
-                iy += 4;
-            });
-
-            y += instrH + 4;
-
-            // SIGNATURE SECTION
-            if (y > 255) {
-                doc.addPage();
-                y = 20;
-            }
-
-            const sigY = y + 5;
-            const sigW = 65;
-
-            doc.setDrawColor(31, 41, 55);
-            doc.setLineWidth(0.4);
-            doc.line(margin + 5, sigY + 12, margin + 5 + sigW, sigY + 12);
-
-            doc.setTextColor(31, 41, 55);
-            doc.setFontSize(7.5);
-            doc.setFont('helvetica', 'bold');
-            doc.text("Applicant's Signature", margin + 5 + sigW / 2, sigY + 16, { align: 'center' });
-
-            doc.line(margin + 105, sigY + 12, margin + 105 + sigW, sigY + 12);
-            doc.text('For Office Use', margin + 105 + sigW / 2, sigY + 16, { align: 'center' });
-
-            // FOOTER
-            const footY = pageH - 12;
-
-            doc.setFillColor(31, 41, 55);
-            doc.rect(margin, footY, contentW, 8, 'F');
-
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(7);
-            doc.setFont('helvetica', 'bold');
-            doc.text(applicationId, margin + 3, footY + 5);
-
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(242, 210, 123);
-            doc.text(PDF_CFG.college.website, pageW / 2, footY + 5, { align: 'center' });
-
-            doc.setTextColor(255, 255, 255);
-            doc.text('Page 1 of 1', pageW - margin - 3, footY + 5, { align: 'right' });
-
-            doc.save(`FDC_Admission_${applicationId}.pdf`);
-            console.log('✅ Professional PDF downloaded');
-
-        } catch (err) {
-            console.error('PDF error:', err);
-            window.fdcError('PDF তৈরি করা যায়নি: ' + err.message);
         }
     }
 
@@ -1529,7 +1028,7 @@
     // INIT
     // =========================================================
     function init() {
-        console.log('🚀 Admission Form v7.1 loading...');
+        console.log('🚀 Admission Form v8.0 loading (Print to PDF)...');
         console.log('📋 Form Type:', FORM_TYPE);
 
         const yearEl = $('year');
@@ -1567,7 +1066,7 @@
             }
         });
 
-        console.log('✅ Admission Form v7.1 ready');
+        console.log('✅ Admission Form v8.0 ready');
     }
 
     if (document.readyState === 'loading') {
