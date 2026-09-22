@@ -376,6 +376,14 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 }
 .btn-export:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(16,185,129,0.4); }
 
+.btn-export.btn-bulk-pdf {
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    box-shadow: 0 4px 12px rgba(220,38,38,0.3);
+}
+.btn-export.btn-bulk-pdf:hover {
+    box-shadow: 0 6px 18px rgba(220,38,38,0.4);
+}
+
 /* ============ APPLICATION CARDS ============ */
 .apps-container {
     display: grid;
@@ -546,6 +554,17 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 .ac-btn.admit:hover { background: #059669; color: #fff; }
 .ac-btn.cancel { background: #fef2f2; color: #dc2626; }
 .ac-btn.cancel:hover { background: #dc2626; color: #fff; }
+.ac-btn.pdf {
+    background: linear-gradient(135deg, #fef2f2, #fee2e2);
+    color: #dc2626;
+    flex: 0 0 auto !important;
+    min-width: 42px;
+    padding: 8px 12px;
+}
+.ac-btn.pdf:hover {
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    color: #fff;
+}
 
 /* ============ LOADING & EMPTY ============ */
 .loading-wrap {
@@ -879,6 +898,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     .btn-header span { display: none; }
     .app-card .ac-actions { flex-wrap: wrap; }
     .ac-btn { flex: 1 1 45%; }
+    .ac-btn.pdf { flex: 0 0 auto !important; }
 }
 </style>
 </head>
@@ -1001,6 +1021,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
             <i class="fas fa-search"></i>
             <input type="text" class="search-input" id="searchInput" placeholder="নাম / Phone / App ID...">
         </div>
+
+        <button class="btn-export btn-bulk-pdf" id="btnBulkPdf">
+            <i class="fas fa-print"></i> Bulk Print
+        </button>
 
         <button class="btn-export" id="btnExport">
             <i class="fas fa-file-csv"></i> Export CSV
@@ -1166,7 +1190,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
                     Status page-এ "আবেদন বাতিল" দেখাবে।
                 </div>
             </div>
-            <div class="fdc-form-label">Cancel Reason <span class="req">*</span></label></div>
+            <div class="fdc-form-label">Cancel Reason <span class="req">*</span></div>
             <textarea class="fdc-textarea" id="cancelReason" placeholder="কারণ লিখুন... (যেমন: তথ্য অসম্পূর্ণ, ভুল তথ্য, ইত্যাদি)"></textarea>
         </div>
         <div class="fdc-modal-footer">
@@ -1183,7 +1207,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <!-- ================================================== -->
 <!-- SCRIPTS -->
 <!-- ================================================== -->
-<!-- SCRIPTS -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../js/config.js"></script>
 <script src="../js/supabase.js"></script>
@@ -1191,5 +1214,6 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/admin-popup.js?v=2"></script>
 <script src="../js/session-helper.js"></script>
 <script src="../js/admin-admissions.js?v=3.1"></script>
+
 </body>
 </html>
