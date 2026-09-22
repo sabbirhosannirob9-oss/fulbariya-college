@@ -934,11 +934,11 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 
     <!-- STATS -->
     <div class="stats-row" id="statsRow">
-        <div class="stat-card active" data-filter="all">
+        <div class="stat-card active" data-filter="active">
             <div class="sc-icon navy"><i class="fas fa-inbox"></i></div>
             <div class="sc-info">
                 <div class="sc-value" id="statTotal">0</div>
-                <div class="sc-label">Total</div>
+                <div class="sc-label">Active</div>
             </div>
         </div>
         <div class="stat-card" data-filter="pending">
@@ -995,9 +995,9 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
     <!-- TOOLBAR -->
     <div class="toolbar">
         <div class="status-chips" id="statusChips">
-            <button class="status-chip active" data-status="all">
-                <i class="fas fa-list"></i> All
-                <span class="chip-count" id="chipAll">0</span>
+            <button class="status-chip active" data-status="active">
+                <i class="fas fa-check-double"></i> Active
+                <span class="chip-count" id="chipActive">0</span>
             </button>
             <button class="status-chip" data-status="pending">
                 <i class="fas fa-hourglass-half"></i> Pending
@@ -1014,6 +1014,10 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
             <button class="status-chip" data-status="cancelled">
                 <i class="fas fa-ban"></i> Cancelled
                 <span class="chip-count" id="chipCancelled">0</span>
+            </button>
+            <button class="status-chip" data-status="all">
+                <i class="fas fa-list"></i> All
+                <span class="chip-count" id="chipAll">0</span>
             </button>
         </div>
 
@@ -1213,7 +1217,7 @@ body { background: var(--off-white); margin: 0; color: var(--dark); }
 <script src="../js/auth.js"></script>
 <script src="../js/admin-popup.js?v=2"></script>
 <script src="../js/session-helper.js"></script>
-<script src="../js/admin-admissions.js?v=3.1"></script>
+<script src="../js/admin-admissions.js?v=3.2"></script>
 
 </body>
 </html>
