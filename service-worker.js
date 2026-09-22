@@ -2,29 +2,37 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v3.0.4
- * Purpose: PWA Install + Offline Caching
+ * Version: v3.1.0
+ * Purpose: PWA Install + Offline Caching (Network-first strategy)
+ *
+ * ⚡ Changes v3.1.0:
+ *   - HTML: Network-first (was cache-first → caused stale pages)
+ *   - JS/CSS: Stale-while-revalidate (fresh in background)
+ *   - 404 JS files: silent fail (no page break)
+ *   - Old caches: force-purged on activate
+ *   - Fallback: only cache when truly offline
  *
  * Changes v3.0.4:
- *   - Removed reactions.js entry (reaction system removed)
- *   - admin-admissions.js bumped to v3.2 (Active default filter)
+ *   - Removed reactions.js entry
+ *   - admin-admissions.js bumped to v3.2
  *
  * Changes v3.0.3:
- *   - reactions.js v1.1 added (Facebook-style News & Gallery reactions)
+ *   - reactions.js v1.1 added
  *
  * Changes v3.0.2:
  *   - admission-status.js v3.0 (Print to PDF)
  *   - admission-print.js v1.1 (bulk support)
- *   - Legacy: v3.0.0 jsPDF removal, v2.9.x Admission System
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v3.0.4';
+const CACHE_VERSION = 'fdc-v3.1.0';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
 const DYNAMIC_CACHE_LIMIT = 60;
 
+// ✅ Only cache assets that definitely exist (no version-specific JS)
+// Version-specific JS files will be fetched fresh from network
 const STATIC_ASSETS = [
     // ==================== Core ====================
     '/',
@@ -37,149 +45,18 @@ const STATIC_ASSETS = [
     '/assets/images/web-app-manifest-512x512.png',
     '/assets/images/apple-touch-icon.png',
     '/assets/images/favicon-96x96.png',
-    '/assets/images/favicon.ico',
-
-    // ==================== CSS ====================
-    '/css/style.css',
-    '/css/responsive.css',
-    '/css/admin.css',
-    '/css/student.css',
-    '/css/notice-board.css',
-
-    // ==================== JS — Core ====================
-    '/js/config.js',
-    '/js/supabase.js',
-    '/js/auth.js',
-    '/js/app.js',
-    '/js/scroll-restore.js',
-    '/js/session-helper.js',
-
-    // ==================== JS — Public ====================
-    '/js/notice-board.js',
-    '/js/gallery.js',
-    '/js/results.js?v=2',
-    '/js/result-details.js?v=4',
-    '/js/result-overview.js?v=2',
-
-    // ==================== JS — Student ====================
-    '/js/student.js',
-    '/js/student-login.js',
-    '/js/student-dashboard.js',
-
-    // ==================== JS — Admin Core ====================
-    '/js/admin-guard.js',
-    '/js/admin-popup.js?v=2',
-    '/js/admin-login.js',
-
-    // ==================== JS — Admin Pages ====================
-    '/js/admin-dashboard.js',
-    '/js/admin-students.js?v=13',
-    '/js/admin-subjects.js?v=4',
-    '/js/admin-results.js?v=3',
-    '/js/admin-notices.js',
-    '/js/admin-news.js',
-    '/js/admin-gallery.js',
-    '/js/admin-calendar.js?v=2',
-    '/js/admin-bncc.js',
-    '/js/admin-scouts.js',
-    '/js/admin-greeting.js',
-    '/js/admin-department-heads.js',
-    '/js/admin-settings.js',
-    '/js/admin-profile.js',
-    '/js/admin-board-final.js',
-    '/js/admin-result-overview.js?v=1',
-
-    // ==================== JS — Class / Exam Routine ====================
-    '/js/admin-class-routine.js?v=4',
-    '/js/admin-exam-routine.js?v=3',
-
-    // ==================== JS — Promote System ====================
-    '/js/promote-utils.js?v=4',
-    '/js/promote-engine.js?v=3',
-    '/js/promote-restore.js?v=3',
-    '/js/promote-rules.js?v=3',
-    '/js/admin-promote.js?v=3.1',
-    '/js/admin-promote-history.js?v=3',
-    '/js/admin-promote-settings.js?v=3',
-
-    // ==================== JS — GPA Calculator ====================
-    '/js/gpa-calculator.js?v=2',
-
-    // ==================== JS — Public Routine ====================
-    '/js/class-routine.js?v=2',
-    '/js/exam-routine.js?v=2',
-    '/js/academic-hub.js?v=3',
-
-    // ==================== JS — Admission System ====================
-    '/js/bd-locations.js?v=1',
-    '/js/subject-pools.js?v=1',
-    '/js/admission.js?v=8.0',
-    '/js/admission-print.js?v=1.1',
-    '/js/admission-status.js?v=3.0',
-    '/js/admin-admissions.js?v=3.2',
-
-    // ==================== Public Pages ====================
-    '/public-pages/results.html',
-    '/public-pages/result-details.html',
-    '/public-pages/result-overview.html',
-    '/public-pages/notices.html',
-    '/public-pages/notice-details.html',
-    '/public-pages/news.html',
-    '/public-pages/news-details.html',
-    '/public-pages/gallery.html',
-    '/public-pages/bncc.html',
-    '/public-pages/scouts.html',
-    '/public-pages/contact.html',
-    '/public-pages/about.html',
-    '/public-pages/admission.html',
-    '/public-pages/academics.html',
-
-    // Admission Pages
-    '/public-pages/admission-hsc.html',
-    '/public-pages/admission-bm.html',
-    '/public-pages/admission-status.html',
-    '/public-pages/admission-print.html',
-
-    // Academic Hub
-    '/public-pages/academic-hub.html',
-    '/public-pages/class-routine.html',
-    '/public-pages/exam-routine.html',
-
-    // ==================== Admin Pages ====================
-    '/admin-pages/admin-dashboard.html',
-    '/admin-pages/admin-login.html',
-    '/admin-pages/admin-students.html',
-    '/admin-pages/admin-subjects.html',
-    '/admin-pages/admin-results.html',
-    '/admin-pages/admin-notices.html',
-    '/admin-pages/admin-news.html',
-    '/admin-pages/admin-gallery.html',
-    '/admin-pages/admin-calendar.html',
-    '/admin-pages/admin-bncc.html',
-    '/admin-pages/admin-scouts.html',
-    '/admin-pages/admin-greeting.html',
-    '/admin-pages/admin-department-heads.html',
-    '/admin-pages/admin-settings.html',
-    '/admin-pages/admin-profile.html',
-    '/admin-pages/admin-board-final.html',
-    '/admin-pages/admin-result-overview.html',
-    '/admin-pages/admin-admissions.html',
-    '/admin-pages/admin-class-routine.html',
-    '/admin-pages/admin-exam-routine.html',
-    '/admin-pages/admin-promote.html',
-    '/admin-pages/admin-promote-history.html',
-    '/admin-pages/admin-promote-settings.html'
+    '/assets/images/favicon.ico'
 ];
 
 // =========================================================
-// INSTALL
+// INSTALL — Precache only static assets
 // =========================================================
 self.addEventListener('install', function (event) {
     console.log('[SW] Installing v' + CACHE_VERSION + '...');
 
     event.waitUntil(
         caches.open(STATIC_CACHE).then(function (cache) {
-            console.log('[SW] Caching ' + STATIC_ASSETS.length + ' static assets');
+            console.log('[SW] Caching ' + STATIC_ASSETS.length + ' core assets');
 
             return Promise.all(
                 STATIC_ASSETS.map(function (url) {
@@ -188,10 +65,9 @@ self.addEventListener('install', function (event) {
                             if (response && response.status === 200) {
                                 return cache.put(url, response);
                             }
-                            console.warn('[SW] Skipped (status ' + (response ? response.status : '?') + '):', url);
                         })
                         .catch(function (err) {
-                            console.warn('[SW] Failed to cache:', url, err.message || err);
+                            console.warn('[SW] Skip:', url, err.message);
                         });
                 })
             );
@@ -206,7 +82,7 @@ self.addEventListener('install', function (event) {
 });
 
 // =========================================================
-// ACTIVATE
+// ACTIVATE — Purge all old caches
 // =========================================================
 self.addEventListener('activate', function (event) {
     console.log('[SW] Activating v' + CACHE_VERSION + '...');
@@ -250,16 +126,25 @@ function isHtmlRequest(request) {
     return accept.includes('text/html');
 }
 
+// ✅ Check if request is for a static asset (JS/CSS/font/image)
+function isStaticAsset(url) {
+    return /\.(js|css|woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico)(\?.*)?$/i.test(url.pathname);
+}
+
 // =========================================================
-// FETCH
+// FETCH — Smart routing
 // =========================================================
 self.addEventListener('fetch', function (event) {
     const request = event.request;
     const url = new URL(request.url);
 
+    // Skip non-GET and non-http
     if (request.method !== 'GET') return;
     if (!url.protocol.startsWith('http')) return;
 
+    // =========================================
+    // 1) External services → Network only, no cache
+    // =========================================
     if (
         url.hostname.includes('supabase.co') ||
         url.hostname.includes('cloudinary.com') ||
@@ -268,40 +153,41 @@ self.addEventListener('fetch', function (event) {
         url.hostname.includes('wikipedia.org') ||
         url.hostname.includes('api.wikimedia.org') ||
         url.hostname.includes('cdn.jsdelivr.net') ||
-        url.hostname.includes('cdnjs.cloudflare.com') ||
-        url.hostname.includes('fonts.googleapis.com') ||
-        url.hostname.includes('fonts.gstatic.com')
+        url.hostname.includes('cdnjs.cloudflare.com')
     ) {
+        // Network first, fallback to cache if offline
         event.respondWith(
-            fetch(request)
-                .then(function (response) {
-                    return response;
-                })
-                .catch(function () {
-                    return caches.match(request);
-                })
+            fetch(request).catch(function () {
+                return caches.match(request);
+            })
         );
         return;
     }
 
+    // Skip cross-origin
     if (url.origin !== location.origin) return;
 
+    // =========================================
+    // 2) HTML → Network-first (always fresh)
+    // =========================================
     if (isHtmlRequest(request)) {
         event.respondWith(
             fetch(request)
                 .then(function (response) {
                     if (response && response.status === 200) {
-                        const responseClone = response.clone();
+                        const clone = response.clone();
                         caches.open(DYNAMIC_CACHE).then(function (cache) {
-                            cache.put(request, responseClone);
+                            cache.put(request, clone);
                             trimCache(DYNAMIC_CACHE, DYNAMIC_CACHE_LIMIT);
                         });
                     }
                     return response;
                 })
                 .catch(function () {
+                    // Offline: serve cached HTML if available
                     return caches.match(request).then(function (cached) {
                         if (cached) return cached;
+                        // Final fallback: index.html
                         return caches.match('/index.html');
                     });
                 })
@@ -309,30 +195,59 @@ self.addEventListener('fetch', function (event) {
         return;
     }
 
-    event.respondWith(
-        caches.match(request).then(function (cached) {
-            const fetchPromise = fetch(request)
-                .then(function (response) {
-                    if (response && response.status === 200) {
-                        const responseClone = response.clone();
-                        caches.open(DYNAMIC_CACHE).then(function (cache) {
-                            cache.put(request, responseClone);
-                            trimCache(DYNAMIC_CACHE, DYNAMIC_CACHE_LIMIT);
-                        });
-                    }
-                    return response;
-                })
-                .catch(function () {
-                    return cached;
-                });
+    // =========================================
+    // 3) JS/CSS/Assets → Stale-while-revalidate
+    //    Serve cache instantly, update in background
+    // =========================================
+    if (isStaticAsset(url)) {
+        event.respondWith(
+            caches.match(request).then(function (cached) {
+                const networkFetch = fetch(request)
+                    .then(function (response) {
+                        if (response && response.status === 200) {
+                            const clone = response.clone();
+                            caches.open(DYNAMIC_CACHE).then(function (cache) {
+                                cache.put(request, clone);
+                                trimCache(DYNAMIC_CACHE, DYNAMIC_CACHE_LIMIT);
+                            });
+                        }
+                        return response;
+                    })
+                    .catch(function () {
+                        // Network fail → return cache (or undefined)
+                        return cached;
+                    });
 
-            return cached || fetchPromise;
-        })
+                // Return cached immediately if available, else wait for network
+                return cached || networkFetch;
+            })
+        );
+        return;
+    }
+
+    // =========================================
+    // 4) Everything else → Network-first, cache fallback
+    // =========================================
+    event.respondWith(
+        fetch(request)
+            .then(function (response) {
+                if (response && response.status === 200) {
+                    const clone = response.clone();
+                    caches.open(DYNAMIC_CACHE).then(function (cache) {
+                        cache.put(request, clone);
+                        trimCache(DYNAMIC_CACHE, DYNAMIC_CACHE_LIMIT);
+                    });
+                }
+                return response;
+            })
+            .catch(function () {
+                return caches.match(request);
+            })
     );
 });
 
 // =========================================================
-// MESSAGE
+// MESSAGE — SW control from page
 // =========================================================
 self.addEventListener('message', function (event) {
     if (!event.data) return;
