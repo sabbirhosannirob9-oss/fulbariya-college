@@ -2,17 +2,19 @@
  * =========================================================
  * FULBARIYA COLLEGE — ADMISSION FORM LOGIC
  * Location: js/admission.js
- * Version: v6.0 — Location Dropdowns + Auto Session + Compact PDF
+ * Version: v7.1 — Subject Pools + Bengali PDF + Professional Design
  * 
  * ✅ Features:
  *    - HSC-General + HSC-BM support
- *    - Division → District → Upazila cascade dropdowns
- *    - Auto Session (with override)
- *    - Auto Image Compression (600px, 75%)
- *    - Cloudinary Upload
- *    - Preview before submit
- *    - Auto Application ID
- *    - PDF Download (single-page, photo top-right)
+ *    - Multi-select checkbox for group subjects
+ *    - Fixed + Choice subjects per group
+ *    - 4th Subject with dynamic exclusion filter
+ *    - Bengali font embed for PDF
+ *    - Professional PDF design (logo, watermark, border, sections)
+ *    - Inline PDF config (no external dependency)
+ *    - Division → District → Upazila cascade
+ *    - Auto Session
+ *    - Image Compression + Cloudinary
  *    - Draft auto-save
  * =========================================================
  */
@@ -33,7 +35,41 @@
     const DRAFT_KEY_PREFIX = 'fdc_admission_draft_';
     const DRAFT_AUTO_SAVE_MS = 3000;
 
+    const BENGALI_FONT_URL = '../../assets/fonts/NotoSansBengali.ttf';
+    const BENGALI_FONT_NAME = 'NotoSansBengali';
+
     const FORM_TYPE = detectFormType();
+
+    // =========================================================
+    // PDF CONFIG (Inline — no external file)
+    // =========================================================
+    const PDF_CFG = {
+        college: {
+            name_bn: 'ফুলবাড়ীয়া কলেজ',
+            name_en: 'FULBARIYA COLLEGE',
+            location_bn: 'ফুলবাড়ীয়া, ময়মনসিংহ',
+            location_en: 'Fulbariya, Mymensingh',
+            eiin: '111516',
+            established: '1972',
+            website: 'fulbariya-college.pages.dev',
+            help_phone: '0872050568'
+        },
+        logo: {
+            url: 'https://fulbariya-college.pages.dev/assets/images/logo1.png'
+        },
+        status: {
+            pending:  { label: 'PENDING',  color: [245, 158, 11], bg: [254, 243, 199], text: [146, 64, 14] },
+            verified: { label: 'VERIFIED', color: [59, 130, 246], bg: [219, 234, 254], text: [30, 64, 175] },
+            admitted: { label: 'ADMITTED', color: [16, 185, 129], bg: [209, 250, 229], text: [6, 95, 70] },
+            cancelled:{ label: 'CANCELLED',color: [239, 68, 68],  bg: [254, 226, 226], text: [153, 27, 27] }
+        },
+        instructions: [
+            'এই Application ID সংরক্ষণ করুন — ভর্তির সময় প্রয়োজন হবে',
+            'এই কপি প্রিন্ট করে সাথে আনুন',
+            'মূল কাগজপত্র (SSC সার্টিফিকেট, NID, মার্কশিট) আনুন',
+            'Status চেক করুন: fulbariya-college.pages.dev'
+        ]
+    };
 
     // =========================================================
     // STATE
@@ -43,9 +79,9 @@
     let draftSaveTimer = null;
     let formTouched = false;
 
-    // =========================================================
-    // DOM HELPER
-    // =========================================================
+    let _bengaliFontLoaded = false;
+    let _bengaliFontPromise = null;
+
     const $ = (id) => document.getElementById(id);
 
     // =========================================================
@@ -90,6 +126,68 @@
     function hideAllErrors() {
         document.querySelectorAll('.error-msg.show').forEach(el => el.classList.remove('show'));
         document.querySelectorAll('.error').forEach(el => el.classList.remove('error'));
+    }
+
+    // =========================================================
+    // BENGALI FONT LOADER
+    // =========================================================
+    async function loadBengaliFont(doc) {
+        if (_bengaliFontLoaded) return true;
+
+        if (!_bengaliFontPromise) {
+            _bengaliFontPromise = fetch(BENGALI_FONT_URL)
+                .then(res => {
+                    if (!res.ok) throw new Error('Font fetch failed: ' + res.status);
+                    return res.arrayBuffer();
+                })
+                .then(buf => {
+                    let binary = '';
+                    const bytes = new Uint8Array(buf);
+                    const chunkSize = 0x8000;
+                    for (let i = 0; i < bytes.length; i += chunkSize) {
+                        binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+                    }
+                    return btoa(binary);
+                })
+                .catch(err => {
+                    console.warn('⚠️ Bengali font load failed:', err);
+                    return null;
+                });
+        }
+
+        const base64 = await _bengaliFontPromise;
+        if (!base64) {
+            console.warn('⚠️ Bengali text will not render properly (font missing)');
+            return false;
+        }
+
+        try {
+            doc.addFileToVFS('NotoSansBengali.ttf', base64);
+            doc.addFont('NotoSansBengali.ttf', BENGALI_FONT_NAME, 'normal');
+            doc.addFont('NotoSansBengali.ttf', BENGALI_FONT_NAME, 'bold');
+            _bengaliFontLoaded = true;
+            console.log('✅ Bengali font loaded:', BENGALI_FONT_NAME);
+            return true;
+        } catch (e) {
+            console.error('❌ Font registration failed:', e);
+            return false;
+        }
+    }
+
+    function hasBengali(text) {
+        return /[\u0980-\u09FF]/.test(String(text || ''));
+    }
+
+    function setEnglishFont(doc, style) {
+        doc.setFont('helvetica', style || 'normal');
+    }
+
+    function setBengaliFont(doc) {
+        if (_bengaliFontLoaded) {
+            doc.setFont(BENGALI_FONT_NAME, 'normal');
+            return true;
+        }
+        return false;
     }
 
     // =========================================================
@@ -153,12 +251,7 @@
             if (isNaN(date.getTime())) return '';
             const year = date.getFullYear();
             const month = date.getMonth() + 1;
-            let admissionYear;
-            if (month >= 1 && month <= 6) {
-                admissionYear = year;
-            } else {
-                admissionYear = year + 1;
-            }
+            let admissionYear = (month >= 1 && month <= 6) ? year : (year + 1);
             return `${admissionYear}-${admissionYear + 1}`;
         } catch (e) {
             return '';
@@ -201,7 +294,7 @@
             }
             sessionSel.value = autoSession;
             if (hint) {
-                hint.innerHTML = `<i class="fas fa-magic"></i> Auto-selected: <strong>${autoSession}</strong> (তারিখ থেকে)`;
+                hint.innerHTML = `<i class="fas fa-magic"></i> Auto-selected: <strong>${autoSession}</strong>`;
                 hint.style.display = 'block';
                 hint.style.opacity = '1';
                 setTimeout(() => { if (hint) hint.style.opacity = '0.7'; }, 3000);
@@ -210,7 +303,7 @@
 
         sessionSel.addEventListener('change', function () {
             if (hint && this.value) {
-                hint.innerHTML = `<i class="fas fa-check-circle"></i> Manually selected: <strong>${this.value}</strong>`;
+                hint.innerHTML = `<i class="fas fa-check-circle"></i> Selected: <strong>${this.value}</strong>`;
             }
         });
     }
@@ -220,10 +313,7 @@
     // =========================================================
     async function compressImage(file) {
         return new Promise((resolve, reject) => {
-            const originalKB = Math.round(file.size / 1024);
-            console.log(`📷 Original: ${originalKB} KB`);
             const reader = new FileReader();
-
             reader.onload = function (e) {
                 const img = new Image();
                 img.onload = function () {
@@ -246,9 +336,6 @@
                     canvas.toBlob(
                         function (blob) {
                             if (!blob) { reject(new Error('Image compression failed')); return; }
-                            const newKB = Math.round(blob.size / 1024);
-                            const savings = Math.round((1 - blob.size / file.size) * 100);
-                            console.log(`✅ Compressed: ${newKB} KB (${savings}% saved) — ${width}x${height}`);
                             const newFile = new File([blob], file.name.replace(/\.[^.]+$/, '.jpg'), { type: 'image/jpeg' });
                             resolve(newFile);
                         },
@@ -278,7 +365,6 @@
             throw new Error(err.error?.message || 'Cloudinary upload failed');
         }
         const data = await response.json();
-        console.log('☁️ Cloudinary URL:', data.secure_url);
         return data.secure_url;
     }
 
@@ -302,20 +388,17 @@
                 input.value = '';
                 return;
             }
-            const originalKB = Math.round(file.size / 1024);
-            $('photoFileName').textContent = `${file.name} (${originalKB} KB)`;
+            $('photoFileName').textContent = `${file.name} (${Math.round(file.size/1024)} KB)`;
             hideError('photo');
             $('photoPreview').innerHTML = `<div style="padding:20px;color:var(--grey);font-size:13px;"><i class="fas fa-spinner fa-spin"></i> Compressing...</div>`;
             try {
                 const compressed = await compressImage(file);
                 uploadedPhotoFile = compressed;
                 const url = URL.createObjectURL(compressed);
-                const newKB = Math.round(compressed.size / 1024);
-                $('photoFileName').textContent = `${compressed.name} (${newKB} KB)`;
+                $('photoFileName').textContent = `${compressed.name} (${Math.round(compressed.size/1024)} KB)`;
                 $('photoPreview').innerHTML = `<img src="${url}" alt="Preview">`;
                 triggerDraftSave();
             } catch (err) {
-                console.error('Compress error:', err);
                 window.fdcError('ছবি compress করা যায়নি: ' + err.message);
                 $('photoPreview').innerHTML = '';
                 input.value = '';
@@ -325,67 +408,167 @@
     }
 
     // =========================================================
-    // GROUP SUBJECTS
+    // GROUP SUBJECTS — Multi-select Checkbox
     // =========================================================
-    function getGroupSubjects(group) {
-        if (!group) return [];
-        const bmTrades = {
-            'Computerized Accounting System': ['Computerized Accounting System'],
-            'Digital Technology in Business': ['Digital Technology in Business'],
-            'Human Resource Development': ['Human Resource Development']
-        };
-        if (bmTrades[group]) return bmTrades[group];
-        const generalMap = {
-            'Science': ['পদার্থবিজ্ঞান', 'রসায়ন', 'জীববিজ্ঞান বা উচ্চতর গণিত'],
-            'Business': ['হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা', 'উৎপাদন ব্যবস্থাপনা ও বিপণন'],
-            'Humanities': ['পৌরনীতি ও সুশাসন', 'অর্থনীতি', 'ইসলামের ইতিহাস ও সংস্কৃতি']
-        };
-        return generalMap[group] || [];
-    }
-
-    function getFourthSubjectPool(group) {
-        if (!group) return [];
-        const bmTrades = ['Computerized Accounting System', 'Digital Technology in Business', 'Human Resource Development'];
-        if (bmTrades.includes(group)) return [];
-        const map = {
-            'Science': ['জীববিজ্ঞান', 'উচ্চতর গণিত', 'কৃষিশিক্ষা', 'পরিসংখ্যান', 'প্রকৌশল অঙ্কন ও ওয়ার্কশপ প্র্যাকটিস', 'ভূগোল', 'মনোবিজ্ঞান'],
-            'Business': ['হিসাববিজ্ঞান', 'ব্যবসায় সংগঠন ও ব্যবস্থাপনা', 'উৎপাদন ব্যবস্থাপনা ও বিপণন', 'অর্থনীতি', 'ফিন্যান্স, ব্যাংকিং ও বিমা', 'পরিসংখ্যান', 'কৃষিশিক্ষা', 'ভূগোল'],
-            'Humanities': ['পৌরনীতি ও সুশাসন', 'অর্থনীতি', 'যুক্তিবিদ্যা', 'ইসলামের ইতিহাস ও সংস্কৃতি', 'ইসলাম শিক্ষা', 'ইতিহাস', 'সমাজবিজ্ঞান', 'সমাজকর্ম', 'কৃষিশিক্ষা', 'পরিসংখ্যান', 'ভূগোল']
-        };
-        return map[group] || [];
-    }
-
     function setupGroupChange() {
         const groupSel = $('group_name') || $('department');
         if (!groupSel) return;
+
         groupSel.addEventListener('change', function () {
-            const group = this.value;
-            if (!group) {
-                if ($('groupSubjectsWrap')) $('groupSubjectsWrap').style.display = 'none';
-                if ($('fourthSubjectWrap')) $('fourthSubjectWrap').style.display = 'none';
-                return;
-            }
-            const subjects = getGroupSubjects(group);
-            if ($('groupSubjectsList')) {
-                $('groupSubjectsList').innerHTML = subjects.map(s =>
-                    `<div class="subject-locked"><i class="fas fa-lock"></i> ${escapeHtml(s)}</div>`
-                ).join('');
-                $('groupSubjectsWrap').style.display = 'block';
-            }
-            const fourthPool = getFourthSubjectPool(group);
-            if ($('optional_subject') && $('fourthSubjectWrap')) {
-                if (fourthPool.length > 0) {
-                    const sel = $('optional_subject');
-                    const currentVal = sel.value;
-                    sel.innerHTML = '<option value="">Select 4th Subject</option>' +
-                        fourthPool.map(s => `<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
-                    if (currentVal && fourthPool.includes(currentVal)) sel.value = currentVal;
-                    $('fourthSubjectWrap').style.display = 'block';
-                } else {
-                    $('fourthSubjectWrap').style.display = 'none';
-                }
+            renderGroupSubjects(this.value);
+        });
+    }
+
+    function renderGroupSubjects(groupName) {
+        const POOLS = window.FDC_SUBJECT_POOLS;
+        if (!POOLS) {
+            console.warn('Subject pools not loaded');
+            return;
+        }
+
+        const wrap = $('mainSubjectsWrap');
+        const fourthWrap = $('fourthSubjectWrap');
+        const fixedList = $('fixedSubjectsList');
+        const choiceList = $('choiceSubjectsList');
+
+        if (fixedList) fixedList.innerHTML = '';
+        if (choiceList) choiceList.innerHTML = '';
+
+        if (!groupName) {
+            if (wrap) wrap.style.display = 'none';
+            if (fourthWrap) fourthWrap.style.display = 'none';
+            return;
+        }
+
+        const groupData = POOLS.getGroupData(groupName);
+        if (!groupData) {
+            if (wrap) wrap.style.display = 'none';
+            if (fourthWrap) fourthWrap.style.display = 'none';
+            return;
+        }
+
+        if (fixedList && groupData.fixed.length > 0) {
+            fixedList.innerHTML = groupData.fixed.map(s =>
+                `<div class="fixed-subject-tag">
+                    <i class="fas fa-lock"></i> ${escapeHtml(s.name)}
+                </div>`
+            ).join('');
+        }
+
+        if (choiceList && groupData.choice.length > 0) {
+            choiceList.innerHTML = groupData.choice.map(s => `
+                <label class="subject-checkbox" data-code="${escapeHtml(s.code)}">
+                    <input type="checkbox" 
+                           name="main_subject" 
+                           value="${escapeHtml(s.code)}"
+                           data-name="${escapeHtml(s.name)}">
+                    <div class="subject-info">
+                        <span class="subject-name">${escapeHtml(s.name)}</span>
+                        <span class="subject-code">Code: ${escapeHtml(s.code)}</span>
+                    </div>
+                </label>
+            `).join('');
+
+            choiceList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', handleMainSubjectChange);
+            });
+        }
+
+        if (wrap) wrap.style.display = 'block';
+        if (fourthWrap) fourthWrap.style.display = 'block';
+
+        updateMainSubjectCounter();
+        updateFourthSubjectPool();
+    }
+
+    function handleMainSubjectChange(e) {
+        const POOLS = window.FDC_SUBJECT_POOLS;
+        if (!POOLS) return;
+
+        const groupName = ($('group_name')?.value || $('department')?.value || '');
+        const groupData = POOLS.getGroupData(groupName);
+        if (!groupData) return;
+
+        const checkboxes = document.querySelectorAll('input[name="main_subject"]');
+        const checked = Array.from(checkboxes).filter(cb => cb.checked);
+
+        if (checked.length > groupData.choiceCount) {
+            e.target.checked = false;
+            window.fdcWarning(`শুধু ${groupData.choiceCount}টি choice subject select করতে পারবেন`);
+            return;
+        }
+
+        checkboxes.forEach(cb => {
+            const label = cb.closest('.subject-checkbox');
+            if (cb.checked) {
+                label?.classList.add('checked');
+            } else {
+                label?.classList.remove('checked');
             }
         });
+
+        updateMainSubjectCounter();
+        updateFourthSubjectPool();
+    }
+
+    function updateMainSubjectCounter() {
+        const POOLS = window.FDC_SUBJECT_POOLS;
+        if (!POOLS) return;
+
+        const groupName = ($('group_name')?.value || $('department')?.value || '');
+        const groupData = POOLS.getGroupData(groupName);
+        if (!groupData) return;
+
+        const checkboxes = document.querySelectorAll('input[name="main_subject"]');
+        const checked = Array.from(checkboxes).filter(cb => cb.checked);
+        const totalSelected = (groupData.fixedCount || 0) + checked.length;
+
+        const counter = $('mainSubjectCounter');
+        if (counter) {
+            counter.textContent = `${totalSelected} / ${groupData.mainCount} selected`;
+            if (totalSelected === groupData.mainCount) {
+                counter.classList.add('complete');
+            } else {
+                counter.classList.remove('complete');
+            }
+        }
+
+        if (totalSelected === groupData.mainCount) {
+            hideError('main_subjects');
+        }
+    }
+
+    function updateFourthSubjectPool() {
+        const POOLS = window.FDC_SUBJECT_POOLS;
+        if (!POOLS) return;
+
+        const groupName = ($('group_name')?.value || $('department')?.value || '');
+        if (!groupName) return;
+
+        const checkboxes = document.querySelectorAll('input[name="main_subject"]:checked');
+        const selectedCodes = Array.from(checkboxes).map(cb => cb.value);
+
+        const groupData = POOLS.getGroupData(groupName);
+        if (groupData && groupData.fixed) {
+            groupData.fixed.forEach(f => {
+                if (!selectedCodes.includes(f.code)) {
+                    selectedCodes.push(f.code);
+                }
+            });
+        }
+
+        const filtered = POOLS.getFilteredFourthPool(groupName, selectedCodes);
+
+        const sel = $('optional_subject');
+        if (!sel) return;
+
+        const currentVal = sel.value;
+        sel.innerHTML = '<option value="">Select 4th Subject</option>' +
+            filtered.map(s => `<option value="${escapeHtml(s.name)}">${escapeHtml(s.name)}</option>`).join('');
+
+        if (currentVal && filtered.some(s => s.name === currentVal)) {
+            sel.value = currentVal;
+        }
     }
 
     // =========================================================
@@ -478,6 +661,29 @@
             errors.push('Passing Year (৪ ডিজিট)');
         }
 
+        if (FORM_TYPE !== 'HSC-BM') {
+            const POOLS = window.FDC_SUBJECT_POOLS;
+            const groupName = ($('group_name')?.value || '').trim();
+            
+            if (POOLS && groupName) {
+                const groupData = POOLS.getGroupData(groupName);
+                if (groupData) {
+                    const checkboxes = document.querySelectorAll('input[name="main_subject"]:checked');
+                    const totalSelected = (groupData.fixedCount || 0) + checkboxes.length;
+                    
+                    if (totalSelected !== groupData.mainCount) {
+                        showError('main_subjects');
+                        errors.push(`Main Subject (${totalSelected}/${groupData.mainCount})`);
+                    }
+                    
+                    if (!$('optional_subject')?.value) {
+                        showError('optional_subject');
+                        errors.push('4th Subject');
+                    }
+                }
+            }
+        }
+
         if (errors.length > 0) {
             window.fdcWarning(
                 `অনুগ্রহ করে ${errors.length}টি field পূরণ করুন:<br>• ${errors.slice(0, 5).map(e => escapeHtml(e)).join('<br>• ')}${errors.length > 5 ? '<br>• ...' : ''}`
@@ -495,16 +701,39 @@
     // =========================================================
     function collectFormData() {
         const session = ($('admission_session')?.value || '').trim();
+        const groupName = ($('group_name')?.value || $('department')?.value || '').trim();
+        const optionalSub = ($('optional_subject')?.value || '').trim();
+        const POOLS = window.FDC_SUBJECT_POOLS;
 
-        let compulsory;
+        let compulsory = [];
+
         if (FORM_TYPE === 'HSC-BM') {
-            compulsory = ['বাংলা', 'English', 'ICT', 'Mathematics', 'Accounting', 'Business Organization & Management', 'Finance, Banking & Insurance', 'Production Management & Marketing'];
+            compulsory = POOLS?.BM?.compulsory?.map(s => s.name) || [
+                'বাংলা', 'English', 'ICT', 'Mathematics',
+                'Accounting', 'Business Organization & Management',
+                'Finance, Banking & Insurance', 'Production Management & Marketing'
+            ];
+            if (groupName) compulsory.push(groupName);
         } else {
             compulsory = ['Bangla', 'English', 'ICT'];
-        }
 
-        const groupName = ($('group_name')?.value || $('department')?.value || '');
-        const optionalSub = ($('optional_subject')?.value || '');
+            if (POOLS && groupName) {
+                const groupData = POOLS.getGroupData(groupName);
+                if (groupData) {
+                    groupData.fixed.forEach(f => compulsory.push(f.name));
+
+                    const checkboxes = document.querySelectorAll('input[name="main_subject"]:checked');
+                    checkboxes.forEach(cb => {
+                        const name = cb.getAttribute('data-name');
+                        if (name) compulsory.push(name);
+                    });
+
+                    if (optionalSub) {
+                        compulsory.push('৪র্থ বিষয়: ' + optionalSub);
+                    }
+                }
+            }
+        }
 
         let branch = 'HSC';
         if (FORM_TYPE === 'HSC-BM') branch = 'BM';
@@ -572,7 +801,6 @@
             if (error) throw error;
             return data || generateFallbackId();
         } catch (e) {
-            console.warn('RPC failed, using fallback:', e);
             return generateFallbackId();
         }
     }
@@ -587,7 +815,7 @@
     }
 
     // =========================================================
-    // SUBMIT → SHOW PREVIEW
+    // SUBMIT → PREVIEW
     // =========================================================
     function submitForm(e) {
         e.preventDefault();
@@ -605,14 +833,10 @@
         let subjectTagHtml = data.compulsory_subjects.map(s =>
             `<span class="preview-subject-tag">${escapeHtml(s)}</span>`
         ).join('');
-        if (data.optional_subject) {
-            subjectTagHtml += `<span class="preview-subject-tag" style="background:#fef3c7;color:#92400e;border-color:#fde68a;">৪র্থ: ${escapeHtml(data.optional_subject)}</span>`;
-        }
 
         let groupLabel = 'Group';
         let groupValue = data.group_name;
         if (FORM_TYPE === 'HSC-BM') { groupLabel = 'Trade'; groupValue = data.group_name || '—'; }
-        else if (FORM_TYPE === 'Honours') { groupLabel = 'Department'; groupValue = data.department; }
 
         const html = `
             <div class="preview-section">
@@ -693,9 +917,6 @@
         $('previewBody').scrollTop = 0;
     }
 
-    // =========================================================
-    // BACK TO EDIT
-    // =========================================================
     function backToEdit() {
         $('previewModal').classList.remove('show');
         document.body.style.overflow = '';
@@ -742,8 +963,6 @@
 
             if (error) throw error;
 
-            console.log('✅ Application saved:', data);
-
             clearDraft();
             overlay.classList.remove('show');
             document.body.style.overflow = '';
@@ -773,14 +992,14 @@
                 this.innerHTML = '<i class="fas fa-check"></i> Copied!';
                 setTimeout(() => { this.innerHTML = orig; }, 2000);
             }).catch(() => {
-                window.fdcWarning('Copy করা যায়নি — manually লিখে নিন');
+                window.fdcWarning('Copy করা যায়নি');
             });
         });
         $('downloadPdfBtn')?.addEventListener('click', downloadPdf);
     }
 
     // =========================================================
-    // PDF GENERATION (COMPACT — Single Page)
+    // PDF GENERATION v7.1 — Professional Design
     // =========================================================
     async function downloadPdf() {
         try {
@@ -795,47 +1014,139 @@
 
             const { formData, applicationId } = submission;
 
-            // ============ HEADER (0-26mm) ============
+            await loadBengaliFont(doc);
+
+            // =====================================================
+            // PAGE SETUP
+            // =====================================================
+            const pageW = 210;
+            const pageH = 297;
+            const margin = 12;
+            const contentW = pageW - (margin * 2);
+
+            // =====================================================
+            // WATERMARK
+            // =====================================================
+            doc.setTextColor(240, 242, 247);
+            doc.setFontSize(48);
+            doc.setFont('helvetica', 'bold');
+            doc.text('FULBARIYA', 105, 130, { align: 'center', angle: 45 });
+            doc.text('COLLEGE', 105, 175, { align: 'center', angle: 45 });
+            doc.setFontSize(14);
+            doc.text('ADMISSION 2026', 105, 210, { align: 'center', angle: 45 });
+
+            // =====================================================
+            // OUTER BORDER
+            // =====================================================
+            doc.setDrawColor(10, 22, 85);
+            doc.setLineWidth(0.8);
+            doc.rect(6, 6, pageW - 12, pageH - 12);
+            doc.setDrawColor(212, 175, 55);
+            doc.setLineWidth(0.3);
+            doc.rect(8, 8, pageW - 16, pageH - 16);
+
+            // =====================================================
+            // HEADER BANNER
+            // =====================================================
+            const headerY = 10;
+            const headerH = 34;
+
             doc.setFillColor(10, 22, 85);
-            doc.rect(0, 0, 210, 26, 'F');
+            doc.rect(margin, headerY, contentW, headerH, 'F');
 
             doc.setFillColor(212, 175, 55);
-            doc.rect(0, 26, 210, 1.2, 'F');
+            doc.rect(margin, headerY + headerH, contentW, 1.2, 'F');
 
+            // Logo
+            try {
+                const logoImg = new Image();
+                logoImg.crossOrigin = 'Anonymous';
+                const logoPromise = new Promise((resolve) => {
+                    logoImg.onload = () => resolve(true);
+                    logoImg.onerror = () => resolve(false);
+                    logoImg.src = PDF_CFG.logo.url;
+                    setTimeout(() => resolve(false), 2000);
+                });
+                const logoOk = await logoPromise;
+                if (logoOk) {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = logoImg.width;
+                    canvas.height = logoImg.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(logoImg, 0, 0);
+                    const logoData = canvas.toDataURL('image/png');
+                    doc.addImage(logoData, 'PNG', margin + 4, headerY + 5, 22, 22);
+                }
+            } catch (e) {
+                console.warn('Logo load failed:', e);
+            }
+
+            // Header text
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(18);
             doc.setFont('helvetica', 'bold');
-            doc.text('FULBARIYA COLLEGE', 105, 10, { align: 'center' });
+            doc.setFontSize(17);
+            doc.text(PDF_CFG.college.name_en, 105, headerY + 11, { align: 'center' });
+
+            if (_bengaliFontLoaded) {
+                doc.setFont(BENGALI_FONT_NAME, 'normal');
+                doc.setFontSize(12);
+                doc.text(PDF_CFG.college.name_bn, 105, headerY + 17, { align: 'center' });
+                doc.setFont('helvetica', 'normal');
+            }
+
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(242, 210, 123);
+            doc.text(
+                PDF_CFG.college.location_en + ' · EIIN: ' + PDF_CFG.college.eiin + ' · Est. ' + PDF_CFG.college.established,
+                105, headerY + 23, { align: 'center' }
+            );
 
             doc.setFontSize(9);
-            doc.setFont('helvetica', 'normal');
-            doc.text('Fulbariya, Mymensingh', 105, 16, { align: 'center' });
-
-            doc.setFontSize(11);
             doc.setFont('helvetica', 'bold');
-            doc.text('ADMISSION APPLICATION', 105, 23, { align: 'center' });
+            doc.setTextColor(255, 255, 255);
+            doc.text('ONLINE ADMISSION APPLICATION', 105, headerY + 30, { align: 'center' });
 
-            // ============ APPLICATION ID + PHOTO (28-51mm) ============
+            // =====================================================
+            // APP ID + PHOTO ROW
+            // =====================================================
+            const rowY = headerY + headerH + 4;
+            const rowH = 28;
+
             doc.setFillColor(239, 246, 255);
-            doc.rect(15, 29, 135, 22, 'F');
+            doc.rect(margin, rowY, 138, rowH, 'F');
             doc.setDrawColor(59, 130, 246);
             doc.setLineWidth(0.4);
-            doc.rect(15, 29, 135, 22);
+            doc.rect(margin, rowY, 138, rowH);
 
-            doc.setTextColor(10, 22, 85);
-            doc.setFontSize(8);
+            doc.setTextColor(30, 64, 175);
+            doc.setFontSize(7);
             doc.setFont('helvetica', 'bold');
-            doc.text('Application ID:', 18, 35);
+            doc.text('APPLICATION ID', margin + 4, rowY + 5);
+
             doc.setTextColor(220, 38, 38);
-            doc.setFontSize(13);
-            doc.text(applicationId, 18, 43);
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text(applicationId, margin + 4, rowY + 13);
 
             doc.setTextColor(107, 114, 128);
-            doc.setFontSize(7);
+            doc.setFontSize(6.5);
             doc.setFont('helvetica', 'normal');
-            doc.text('Submitted: ' + new Date().toLocaleString('en-GB'), 18, 49);
+            doc.text('Submitted: ' + new Date().toLocaleString('en-GB'), margin + 4, rowY + 18);
 
-            // PHOTO (top-right corner)
+            // Status badge
+            const st = PDF_CFG.status.pending;
+            doc.setFillColor(st.bg[0], st.bg[1], st.bg[2]);
+            doc.rect(margin + 4, rowY + 20, 40, 6, 'F');
+            doc.setDrawColor(st.color[0], st.color[1], st.color[2]);
+            doc.setLineWidth(0.3);
+            doc.rect(margin + 4, rowY + 20, 40, 6);
+            doc.setTextColor(st.text[0], st.text[1], st.text[2]);
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'bold');
+            doc.text('STATUS: ' + st.label, margin + 24, rowY + 24, { align: 'center' });
+
+            // Photo
             if (formData.photo_url) {
                 try {
                     const img = await fetch(formData.photo_url);
@@ -847,147 +1158,267 @@
                         reader.readAsDataURL(blob);
                     });
                     doc.setDrawColor(10, 22, 85);
-                    doc.setLineWidth(0.5);
-                    doc.rect(155, 29, 40, 32);
-                    doc.addImage(base64, 'JPEG', 155.5, 29.5, 39, 31);
+                    doc.setLineWidth(0.6);
+                    doc.rect(margin + 141, rowY, 44, rowH);
+                    doc.addImage(base64, 'JPEG', margin + 142, rowY + 1, 42, rowH - 2);
                 } catch (e) {
-                    console.warn('Photo embed failed:', e);
                     doc.setDrawColor(200, 200, 200);
                     doc.setLineWidth(0.3);
-                    doc.rect(155, 29, 40, 32);
+                    doc.rect(margin + 141, rowY, 44, rowH);
                     doc.setTextColor(150, 150, 150);
                     doc.setFontSize(8);
-                    doc.text('No Photo', 175, 46, { align: 'center' });
+                    doc.text('No Photo', margin + 163, rowY + 15, { align: 'center' });
                 }
             } else {
                 doc.setDrawColor(200, 200, 200);
                 doc.setLineWidth(0.3);
-                doc.rect(155, 29, 40, 32);
+                doc.rect(margin + 141, rowY, 44, rowH);
                 doc.setTextColor(150, 150, 150);
                 doc.setFontSize(8);
-                doc.text('No Photo', 175, 46, { align: 'center' });
+                doc.text('No Photo', margin + 163, rowY + 15, { align: 'center' });
             }
 
-            // ============ HELPERS ============
-            let y = 55;
+            // =====================================================
+            // SECTION RENDERER
+            // =====================================================
+            let y = rowY + rowH + 4;
+            let sectionNum = 1;
 
-            function addSection(title) {
-                doc.setFillColor(6, 182, 212);
-                doc.rect(15, y, 180, 6, 'F');
-                doc.setTextColor(255, 255, 255);
-                doc.setFontSize(9);
-                doc.setFont('helvetica', 'bold');
-                doc.text(title, 18, y + 4.2);
-                y += 8;
-            }
+            function drawSectionHeader(title) {
+                if (y > 250) {
+                    doc.addPage();
+                    y = 20;
+                }
+                const num = String(sectionNum).padStart(2, '0');
+                sectionNum++;
 
-            function addField(label, value, xPos) {
-                doc.setTextColor(107, 114, 128);
+                doc.setFillColor(10, 22, 85);
+                doc.rect(margin, y, contentW, 7, 'F');
+
+                doc.setFillColor(212, 175, 55);
+                doc.rect(margin, y + 7, contentW, 0.6, 'F');
+
+                doc.setFillColor(212, 175, 55);
+                doc.circle(margin + 5, y + 3.5, 3.2, 'F');
+                doc.setTextColor(10, 22, 85);
                 doc.setFontSize(7);
-                doc.setFont('helvetica', 'normal');
-                doc.text(label, xPos, y);
-                doc.setTextColor(31, 41, 55);
-                doc.setFontSize(9);
                 doc.setFont('helvetica', 'bold');
-                const val = value ? String(value) : '—';
-                doc.text(val.substring(0, 38), xPos, y + 4);
+                doc.text(num, margin + 5, y + 4.5, { align: 'center' });
+
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                doc.text(title, margin + 12, y + 4.5);
+
+                y += 10;
             }
 
-            function addRow(field1, val1, field2, val2) {
-                addField(field1, val1, 18);
-                if (field2) addField(field2, val2, 108);
-                y += 8.5;
+            function drawRow(label, value, x, width) {
+                doc.setTextColor(107, 114, 128);
+                doc.setFontSize(6.5);
+                doc.setFont('helvetica', 'bold');
+                doc.text(String(label).toUpperCase(), x, y);
+
+                const val = (value === null || value === undefined || value === '') ? '—' : String(value);
+                doc.setTextColor(31, 41, 55);
+
+                if (hasBengali(val)) {
+                    if (setBengaliFont(doc)) {
+                        doc.setFontSize(10);
+                        const lines = doc.splitTextToSize(val, width - 2);
+                        doc.text(lines[0] || '—', x, y + 4.5);
+                        setEnglishFont(doc, 'bold');
+                    } else {
+                        doc.setFont('helvetica', 'bold');
+                        doc.setFontSize(9);
+                        doc.text('[Bangla]', x, y + 4.5);
+                    }
+                } else {
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(9.5);
+                    const lines = doc.splitTextToSize(val, width - 2);
+                    doc.text(lines[0] || '—', x, y + 4.5);
+                }
             }
 
-            // STUDENT INFORMATION
-            addSection('STUDENT INFORMATION');
-            addRow('Name (English)', formData.name_en, 'Name (Bangla)', formData.name_bn);
-            addRow('Gender', formData.gender, 'Phone', formData.phone);
-            addRow('Email', formData.email, 'Birth Date', formData.birth_date);
-            addRow('Religion', formData.religion, 'Blood Group', formData.blood_group);
-            addRow('UID', formData.uid_number, 'NID', formData.nid_number);
+            function drawRowFull(label, value) {
+                drawRow(label, value, margin + 3, contentW - 6);
+                y += 9;
+            }
+
+            function drawRowPair(l1, v1, l2, v2) {
+                const halfW = contentW / 2;
+                drawRow(l1, v1, margin + 3, halfW - 5);
+                drawRow(l2, v2, margin + halfW + 3, halfW - 5);
+                y += 9;
+            }
+
+            // SECTION 01
+            drawSectionHeader('STUDENT INFORMATION');
+            drawRowPair('Name (English)', formData.name_en, 'নাম (বাংলা)', formData.name_bn);
+            drawRowPair('Gender', formData.gender, 'Phone', formData.phone);
+            drawRowPair('Birth Date', formData.birth_date, 'Religion', formData.religion);
+            drawRowPair('Blood Group', formData.blood_group, 'UID', formData.uid_number);
             y += 1;
 
-            // ADDRESS
-            addSection('ADDRESS');
-            addRow('Village', formData.village, 'Union', formData.union_name);
-            addRow('Post Office', formData.post_office, 'Post Code', formData.post_code);
-            addRow('Division', formData.division, 'District', formData.district);
-            addRow('Upazila', formData.upazila, '', '');
+            // SECTION 02
+            drawSectionHeader('ADDRESS');
+            drawRowPair('Village', formData.village, 'Union', formData.union_name);
+            drawRowPair('Upazila', formData.upazila, 'District', formData.district);
+            drawRowPair('Post Office', formData.post_office, 'Post Code', formData.post_code);
             y += 1;
 
-            // PARENT INFORMATION
-            addSection('PARENT INFORMATION');
-            addRow("Father's Name (EN)", formData.father_name_en, "Father's Name (BN)", formData.father_name_bn);
-            addRow("Mother's Name (EN)", formData.mother_name_en, "Mother's Name (BN)", formData.mother_name_bn);
-            addRow("Father's Phone", formData.father_phone, "Mother's Phone", formData.mother_phone);
+            // SECTION 03
+            drawSectionHeader('PARENT INFORMATION');
+            drawRowPair('পিতার নাম', formData.father_name_bn, 'মাতার নাম', formData.mother_name_bn);
+            drawRowPair("Father's Phone", formData.father_phone, "Mother's Phone", formData.mother_phone);
             if (formData.guardian_name) {
-                addRow('Guardian', formData.guardian_name, 'Guardian Phone', formData.guardian_phone);
+                drawRowPair('Guardian', formData.guardian_name, 'Guardian Phone', formData.guardian_phone);
             }
             y += 1;
 
-            // ADMISSION INFORMATION
-            addSection('ADMISSION INFORMATION');
-            addRow('Admission Date', formData.admission_date, 'Session', formData.admission_session);
-            addRow('Class', formData.class_name, 'Branch', formData.branch);
+            // SECTION 04
+            drawSectionHeader('ADMISSION DETAILS');
+            drawRowPair('Class', formData.class_name, 'Branch', formData.branch);
 
             let gLabel = 'Group';
             let gValue = formData.group_name;
-            if (formData.branch === 'BM') { gLabel = 'Trade'; gValue = formData.group_name || '—'; }
-            addRow(gLabel, gValue, '4th Subject', formData.optional_subject);
+            if (formData.branch === 'BM') gLabel = 'Trade';
+            drawRowPair(gLabel, gValue, '4th Subject', formData.optional_subject);
 
-            if (formData.compulsory_subjects && formData.compulsory_subjects.length > 0) {
-                doc.setTextColor(107, 114, 128);
-                doc.setFontSize(7);
-                doc.setFont('helvetica', 'normal');
-                doc.text('Subjects:', 18, y);
-                y += 4;
-
-                const subjectsText = formData.compulsory_subjects.join(' · ');
-                doc.setTextColor(31, 41, 55);
-                doc.setFontSize(8);
-                doc.setFont('helvetica', 'bold');
-                const lines = doc.splitTextToSize(subjectsText, 175);
-                doc.text(lines, 18, y);
-                y += lines.length * 3.5 + 1;
-            }
+            drawRowFull('Admission Date · Session', 
+                (formData.admission_date || '—') + ' · ' + (formData.admission_session || '—'));
             y += 1;
 
-            // PREVIOUS EXAM RESULT
-            addSection('PREVIOUS EXAM RESULT');
-            addRow('Exam Name', formData.prev_exam_name, 'School', formData.prev_school_name);
-            addRow('Result', formData.prev_result, 'Passing Year', formData.prev_passing_year);
-            addRow('Board', formData.prev_board, 'Roll No', formData.prev_roll_no);
-            y += 3;
+            // SECTION 05
+            drawSectionHeader('SUBJECTS');
 
-            // STATUS BOX
-            doc.setFillColor(254, 243, 199);
-            doc.rect(70, y, 70, 12, 'F');
-            doc.setDrawColor(217, 119, 6);
+            if (formData.compulsory_subjects && formData.compulsory_subjects.length > 0) {
+                const subjectsText = formData.compulsory_subjects.join('  ·  ');
+                
+                doc.setTextColor(107, 114, 128);
+                doc.setFontSize(6.5);
+                doc.setFont('helvetica', 'bold');
+                doc.text('SELECTED SUBJECTS', margin + 3, y);
+                y += 4;
+
+                doc.setTextColor(31, 41, 55);
+
+                if (hasBengali(subjectsText)) {
+                    if (setBengaliFont(doc)) {
+                        doc.setFontSize(9.5);
+                        const lines = doc.splitTextToSize(subjectsText, contentW - 6);
+                        doc.text(lines, margin + 3, y);
+                        y += lines.length * 4 + 2;
+                        setEnglishFont(doc, 'bold');
+                    } else {
+                        doc.setFont('helvetica', 'bold');
+                        doc.setFontSize(9);
+                        doc.text('[Bangla subjects]', margin + 3, y);
+                        y += 5;
+                    }
+                } else {
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(9.5);
+                    const lines = doc.splitTextToSize(subjectsText, contentW - 6);
+                    doc.text(lines, margin + 3, y);
+                    y += lines.length * 4 + 2;
+                }
+            }
+            y += 2;
+
+            // SECTION 06
+            drawSectionHeader('PREVIOUS EXAM RESULT');
+            drawRowPair('Exam Name', formData.prev_exam_name, 'Roll No', formData.prev_roll_no);
+            drawRowPair('Result', formData.prev_result, 'Passing Year', formData.prev_passing_year);
+            drawRowPair('Board', formData.prev_board, 'School', formData.prev_school_name);
+            y += 2;
+
+            // INSTRUCTIONS BOX
+            if (y > 235) {
+                doc.addPage();
+                y = 20;
+            }
+
+            const instrH = 30;
+            doc.setFillColor(254, 252, 232);
+            doc.rect(margin, y, contentW, instrH, 'F');
+            doc.setDrawColor(245, 158, 11);
             doc.setLineWidth(0.5);
-            doc.rect(70, y, 70, 12);
+            doc.rect(margin, y, contentW, instrH);
+
+            doc.setFillColor(245, 158, 11);
+            doc.rect(margin, y, 2, instrH, 'F');
 
             doc.setTextColor(146, 64, 14);
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'bold');
+            doc.text('IMPORTANT INSTRUCTIONS', margin + 6, y + 6);
+
             doc.setFontSize(8);
             doc.setFont('helvetica', 'normal');
-            doc.text('STATUS', 105, y + 4.5, { align: 'center' });
-            doc.setFontSize(12);
+            doc.setTextColor(120, 53, 15);
+
+            const instrs = PDF_CFG.instructions;
+            let iy = y + 11;
+            instrs.forEach((instr, i) => {
+                doc.text((i + 1) + '.', margin + 6, iy);
+                if (hasBengali(instr) && _bengaliFontLoaded) {
+                    doc.setFont(BENGALI_FONT_NAME, 'normal');
+                    doc.setFontSize(8);
+                    const lines = doc.splitTextToSize(instr, contentW - 15);
+                    doc.text(lines[0], margin + 10, iy);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(8);
+                } else {
+                    doc.text(instr, margin + 10, iy);
+                }
+                iy += 4;
+            });
+
+            y += instrH + 4;
+
+            // SIGNATURE SECTION
+            if (y > 255) {
+                doc.addPage();
+                y = 20;
+            }
+
+            const sigY = y + 5;
+            const sigW = 65;
+
+            doc.setDrawColor(31, 41, 55);
+            doc.setLineWidth(0.4);
+            doc.line(margin + 5, sigY + 12, margin + 5 + sigW, sigY + 12);
+
+            doc.setTextColor(31, 41, 55);
+            doc.setFontSize(7.5);
             doc.setFont('helvetica', 'bold');
-            doc.text('PENDING', 105, y + 10, { align: 'center' });
+            doc.text("Applicant's Signature", margin + 5 + sigW / 2, sigY + 16, { align: 'center' });
+
+            doc.line(margin + 105, sigY + 12, margin + 105 + sigW, sigY + 12);
+            doc.text('For Office Use', margin + 105 + sigW / 2, sigY + 16, { align: 'center' });
 
             // FOOTER
-            doc.setFillColor(31, 41, 55);
-            doc.rect(0, 287, 210, 10, 'F');
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(7.5);
-            doc.setFont('helvetica', 'normal');
-            doc.text(
-                `Fulbariya College | Application ID: ${applicationId}`,
-                105, 293, { align: 'center' }
-            );
+            const footY = pageH - 12;
 
-            doc.save(`Admission_${applicationId}.pdf`);
-            console.log('✅ PDF downloaded');
+            doc.setFillColor(31, 41, 55);
+            doc.rect(margin, footY, contentW, 8, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(7);
+            doc.setFont('helvetica', 'bold');
+            doc.text(applicationId, margin + 3, footY + 5);
+
+            doc.setFont('helvetica', 'normal');
+            doc.setTextColor(242, 210, 123);
+            doc.text(PDF_CFG.college.website, pageW / 2, footY + 5, { align: 'center' });
+
+            doc.setTextColor(255, 255, 255);
+            doc.text('Page 1 of 1', pageW - margin - 3, footY + 5, { align: 'right' });
+
+            doc.save(`FDC_Admission_${applicationId}.pdf`);
+            console.log('✅ Professional PDF downloaded');
 
         } catch (err) {
             console.error('PDF error:', err);
@@ -998,16 +1429,16 @@
     // =========================================================
     // DRAFT AUTO-SAVE
     // =========================================================
-    function getDraftKey() {
-        return DRAFT_KEY_PREFIX + FORM_TYPE;
-    }
+    function getDraftKey() { return DRAFT_KEY_PREFIX + FORM_TYPE; }
 
     function saveDraft() {
         try {
             const data = collectFormData();
-            const draft = { ...data, _savedAt: Date.now() };
-            localStorage.setItem(getDraftKey(), JSON.stringify(draft));
-            console.log('💾 Draft saved');
+            const checkboxes = document.querySelectorAll('input[name="main_subject"]:checked');
+            const selectedCodes = Array.from(checkboxes).map(cb => cb.value);
+            data._selected_main_codes = selectedCodes;
+            data._savedAt = Date.now();
+            localStorage.setItem(getDraftKey(), JSON.stringify(data));
         } catch (e) {
             console.warn('Draft save failed:', e);
         }
@@ -1034,23 +1465,31 @@
             const groupSel = $('group_name') || $('department');
             if (groupSel && groupSel.value) {
                 groupSel.dispatchEvent(new Event('change'));
-                if ($('optional_subject') && draft.optional_subject) {
-                    $('optional_subject').value = draft.optional_subject;
-                }
+                
+                setTimeout(() => {
+                    const selectedCodes = draft._selected_main_codes || [];
+                    document.querySelectorAll('input[name="main_subject"]').forEach(cb => {
+                        if (selectedCodes.includes(cb.value)) {
+                            cb.checked = true;
+                            cb.closest('.subject-checkbox')?.classList.add('checked');
+                        }
+                    });
+                    updateMainSubjectCounter();
+                    updateFourthSubjectPool();
+                    
+                    if (draft.optional_subject && $('optional_subject')) {
+                        $('optional_subject').value = draft.optional_subject;
+                    }
+                }, 100);
             }
-            console.log('📂 Draft loaded');
             return true;
         } catch (e) {
-            console.warn('Draft load failed:', e);
             return false;
         }
     }
 
     function clearDraft() {
-        try {
-            localStorage.removeItem(getDraftKey());
-            console.log('🗑️ Draft cleared');
-        } catch (e) {}
+        try { localStorage.removeItem(getDraftKey()); } catch (e) {}
     }
 
     function triggerDraftSave() {
@@ -1090,7 +1529,7 @@
     // INIT
     // =========================================================
     function init() {
-        console.log('🚀 Admission Form v6.0 loading...');
+        console.log('🚀 Admission Form v7.1 loading...');
         console.log('📋 Form Type:', FORM_TYPE);
 
         const yearEl = $('year');
@@ -1128,7 +1567,7 @@
             }
         });
 
-        console.log('✅ Admission Form v6.0 ready');
+        console.log('✅ Admission Form v7.1 ready');
     }
 
     if (document.readyState === 'loading') {
