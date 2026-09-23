@@ -236,18 +236,27 @@ img { max-width: 100%; display: block; }
 .sk-welcome-wrap .sk-btn { display: inline-block; width: 170px; height: 44px; border-radius: 50px; }
 
 .sk-counter-glass {
-    background: transparent;
-    border: 1.5px solid rgba(242, 210, 123, 0.55);
-    border-radius: 16px;
-    padding: 28px 44px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid rgba(242, 210, 123, 0.4);
+    padding: 40px 50px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: 24px;
-    min-height: auto;
-    max-width: fit-content;
+    gap: 30px;
+    min-height: 200px;
+    max-width: 780px;
     margin: 0 auto;
     position: relative;
+}
+.sk-counter-glass::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 5px;
+    background: var(--gold);
+    border-radius: 20px 0 0 20px;
 }
 .sk-counter-glass .sk-counter-icon { width: 78px; height: 78px; border-radius: 20px; flex-shrink: 0; }
 .sk-counter-glass .sk-counter-info { flex: 1; display: flex; flex-direction: column; gap: 12px; }
@@ -1092,21 +1101,27 @@ img { max-width: 100%; display: block; }
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
-    gap: 24px;
-    padding: 28px 44px;
-    background: transparent;
-    border-radius: 16px;
-    border: 1.5px solid rgba(242, 210, 123, 0.55);
-    box-shadow: none;
+    justify-content: flex-start;
+    gap: 30px;
+    padding: 40px 50px;
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 20px;
+    border: 1px solid rgba(242, 210, 123, 0.4);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
     position: relative;
-    overflow: visible;
-    text-align: center;
-    min-height: auto;
-    max-width: fit-content;
-    margin: 0 auto;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
+    overflow: hidden;
+    text-align: left;
+    min-height: 200px;
+}
+.counter-glass::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 5px;
+    background: var(--gold);
+    border-radius: 20px 0 0 20px;
 }
 .counter-fm-icon {
     flex-shrink: 0;
@@ -3693,6 +3708,275 @@ img { max-width: 100%; display: block; }
 
 </style>
 
+
+<style id="fdcPremiumResponsiveFix">
+/* =========================================================
+   PREMIUM RESPONSIVE / CENTERING SYSTEM
+   - keeps cards inside every viewport
+   - no horizontal clipping on mobile/tablet/iPhone/iPad
+========================================================= */
+html, body { width:100%; max-width:100%; overflow-x:hidden; }
+body { min-width:0; }
+.container-custom { width:100%; max-width:1200px; margin-left:auto; margin-right:auto; padding-left:20px; padding-right:20px; }
+
+/* Principal: always centered on compact screens */
+.principal-section,
+.principal-grid,
+.principal-content,
+.principal-image-wrap { min-width:0; }
+@media (max-width: 992px) {
+    .principal-grid {
+        display:grid;
+        grid-template-columns:minmax(0, 1fr);
+        justify-items:center;
+        width:100%;
+        max-width:760px;
+        margin-left:auto;
+        margin-right:auto;
+        padding-left:0;
+        padding-right:0;
+    }
+    .principal-image-wrap {
+        width:min(100%, 620px);
+        max-width:620px;
+        margin-left:auto;
+        margin-right:auto;
+    }
+    .principal-content {
+        width:min(100%, 760px);
+        max-width:760px;
+        margin-left:auto;
+        margin-right:auto;
+        padding-left:0;
+        padding-right:0;
+    }
+}
+@media (max-width: 768px) {
+    .principal-section .container-custom,
+    .welcome-section .container-custom { padding-left:14px; padding-right:14px; }
+    .principal-grid { gap:26px; }
+    .principal-image-wrap { width:min(100%, 560px); }
+    .principal-image-wrap img { width:100%; height:auto; }
+    .principal-content { text-align:center; }
+    .principal-content h2 { text-align:center; font-size:clamp(22px,6vw,30px); }
+    .principal-content .designation { text-align:center; }
+    .principal-content .quote { text-align:center; }
+    .principal-content .principal-actions { justify-content:center; align-items:center; }
+}
+@media (max-width: 480px) {
+    .principal-section .container-custom,
+    .welcome-section .container-custom { padding-left:12px; padding-right:12px; }
+    .principal-image-wrap { width:min(100%, 430px); }
+    .principal-image-wrap::after { inset:-10px -10px 10px 10px; border-width:2px; }
+    .principal-content .principal-actions { flex-direction:column; width:100%; }
+    .principal-content .principal-actions > * { width:min(100%, 320px); justify-content:center; }
+}
+
+/* Welcome: kill reveal-side overflow on narrow screens and center the card */
+.welcome-wrap,
+#welcomeSkeleton { margin-left:auto !important; margin-right:auto !important; }
+@media (max-width: 768px) {
+    .welcome-wrap,
+    #welcomeSkeleton {
+        width:100%;
+        max-width:760px;
+        transform:none !important;
+        left:auto !important;
+        right:auto !important;
+        margin-left:auto !important;
+        margin-right:auto !important;
+    }
+    .welcome-wrap { padding:30px 20px; }
+    .welcome-wrap h2 { font-size:clamp(22px,6vw,30px); line-height:1.3; }
+    .welcome-wrap p { font-size:clamp(14px,3.7vw,16px); line-height:1.85; }
+}
+@media (max-width:480px) {
+    .welcome-wrap,
+    #welcomeSkeleton { border-radius:18px; }
+    .welcome-wrap { padding:28px 16px; }
+}
+
+/* =========================================================
+   COUNTER — clean image + intelligent overlay, NO glass blur
+========================================================= */
+.counter-section {
+    isolation:isolate;
+    min-height:clamp(430px, 52vw, 560px);
+    padding:clamp(70px, 8vw, 100px) 0;
+}
+.counter-section::before {
+    z-index:-3;
+    transform:scale(1.015);
+    animation:counterBgZoomPremium 24s ease-in-out infinite alternate;
+}
+.counter-section-overlay {
+    position:absolute;
+    inset:0;
+    z-index:-2;
+    pointer-events:none;
+    background:
+      linear-gradient(90deg, rgba(5,12,54,.82) 0%, rgba(10,22,85,.50) 46%, rgba(5,12,54,.78) 100%),
+      linear-gradient(180deg, rgba(10,22,85,.18), rgba(4,9,38,.72));
+}
+.counter-section::after {
+    content:"";
+    position:absolute;
+    inset:0;
+    z-index:-1;
+    pointer-events:none;
+    background:radial-gradient(circle at 50% 45%, rgba(242,210,123,.13), transparent 45%);
+}
+@keyframes counterBgZoomPremium { from{transform:scale(1.015)} to{transform:scale(1.075)} }
+.counter-section .container-custom { z-index:2; }
+.counter-heading { height:14px; display:flex; align-items:center; justify-content:center; gap:8px; margin:0 auto 20px; opacity:.9; }
+.counter-heading-line { width:54px; height:1px; background:linear-gradient(90deg,transparent,var(--gold)); }
+.counter-heading-line:last-child { background:linear-gradient(90deg,var(--gold),transparent); }
+.counter-heading-dot { width:6px; height:6px; border:1px solid var(--gold); border-radius:50%; box-shadow:0 0 14px rgba(242,210,123,.7); }
+.counter-slider-wrap {
+    width:min(100%, 820px);
+    max-width:820px;
+    min-height:clamp(190px, 25vw, 220px);
+    margin:0 auto;
+    overflow:visible;
+    position:relative;
+}
+.counter-slide { width:100%; }
+.counter-glass {
+    width:100%;
+    max-width:100%;
+    min-height:clamp(190px, 25vw, 220px);
+    padding:clamp(28px,5vw,44px) clamp(22px,6vw,54px);
+    gap:clamp(18px,4vw,32px);
+    background:transparent !important;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+    border:1px solid rgba(242,210,123,.48);
+    box-shadow:0 24px 70px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.10);
+    border-radius:clamp(18px,3vw,26px);
+}
+.counter-glass::after {
+    content:"";
+    position:absolute;
+    inset:8px;
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:inherit;
+    pointer-events:none;
+}
+.counter-glass::before { width:4px; border-radius:26px 0 0 26px; }
+.counter-fm-icon { font-size:clamp(50px,8vw,78px); }
+.counter-info { min-width:0; }
+.counter-info .counter-label { font-size:clamp(11px,1.8vw,15px); letter-spacing:clamp(1.8px,.5vw,4px); overflow-wrap:anywhere; }
+.counter-info .counter-value { font-size:clamp(34px,6vw,56px); overflow-wrap:anywhere; }
+.counter-controls { display:flex; align-items:center; justify-content:center; gap:14px; margin-top:20px; min-height:42px; }
+.counter-nav-btn { width:38px; height:38px; border-radius:50%; border:1px solid rgba(242,210,123,.55); background:rgba(10,22,85,.28); color:#fff; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; transition:.25s; backdrop-filter:blur(4px); }
+.counter-nav-btn:hover { background:var(--gold); color:var(--navy); transform:translateY(-2px); }
+.counter-dots { display:flex; align-items:center; justify-content:center; gap:7px; min-width:30px; }
+.counter-dots .counter-dot { width:7px; height:7px; border:0; padding:0; border-radius:50%; background:rgba(255,255,255,.42); cursor:pointer; transition:.3s; }
+.counter-dots .counter-dot.active { width:22px; border-radius:10px; background:var(--gold); box-shadow:0 0 12px rgba(242,210,123,.55); }
+@media (max-width:768px) {
+    .counter-section { padding:58px 0; }
+    .counter-slider-wrap { width:calc(100% - 2px); }
+    .counter-glass { flex-direction:column; text-align:center; justify-content:center; }
+    .counter-info { align-items:center; }
+    .counter-fm-icon { font-size:50px; }
+}
+@media (max-width:480px) {
+    .counter-section { padding:50px 0; }
+    .counter-glass { min-height:205px; padding:24px 18px; gap:12px; }
+    .counter-fm-icon { font-size:42px; }
+    .counter-info .counter-value { font-size:30px; }
+    .counter-controls { margin-top:15px; }
+}
+
+/* =========================================================
+   DEPARTMENT HEADS — modern centered carousel
+========================================================= */
+.dept-heads-section { overflow:hidden; }
+.dept-carousel-shell { position:relative; width:100%; max-width:1280px; margin:0 auto; padding:0 58px; }
+.dept-slider-viewport {
+    width:100%;
+    max-width:100%;
+    overflow:hidden;
+    padding:28px 0 42px;
+    mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 8%,#000 92%,transparent 100%);
+    touch-action:pan-y;
+    cursor:grab;
+}
+.dept-slider-viewport.is-dragging { cursor:grabbing; }
+.dept-slider {
+    display:flex;
+    align-items:stretch;
+    gap:24px;
+    width:max-content;
+    will-change:transform;
+    animation:none !important;
+    transition:transform .65s cubic-bezier(.22,1,.36,1);
+}
+.dept-card {
+    flex:0 0 270px;
+    width:270px;
+    border-radius:24px;
+    box-shadow:0 12px 34px rgba(10,22,85,.09);
+    border:1px solid rgba(10,22,85,.08);
+    transform:none !important;
+    transition:box-shadow .35s, border-color .35s;
+}
+.dept-card:hover { box-shadow:0 24px 55px rgba(10,22,85,.18); border-color:rgba(242,210,123,.7); }
+.dept-card .dept-img { height:290px; object-fit:cover; }
+.dept-card .dept-info { padding:17px 16px 20px; background:linear-gradient(180deg,#fff,#fbfcff); }
+.dept-card .dept-info h4 { font-size:17px; }
+.dept-carousel-btn {
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:5;
+    width:42px; height:42px;
+    border-radius:50%;
+    border:1px solid rgba(10,22,85,.12);
+    background:rgba(255,255,255,.94);
+    color:var(--navy);
+    box-shadow:0 10px 28px rgba(10,22,85,.15);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition:.25s;
+}
+.dept-carousel-btn:hover { background:var(--navy); color:#fff; transform:translateY(-50%) scale(1.06); }
+.dept-carousel-prev { left:8px; }
+.dept-carousel-next { right:8px; }
+.dept-carousel-dots { display:flex; justify-content:center; align-items:center; gap:7px; min-height:20px; margin-top:-14px; }
+.dept-carousel-dots button { width:7px; height:7px; border:0; border-radius:50%; padding:0; background:#cfd4df; cursor:pointer; transition:.3s; }
+.dept-carousel-dots button.active { width:24px; border-radius:10px; background:var(--navy); box-shadow:0 4px 12px rgba(10,22,85,.2); }
+@media (max-width:900px) {
+    .dept-carousel-shell { padding:0 48px; }
+    .dept-card { flex-basis:250px; width:250px; }
+    .dept-card .dept-img { height:275px; }
+}
+@media (max-width:768px) {
+    .dept-carousel-shell { padding:0 42px; }
+    .dept-slider-viewport { padding:24px 0 34px; mask-image:none; -webkit-mask-image:none; }
+    .dept-slider { gap:16px; }
+    .dept-card { flex-basis:clamp(250px,78vw,330px); width:clamp(250px,78vw,330px); border-radius:22px; }
+    .dept-card .dept-img { height:clamp(270px,72vw,330px); }
+    .dept-carousel-btn { width:38px; height:38px; }
+    .dept-carousel-prev { left:2px; }
+    .dept-carousel-next { right:2px; }
+}
+@media (max-width:480px) {
+    .dept-carousel-shell { padding:0 36px; }
+    .dept-slider { gap:12px; }
+    .dept-card { flex-basis:calc(100vw - 72px); width:calc(100vw - 72px); max-width:340px; }
+    .dept-card .dept-img { height:clamp(250px,78vw,310px); }
+    .dept-carousel-btn { width:34px; height:34px; font-size:12px; }
+}
+@media (prefers-reduced-motion:reduce) {
+    .counter-section::before,.counter-fm-icon { animation:none !important; }
+    .counter-slide,.dept-slider { transition:none !important; }
+}
+</style>
+
 </head>
 <body>
 <div id="fdcSplash" aria-hidden="true">
@@ -3920,42 +4204,43 @@ img { max-width: 100%; display: block; }
         <h2 class="section-title reveal reveal-scale">বিভাগীয় প্রধানগণ</h2>
         <p class="section-subtitle reveal reveal-scale">আমাদের অভিজ্ঞ শিক্ষকমণ্ডলী</p>
     </div>
-    <div class="dept-slider-viewport">
-        <div class="dept-slider" id="deptSlider">
-            <div class="dept-card sk-dept-card">
-                <div class="sk-dept-img sk-shimmer"></div>
-                <div class="sk-dept-info">
-                    <div class="sk-line name sk-shimmer"></div>
-                    <div class="sk-line role sk-shimmer"></div>
-                    <div class="sk-line dept sk-shimmer"></div>
+    <div class="dept-carousel-shell">
+        <button class="dept-carousel-btn dept-carousel-prev" id="deptPrev" type="button" aria-label="আগের বিভাগীয় প্রধান">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="dept-slider-viewport" id="deptViewport">
+            <div class="dept-slider" id="deptSlider">
+                <div class="dept-card sk-dept-card">
+                    <div class="sk-dept-img sk-shimmer"></div>
+                    <div class="sk-dept-info">
+                        <div class="sk-line name sk-shimmer"></div>
+                        <div class="sk-line role sk-shimmer"></div>
+                        <div class="sk-line dept sk-shimmer"></div>
+                    </div>
                 </div>
-            </div>
-            <div class="dept-card sk-dept-card">
-                <div class="sk-dept-img sk-shimmer"></div>
-                <div class="sk-dept-info">
-                    <div class="sk-line name sk-shimmer"></div>
-                    <div class="sk-line role sk-shimmer"></div>
-                    <div class="sk-line dept sk-shimmer"></div>
+                <div class="dept-card sk-dept-card">
+                    <div class="sk-dept-img sk-shimmer"></div>
+                    <div class="sk-dept-info">
+                        <div class="sk-line name sk-shimmer"></div>
+                        <div class="sk-line role sk-shimmer"></div>
+                        <div class="sk-line dept sk-shimmer"></div>
+                    </div>
                 </div>
-            </div>
-            <div class="dept-card sk-dept-card">
-                <div class="sk-dept-img sk-shimmer"></div>
-                <div class="sk-dept-info">
-                    <div class="sk-line name sk-shimmer"></div>
-                    <div class="sk-line role sk-shimmer"></div>
-                    <div class="sk-line dept sk-shimmer"></div>
-                </div>
-            </div>
-            <div class="dept-card sk-dept-card">
-                <div class="sk-dept-img sk-shimmer"></div>
-                <div class="sk-dept-info">
-                    <div class="sk-line name sk-shimmer"></div>
-                    <div class="sk-line role sk-shimmer"></div>
-                    <div class="sk-line dept sk-shimmer"></div>
+                <div class="dept-card sk-dept-card">
+                    <div class="sk-dept-img sk-shimmer"></div>
+                    <div class="sk-dept-info">
+                        <div class="sk-line name sk-shimmer"></div>
+                        <div class="sk-line role sk-shimmer"></div>
+                        <div class="sk-line dept sk-shimmer"></div>
+                    </div>
                 </div>
             </div>
         </div>
+        <button class="dept-carousel-btn dept-carousel-next" id="deptNext" type="button" aria-label="পরের বিভাগীয় প্রধান">
+            <i class="fas fa-chevron-right"></i>
+        </button>
     </div>
+    <div class="dept-carousel-dots" id="deptDots" aria-label="বিভাগীয় প্রধান স্লাইড নেভিগেশন"></div>
 </section>
 
 <!-- WELCOME -->
@@ -3981,7 +4266,13 @@ img { max-width: 100%; display: block; }
 
 <!-- COUNTER -->
 <section class="counter-section" id="counterSection">
+    <div class="counter-section-overlay" aria-hidden="true"></div>
     <div class="container-custom">
+        <div class="counter-heading" aria-hidden="true">
+            <span class="counter-heading-line"></span>
+            <span class="counter-heading-dot"></span>
+            <span class="counter-heading-line"></span>
+        </div>
         <div class="counter-slider-wrap" id="counterSliderWrap">
             <div class="sk-counter-glass">
                 <div class="sk-counter-icon sk-shimmer-gold"></div>
@@ -3991,7 +4282,11 @@ img { max-width: 100%; display: block; }
                 </div>
             </div>
         </div>
-        <div class="counter-dots" id="counterDots"></div>
+        <div class="counter-controls" id="counterControls" aria-label="কাউন্টার স্লাইড নিয়ন্ত্রণ">
+            <button class="counter-nav-btn" id="counterPrev" type="button" aria-label="আগের কাউন্টার"><i class="fas fa-chevron-left"></i></button>
+            <div class="counter-dots" id="counterDots"></div>
+            <button class="counter-nav-btn" id="counterNext" type="button" aria-label="পরের কাউন্টার"><i class="fas fa-chevron-right"></i></button>
+        </div>
     </div>
 </section>
 <!-- NOTICE BOARD -->
@@ -4334,7 +4629,7 @@ img { max-width: 100%; display: block; }
 <script src="js/config.js"></script>
 <script src="js/supabase.js"></script>
 <script src="js/scroll-restore.js"></script>
- 
+
 <script>
 (function () {
     "use strict";
@@ -4347,6 +4642,10 @@ img { max-width: 100%; display: block; }
     let COUNTER_TIMER = null;
     let COUNTER_TOTAL = 0;
     let COUNTER_EXIT_TIMERS = {};
+    let DEPT_INDEX = 0;
+    let DEPT_TIMER = null;
+    let DEPT_ITEMS = [];
+    let DEPT_DRAG = null;
     let INIT_DONE = false;
     let REVEAL_OBSERVER = null;
     let NOTICE_AUTOSCROLL_TIMER = null;
@@ -4686,6 +4985,13 @@ img { max-width: 100%; display: block; }
 
     async function loadDepartmentHeads() {
         const slider = document.getElementById('deptSlider');
+        const viewport = document.getElementById('deptViewport');
+        const dots = document.getElementById('deptDots');
+        const prevBtn = document.getElementById('deptPrev');
+        const nextBtn = document.getElementById('deptNext');
+
+        if (!slider || !viewport) return;
+
         try {
             const supabase = window.FDC_SUPABASE;
             const { data, error } = await supabase
@@ -4697,31 +5003,145 @@ img { max-width: 100%; display: block; }
             if (error) throw error;
             if (!data || data.length === 0) {
                 slider.innerHTML = '<p style="text-align:center;color:var(--grey);width:100%;padding:30px;">কোনো তথ্য পাওয়া যায়নি</p>';
+                if (dots) dots.innerHTML = '';
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
                 return;
             }
 
+            DEPT_ITEMS = data.slice();
+            DEPT_INDEX = 0;
+
             function buildCard(head) {
                 const img = head.image_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22280%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22260%22 height=%22280%22/%3E%3C/svg%3E';
-                return '<div class="dept-card">' +
-                    '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(head.name) + '" class="dept-img" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22280%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22260%22 height=%22280%22/%3E%3C/svg%3E\'">' +
+                return '<article class="dept-card" data-dept-index="' + DEPT_ITEMS.indexOf(head) + '">' +
+                    '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(head.name || 'বিভাগীয় প্রধান') + '" class="dept-img" loading="lazy" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22280%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22260%22 height=%22280%22/%3E%3C/svg%3E\'">' +
                     '<div class="dept-info">' +
-                        '<h4>' + escapeHtml(head.name) + '</h4>' +
-                        '<p class="dept-designation">' + escapeHtml(head.designation) + '</p>' +
+                        '<h4>' + escapeHtml(head.name || '') + '</h4>' +
+                        '<p class="dept-designation">' + escapeHtml(head.designation || '') + '</p>' +
                         '<p class="dept-department">' + escapeHtml(head.department || '') + '</p>' +
                     '</div>' +
-                '</div>';
+                '</article>';
             }
 
-            const cardsHtml = data.map(buildCard).join('');
-            slider.innerHTML = cardsHtml + cardsHtml;
+            slider.innerHTML = data.map(buildCard).join('');
             slider.classList.add('sk-fade-in');
-            const duration = Math.max(data.length * 8, 30);
-            slider.style.animationDuration = duration + 's';
+
+            if (dots) {
+                dots.innerHTML = data.map(function (head, i) {
+                    return '<button type="button" class="' + (i === 0 ? 'active' : '') + '" data-dept-dot="' + i + '" aria-label="বিভাগীয় প্রধান ' + (i + 1) + '"></button>';
+                }).join('');
+                dots.querySelectorAll('button').forEach(function (btn) {
+                    btn.addEventListener('click', function () {
+                        goToDeptSlide(parseInt(btn.getAttribute('data-dept-dot'), 10), true);
+                    });
+                });
+            }
+
+            if (prevBtn) prevBtn.style.display = data.length > 1 ? 'inline-flex' : 'none';
+            if (nextBtn) nextBtn.style.display = data.length > 1 ? 'inline-flex' : 'none';
+
+            if (prevBtn) prevBtn.onclick = function () { goToDeptSlide(DEPT_INDEX - 1, true); };
+            if (nextBtn) nextBtn.onclick = function () { goToDeptSlide(DEPT_INDEX + 1, true); };
+
+            viewport.onpointerdown = function (e) {
+                if (e.pointerType === 'mouse' && e.button !== 0) return;
+                DEPT_DRAG = { x: e.clientX, y: e.clientY, moved: false };
+                viewport.classList.add('is-dragging');
+                pauseDeptAuto();
+                try { viewport.setPointerCapture(e.pointerId); } catch (_) {}
+            };
+            viewport.onpointermove = function (e) {
+                if (!DEPT_DRAG) return;
+                const dx = e.clientX - DEPT_DRAG.x;
+                const dy = e.clientY - DEPT_DRAG.y;
+                if (Math.abs(dx) > 8 && Math.abs(dx) > Math.abs(dy)) {
+                    DEPT_DRAG.moved = true;
+                    e.preventDefault();
+                }
+            };
+            viewport.onpointerup = function (e) {
+                if (!DEPT_DRAG) return;
+                const dx = e.clientX - DEPT_DRAG.x;
+                const moved = DEPT_DRAG.moved;
+                DEPT_DRAG = null;
+                viewport.classList.remove('is-dragging');
+                try { viewport.releasePointerCapture(e.pointerId); } catch (_) {}
+                if (moved && Math.abs(dx) > 42) {
+                    goToDeptSlide(DEPT_INDEX + (dx < 0 ? 1 : -1), true);
+                }
+                startDeptAuto();
+            };
+            viewport.onpointercancel = function () {
+                DEPT_DRAG = null;
+                viewport.classList.remove('is-dragging');
+                startDeptAuto();
+            };
+            viewport.onmouseenter = pauseDeptAuto;
+            viewport.onmouseleave = startDeptAuto;
+            viewport.onfocusin = pauseDeptAuto;
+            viewport.onfocusout = startDeptAuto;
+
+            requestAnimationFrame(function () {
+                goToDeptSlide(0, false);
+                startDeptAuto();
+            });
+            window.removeEventListener('resize', positionDeptSlider);
+            window.addEventListener('resize', positionDeptSlider, { passive: true });
 
         } catch (err) {
             console.error('Dept error:', err);
             slider.innerHTML = '<p style="text-align:center;color:var(--grey);width:100%;padding:30px;">লোড করা যায়নি</p>';
         }
+    }
+
+    function getDeptCardStep() {
+        const card = document.querySelector('#deptSlider .dept-card');
+        if (!card) return 0;
+        const gap = parseFloat(getComputedStyle(document.getElementById('deptSlider')).gap) || 0;
+        return card.getBoundingClientRect().width + gap;
+    }
+
+    function positionDeptSlider() {
+        const slider = document.getElementById('deptSlider');
+        const viewport = document.getElementById('deptViewport');
+        if (!slider || !viewport || !DEPT_ITEMS.length) return;
+        const card = slider.querySelector('.dept-card');
+        if (!card) return;
+        const viewportWidth = viewport.clientWidth;
+        const cardWidth = card.getBoundingClientRect().width;
+        const step = getDeptCardStep();
+        const offset = (viewportWidth - cardWidth) / 2 - (DEPT_INDEX * step);
+        slider.style.transform = 'translate3d(' + offset + 'px,0,0)';
+    }
+
+    function updateDeptDots() {
+        const dots = document.querySelectorAll('#deptDots button');
+        dots.forEach(function (dot, i) { dot.classList.toggle('active', i === DEPT_INDEX); });
+    }
+
+    function goToDeptSlide(index, userInitiated) {
+        if (!DEPT_ITEMS.length) return;
+        const total = DEPT_ITEMS.length;
+        DEPT_INDEX = ((index % total) + total) % total;
+        positionDeptSlider();
+        updateDeptDots();
+        if (userInitiated) startDeptAuto();
+    }
+
+    function pauseDeptAuto() {
+        if (DEPT_TIMER) {
+            clearInterval(DEPT_TIMER);
+            DEPT_TIMER = null;
+        }
+    }
+
+    function startDeptAuto() {
+        pauseDeptAuto();
+        if (DEPT_ITEMS.length < 2) return;
+        DEPT_TIMER = setInterval(function () {
+            goToDeptSlide(DEPT_INDEX + 1, false);
+        }, 4800);
     }
 
     function loadWelcome() {
@@ -4753,8 +5173,13 @@ img { max-width: 100%; display: block; }
     function buildCounter() {
         const wrap = document.getElementById('counterSliderWrap');
         const section = document.getElementById('counterSection');
+        const dots = document.getElementById('counterDots');
+        const prevBtn = document.getElementById('counterPrev');
+        const nextBtn = document.getElementById('counterNext');
+        if (!wrap) return;
+
         const bg = getSetting('counter_bg_image');
-        if (bg && section) section.style.setProperty('--counter-bg', 'url(\'' + bg + '\')');
+        if (bg && section) section.style.setProperty('--counter-bg', 'url(\'' + bg.replace(/'/g, "\'") + '\')');
 
         let html = '';
         let total = 0;
@@ -4768,7 +5193,7 @@ img { max-width: 100%; display: block; }
             const active = total === 0 ? 'active' : '';
             html += '<div class="counter-slide ' + active + '" data-index="' + total + '">' +
                 '<div class="counter-glass">' +
-                    '<div class="counter-fm-icon"><i class="' + icon + '"></i></div>' +
+                    '<div class="counter-fm-icon"><i class="' + escapeHtml(icon) + '"></i></div>' +
                     '<div class="counter-info">' +
                         '<span class="counter-label">' + escapeHtml(label || '') + '</span>' +
                         '<span class="counter-value">' + escapeHtml(value || '0') + '</span>' +
@@ -4781,19 +5206,45 @@ img { max-width: 100%; display: block; }
         if (total === 0) {
             wrap.innerHTML = '<div class="counter-slide active"><div class="counter-glass"><div class="counter-fm-icon"><i class="fas fa-graduation-cap"></i></div><div class="counter-info"><span class="counter-label">WELCOME</span><span class="counter-value">FDC</span></div></div></div>';
             COUNTER_TOTAL = 1;
-            return;
+            COUNTER_INDEX = 0;
+        } else {
+            wrap.innerHTML = html;
+            wrap.classList.add('sk-fade-in');
+            COUNTER_TOTAL = total;
+            COUNTER_INDEX = 0;
         }
 
-        wrap.innerHTML = html;
-        wrap.classList.add('sk-fade-in');
-        COUNTER_TOTAL = total;
-        COUNTER_INDEX = 0;
+        if (dots) {
+            dots.innerHTML = '';
+            for (let i = 0; i < COUNTER_TOTAL; i++) {
+                const b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'counter-dot' + (i === 0 ? ' active' : '');
+                b.setAttribute('aria-label', 'কাউন্টার ' + (i + 1));
+                b.addEventListener('click', function () {
+                    goToCounterSlide(i, true);
+                });
+                dots.appendChild(b);
+            }
+        }
 
-        if (total > 1) startCounterAuto();
+        const showControls = COUNTER_TOTAL > 1;
+        if (prevBtn) prevBtn.style.display = showControls ? 'inline-flex' : 'none';
+        if (nextBtn) nextBtn.style.display = showControls ? 'inline-flex' : 'none';
+        if (dots) dots.style.display = showControls ? 'flex' : 'none';
+
+        if (prevBtn) prevBtn.onclick = function () { goToCounterSlide(COUNTER_INDEX - 1, true); };
+        if (nextBtn) nextBtn.onclick = function () { goToCounterSlide(COUNTER_INDEX + 1, true); };
+
+        if (COUNTER_TOTAL > 1) startCounterAuto();
+        else if (COUNTER_TIMER) { clearInterval(COUNTER_TIMER); COUNTER_TIMER = null; }
     }
 
-    function goToCounterSlide(index) {
+    function goToCounterSlide(index, userInitiated) {
         const slides = document.querySelectorAll('.counter-slide');
+        if (!slides.length) return;
+        const total = slides.length;
+        const nextIndex = ((index % total) + total) % total;
         const prevIndex = COUNTER_INDEX;
 
         Object.keys(COUNTER_EXIT_TIMERS).forEach(function (key) {
@@ -4802,31 +5253,32 @@ img { max-width: 100%; display: block; }
         });
 
         slides.forEach(function (s, i) {
-            if (i === index) {
-                s.classList.remove('exit-left');
-                s.classList.add('active');
-            } else if (i === prevIndex && prevIndex !== index) {
-                s.classList.remove('active');
-                s.classList.add('exit-left');
-                COUNTER_EXIT_TIMERS['slide_' + i] = setTimeout(function () {
-                    if (!s.classList.contains('active')) {
-                        s.classList.remove('exit-left');
-                    }
-                    delete COUNTER_EXIT_TIMERS['slide_' + i];
-                }, 800);
-            } else {
-                s.classList.remove('active', 'exit-left');
-            }
+            s.classList.remove('exit-left');
+            if (i === nextIndex) s.classList.add('active');
+            else s.classList.remove('active');
         });
-        COUNTER_INDEX = index;
+
+        if (prevIndex !== nextIndex && slides[prevIndex]) {
+            slides[prevIndex].classList.add('exit-left');
+            COUNTER_EXIT_TIMERS['slide_' + prevIndex] = setTimeout(function () {
+                if (slides[prevIndex] && !slides[prevIndex].classList.contains('active')) slides[prevIndex].classList.remove('exit-left');
+                delete COUNTER_EXIT_TIMERS['slide_' + prevIndex];
+            }, 760);
+        }
+
+        COUNTER_INDEX = nextIndex;
+        document.querySelectorAll('#counterDots .counter-dot').forEach(function (dot, i) {
+            dot.classList.toggle('active', i === COUNTER_INDEX);
+        });
+        if (userInitiated) startCounterAuto();
     }
 
     function startCounterAuto() {
         if (COUNTER_TIMER) clearInterval(COUNTER_TIMER);
-        const speed = parseInt(getSetting('counter_slide_speed', '4000')) || 4000;
+        if (COUNTER_TOTAL < 2) return;
+        const speed = Math.max(parseInt(getSetting('counter_slide_speed', '5000')) || 5000, 2800);
         COUNTER_TIMER = setInterval(function () {
-            const next = (COUNTER_INDEX + 1) % COUNTER_TOTAL;
-            goToCounterSlide(next);
+            goToCounterSlide(COUNTER_INDEX + 1, false);
         }, speed);
     }
 
@@ -5881,5 +6333,6 @@ function isDismissed() {
 </script>
 
 
+<script src="js/reactions.js"></script>
 </body>
 </html>
