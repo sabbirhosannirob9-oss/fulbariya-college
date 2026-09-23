@@ -1,0 +1,110 @@
+/**
+ * =========================================================
+ * FULBARIYA COLLEGE — UNIVERSAL PRINT WATERMARK
+ * Location: css/print-watermark.css
+ * Version: v1.0
+ * 
+ * Applies watermark to:
+ *   - admission-print.html (student + admin + bulk)
+ *   - result-details.html (public result)
+ * 
+ * Features:
+ *   - Student mode: subtle watermark
+ *   - Admin mode: stronger watermark (office copy)
+ *   - Print-safe (background graphics)
+ * =========================================================
+ */
+
+/* ========== FORCE BACKGROUND PRINTING ========== */
+@media print {
+    *,
+    *::before,
+    *::after {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+}
+
+/* ========== CONTAINERS ========== */
+.a4-page,
+.sheet-wrapper,
+.result-page,
+.print-container {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+
+/* ========== WATERMARK ::BEFORE — Base ========== */
+.a4-page::before,
+.sheet-wrapper::before,
+.result-page::before,
+.print-container::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-15deg);
+    width: 500px;
+    height: 500px;
+    background-image: url('/assets/images/logo1.png');
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0.06;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+}
+
+/* ========== CONTENT ABOVE WATERMARK ========== */
+.a4-page > *,
+.sheet-wrapper > *,
+.result-page > *,
+.print-container > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* ========== SCREEN OPACITY ========== */
+@media screen {
+    .a4-page::before,
+    .sheet-wrapper::before,
+    .result-page::before,
+    .print-container::before {
+        opacity: 0.04;
+    }
+    
+    /* Admin mode — slightly stronger on screen */
+    .a4-page.admin-mode::before {
+        opacity: 0.06;
+    }
+}
+
+/* ========== PRINT OPACITY ========== */
+@media print {
+    /* Student / public — subtle */
+    .a4-page:not(.admin-mode)::before,
+    .sheet-wrapper::before,
+    .result-page::before,
+    .print-container::before {
+        opacity: 0.10;
+    }
+    
+    /* Admin office copy — prominent */
+    .a4-page.admin-mode::before {
+        opacity: 0.14;
+    }
+}
+
+/* ========== MOBILE ========== */
+@media (max-width: 640px) {
+    .a4-page::before,
+    .sheet-wrapper::before {
+        width: 320px;
+        height: 320px;
+    }
+}
