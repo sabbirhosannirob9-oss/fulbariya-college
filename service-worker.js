@@ -2,8 +2,11 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v3.1.0
+ * Version: v3.1.1
  * Purpose: PWA Install + Offline Caching (Network-first strategy)
+ *
+ * ⚡ Changes v3.1.1:
+ *   - Added /css/print-watermark.css (logo watermark for PDFs)
  *
  * ⚡ Changes v3.1.0:
  *   - HTML: Network-first (was cache-first → caused stale pages)
@@ -25,7 +28,7 @@
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v3.1.0';
+const CACHE_VERSION = 'fdc-v3.1.1';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -45,7 +48,10 @@ const STATIC_ASSETS = [
     '/assets/images/web-app-manifest-512x512.png',
     '/assets/images/apple-touch-icon.png',
     '/assets/images/favicon-96x96.png',
-    '/assets/images/favicon.ico'
+    '/assets/images/favicon.ico',
+
+    // ==================== Core CSS ====================
+    '/css/print-watermark.css'
 ];
 
 // =========================================================
