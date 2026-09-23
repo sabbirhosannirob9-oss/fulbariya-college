@@ -236,27 +236,18 @@ img { max-width: 100%; display: block; }
 .sk-welcome-wrap .sk-btn { display: inline-block; width: 170px; height: 44px; border-radius: 50px; }
 
 .sk-counter-glass {
-    background: rgba(255, 255, 255, 0.06);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
-    border: 1px solid rgba(242, 210, 123, 0.4);
-    padding: 40px 50px;
+    background: transparent;
+    border: 1.5px solid rgba(242, 210, 123, 0.55);
+    border-radius: 16px;
+    padding: 28px 44px;
     display: flex;
     align-items: center;
-    gap: 30px;
-    min-height: 200px;
-    max-width: 780px;
+    justify-content: center;
+    gap: 24px;
+    min-height: auto;
+    max-width: fit-content;
     margin: 0 auto;
     position: relative;
-}
-.sk-counter-glass::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 5px;
-    background: var(--gold);
-    border-radius: 20px 0 0 20px;
 }
 .sk-counter-glass .sk-counter-icon { width: 78px; height: 78px; border-radius: 20px; flex-shrink: 0; }
 .sk-counter-glass .sk-counter-info { flex: 1; display: flex; flex-direction: column; gap: 12px; }
@@ -1073,62 +1064,49 @@ img { max-width: 100%; display: block; }
 }
 .counter-slider-wrap {
     position: relative;
-    max-width: 720px;
+    max-width: 780px;
     margin: 0 auto;
-    min-height: 180px;
-    overflow: visible;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    min-height: 220px;
+    overflow: hidden;
 }
 .counter-slide {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 0; left: 0;
     width: 100%;
     opacity: 0;
-    visibility: hidden;
-    transform: translate(-50%, -50%) translateX(60px) scale(0.92);
-    transition: opacity 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-                visibility 0s linear 0.55s;
+    transform: translateX(100px) scale(0.94);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
 }
 .counter-slide.active {
     opacity: 1;
-    visibility: visible;
-    transform: translate(-50%, -50%) translateX(0) scale(1);
+    transform: translateX(0) scale(1);
     pointer-events: auto;
-    transition-delay: 0s, 0s, 0s;
 }
 .counter-slide.exit-left {
     opacity: 0;
-    visibility: hidden;
-    transform: translate(-50%, -50%) translateX(-60px) scale(0.92);
+    transform: translateX(-100px) scale(0.94);
 }
 .counter-glass {
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: flex-start;
-    gap: 30px;
-    padding: 40px 50px;
-    background: rgba(10, 22, 85, 0.28);
-    border-radius: 20px;
-    border: 1px solid rgba(242, 210, 123, 0.4);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    justify-content: center;
+    gap: 24px;
+    padding: 28px 44px;
+    background: transparent;
+    border-radius: 16px;
+    border: 1.5px solid rgba(242, 210, 123, 0.55);
+    box-shadow: none;
     position: relative;
-    overflow: hidden;
-    text-align: left;
-    min-height: 200px;
-}
-.counter-glass::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; bottom: 0;
-    width: 5px;
-    background: var(--gold);
-    border-radius: 20px 0 0 20px;
+    overflow: visible;
+    text-align: center;
+    min-height: auto;
+    max-width: fit-content;
+    margin: 0 auto;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
 }
 .counter-fm-icon {
     flex-shrink: 0;
@@ -1455,15 +1433,6 @@ img { max-width: 100%; display: block; }
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
-}
-
-.gallery-card-wrap .gallery-card-link .gallery-text-overlay .gallery-date {
-    font-size: 11.5px;
-    color: rgba(255,255,255,0.75);
-    margin: 0;
-    line-height: 1.4;
-    font-weight: 500;
-    letter-spacing: 0.3px;
 }
 
 /* FOOTER */
@@ -3406,6 +3375,185 @@ img { max-width: 100%; display: block; }
     .gallery-grid-home{gap:9px;}
 }
 
+/* =========================================================
+   REACTIONS SYSTEM (Facebook-style)
+========================================================= */
+.reactions-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--border-light);
+    background: #fafbff;
+    position: relative;
+}
+.rc-counts {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    flex: 1;
+    min-width: 0;
+}
+.rc-count-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+    animation: rcFadeIn 0.3s ease;
+}
+.rc-count-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+.rc-count-num {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    color: var(--navy);
+}
+.rc-count-empty {
+    font-size: 12px;
+    color: var(--grey);
+    font-style: italic;
+}
+@keyframes rcFadeIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}
+.rc-button-wrap {
+    position: relative;
+    flex-shrink: 0;
+}
+.rc-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    background: #fff;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 50px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--grey);
+    cursor: pointer;
+    transition: 0.25s;
+}
+.rc-trigger:hover {
+    border-color: var(--navy);
+    color: var(--navy);
+    background: #f5f7ff;
+}
+.rc-trigger-icon {
+    font-size: 16px;
+    line-height: 1;
+}
+.rc-trigger-label {
+    font-size: 12.5px;
+}
+.rc-trigger.rc-btn-active.rc-btn-love {
+    background: linear-gradient(135deg, #fee2e2, #fecaca);
+    border-color: #ef4444;
+    color: #991b1b;
+}
+.rc-trigger.rc-btn-active.rc-btn-care {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-color: #f59e0b;
+    color: #92400e;
+}
+.rc-trigger.rc-btn-active.rc-btn-sad {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border-color: #f59e0b;
+    color: #92400e;
+}
+.rc-picker {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    right: 0;
+    display: flex;
+    gap: 4px;
+    padding: 6px;
+    background: #fff;
+    border-radius: 50px;
+    box-shadow: 
+        0 8px 32px rgba(10,22,85,0.18),
+        0 0 0 1px rgba(0,0,0,0.04);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px) scale(0.9);
+    transform-origin: bottom right;
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 100;
+    white-space: nowrap;
+}
+.rc-picker.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+.rc-picker-btn {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 10px;
+    background: transparent;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.2s;
+    font-family: inherit;
+}
+.rc-picker-btn:hover {
+    background: #f5f7ff;
+    transform: translateY(-2px) scale(1.15);
+}
+.rc-picker-btn.active {
+    background: linear-gradient(135deg, #eff6ff, #dbeafe);
+    box-shadow: 0 0 0 2px rgba(10,22,85,0.15);
+}
+.rc-picker-icon {
+    font-size: 24px;
+    line-height: 1;
+    display: block;
+    transition: transform 0.2s;
+}
+.rc-picker-btn:hover .rc-picker-icon {
+    transform: scale(1.15);
+}
+.rc-picker-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    color: var(--grey);
+    transition: color 0.2s;
+}
+.rc-picker-btn.active .rc-picker-label {
+    color: var(--navy);
+}
+.rc-loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+.rc-success .rc-trigger {
+    animation: rcPulse 0.5s ease;
+}
+.rc-error .rc-trigger {
+    animation: rcShake 0.5s ease;
+}
+@keyframes rcPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}
+@keyframes rcShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
 .news-card-wrap {
     position: relative;
     display: flex;
@@ -3451,6 +3599,55 @@ img { max-width: 100%; display: block; }
     aspect-ratio: 4/3;
     overflow: hidden;
 }
+@media (max-width: 768px) {
+    .reactions-bar {
+        padding: 8px 12px;
+        gap: 8px;
+    }
+    .rc-counts {
+        gap: 8px;
+    }
+    .rc-count-item {
+        font-size: 12px;
+    }
+    .rc-count-icon {
+        font-size: 14px;
+    }
+    .rc-trigger {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+    .rc-trigger-label {
+        display: none;
+    }
+    .rc-trigger-icon {
+        font-size: 18px;
+    }
+    .rc-picker {
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%) translateY(8px) scale(0.9);
+        transform-origin: bottom center;
+    }
+    .rc-picker.show {
+        transform: translateX(-50%) translateY(0) scale(1);
+    }
+    .rc-picker-icon {
+        font-size: 22px;
+    }
+    .rc-picker-label {
+        font-size: 8px;
+    }
+}
+@media (max-width: 480px) {
+    .rc-picker-btn {
+        padding: 5px 8px;
+    }
+    .rc-picker-icon {
+        font-size: 20px;
+    }
+}
+
 /* =========================================================
    GALLERY GRID — RESPONSIVE CARD SIZE FIX
    Gallery CSS only; all HTML/JS/data logic remains unchanged.
@@ -4137,7 +4334,7 @@ img { max-width: 100%; display: block; }
 <script src="js/config.js"></script>
 <script src="js/supabase.js"></script>
 <script src="js/scroll-restore.js"></script>
-
+ 
 <script>
 (function () {
     "use strict";
@@ -4862,7 +5059,7 @@ img { max-width: 100%; display: block; }
                 ? new Date(item.news_date).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' })
                 : 'সাম্প্রতিক';
 
-            html += '<div class="news-card-wrap">' +
+            html += '<div class="news-card-wrap" data-react-id="' + item.id + '">' +
                 '<a href="' + link + '" ' + target + ' class="news-card-link">' +
                     '<div class="news-img-wrap">' +
                         '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(item.title) + '" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22300%22 height=%22200%22/%3E%3C/svg%3E\'">' +
@@ -4874,12 +5071,19 @@ img { max-width: 100%; display: block; }
                         '<span class="news-date"><i class="fas fa-calendar"></i> ' + dateStr + '</span>' +
                     '</div>' +
                 '</a>' +
+                '<div data-reactions-mount></div>' +
             '</div>';
         });
 
         grid.innerHTML = html;
         grid.classList.add('sk-fade-in');
         observeNewReveals(grid);
+
+        if (window.FDCReactions) {
+            setTimeout(function () {
+                window.FDCReactions.mount('#newsGrid', 'news');
+            }, 100);
+        }
 
     } catch (err) {
         console.error('News error:', err);
@@ -4895,7 +5099,7 @@ img { max-width: 100%; display: block; }
         const supabase = window.FDC_SUPABASE;
         const { data, error } = await supabase
             .from('gallery')
-            .select('id, title, description, image_url, category, is_featured, created_at')
+            .select('id, title, description, image_url, category, is_featured')
             .eq('is_active', true)
             .order('display_order', { ascending: true })
             .limit(6);
@@ -4913,21 +5117,28 @@ img { max-width: 100%; display: block; }
                 ? '<span class="featured-badge"><i class="fas fa-star"></i> Featured</span>'
                 : '';
 
-            html += '<div class="gallery-card-wrap">' +
+            html += '<div class="gallery-card-wrap" data-react-id="' + item.id + '">' +
                 '<a href="public-pages/gallery.html" class="gallery-card-link">' +
                     '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(item.title) + '" onerror="this.src=\'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22200%22%3E%3Crect fill=%22%23f8f9fc%22 width=%22300%22 height=%22200%22/%3E%3C/svg%3E\'">' +
                     featuredBadge +
                     '<div class="gallery-text-overlay">' +
                         '<h4>' + escapeHtml(item.title) + '</h4>' +
-                        '<p class="gallery-date">' + (item.created_at ? new Date(item.created_at).toLocaleDateString('bn-BD', { day: 'numeric', month: 'long', year: 'numeric' }) : 'সাম্প্রতিক') + '</p>' +
+                        (item.description ? '<p>' + escapeHtml(item.description) + '</p>' : '') +
                     '</div>' +
                 '</a>' +
+                '<div data-reactions-mount></div>' +
             '</div>';
         });
 
         grid.innerHTML = html;
         grid.classList.add('sk-fade-in');
         observeNewReveals(grid);
+
+        if (window.FDCReactions) {
+            setTimeout(function () {
+                window.FDCReactions.mount('#galleryGridHome', 'gallery');
+            }, 100);
+        }
 
     } catch (err) {
         console.error('Gallery error:', err);
