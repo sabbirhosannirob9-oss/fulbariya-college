@@ -2,7 +2,7 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v3.1.1
+ * Version: v3.2.0
  * Purpose: PWA Install + Offline Caching (Network-first strategy)
  *
  * ⚡ Changes v3.1.1:
@@ -28,7 +28,7 @@
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v3.1.1';
+const CACHE_VERSION = 'fdc-v3.2.0';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -41,6 +41,8 @@ const STATIC_ASSETS = [
     '/',
     '/index.html',
     '/manifest.json',
+    '/css/pwa-enhancements.css',
+    '/js/pwa-enhancements.js',
 
     // ==================== Icons / Images ====================
     '/assets/images/logo1.png',
@@ -97,7 +99,7 @@ self.addEventListener('activate', function (event) {
         caches.keys().then(function (cacheNames) {
             return Promise.all(
                 cacheNames.map(function (cacheName) {
-                    if (cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
+                    if (cacheName.startsWith('fdc-') && cacheName !== STATIC_CACHE && cacheName !== DYNAMIC_CACHE) {
                         console.log('[SW] Deleting old cache:', cacheName);
                         return caches.delete(cacheName);
                     }
@@ -193,8 +195,8 @@ self.addEventListener('fetch', function (event) {
                     // Offline: serve cached HTML if available
                     return caches.match(request).then(function (cached) {
                         if (cached) return cached;
-                        // Final fallback: index.html
-                        return caches.match('/index.html');
+                        // Do not show the home page as if it were a different offline page.
+                        return new Response('<!doctype html><html lang="bn"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>অফলাইন</title><body style="font-family:system-ui,sans-serif;padding:24px;color:#0a1655"><h2>আপনি অফলাইনে আছেন</h2><p>এই পেজটি আগে খোলা না থাকায় অফলাইনে দেখানো যাচ্ছে না। ইন্টারনেট সংযোগ ফিরে এলে আবার চেষ্টা করুন।</p></body></html>', {status: 503, headers: {'Content-Type':'text/html; charset=utf-8'}});
                     });
                 })
         );
