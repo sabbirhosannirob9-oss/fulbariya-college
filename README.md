@@ -1,4 +1,4 @@
-# Fulbariya Degree College Website
+# Fulbaria College Website
 
 Premium navy/gold college website frontend scaffold.
 

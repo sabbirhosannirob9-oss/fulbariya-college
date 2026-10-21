@@ -1,8 +1,8 @@
 {
-  "name": "ফুলবাড়ীয়া কলেজ",
-  "short_name": "ফুলবাড়ীয়া কলেজ",
-  "description": "ফুলবাড়ীয়া কলেজ - মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়",
-  "lang": "bn",
+  "name": "Fulbaria College",
+  "short_name": "Fulbaria",
+  "description": "Official website and progressive web app of Fulbaria College, Mymensingh, Bangladesh.",
+  "lang": "en",
   "dir": "ltr",
   "start_url": "/",
   "scope": "/",
@@ -15,6 +15,12 @@
     "college"
   ],
   "icons": [
+    {
+      "src": "/assets/images/fulbaria-college-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
     {
       "src": "/assets/images/web-app-manifest-192x192.png",
       "sizes": "192x192",
@@ -42,9 +48,9 @@
   ],
   "shortcuts": [
     {
-      "name": "নোটিশ দেখুন",
-      "short_name": "নোটিশ",
-      "description": "সর্বশেষ নোটিশ",
+      "name": "College Notices",
+      "short_name": "Notices",
+      "description": "Latest college notices and announcements",
       "url": "/public-pages/notices.html",
       "icons": [
         {
@@ -54,9 +60,9 @@
       ]
     },
     {
-      "name": "রেজাল্ট দেখুন",
-      "short_name": "রেজাল্ট",
-      "description": "পরীক্ষার ফলাফল",
+      "name": "Exam Results",
+      "short_name": "Results",
+      "description": "Published examination results",
       "url": "/public-pages/results.html",
       "icons": [
         {
@@ -66,9 +72,9 @@
       ]
     },
     {
-      "name": "গ্যালারি দেখুন",
-      "short_name": "গ্যালারি",
-      "description": "কলেজের ছবি",
+      "name": "Photo Gallery",
+      "short_name": "Gallery",
+      "description": "Photos and memories of Fulbaria College",
       "url": "/public-pages/gallery.html",
       "icons": [
         {

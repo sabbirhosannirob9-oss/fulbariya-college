@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="google-site-verification" content="Qvrzl8u8eIqlvoXqVO4Ofjnx_haKcn2Y88RU6VNdCME" />
-<title>ফুলবাড়ীয়া কলেজ | Fulbariya College</title>
-<meta name="description" content="ফুলবাড়ীয়া কলেজ - মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়">
+<title>Fulbaria College | Fulbaria College</title>
+<meta name="description" content="Fulbaria College - মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়">
 <meta name="theme-color" content="#0a1655">
 <script>
 (function(){
@@ -20,7 +20,6 @@
 </script>
 <style id="fdcSplashStyles">
 html.fdc-skip-splash #fdcSplash{display:none!important}
-html.fdc-skip-splash body>*:not(#fdcSplash):not(#fdcPageLoader){opacity:1!important;animation:none!important}
 #fdcSplash{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;overflow:hidden;background:linear-gradient(145deg,#0a1655,#0d1a5e);color:#fff;animation:fdcSplashExit 1s cubic-bezier(.4,0,.2,1) 1.8s forwards;pointer-events:auto;will-change:opacity,transform}
 #fdcSplash::before{content:"";position:absolute;inset:-25%;background:radial-gradient(circle at 50% 44%,rgba(242,210,123,.13),transparent 34%);pointer-events:none}
 .fdc-splash-inner{position:relative;z-index:1;width:min(84vw,360px);text-align:center}
@@ -35,44 +34,8 @@ html.fdc-skip-splash body>*:not(#fdcSplash):not(#fdcPageLoader){opacity:1!import
 @keyframes fdcLineIn{to{width:54px}}
 @keyframes fdcShimmerBar{from{transform:translateX(-130%)}to{transform:translateX(330%)}}
 @keyframes fdcSplashExit{to{opacity:0;transform:scale(1.03);pointer-events:none}}
-@keyframes fdcHomeIn{from{opacity:0}to{opacity:1}}
-body>*:not(#fdcSplash):not(#fdcPageLoader){opacity:0;animation:fdcHomeIn .65s ease 1.55s forwards}
+/* Keep the page visible behind the premium splash; avoid a second fade that can flash the navigation. */
 
-/* =========================================================
-   FULL-PAGE FACEBOOK-STYLE LOADING LAYER
-   Sits below the splash and disappears after the page is ready.
-========================================================= */
-#fdcPageLoader{position:fixed;inset:0;z-index:99998;background:#f7f8fb;overflow:hidden;opacity:1;visibility:visible;transition:opacity .38s ease,visibility .38s ease;pointer-events:auto}
-#fdcPageLoader.fdc-loader-hide{opacity:0;visibility:hidden;pointer-events:none}
-.fdc-loader-shell{width:100%;min-height:100%;background:#f7f8fb}
-.fdc-loader-top{height:46px;background:#e9edf3;position:relative;overflow:hidden}
-.fdc-loader-header{height:92px;background:#fff;border-bottom:1px solid #e9edf3;display:flex;align-items:center;padding:0 18px;gap:14px}
-.fdc-loader-logo{width:48px;height:48px;border-radius:14px}
-.fdc-loader-brand{flex:1;max-width:190px}
-.fdc-loader-line{height:10px;border-radius:6px;margin-bottom:9px}
-.fdc-loader-line:last-child{margin-bottom:0;width:68%}
-.fdc-loader-menu{width:34px;height:34px;border-radius:10px}
-.fdc-loader-hero{height:300px;margin:14px auto 0;width:min(100% - 28px,1100px);border-radius:18px}
-.fdc-loader-row{width:min(100% - 28px,1100px);margin:14px auto;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-.fdc-loader-card{height:112px;border-radius:16px}
-.fdc-loader-content{width:min(100% - 28px,1100px);margin:14px auto;display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
-.fdc-loader-panel{height:180px;border-radius:17px}
-.fdc-loader-shimmer{background:linear-gradient(90deg,#e9edf3 0%,#f7f9fc 22%,#e2e7ee 42%,#f7f9fc 62%,#e9edf3 100%);background-size:260% 100%;animation:fdcPageShimmer 1.35s linear infinite}
-@keyframes fdcPageShimmer{0%{background-position:120% 0}100%{background-position:-120% 0}}
-@media(max-width:700px){
-    .fdc-loader-top{height:38px}
-    .fdc-loader-header{height:78px;padding:0 14px}
-    .fdc-loader-logo{width:42px;height:42px;border-radius:12px}
-    .fdc-loader-hero{height:255px;margin-top:10px;border-radius:14px}
-    .fdc-loader-row{grid-template-columns:repeat(2,1fr);gap:9px;margin-top:10px}
-    .fdc-loader-card{height:92px;border-radius:13px}
-    .fdc-loader-content{grid-template-columns:1fr;margin-top:10px}
-    .fdc-loader-panel{height:150px}
-}
-@media(prefers-reduced-motion:reduce){
-    .fdc-loader-shimmer{animation:none}
-    #fdcSplash{animation:none;opacity:0;pointer-events:none}
-}
 </style>
 
 <link rel="manifest" href="/manifest.json">
@@ -81,7 +44,7 @@ body>*:not(#fdcSplash):not(#fdcPageLoader){opacity:0;animation:fdcHomeIn .65s ea
 <link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Fulbariya">
+<meta name="apple-mobile-web-app-title" content="Fulbaria College">
 <meta name="mobile-web-app-capable" content="yes">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -2809,7 +2772,7 @@ img { max-width: 100%; display: block; }
 
 <style id="fdcSmartUI">
 /* =========================================================
-   FULBARIYA COLLEGE — SMART UI LAYER
+   FULBARIA COLLEGE — SMART UI LAYER
    UI ONLY: existing HTML/JS/Supabase/Cloudinary untouched.
    HEADER IS INTENTIONALLY NOT MODIFIED.
 ========================================================= */
@@ -3498,43 +3461,22 @@ img { max-width: 100%; display: block; }
 
 </style>
 
+  <link rel="stylesheet" href="/css/premium-system.css">
 </head>
 <body>
 <div id="fdcSplash" aria-hidden="true">
     <div class="fdc-splash-inner">
-        <img class="fdc-splash-logo" src="/assets/images/logo1.png" alt="">
-        <div class="fdc-splash-bn">ফুলবাড়ীয়া কলেজ</div>
-        <div class="fdc-splash-en">Fulbariya College</div>
+        <img class="fdc-splash-logo" src="/assets/images/fulbaria-college-mark.svg" alt="">
+        <div class="fdc-splash-bn">Fulbaria College</div>
+        <div class="fdc-splash-en">Fulbaria College</div>
         <div class="fdc-splash-line"></div>
         <div class="fdc-splash-loader"></div>
+        <div class="fdc-splash-credit">Developed by <strong>Sabbir Hosan Nirob</strong></div>
     </div>
 </div>
 
 <!-- FACEBOOK-STYLE PAGE LOADING SKELETON -->
-<div id="fdcPageLoader" aria-hidden="true">
-    <div class="fdc-loader-shell">
-        <div class="fdc-loader-top fdc-loader-shimmer"></div>
-        <div class="fdc-loader-header">
-            <div class="fdc-loader-logo fdc-loader-shimmer"></div>
-            <div class="fdc-loader-brand">
-                <div class="fdc-loader-line fdc-loader-shimmer"></div>
-                <div class="fdc-loader-line fdc-loader-shimmer"></div>
-            </div>
-            <div class="fdc-loader-menu fdc-loader-shimmer"></div>
-        </div>
-        <div class="fdc-loader-hero fdc-loader-shimmer"></div>
-        <div class="fdc-loader-row">
-            <div class="fdc-loader-card fdc-loader-shimmer"></div>
-            <div class="fdc-loader-card fdc-loader-shimmer"></div>
-            <div class="fdc-loader-card fdc-loader-shimmer"></div>
-            <div class="fdc-loader-card fdc-loader-shimmer"></div>
-        </div>
-        <div class="fdc-loader-content">
-            <div class="fdc-loader-panel fdc-loader-shimmer"></div>
-            <div class="fdc-loader-panel fdc-loader-shimmer"></div>
-        </div>
-    </div>
-</div>
+
 
 <!-- TOP BAR -->
 <div class="top-bar">
@@ -3557,10 +3499,10 @@ img { max-width: 100%; display: block; }
 <header class="main-header">
     <div class="container-custom">
         <a href="index.html" class="logo-box">
-            <img src="assets/images/logo1.png" alt="Fulbariya College" onerror="this.style.display='none'">
+            <img src="/assets/images/fulbaria-college-mark.svg" alt="Fulbaria College" onerror="this.style.display='none'">
             <div class="logo-text">
-                <h1 data-college-name>ফুলবাড়ীয়া কলেজ</h1>
-                <p>Fulbariya College</p>
+                <h1 data-college-name>Fulbaria College</h1>
+                <p>Fulbaria College</p>
             </div>
         </a>
 
@@ -3776,7 +3718,7 @@ img { max-width: 100%; display: block; }
 
         <div class="welcome-wrap reveal reveal-left" id="welcomeRealContent" style="display:none;">
             <h2 id="welcomeTitle">স্বাগতম</h2>
-            <p id="welcomeShortText">ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।</p>
+            <p id="welcomeShortText">Fulbaria Collegeে আপনাকে স্বাগতম।</p>
             <button class="btn-navy" onclick="openWelcomeModal()">
                 <i class="fas fa-arrow-right"></i> আরও পড়ুন
             </button>
@@ -3986,7 +3928,7 @@ img { max-width: 100%; display: block; }
     <div class="container-custom">
         <div class="footer-grid">
             <div class="footer-col">
-                <h4 data-college-name>ফুলবাড়ীয়া কলেজ</h4>
+                <h4 data-college-name>Fulbaria College</h4>
                 <p>শিক্ষা, নৈতিকতা ও আধুনিকতার সমন্বয়ে একটি আদর্শ শিক্ষা প্রতিষ্ঠান। ১৯৭২ সাল থেকে মানসম্মত শিক্ষা প্রদান করে আসছে।</p>
                 <div class="footer-social">
                     <a href="#" id="footerFacebook" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
@@ -4103,7 +4045,7 @@ img { max-width: 100%; display: block; }
         </div>
 
         <div class="footer-bottom">
-            <span>© <span id="year"></span> <strong data-college-name>ফুলবাড়ীয়া কলেজ</strong>। সর্বস্বত্ব সংরক্ষিত।</span>
+            <span>© <span id="year"></span> <strong data-college-name>Fulbaria College</strong>। সর্বস্বত্ব সংরক্ষিত।</span>
 
             <div class="footer-visitors" title="Total Visitors">
                 <i class="fas fa-eye"></i>
@@ -4247,7 +4189,7 @@ img { max-width: 100%; display: block; }
     }
 
     function applyCollegeInfo() {
-        const name = getSetting('college_name', 'ফুলবাড়ীয়া কলেজ');
+        const name = getSetting('college_name', 'Fulbaria College');
         const email = getSetting('college_email', 'info@fulbariyacollege.edu.bd');
         const phone = getSetting('college_phone', '+880 1XXX-XXXXXX');
         const address = getSetting('college_address', 'ফুলবাড়ীয়া, ময়মনসিংহ');
@@ -4258,7 +4200,7 @@ img { max-width: 100%; display: block; }
         document.querySelectorAll('[data-college-phone]').forEach(function (el) { el.textContent = phone; });
         document.querySelectorAll('[data-college-address]').forEach(function (el) { el.textContent = address; });
         document.querySelectorAll('[data-college-eiin]').forEach(function (el) { el.textContent = eiin; });
-        document.title = name + ' | Fulbariya College';
+        document.title = name + ' | Fulbaria College';
 
         const metaDesc = document.querySelector('meta[name="description"]');
         if (metaDesc) {
@@ -4308,7 +4250,7 @@ img { max-width: 100%; display: block; }
         slider.classList.remove('sk-loading');
 
         if (HERO_SLIDES.length === 0) {
-            slider.innerHTML = '<div class="hero-slide active" style="position:relative;min-height:520px;background:linear-gradient(135deg,#0a1655,#1a237e);"><div class="hero-content" style="position:relative;padding:80px 20px;"><h2>ফুলবাড়ীয়া কলেজে স্বাগতম</h2><p>মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়</p></div></div>';
+            slider.innerHTML = '<div class="hero-slide active" style="position:relative;min-height:520px;background:linear-gradient(135deg,#0a1655,#1a237e);"><div class="hero-content" style="position:relative;padding:80px 20px;"><h2>Fulbaria Collegeে স্বাগতম</h2><p>মানসম্মত শিক্ষা ও আধুনিক সুবিধার সমন্বয়</p></div></div>';
             return;
         }
 
@@ -4541,7 +4483,7 @@ img { max-width: 100%; display: block; }
         const titleEl = document.getElementById('welcomeTitle');
         const textEl = document.getElementById('welcomeShortText');
         if (titleEl) titleEl.textContent = getSetting('welcome_title', 'স্বাগতম');
-        if (textEl) textEl.textContent = getSetting('welcome_short_text', 'ফুলবাড়ীয়া কলেজে আপনাকে স্বাগতম।');
+        if (textEl) textEl.textContent = getSetting('welcome_short_text', 'Fulbaria Collegeে আপনাকে স্বাগতম।');
     }
 
     window.openWelcomeModal = function () {
@@ -5491,7 +5433,7 @@ function isDismissed() {
                 '</div>' +
                 '<div class="fdc-install-text">' +
                     '<h4>অ্যাপ ইনস্টল করুন</h4>' +
-                    '<p>ফুলবাড়ীয়া কলেজ — হোম স্ক্রিনে যোগ করে অ্যাপের মতো ব্যবহার করুন</p>' +
+                    '<p>Fulbaria College — হোম স্ক্রিনে যোগ করে অ্যাপের মতো ব্যবহার করুন</p>' +
                 '</div>' +
             '</div>' +
             '<div class="fdc-install-actions">' +
@@ -5637,42 +5579,7 @@ function isDismissed() {
 })();
 </script>
 
-<!-- ============================================================
-     PAGE LOADER CONTROLLER — UI ONLY
-     Does not touch Supabase, Cloudinary, PWA or existing functions.
-     ============================================================ -->
-<script>
-(function(){
-    "use strict";
-    var loader=document.getElementById("fdcPageLoader");
-    if(!loader) return;
-
-    var hidden=false;
-    var started=Date.now();
-
-    function hideLoader(){
-        if(hidden) return;
-        hidden=true;
-        var elapsed=Date.now()-started;
-        var wait=Math.max(0,520-elapsed);
-        setTimeout(function(){
-            loader.classList.add("fdc-loader-hide");
-            setTimeout(function(){
-                if(loader.parentNode) loader.parentNode.removeChild(loader);
-            },420);
-        },wait);
-    }
-
-    if(document.readyState === "complete") hideLoader();
-    else window.addEventListener("load",hideLoader,{once:true});
-
-    // Safety fallback: slow external resources should never trap the user.
-    setTimeout(hideLoader,3200);
-})();
-</script>
-
-
-
 <script src="/js/pwa-enhancements.js" defer></script>
+  <script src="/js/premium-shell.js" defer></script>
 </body>
 </html>

@@ -2,7 +2,7 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v3.2.0
+ * Version: v3.3.0
  * Purpose: PWA Install + Offline Caching (Network-first strategy)
  *
  * ⚡ Changes v3.1.1:
@@ -28,7 +28,7 @@
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v3.2.0';
+const CACHE_VERSION = 'fdc-v3.4.0';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -42,10 +42,12 @@ const STATIC_ASSETS = [
     '/index.html',
     '/manifest.json',
     '/css/pwa-enhancements.css',
+    '/css/premium-system.css',
     '/js/pwa-enhancements.js',
+    '/js/premium-shell.js',
 
     // ==================== Icons / Images ====================
-    '/assets/images/logo1.png',
+    '/assets/images/fulbaria-college-mark.svg',
     '/assets/images/web-app-manifest-192x192.png',
     '/assets/images/web-app-manifest-512x512.png',
     '/assets/images/apple-touch-icon.png',
