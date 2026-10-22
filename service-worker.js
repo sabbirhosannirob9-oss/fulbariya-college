@@ -28,7 +28,7 @@
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v3.4.0';
+const CACHE_VERSION = 'fdc-v3.4.1';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -43,6 +43,7 @@ const STATIC_ASSETS = [
     '/manifest.json',
     '/css/pwa-enhancements.css',
     '/css/premium-system.css',
+    '/css/mobile-wide-fixes.css',
     '/js/pwa-enhancements.js',
     '/js/premium-shell.js',
 
