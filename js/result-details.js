@@ -272,7 +272,7 @@
             <div class="sheet-wrapper" id="sheetWrapper">
                 <div class="sheet-header">
                     <div class="sh-logo">
-                        <img src="../assets/images/logo1.png" alt="Fulbariya College"
+                        <img src="/assets/images/fulbaria-college-mark.svg" alt="Fulbariya College"
                              onerror="this.style.display='none';this.parentElement.innerHTML='<i class=\\'fas fa-graduation-cap\\' style=\\'font-size:32px;color:var(--navy);\\'></i>';">
                     </div>
                     <div class="sh-info">

@@ -21,7 +21,7 @@
         eiin: '111516',
         established: '1972',
         website: 'fulbariya-college.pages.dev',
-        logo: 'https://fulbariya-college.pages.dev/assets/images/logo1.png'
+        logo: '/assets/images/fulbaria-college-mark.svg'
     };
 
     const INSTRUCTIONS = [

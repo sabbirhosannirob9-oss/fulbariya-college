@@ -275,7 +275,7 @@
         let html = '';
         filtered.forEach(function (img) {
             const categoryLabel = CATEGORY_LABELS[img.category] || img.category;
-            const imageUrl = img.image_url || '../assets/images/logo1.png';
+            const imageUrl = img.image_url || '/assets/images/fulbaria-college-mark.svg';
             const featuredIcon = img.is_featured ? 'fa-star' : 'fa-star-o';
 
             html += `
@@ -283,7 +283,7 @@
                     ${img.is_featured ? '<div class="gallery-badge-featured"><i class="fas fa-star"></i></div>' : ''}
                     <img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(img.title)}"
                          class="gallery-thumb"
-                         onerror="this.src='../assets/images/logo1.png'">
+                         onerror="this.src='/assets/images/fulbaria-college-mark.svg'">
                     <div class="gallery-body">
                         <h6 class="gallery-title" title="${escapeHtml(img.title)}">
                             ${escapeHtml(img.title)}

@@ -224,7 +224,7 @@
 
             let html = '';
             allHeads.forEach(function (head) {
-                const imageUrl = head.image_url || '../assets/images/logo1.png';
+                const imageUrl = head.image_url || '/assets/images/fulbaria-college-mark.svg';
                 const statusBadge = head.is_active
                     ? '<span class="status-badge-active">✅ Active</span>'
                     : '<span class="status-badge-inactive">❌ Inactive</span>';
@@ -235,7 +235,7 @@
                             <img src="${escapeHtml(imageUrl)}"
                                  alt="${escapeHtml(head.name)}"
                                  class="head-photo"
-                                 onerror="this.src='../assets/images/logo1.png'">
+                                 onerror="this.src='/assets/images/fulbaria-college-mark.svg'">
                         </td>
                         <td>
                             <div class="head-name">${escapeHtml(head.name || '-')}</div>
