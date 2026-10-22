@@ -7,8 +7,8 @@
 <meta name="theme-color" content="#0a1655">
 <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
 
-<title>একাডেমিক | ফুলবাড়ীয়া কলেজ</title>
-<meta name="description" content="ফুলবাড়ীয়া কলেজের একাডেমিক প্রোগ্রাম, কোর্স ও সহশিক্ষা কার্যক্রম">
+<title>একাডেমিক | Fulbaria College</title>
+<meta name="description" content="Fulbaria Collegeের একাডেমিক প্রোগ্রাম, কোর্স ও সহশিক্ষা কার্যক্রম">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -770,6 +770,7 @@ button { font-family: inherit; cursor: pointer; }
     .cocurricular-grid { grid-template-columns: 1fr; }
 }
 </style>
+  <link rel="stylesheet" href="/css/premium-system.css">
 </head>
 <body>
 
@@ -777,10 +778,10 @@ button { font-family: inherit; cursor: pointer; }
 <header class="main-header">
     <div class="container-custom">
         <a href="../index.html" class="logo-box">
-            <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
+            <img src="/assets/images/fulbaria-college-mark.svg" alt="Logo" onerror="this.style.display='none'">
             <div class="logo-text">
-                <h1 data-college-name>ফুলবাড়ীয়া কলেজ</h1>
-                <p>Fulbariya College</p>
+                <h1 data-college-name>Fulbaria College</h1>
+                <p>Fulbaria College</p>
             </div>
         </a>
         <nav class="header-nav">
@@ -802,7 +803,7 @@ button { font-family: inherit; cursor: pointer; }
         </div>
         <div class="hero-badge">Academic Programs</div>
         <h1>একাডেমিক <span>প্রোগ্রাম</span></h1>
-        <p>ফুলবাড়ীয়া কলেজে HSC, ডিগ্রি ও ৭টি বিষয়ে অনার্স কোর্স — শিক্ষার্থীদের পূর্ণাঙ্গ শিক্ষার সুযোগ</p>
+        <p>Fulbaria Collegeে HSC, ডিগ্রি ও ৭টি বিষয়ে অনার্স কোর্স — শিক্ষার্থীদের পূর্ণাঙ্গ শিক্ষার সুযোগ</p>
     </div>
 </section>
 
@@ -1101,7 +1102,7 @@ button { font-family: inherit; cursor: pointer; }
         <div class="cta-section reveal reveal-scale">
             <div class="cta-inner">
                 <h2>ভর্তি <span>হতে চান?</span></h2>
-                <p>ফুলবাড়ীয়া কলেজে HSC, ডিগ্রি বা অনার্স কোর্সে ভর্তির জন্য আবেদন করুন।</p>
+                <p>Fulbaria Collegeে HSC, ডিগ্রি বা অনার্স কোর্সে ভর্তির জন্য আবেদন করুন।</p>
                 <div class="cta-buttons">
                     <a href="admission.html" class="btn-gold">
                         <i class="fas fa-user-plus"></i> ভর্তি তথ্য
@@ -1121,8 +1122,8 @@ button { font-family: inherit; cursor: pointer; }
     <div class="container-custom">
         <div class="footer-content">
             <div class="footer-brand">
-                <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
-                <h3><span data-college-name>ফুলবাড়ীয়া কলেজ</span></h3>
+                <img src="/assets/images/fulbaria-college-mark.svg" alt="Logo" onerror="this.style.display='none'">
+                <h3><span data-college-name>Fulbaria College</span></h3>
             </div>
             <p class="footer-tagline">শিক্ষা, নৈতিকতা ও আধুনিকতার সমন্বয়ে একটি আদর্শ শিক্ষা প্রতিষ্ঠান</p>
             <div class="footer-social">
@@ -1132,7 +1133,7 @@ button { font-family: inherit; cursor: pointer; }
             </div>
         </div>
         <div class="footer-bottom">
-            © <span id="year"></span> <strong data-college-name>ফুলবাড়ীয়া কলেজ</strong>। সর্বস্বত্ব সংরক্ষিত।
+            © <span id="year"></span> <strong data-college-name>Fulbaria College</strong>। সর্বস্বত্ব সংরক্ষিত।
         </div>
     </div>
 </footer>
@@ -1218,7 +1219,7 @@ button { font-family: inherit; cursor: pointer; }
             const settings = {};
             (data || []).forEach(function (item) { settings[item.key] = item.value; });
 
-            const name = settings.college_name || 'ফুলবাড়ীয়া কলেজ';
+            const name = settings.college_name || 'Fulbaria College';
             document.querySelectorAll('[data-college-name]').forEach(function (el) { el.textContent = name; });
             document.title = 'একাডেমিক | ' + name;
 
@@ -1271,5 +1272,6 @@ button { font-family: inherit; cursor: pointer; }
 
 
 <script src="/js/pwa-enhancements.js" defer></script>
+  <script src="/js/premium-shell.js" defer></script>
 </body>
 </html>

@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0a1655">
 <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
 
-<title>নোটিশ বিস্তারিত - ফুলবাড়ীয়া কলেজ</title>
+<title>নোটিশ বিস্তারিত - Fulbaria College</title>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
@@ -419,6 +419,7 @@ img { max-width: 100%; display: block; }
     .lightbox-close { top: 12px; right: 12px; width: 42px; height: 42px; font-size: 18px; }
 }
 </style>
+  <link rel="stylesheet" href="/css/premium-system.css">
 </head>
 <body>
 
@@ -429,7 +430,7 @@ img { max-width: 100%; display: block; }
             <i class="fas fa-arrow-left"></i> সব নোটিশ
         </a>
         <div class="brand">
-            <i class="fas fa-graduation-cap"></i> ফুলবাড়ীয়া কলেজ
+            <i class="fas fa-graduation-cap"></i> Fulbaria College
         </div>
     </div>
 </div>
@@ -645,7 +646,7 @@ img { max-width: 100%; display: block; }
             if (!data) throw new Error('Notice not found');
 
             renderNotice(data);
-            document.title = (data.title || 'নোটিশ') + ' - ফুলবাড়ীয়া কলেজ';
+            document.title = (data.title || 'নোটিশ') + ' - Fulbaria College';
 
         } catch (err) {
             console.error('❌ Notice load error:', err);
@@ -795,5 +796,6 @@ img { max-width: 100%; display: block; }
 
 
 <script src="/js/pwa-enhancements.js" defer></script>
+  <script src="/js/premium-shell.js" defer></script>
 </body>
 </html>

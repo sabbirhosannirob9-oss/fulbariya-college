@@ -7,8 +7,8 @@
 <meta name="theme-color" content="#0a1655">
 <link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
 
-<title>যোগাযোগ | ফুলবাড়ীয়া কলেজ</title>
-<meta name="description" content="ফুলবাড়ীয়া কলেজের সাথে যোগাযোগ করুন — অফিস, ইমেইল, ঠিকানা ও ম্যাপ">
+<title>যোগাযোগ | Fulbaria College</title>
+<meta name="description" content="Fulbaria Collegeের সাথে যোগাযোগ করুন — অফিস, ইমেইল, ঠিকানা ও ম্যাপ">
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -727,6 +727,7 @@ button { font-family: inherit; cursor: pointer; }
     .reveal.reveal-right { transform: translateX(40px); }
 }
 </style>
+  <link rel="stylesheet" href="/css/premium-system.css">
 </head>
 <body>
 
@@ -734,10 +735,10 @@ button { font-family: inherit; cursor: pointer; }
 <header class="main-header">
     <div class="container-custom">
         <a href="../index.html" class="logo-box">
-            <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
+            <img src="/assets/images/fulbaria-college-mark.svg" alt="Logo" onerror="this.style.display='none'">
             <div class="logo-text">
-                <h1 data-college-name>ফুলবাড়ীয়া কলেজ</h1>
-                <p>Fulbariya College</p>
+                <h1 data-college-name>Fulbaria College</h1>
+                <p>Fulbaria College</p>
             </div>
         </a>
         <nav class="header-nav">
@@ -831,7 +832,7 @@ button { font-family: inherit; cursor: pointer; }
             <div class="info-table">
                 <div class="info-row">
                     <span class="ir-label"><i class="fas fa-building"></i> প্রতিষ্ঠানের নাম</span>
-                    <span class="ir-value" data-college-name>ফুলবাড়ীয়া কলেজ</span>
+                    <span class="ir-value" data-college-name>Fulbaria College</span>
                 </div>
                 <div class="info-row">
                     <span class="ir-label"><i class="fas fa-id-card"></i> EIIN</span>
@@ -901,7 +902,7 @@ button { font-family: inherit; cursor: pointer; }
 
         <div class="map-wrapper reveal reveal-scale">
             <div class="map-header">
-                <h3><i class="fas fa-map-marked-alt"></i> ফুলবাড়ীয়া কলেজ, ময়মনসিংহ</h3>
+                <h3><i class="fas fa-map-marked-alt"></i> Fulbaria College, ময়মনসিংহ</h3>
                 <a href="https://www.google.com/maps/dir/?api=1&destination=24.637326,90.272935"
                    target="_blank"
                    rel="noopener"
@@ -964,8 +965,8 @@ button { font-family: inherit; cursor: pointer; }
     <div class="container-custom">
         <div class="footer-content">
             <div class="footer-brand">
-                <img src="../assets/images/logo1.png" alt="Logo" onerror="this.style.display='none'">
-                <h3><span data-college-name>ফুলবাড়ীয়া কলেজ</span></h3>
+                <img src="/assets/images/fulbaria-college-mark.svg" alt="Logo" onerror="this.style.display='none'">
+                <h3><span data-college-name>Fulbaria College</span></h3>
             </div>
             <p class="footer-tagline">শিক্ষা, নৈতিকতা ও আধুনিকতার সমন্বয়ে একটি আদর্শ শিক্ষা প্রতিষ্ঠান</p>
             <div class="footer-social">
@@ -975,7 +976,7 @@ button { font-family: inherit; cursor: pointer; }
             </div>
         </div>
         <div class="footer-bottom">
-            © <span id="year"></span> <strong data-college-name>ফুলবাড়ীয়া কলেজ</strong>। সর্বস্বত্ব সংরক্ষিত।
+            © <span id="year"></span> <strong data-college-name>Fulbaria College</strong>। সর্বস্বত্ব সংরক্ষিত।
         </div>
     </div>
 </footer>
@@ -1061,7 +1062,7 @@ button { font-family: inherit; cursor: pointer; }
             const settings = {};
             (data || []).forEach(function (item) { settings[item.key] = item.value; });
 
-            const name = settings.college_name || 'ফুলবাড়ীয়া কলেজ';
+            const name = settings.college_name || 'Fulbaria College';
             document.querySelectorAll('[data-college-name]').forEach(function (el) { el.textContent = name; });
             document.title = 'যোগাযোগ | ' + name;
 
@@ -1118,5 +1119,6 @@ button { font-family: inherit; cursor: pointer; }
 
 
 <script src="/js/pwa-enhancements.js" defer></script>
+  <script src="/js/premium-shell.js" defer></script>
 </body>
 </html>
