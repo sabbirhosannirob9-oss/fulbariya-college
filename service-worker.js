@@ -28,7 +28,7 @@
  * =========================================================
  */
 
-const CACHE_VERSION = 'fdc-v3.4.1';
+const CACHE_VERSION = 'fdc-v3.5.0';
 const STATIC_CACHE = 'fdc-static-' + CACHE_VERSION;
 const DYNAMIC_CACHE = 'fdc-dynamic-' + CACHE_VERSION;
 
@@ -48,6 +48,7 @@ const STATIC_ASSETS = [
     '/js/premium-shell.js',
 
     // ==================== Icons / Images ====================
+    '/assets/images/logo1.png',
     '/assets/images/fulbaria-college-mark.svg',
     '/assets/images/web-app-manifest-192x192.png',
     '/assets/images/web-app-manifest-512x512.png',

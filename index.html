@@ -39,9 +39,9 @@ html.fdc-skip-splash #fdcSplash{display:none!important}
 </style>
 
 <link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/assets/images/apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/assets/images/favicon-96x96.png">
-<link rel="icon" type="image/x-icon" href="/assets/images/favicon.ico">
+<link rel="apple-touch-icon" href="/assets/images/logo1.png">
+<link rel="icon" type="image/png" sizes="96x96" href="/assets/images/logo1.png">
+<link rel="icon" type="image/x-icon" href="/assets/images/logo1.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Fulbaria College">
@@ -1873,6 +1873,15 @@ img { max-width: 100%; display: block; }
         padding: 11px 14px;
         font-size: 14px;
     }
+    .main-nav a.mobile-admin-link {
+        display: flex;
+        width: 100%;
+        min-height: 46px;
+        border-radius: 12px;
+        margin-top: 10px;
+        border: 1px solid rgba(212,175,55,.45);
+        box-shadow: 0 5px 16px rgba(212,175,55,.22);
+    }
     .main-nav a.nav-login {
         justify-content: center;
         margin-left: 0;
@@ -3467,7 +3476,7 @@ img { max-width: 100%; display: block; }
 <body>
 <div id="fdcSplash" aria-hidden="true">
     <div class="fdc-splash-inner">
-        <img class="fdc-splash-logo" src="assets/images/logo1.png" alt="Fulbaria College logo">
+        <img class="fdc-splash-logo" src="/assets/images/logo1.png" alt="Fulbaria College logo">
         <div class="fdc-splash-bn">Fulbaria College</div>
         <div class="fdc-splash-en">Fulbaria College</div>
         <div class="fdc-splash-line"></div>
@@ -3500,7 +3509,7 @@ img { max-width: 100%; display: block; }
 <header class="main-header">
     <div class="container-custom">
         <a href="index.html" class="logo-box">
-            <img src="/assets/images/fulbaria-college-mark.svg" alt="Fulbaria College" onerror="this.style.display='none'">
+            <img src="/assets/images/logo1.png" alt="Fulbaria College" onerror="this.onerror=null;this.src='/assets/images/logo1.png';">
             <div class="logo-text">
                 <h1 data-college-name>Fulbaria College</h1>
                 <p>Fulbaria College</p>
@@ -3518,11 +3527,11 @@ img { max-width: 100%; display: block; }
             <a href="public-pages/bncc.html">BNCC</a>
             <a href="public-pages/scouts.html">Scouts</a>
             <a href="public-pages/contact.html">যোগাযোগ</a>
-            <a href="admin-pages/admin-login.html" class="nav-login nav-admin">
-                <i class="fas fa-user-shield"></i> Admin
+            <a href="/admin-pages/admin-login.html" class="nav-login nav-admin mobile-admin-link" aria-label="Admin Login Portal">
+                <i class="fas fa-user-shield"></i> Admin Login Portal
             </a>
         </nav>
-        <button class="nav-toggle" id="navToggle">
+        <button class="nav-toggle" id="navToggle" type="button" aria-label="Open navigation menu" aria-controls="mainNav" aria-expanded="false">
             <i class="fas fa-bars"></i>
         </button>
     </div>
@@ -3627,7 +3636,7 @@ img { max-width: 100%; display: block; }
         <div class="principal-grid">
             <div class="principal-image-wrap reveal reveal-left">
                 <div class="sk-principal-img sk-shimmer" id="principalImgSkeleton"></div>
-                <img src="assets/images/principal.jpg" alt="Principal" id="principalImage" style="display:none;" onerror="this.style.display='none'">
+                <img src="assets/images/principal.jpg" alt="Principal" id="principalImage" style="display:none;" onerror="this.onerror=null;this.src='/assets/images/logo1.png';">
             </div>
             <div class="principal-content">
                 <div id="principalSkeleton" class="sk-principal-content">
@@ -4941,7 +4950,16 @@ img { max-width: 100%; display: block; }
     });
 
     document.getElementById('navToggle').addEventListener('click', function () {
-        document.getElementById('mainNav').classList.toggle('show');
+        var menu = document.getElementById('mainNav');
+        var opened = menu.classList.toggle('show');
+        document.getElementById('navToggle').setAttribute('aria-expanded', opened ? 'true' : 'false');
+    });
+
+    document.querySelectorAll('#mainNav a').forEach(function (link) {
+        link.addEventListener('click', function () {
+            document.getElementById('mainNav').classList.remove('show');
+            document.getElementById('navToggle').setAttribute('aria-expanded', 'false');
+        });
     });
 
     const scrollBtn = document.getElementById('scrollTop');
