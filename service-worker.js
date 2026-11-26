@@ -2,7 +2,7 @@
  * =========================================================
  * FULBARIYA COLLEGE — SERVICE WORKER
  * Location: /service-worker.js
- * Version: v3.3.0
+ * Version: v3.4.0
  * Purpose: PWA Install + Offline Caching (Network-first strategy)
  *
  * ⚡ Changes v3.1.1:
