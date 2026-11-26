@@ -39,9 +39,9 @@ html.fdc-skip-splash #fdcSplash{display:none!important}
 </style>
 
 <link rel="manifest" href="/manifest.json">
-<link rel="apple-touch-icon" href="/assets/images/logo1.png">
-<link rel="icon" type="image/png" sizes="96x96" href="/assets/images/logo1.png">
-<link rel="icon" type="image/x-icon" href="/assets/images/logo1.png">
+<link rel="apple-touch-icon" href="/assets/images/logo1png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/images/logo1.png">
+<link rel="icon" type="image/png" href="/assets/images/logo1.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Fulbaria College">
@@ -3472,6 +3472,139 @@ img { max-width: 100%; display: block; }
 
   <link rel="stylesheet" href="/css/premium-system.css">
   <link rel="stylesheet" href="/css/mobile-wide-fixes.css">
+
+<style id="fdc-premium-2026">
+/* Fulbaria College — refined institutional visual system */
+:root{
+ --fc-ink:#101b3b;--fc-navy:#07163f;--fc-navy-2:#10285d;
+ --fc-gold:#d9b65e;--fc-gold-soft:#f4e5b8;--fc-paper:#f5f7fb;
+ --fc-line:rgba(10,25,65,.12);
+}
+.hero-slider{
+ min-height:clamp(430px,43vw,650px)!important;height:clamp(430px,43vw,650px);
+ background:#07163f;isolation:isolate;
+}
+.hero-slide{
+ align-items:center!important;justify-content:flex-start!important;
+ padding:clamp(28px,5vw,76px) max(5vw,calc((100vw - 1200px)/2)) 88px!important;
+ opacity:1!important;visibility:hidden;
+ clip-path:inset(0 0 0 100%);
+ transition:clip-path 1.05s cubic-bezier(.77,0,.18,1),visibility 0s linear 1.05s!important;
+}
+.hero-slide.active{visibility:visible;clip-path:inset(0 0 0 0);transition:clip-path 1.05s cubic-bezier(.77,0,.18,1),visibility 0s!important}
+.hero-slide img{transform:scale(1.04)!important;transition:transform 7s cubic-bezier(.2,.65,.3,1)!important;filter:saturate(.82) contrast(1.06)}
+.hero-slide.active img{transform:scale(1.12)!important}
+.hero-slide::after{
+ background:linear-gradient(90deg,rgba(4,12,39,.91) 0%,rgba(5,17,51,.77) 34%,rgba(5,17,51,.28) 68%,rgba(5,17,51,.08) 100%),
+ linear-gradient(0deg,rgba(4,10,32,.45),transparent 55%)!important;
+}
+.hero-content{
+ width:min(650px,65vw);max-width:650px;text-align:left!important;padding:0!important;
+ animation:fcHeroEnter .9s .18s both!important;
+}
+@keyframes fcHeroEnter{from{opacity:0;transform:translate3d(0,24px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.hero-content::before{
+ content:"FULBARIA COLLEGE  •  EST. 1972";display:inline-flex;align-items:center;
+ color:var(--fc-gold-soft);font:600 11px/1.2 'Playfair Display',serif;letter-spacing:2.4px;
+ padding:10px 14px;margin-bottom:22px;border-left:2px solid var(--fc-gold);
+ background:rgba(255,255,255,.07);backdrop-filter:blur(8px);
+}
+.hero-content h2{font-size:clamp(34px,5.2vw,66px)!important;line-height:1.12!important;letter-spacing:-.7px;margin-bottom:18px!important;text-shadow:0 5px 25px rgba(0,0,0,.22)!important}
+.hero-content p{font-size:clamp(14px,1.5vw,18px)!important;line-height:1.9!important;max-width:540px;color:rgba(255,255,255,.88);margin-bottom:28px!important}
+.hero-content .hero-btn{border-radius:4px!important;padding:14px 24px!important;background:var(--fc-gold)!important;color:#101b3b!important;box-shadow:none!important;letter-spacing:.2px}
+.hero-dots{bottom:28px!important;left:auto!important;right:max(5vw,calc((100vw - 1200px)/2))!important;transform:none!important;gap:9px!important}
+.hero-dots .dot{width:25px!important;height:3px!important;border:0!important;border-radius:0!important;background:rgba(255,255,255,.42)!important}
+.hero-dots .dot.active{width:52px!important;background:var(--fc-gold)!important;transform:none!important}
+.hero-arrow{
+ position:absolute;z-index:5;top:50%;transform:translateY(-50%);width:44px;height:44px;
+ display:grid;place-items:center;border:1px solid rgba(255,255,255,.42);border-radius:50%;
+ color:#fff;background:rgba(5,16,48,.25);backdrop-filter:blur(10px);cursor:pointer;
+ transition:background .25s,border-color .25s;
+}
+.hero-arrow:hover{background:var(--fc-gold);color:var(--fc-navy);border-color:var(--fc-gold)}
+.hero-arrow.prev{left:22px}.hero-arrow.next{right:22px}
+
+/* Counter: editorial statistics panel, no playful pulsing */
+.counter-section{
+ min-height:0!important;padding:66px 0 72px!important;
+ background:linear-gradient(115deg,#07132f 0%,#0a2050 55%,#10285a 100%)!important;
+}
+.counter-section::before{opacity:.17;filter:grayscale(1);animation:none!important}
+.counter-section::after{
+ content:"";position:absolute;inset:0;pointer-events:none;opacity:.22;
+ background:linear-gradient(115deg,transparent 0 62%,rgba(217,182,94,.16) 62.1%,transparent 62.4%),
+ radial-gradient(ellipse at 12% 15%,rgba(255,255,255,.12),transparent 36%);
+}
+.counter-slider-wrap{
+ max-width:900px!important;min-height:190px!important;overflow:hidden!important;
+ border:1px solid rgba(244,229,184,.24);background:rgba(255,255,255,.055);
+ backdrop-filter:blur(16px);box-shadow:0 24px 65px rgba(0,0,0,.2);
+}
+.counter-slide{
+ width:100%;height:100%;padding:20px 28px;
+ transform:translateX(8%)!important;opacity:0;visibility:hidden;
+ transition:transform .72s cubic-bezier(.22,.75,.2,1),opacity .55s ease,visibility 0s .72s!important;
+}
+.counter-slide.active{transform:translateX(0)!important;opacity:1;visibility:visible;transition:transform .72s cubic-bezier(.22,.75,.2,1),opacity .55s ease,visibility 0s!important}
+.counter-slide.exit-left{transform:translateX(-8%)!important;opacity:0;visibility:hidden}
+.counter-glass{
+ min-height:148px!important;padding:24px 36px!important;gap:28px!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;
+}
+.counter-glass::before{width:2px!important;left:0!important;background:linear-gradient(180deg,transparent,var(--fc-gold),transparent)!important}
+.counter-fm-icon{font-size:54px!important;color:var(--fc-gold-soft)!important;filter:none!important;animation:none!important}
+.counter-info{gap:12px!important}
+.counter-info .counter-label{font-size:12px!important;letter-spacing:2.5px!important;color:rgba(255,255,255,.72)!important;text-shadow:none!important}
+.counter-info .counter-value{font-size:clamp(38px,5vw,58px)!important;color:#f2dca0!important;text-shadow:none!important;letter-spacing:.5px}
+.counter-dots{display:flex!important;justify-content:center;gap:7px;margin-top:20px}
+.counter-dots button{width:22px;height:3px;border:0;background:rgba(255,255,255,.3);padding:0;cursor:pointer;transition:width .25s,background .25s}
+.counter-dots button.active{width:42px;background:var(--fc-gold)}
+/* Visitor metric: quiet, precise and legible */
+.footer-visitors{
+ border:1px solid rgba(217,182,94,.34)!important;border-radius:3px!important;
+ background:rgba(255,255,255,.055)!important;padding:9px 15px!important;
+ gap:10px!important;box-shadow:none!important;transform:none!important;
+}
+.footer-visitors::before{display:none!important}
+.footer-visitors i{animation:none!important;color:var(--fc-gold-soft)!important}
+.footer-visitors .visitor-label{font-size:11px;letter-spacing:1.1px;text-transform:uppercase;color:rgba(255,255,255,.72)}
+.footer-visitors .visitor-count{font:600 16px/1.2 'Playfair Display',serif!important;color:#f2dca0!important;background:transparent!important;padding:0!important;border:0!important}
+/* Consistent restrained interactions */
+.quick-card,.dept-card,.notice-board-box,.news-card-wrap,.gallery-item{transition:transform .35s ease,box-shadow .35s ease}
+.quick-card:hover,.dept-card:hover{transform:translateY(-4px)!important}
+.quick-card:hover .quick-card-icon{transform:none!important}
+@media(max-width:768px){
+ .hero-slider{height:540px;min-height:540px!important;max-height:620px}
+ .hero-slide{align-items:flex-end!important;padding:0 24px 88px!important}
+ .hero-content{width:100%;max-width:100%;padding:0!important}
+ .hero-content::before{font-size:9px;letter-spacing:1.7px;margin-bottom:16px}
+ .hero-content h2{font-size:clamp(28px,8vw,42px)!important;line-height:1.2!important}
+ .hero-content p{font-size:14px!important;line-height:1.7!important}
+ .hero-dots{left:24px!important;right:auto!important;bottom:27px!important}
+ .hero-arrow{width:36px;height:36px;top:45%}
+ .hero-arrow.prev{left:12px}.hero-arrow.next{right:12px}
+ .counter-section{padding:42px 0 48px!important}
+ .counter-slider-wrap{min-height:150px!important}
+ .counter-slide{padding:12px}
+ .counter-glass{min-height:124px!important;padding:20px 20px!important;gap:18px!important}
+ .counter-fm-icon{font-size:38px!important}
+ .counter-info .counter-value{font-size:36px!important}
+ .counter-info .counter-label{font-size:10px!important;letter-spacing:1.5px!important}
+}
+@media(max-width:420px){
+ .hero-slider{height:500px;min-height:500px!important}
+ .hero-slide{padding:0 20px 82px!important}
+ .counter-glass{gap:14px!important;padding:16px!important}
+ .counter-fm-icon{font-size:32px!important}
+ .counter-info .counter-value{font-size:31px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ .hero-slide,.hero-slide img,.counter-slide{transition:none!important}
+ .hero-content{animation:none!important}
+}
+</style>
+
 </head>
 <body>
 <div id="fdcSplash" aria-hidden="true">
@@ -4280,6 +4413,8 @@ img { max-width: 100%; display: block; }
         });
 
         if (HERO_SLIDES.length > 1) {
+            html += '<button class="hero-arrow prev" type="button" aria-label="Previous slide" onclick="stepHeroSlide(-1)"><i class="fas fa-chevron-left"></i></button>' +
+                    '<button class="hero-arrow next" type="button" aria-label="Next slide" onclick="stepHeroSlide(1)"><i class="fas fa-chevron-right"></i></button>';
             html += '<div class="hero-dots">';
             HERO_SLIDES.forEach(function (_, idx) {
                 html += '<div class="dot ' + (idx === 0 ? 'active' : '') + '" onclick="goToHeroSlide(' + idx + ')"></div>';
@@ -4289,7 +4424,13 @@ img { max-width: 100%; display: block; }
 
         slider.innerHTML = html;
         slider.classList.add('sk-fade-in');
-        if (HERO_SLIDES.length > 1) startHeroAutoSlide();
+        if (HERO_SLIDES.length > 1) {
+            startHeroAutoSlide();
+            slider.addEventListener('mouseenter', function () { if (HERO_TIMER) clearInterval(HERO_TIMER); });
+            slider.addEventListener('mouseleave', startHeroAutoSlide);
+            slider.addEventListener('focusin', function () { if (HERO_TIMER) clearInterval(HERO_TIMER); });
+            slider.addEventListener('focusout', startHeroAutoSlide);
+        }
     }
 
     window.goToHeroSlide = function (index) {
@@ -4306,6 +4447,12 @@ img { max-width: 100%; display: block; }
                 activeImg.style.transform = 'scale(1.12)';
             }, 50);
         }
+    };
+
+    window.stepHeroSlide = function (direction) {
+        if (!HERO_SLIDES.length) return;
+        window.goToHeroSlide((HERO_INDEX + direction + HERO_SLIDES.length) % HERO_SLIDES.length);
+        startHeroAutoSlide();
     };
 
     function startHeroAutoSlide() {
@@ -4544,11 +4691,17 @@ img { max-width: 100%; display: block; }
         wrap.classList.add('sk-fade-in');
         COUNTER_TOTAL = total;
         COUNTER_INDEX = 0;
-
+        const dots = document.getElementById('counterDots');
+        if (dots) {
+            dots.innerHTML = Array.from({length: total}, (_, i) =>
+                '<button type="button" class="' + (i === 0 ? 'active' : '') + '" aria-label="Show statistic ' + (i + 1) + '" onclick="goToCounterSlide(' + i + ')"></button>'
+            ).join('');
+        }
         if (total > 1) startCounterAuto();
     }
 
-    function goToCounterSlide(index) {
+    window.goToCounterSlide = function (index) {
+        index = (index + COUNTER_TOTAL) % COUNTER_TOTAL;
         const slides = document.querySelectorAll('.counter-slide');
         const prevIndex = COUNTER_INDEX;
 
@@ -4575,7 +4728,10 @@ img { max-width: 100%; display: block; }
             }
         });
         COUNTER_INDEX = index;
-    }
+        document.querySelectorAll('#counterDots button').forEach(function (dot, i) {
+            dot.classList.toggle('active', i === index);
+        });
+    };
 
     function startCounterAuto() {
         if (COUNTER_TIMER) clearInterval(COUNTER_TIMER);
